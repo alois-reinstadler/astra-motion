@@ -1,0 +1,297 @@
+{
+	"date": "2026-09-05T09:14:43.632Z",
+	"productionURL": "http://127.0.0.1:5290",
+	"browserVersions": {
+		"chromium": "151.0.7922.34",
+		"firefox": "153.0",
+		"webkit": "26.5"
+	},
+	"cases": [
+		{
+			"name": "adapter-node sends pending SSR markup before deferred data",
+			"status": "passed",
+			"evidence": {
+				"pendingMarkupMs": 9,
+				"completeMs": 908,
+				"bytes": 2786
+			}
+		},
+		{
+			"name": "Chrome actual BFCache restores heap and route registrations",
+			"status": "passed",
+			"evidence": {
+				"persisted": true,
+				"heapPreserved": true,
+				"hideNamesClean": true,
+				"routeAfterRestore": {
+					"oldNames": [
+						{
+							"name": "astra_005b00220022002c0022006c006900660065006300790063006c0065002d00700068006f0074006f0022005d",
+							"testid": "shared-source"
+						}
+					],
+					"newNames": [
+						{
+							"name": "astra_005b00220022002c0022006c006900660065006300790063006c0065002d00700068006f0074006f0022005d",
+							"testid": "awaited-host"
+						}
+					],
+					"ready": true,
+					"finished": true,
+					"rejected": null
+				},
+				"defaultArgumentRemoved": "--disable-back-forward-cache",
+				"notRestored": []
+			}
+		},
+		{
+			"name": "Chrome pagehide cancels a real active native route transition before BFCache",
+			"status": "passed",
+			"evidence": {
+				"persisted": true,
+				"activeBeforeLeave": true,
+				"temporaryNamesAfterRestore": 0
+			}
+		},
+		{
+			"name": "chromium late shared-route content contract",
+			"status": "passed",
+			"evidence": {
+				"nativeViewTransitions": true,
+				"captured": {
+					"oldNames": [
+						{
+							"name": "astra_005b00220022002c0022006c006900660065006300790063006c0065002d00700068006f0074006f0022005d",
+							"testid": "shared-source"
+						}
+					],
+					"newNames": [],
+					"ready": true,
+					"finished": false,
+					"rejected": null
+				},
+				"lateDataReplaysTransition": false
+			}
+		},
+		{
+			"name": "chromium reserved shared-route content contract",
+			"status": "passed",
+			"evidence": {
+				"nativeViewTransitions": true,
+				"captured": {
+					"oldNames": [
+						{
+							"name": "astra_005b00220022002c0022006c006900660065006300790063006c0065002d00700068006f0074006f0022005d",
+							"testid": "shared-source"
+						}
+					],
+					"newNames": [
+						{
+							"name": "astra_005b00220022002c0022006c006900660065006300790063006c0065002d00700068006f0074006f0022005d",
+							"testid": "reserved-host"
+						}
+					],
+					"ready": true,
+					"finished": false,
+					"rejected": null
+				},
+				"lateDataReplaysTransition": false
+			}
+		},
+		{
+			"name": "chromium awaited shared-route content contract",
+			"status": "passed",
+			"evidence": {
+				"nativeViewTransitions": true,
+				"captured": {
+					"oldNames": [
+						{
+							"name": "astra_005b00220022002c0022006c006900660065006300790063006c0065002d00700068006f0074006f0022005d",
+							"testid": "shared-source"
+						}
+					],
+					"newNames": [
+						{
+							"name": "astra_005b00220022002c0022006c006900660065006300790063006c0065002d00700068006f0074006f0022005d",
+							"testid": "awaited-host"
+						}
+					],
+					"ready": true,
+					"finished": false,
+					"rejected": null
+				},
+				"lateDataReplaysTransition": false
+			}
+		},
+		{
+			"name": "firefox late shared-route content contract",
+			"status": "passed",
+			"evidence": {
+				"nativeViewTransitions": true,
+				"captured": {
+					"oldNames": [
+						{
+							"name": "astra_005b00220022002c0022006c006900660065006300790063006c0065002d00700068006f0074006f0022005d",
+							"testid": "shared-source"
+						}
+					],
+					"newNames": [],
+					"ready": true,
+					"finished": false,
+					"rejected": null
+				},
+				"lateDataReplaysTransition": false
+			}
+		},
+		{
+			"name": "firefox reserved shared-route content contract",
+			"status": "passed",
+			"evidence": {
+				"nativeViewTransitions": true,
+				"captured": {
+					"oldNames": [
+						{
+							"name": "astra_005b00220022002c0022006c006900660065006300790063006c0065002d00700068006f0074006f0022005d",
+							"testid": "shared-source"
+						}
+					],
+					"newNames": [
+						{
+							"name": "astra_005b00220022002c0022006c006900660065006300790063006c0065002d00700068006f0074006f0022005d",
+							"testid": "reserved-host"
+						}
+					],
+					"ready": true,
+					"finished": false,
+					"rejected": null
+				},
+				"lateDataReplaysTransition": false
+			}
+		},
+		{
+			"name": "firefox awaited shared-route content contract",
+			"status": "passed",
+			"evidence": {
+				"nativeViewTransitions": true,
+				"captured": {
+					"oldNames": [
+						{
+							"name": "astra_005b00220022002c0022006c006900660065006300790063006c0065002d00700068006f0074006f0022005d",
+							"testid": "shared-source"
+						}
+					],
+					"newNames": [
+						{
+							"name": "astra_005b00220022002c0022006c006900660065006300790063006c0065002d00700068006f0074006f0022005d",
+							"testid": "awaited-host"
+						}
+					],
+					"ready": true,
+					"finished": false,
+					"rejected": null
+				},
+				"lateDataReplaysTransition": false
+			}
+		},
+		{
+			"name": "webkit late shared-route content contract",
+			"status": "passed",
+			"evidence": {
+				"nativeViewTransitions": true,
+				"captured": {
+					"oldNames": [
+						{
+							"name": "astra_005b00220022002c0022006c006900660065006300790063006c0065002d00700068006f0074006f0022005d",
+							"testid": "shared-source"
+						}
+					],
+					"newNames": [],
+					"ready": true,
+					"finished": false,
+					"rejected": null
+				},
+				"lateDataReplaysTransition": false
+			}
+		},
+		{
+			"name": "webkit reserved shared-route content contract",
+			"status": "passed",
+			"evidence": {
+				"nativeViewTransitions": true,
+				"captured": {
+					"oldNames": [
+						{
+							"name": "astra_005b00220022002c0022006c006900660065006300790063006c0065002d00700068006f0074006f0022005d",
+							"testid": "shared-source"
+						}
+					],
+					"newNames": [
+						{
+							"name": "astra_005b00220022002c0022006c006900660065006300790063006c0065002d00700068006f0074006f0022005d",
+							"testid": "reserved-host"
+						}
+					],
+					"ready": true,
+					"finished": false,
+					"rejected": null
+				},
+				"lateDataReplaysTransition": false
+			}
+		},
+		{
+			"name": "webkit awaited shared-route content contract",
+			"status": "passed",
+			"evidence": {
+				"nativeViewTransitions": true,
+				"captured": {
+					"oldNames": [
+						{
+							"name": "astra_005b00220022002c0022006c006900660065006300790063006c0065002d00700068006f0074006f0022005d",
+							"testid": "shared-source"
+						}
+					],
+					"newNames": [
+						{
+							"name": "astra_005b00220022002c0022006c006900660065006300790063006c0065002d00700068006f0074006f0022005d",
+							"testid": "awaited-host"
+						}
+					],
+					"ready": true,
+					"finished": false,
+					"rejected": null
+				},
+				"lateDataReplaysTransition": false
+			}
+		},
+		{
+			"name": "Svelte component HMR remounts package motion and cleans scoped playback",
+			"status": "passed",
+			"evidence": {
+				"documentPreserved": true,
+				"revisions": [
+					{
+						"revision": "B",
+						"live": "1",
+						"activeAnimations": 0
+					},
+					{
+						"revision": "C",
+						"live": "1",
+						"activeAnimations": 0
+					},
+					{
+						"revision": "D",
+						"live": "1",
+						"activeAnimations": 0
+					}
+				],
+				"liveAfterDestroy": 0,
+				"detachedScopeAnimations": 0
+			}
+		}
+	],
+	"physicalSafari": {
+		"tested": false,
+		"reason": "This runner uses locally installed Playwright engines. WebKit is not physical Safari or iOS."
+	}
+}

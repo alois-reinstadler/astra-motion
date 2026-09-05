@@ -1,0 +1,42 @@
+import { test, expect } from 'vitest'
+import { mount, unmount, tick, flushSync } from 'svelte'
+import Harness from './Harness.svelte'
+const delay=(n:number)=>new Promise<void>(r=>setTimeout(r,n))
+test('counts idle reads for 10 shared layout elements',async()=>{
+ const target=document.createElement('div');document.body.append(target)
+ const app=mount(Harness,{target,props:{shared:true,count:10}});await tick();await delay(300)
+ const original=Element.prototype.getBoundingClientRect;let reads=0
+ Element.prototype.getBoundingClientRect=function(){reads++;return original.call(this)}
+ await delay(250)
+ Element.prototype.getBoundingClientRect=original
+ console.log('AUDIT_IDLE_SHARED_READS_250MS',reads)
+ expect(reads).toBeGreaterThan(50)
+ expect({reads}).toMatchSnapshot()
+ await unmount(app);target.remove()
+})
+test('layout misses a position-only change above observed ancestors',async()=>{
+ const target=document.createElement('div');document.body.append(target)
+ const app=mount(Harness,{target});await tick();await delay(300)
+ const el=target.querySelector('[data-testid="deep"]') as HTMLElement
+ const before=el.getBoundingClientRect().left
+ flushSync(()=> (target.querySelectorAll('button')[1] as HTMLButtonElement).click())
+ await delay(50)
+ const after=el.getBoundingClientRect().left
+ console.log('AUDIT_DEEP_ANCESTOR',{before,after,transform:el.style.transform,animations:el.getAnimations().length})
+ expect(after-before).toBeGreaterThan(450)
+ expect({before,after,transform:el.style.transform,animations:el.getAnimations().length}).toMatchSnapshot()
+ expect(el.getAnimations()).toHaveLength(0)
+ expect(el.style.transform === 'none' || el.style.transform === '').toBe(true)
+ await unmount(app);target.remove()
+})
+test('legacy presence drops canvas immediately despite one-second exit',async()=>{
+ const target=document.createElement('div');document.body.append(target)
+ const app=mount(Harness,{target,props:{media:true}});await tick();await delay(100)
+ expect(target.querySelector('canvas')).not.toBeNull()
+ flushSync(()=> (target.querySelector('button') as HTMLButtonElement).click())
+ await tick()
+ console.log('AUDIT_CANVAS_AFTER_TOGGLE',{canvas:!!target.querySelector('canvas'),clone:!!target.querySelector('[data-clone]')})
+ expect(target.querySelector('canvas')).toBeNull()
+ expect(target.querySelector('[data-clone]')).toBeNull()
+ await unmount(app);target.remove()
+})

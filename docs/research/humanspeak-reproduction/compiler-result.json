@@ -1,0 +1,5 @@
+{
+	"source": "<script>\nimport { motion } from '@humanspeak/svelte-motion'\nconst literal = '<motion.div>example</motion.div>'\n</script>\n<motion.div>{literal}</motion.div>",
+	"output": "<script>\nimport SvelteMotionDiv from '@humanspeak/svelte-motion/html/Div.svelte'\nconst literal = '<SvelteMotionDiv>example</SvelteMotionDiv>'\n</script>\n<SvelteMotionDiv>{literal}</SvelteMotionDiv>",
+	"map": null
+}

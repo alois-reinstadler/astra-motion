@@ -1,0 +1,56 @@
+{
+	"date": "2026-09-05",
+	"versions": {
+		"svelte": "5.57.0",
+		"sveltekit": "2.70.3",
+		"motion-dom": "13.2.0",
+		"motion": "13.2.0"
+	},
+	"fullBrowser": {
+		"chromium": {
+			"passed": 178,
+			"files": 33,
+			"seconds": 90.38
+		},
+		"firefox": {
+			"passed": 178,
+			"files": 33,
+			"seconds": 94.99
+		},
+		"webkit": {
+			"passed": 179,
+			"files": 33,
+			"seconds": 127.89
+		}
+	},
+	"finalTimelineDelta": {
+		"passedPerEngine": 14,
+		"engines": ["chromium", "firefox", "webkit"],
+		"note": "Includes one added paint-only authored-transform regression; overlaps the full suite."
+	},
+	"serverCompilerPassed": 52,
+	"sveltekitPassed": 30,
+	"sveltekitSeconds": 58.9,
+	"typecheck": {
+		"errors": 0,
+		"warnings": 0
+	},
+	"eslint": "scoped pass",
+	"prettier": "scoped pass",
+	"svelteAutofixer": "changed source clean",
+	"manualPresence": {
+		"reversals": 16,
+		"intervalMilliseconds": 45,
+		"sameParentNodes": 2,
+		"finalOpacities": [1, 1, 1, 1, 1, 1],
+		"activeNativeAnimations": 0,
+		"browserErrors": 0
+	},
+	"bundleSizes": "bundle-sizes.json",
+	"limits": [
+		"No production application build",
+		"No physical-device performance/memory campaign",
+		"Undocumented motion-dom projection/state integration is pinned",
+		"Arbitrary asynchronous presence ownership not implemented"
+	]
+}

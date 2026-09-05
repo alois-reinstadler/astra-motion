@@ -1,0 +1,1503 @@
+{
+	"date": "2026-09-05T09:31:02.888Z",
+	"status": "complete",
+	"command": [
+		"--url",
+		"http://127.0.0.1:5290",
+		"--traces",
+		"--traces-only",
+		"--trace-dir",
+		"/tmp/astra-production-traces-attribution",
+		"--output",
+		"docs/research/production-performance-attribution.json",
+		"--package-tarball",
+		"/tmp/astra-motion-production-a2BJGU/astra-motion-0.0.1.tgz"
+	],
+	"environment": {
+		"platform": "linux",
+		"kernel": "6.6.87.2-microsoft-standard-WSL2",
+		"node": "v25.8.2",
+		"cpu": "AMD Ryzen 7 7800X3D 8-Core Processor",
+		"logicalCpus": 16,
+		"memoryBytes": 16292966400,
+		"loadAtStart": [0.49, 0.54, 0.56],
+		"loadAtEnd": [0.77, 0.6, 0.58]
+	},
+	"method": {
+		"productionRequired": true,
+		"viewport": {
+			"width": 1280,
+			"height": 1040
+		},
+		"rates": [1, 4, 6],
+		"counts": [100, 500],
+		"modes": ["automatic", "explicit", "instant"],
+		"repeats": 3,
+		"steps": 18,
+		"requestedGapMs": 80,
+		"settleWindowMs": 1400,
+		"readInstrumentation": true,
+		"warmup": "two six-operation cycles per fresh browser/configuration",
+		"cpu": "CDP relative slowdown, not calibrated hardware or a physical mobile device",
+		"frames": "RAF intervals; missed-refresh estimate is not a measurement of compositor dropped frames",
+		"memory": "separate 1x mount/destroy run; forced GC checkpoints; no strong node arrays retained by fixture",
+		"traces": "separate diagnostic runs; not pooled with primary timing samples"
+	},
+	"rows": [],
+	"memory": [],
+	"traces": [
+		{
+			"count": 500,
+			"mode": "automatic",
+			"rate": 4,
+			"path": "/tmp/astra-production-traces-attribution/layout-500-automatic-4x.json",
+			"bytes": 8780717,
+			"sha256": "716d2ab2ca341c1fb42a905f78f04c06ddac5a6f14f1153e6a9a57981546e6f0",
+			"eventCount": 38752,
+			"peakActive": 500,
+			"row": {
+				"count": 500,
+				"mode": "automatic",
+				"rate": 4,
+				"iteration": "trace",
+				"transactions": [
+					{
+						"kind": "reverse",
+						"transactionMs": 46.70000000298023,
+						"offsetMs": 0,
+						"scheduleLagMs": 0
+					},
+					{
+						"kind": "resize",
+						"transactionMs": 0.09999999403953552,
+						"offsetMs": 249.90000000596046,
+						"scheduleLagMs": 169.90000000596046
+					},
+					{
+						"kind": "remove",
+						"transactionMs": 4,
+						"offsetMs": 424.20000000298023,
+						"scheduleLagMs": 264.20000000298023
+					},
+					{
+						"kind": "undo",
+						"transactionMs": 6.5,
+						"offsetMs": 617.7999999970198,
+						"scheduleLagMs": 377.79999999701977
+					},
+					{
+						"kind": "rotate",
+						"transactionMs": 1.0999999940395355,
+						"offsetMs": 822.2000000029802,
+						"scheduleLagMs": 502.20000000298023
+					},
+					{
+						"kind": "resize",
+						"transactionMs": 0.9000000059604645,
+						"offsetMs": 925.7999999970198,
+						"scheduleLagMs": 525.7999999970198
+					},
+					{
+						"kind": "reverse",
+						"transactionMs": 22.299999997019768,
+						"offsetMs": 1118.4000000059605,
+						"scheduleLagMs": 638.4000000059605
+					},
+					{
+						"kind": "resize",
+						"transactionMs": 0.09999999403953552,
+						"offsetMs": 1308.6000000089407,
+						"scheduleLagMs": 748.6000000089407
+					},
+					{
+						"kind": "remove",
+						"transactionMs": 4.4000000059604645,
+						"offsetMs": 1468.2000000029802,
+						"scheduleLagMs": 828.2000000029802
+					},
+					{
+						"kind": "undo",
+						"transactionMs": 5.5,
+						"offsetMs": 1661.4000000059605,
+						"scheduleLagMs": 941.4000000059605
+					},
+					{
+						"kind": "rotate",
+						"transactionMs": 2.300000011920929,
+						"offsetMs": 1866.7999999970198,
+						"scheduleLagMs": 1066.7999999970198
+					},
+					{
+						"kind": "resize",
+						"transactionMs": 0.5999999940395355,
+						"offsetMs": 1964.9000000059605,
+						"scheduleLagMs": 1084.9000000059605
+					},
+					{
+						"kind": "reverse",
+						"transactionMs": 43.80000001192093,
+						"offsetMs": 2157.7999999970198,
+						"scheduleLagMs": 1197.7999999970198
+					},
+					{
+						"kind": "resize",
+						"transactionMs": 0.09999999403953552,
+						"offsetMs": 2417.9000000059605,
+						"scheduleLagMs": 1377.9000000059605
+					},
+					{
+						"kind": "remove",
+						"transactionMs": 5.700000002980232,
+						"offsetMs": 2582.9000000059605,
+						"scheduleLagMs": 1462.9000000059605
+					},
+					{
+						"kind": "undo",
+						"transactionMs": 8.700000002980232,
+						"offsetMs": 2789.4000000059605,
+						"scheduleLagMs": 1589.4000000059605
+					},
+					{
+						"kind": "rotate",
+						"transactionMs": 7.600000008940697,
+						"offsetMs": 3042,
+						"scheduleLagMs": 1762
+					},
+					{
+						"kind": "resize",
+						"transactionMs": 0,
+						"offsetMs": 3152.5,
+						"scheduleLagMs": 1792.5
+					}
+				],
+				"interactionMs": 3314.2000000029802,
+				"LayoutCount": 100,
+				"RecalcStyleCount": 123,
+				"LayoutDuration": 0.6266750000000001,
+				"RecalcStyleDuration": 1.0530220000000001,
+				"ScriptDuration": 1.385411,
+				"TaskDuration": 3.6665049999999995,
+				"durationMs": 4733.79999999702,
+				"bcr": 18600,
+				"computedStyles": 18900,
+				"frameCount": 96,
+				"medianFrameMs": 16.700000000000728,
+				"p95FrameMs": 200,
+				"maximumFrameMs": 266.7000000000007,
+				"framesOver25ms": 26,
+				"estimatedMissed60HzRafs": 188,
+				"longAnimationFrames": 18,
+				"longTasks": 31,
+				"forcedStyleLayoutMsInLongFrames": 806,
+				"observerCost": {
+					"enabled": false,
+					"calls": 46,
+					"records": 37830,
+					"milliseconds": 54.5
+				},
+				"activeAtDeadline": 0,
+				"nativeAtDeadline": 0,
+				"correctness": {
+					"expectedCount": 500,
+					"domCount": 500,
+					"uniqueCount": 500,
+					"orderMatches": true,
+					"maximumResidualTransform": 0,
+					"visible": 500,
+					"participants": 500,
+					"active": 0,
+					"minimumOpacity": 1,
+					"outOfFlow": 0,
+					"inert": 0
+				},
+				"maxTransactionMs": 46.70000000298023,
+				"medianTransactionMs": 4.4000000059604645,
+				"maxScheduleLagMs": 1792.5
+			},
+			"inclusiveCategoriesOverlap": true,
+			"topEvents": [
+				{
+					"thread": "CrRendererMain",
+					"name": "v8.callFunction",
+					"count": 625,
+					"inclusiveMs": 4149.358000000005,
+					"maximumMs": 148.979
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "ThreadControllerImpl::RunTask",
+					"count": 498,
+					"inclusiveMs": 3662.996000000004,
+					"maximumMs": 148.996
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "FunctionCall",
+					"count": 625,
+					"inclusiveMs": 2190.766999999994,
+					"maximumMs": 102.405
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "ProxyMain::BeginMainFrame",
+					"count": 97,
+					"inclusiveMs": 2100.743,
+					"maximumMs": 148.586
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "TimerFire",
+					"count": 19,
+					"inclusiveMs": 1355.0839999999996,
+					"maximumMs": 148.993
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "UpdateLayoutTree",
+					"count": 123,
+					"inclusiveMs": 1053.7820000000002,
+					"maximumMs": 19.186
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "Layout",
+					"count": 100,
+					"inclusiveMs": 622.5669999999998,
+					"maximumMs": 19.063
+				},
+				{
+					"thread": "ThreadPoolForegroundWorker",
+					"name": "ThreadPool_RunTask",
+					"count": 931,
+					"inclusiveMs": 383.05499999999984,
+					"maximumMs": 14.343
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "FireAnimationFrame",
+					"count": 127,
+					"inclusiveMs": 365.6909999999999,
+					"maximumMs": 20.788
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "Paint",
+					"count": 46,
+					"inclusiveMs": 197.24599999999995,
+					"maximumMs": 6.923
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "Receive mojo message",
+					"count": 50,
+					"inclusiveMs": 121.64600000000002,
+					"maximumMs": 100.441
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "PrePaint",
+					"count": 136,
+					"inclusiveMs": 95.20299999999997,
+					"maximumMs": 3.652
+				},
+				{
+					"thread": "ThreadPoolForegroundWorker",
+					"name": "V8.GC_MC_BACKGROUND_MARKING",
+					"count": 110,
+					"inclusiveMs": 86.526,
+					"maximumMs": 2.466
+				},
+				{
+					"thread": "ThreadPoolForegroundWorker",
+					"name": "TaskGraphRunner::RunTask",
+					"count": 574,
+					"inclusiveMs": 57.75499999999995,
+					"maximumMs": 0.918
+				},
+				{
+					"thread": "ThreadPoolForegroundWorker",
+					"name": "RasterizerTaskImpl::RunOnWorkerThread",
+					"count": 490,
+					"inclusiveMs": 54.693999999999924,
+					"maximumMs": 0.915
+				},
+				{
+					"thread": "ThreadPoolForegroundWorker",
+					"name": "RasterTask",
+					"count": 490,
+					"inclusiveMs": 52.79999999999998,
+					"maximumMs": 0.912
+				},
+				{
+					"thread": "Compositor",
+					"name": "ThreadControllerImpl::RunTask",
+					"count": 1089,
+					"inclusiveMs": 51.16100000000002,
+					"maximumMs": 0.951
+				},
+				{
+					"thread": "ThreadPoolForegroundWorker",
+					"name": "ZeroCopyRasterBuffer::Playback",
+					"count": 490,
+					"inclusiveMs": 50.89799999999989,
+					"maximumMs": 0.909
+				},
+				{
+					"thread": "ThreadPoolForegroundWorker",
+					"name": "DisplayItemList::Raster",
+					"count": 490,
+					"inclusiveMs": 48.26100000000001,
+					"maximumMs": 0.902
+				},
+				{
+					"thread": "VizCompositorThread",
+					"name": "ThreadControllerImpl::RunTask",
+					"count": 691,
+					"inclusiveMs": 45.235000000000014,
+					"maximumMs": 1.593
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "Layerize",
+					"count": 97,
+					"inclusiveMs": 41.65899999999999,
+					"maximumMs": 2.113
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "MajorGC",
+					"count": 6,
+					"inclusiveMs": 35.598,
+					"maximumMs": 7.895
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "V8.GCFinalizeMC",
+					"count": 6,
+					"inclusiveMs": 35.471000000000004,
+					"maximumMs": 7.871
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "V8.GC_MARK_COMPACTOR",
+					"count": 6,
+					"inclusiveMs": 35.428,
+					"maximumMs": 7.863
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "HitTest",
+					"count": 34,
+					"inclusiveMs": 22.161,
+					"maximumMs": 1.449
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "V8.GCIncrementalMarking",
+					"count": 72,
+					"inclusiveMs": 21.29499999999999,
+					"maximumMs": 1.681
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "V8.GC_MC_INCREMENTAL",
+					"count": 72,
+					"inclusiveMs": 20.811999999999994,
+					"maximumMs": 1.678
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "V8.GC_MC_INCREMENTAL_EMBEDDER_TRACING",
+					"count": 72,
+					"inclusiveMs": 16.675000000000004,
+					"maximumMs": 1.185
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "V8.GC_MC_EVACUATE",
+					"count": 12,
+					"inclusiveMs": 15.491999999999999,
+					"maximumMs": 3.19
+				},
+				{
+					"thread": "ThreadPoolForegroundWorker",
+					"name": "V8.GC_MC_BACKGROUND_EVACUATE_COPY",
+					"count": 41,
+					"inclusiveMs": 15.432999999999998,
+					"maximumMs": 0.617
+				},
+				{
+					"thread": "Compositor",
+					"name": "EpollEvent",
+					"count": 339,
+					"inclusiveMs": 14.35599999999999,
+					"maximumMs": 0.149
+				},
+				{
+					"thread": "Chrome_ChildIOThread",
+					"name": "EpollEvent",
+					"count": 364,
+					"inclusiveMs": 12.687000000000012,
+					"maximumMs": 0.098
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "LocalFrameView::ScheduleAnimation",
+					"count": 525,
+					"inclusiveMs": 12.179999999999987,
+					"maximumMs": 0.846
+				},
+				{
+					"thread": "Compositor",
+					"name": "ProxyImpl::ReadyToCommit",
+					"count": 28,
+					"inclusiveMs": 10.895000000000001,
+					"maximumMs": 0.945
+				},
+				{
+					"thread": "Compositor",
+					"name": "auto cc::Scheduler::SendDidNotProduceFrame(const viz::BeginFrameArgs &, FrameSkippedReason)::(lambda)::operator()()::(lambda)::operator()(uint32_t) const",
+					"count": 386,
+					"inclusiveMs": 10.707999999999958,
+					"maximumMs": 0.767
+				},
+				{
+					"thread": "Compositor",
+					"name": "auto cc::Scheduler::FinishImplFrame()::(lambda)::operator()()::(lambda)::operator()(uint32_t) const",
+					"count": 284,
+					"inclusiveMs": 10.216,
+					"maximumMs": 0.789
+				},
+				{
+					"thread": "ThreadPoolForegroundWorker",
+					"name": "V8.GC_MC_BACKGROUND_SWEEPING",
+					"count": 99,
+					"inclusiveMs": 9.648,
+					"maximumMs": 0.352
+				},
+				{
+					"thread": "Compositor",
+					"name": "LayerTreeHostImpl::DidNotProduceFrame",
+					"count": 257,
+					"inclusiveMs": 9.334000000000012,
+					"maximumMs": 0.76
+				},
+				{
+					"thread": "Compositor",
+					"name": "DidNotSubmitInLastFrame",
+					"count": 256,
+					"inclusiveMs": 9.233,
+					"maximumMs": 0.786
+				},
+				{
+					"thread": "ThreadPoolForegroundWorker",
+					"name": "V8.GC_SCAVENGER_BACKGROUND_SCAVENGE_PARALLEL",
+					"count": 27,
+					"inclusiveMs": 9.132,
+					"maximumMs": 0.621
+				}
+			]
+		},
+		{
+			"count": 500,
+			"mode": "explicit",
+			"rate": 4,
+			"path": "/tmp/astra-production-traces-attribution/layout-500-explicit-4x.json",
+			"bytes": 8372966,
+			"sha256": "95aee66a4fb00ad069e818e616b725b577956a04df98bc0ba97bcd5f501c0b9d",
+			"eventCount": 38654,
+			"peakActive": 500,
+			"row": {
+				"count": 500,
+				"mode": "explicit",
+				"rate": 4,
+				"iteration": "trace",
+				"transactions": [
+					{
+						"kind": "reverse",
+						"transactionMs": 71.69999998807907,
+						"offsetMs": 0,
+						"scheduleLagMs": 0
+					},
+					{
+						"kind": "resize",
+						"transactionMs": 8.099999994039536,
+						"offsetMs": 167.40000000596046,
+						"scheduleLagMs": 87.40000000596046
+					},
+					{
+						"kind": "remove",
+						"transactionMs": 14,
+						"offsetMs": 257.59999999403954,
+						"scheduleLagMs": 97.59999999403954
+					},
+					{
+						"kind": "undo",
+						"transactionMs": 38.20000000298023,
+						"offsetMs": 343.5,
+						"scheduleLagMs": 103.5
+					},
+					{
+						"kind": "rotate",
+						"transactionMs": 9.200000002980232,
+						"offsetMs": 482.5,
+						"scheduleLagMs": 162.5
+					},
+					{
+						"kind": "resize",
+						"transactionMs": 8.200000002980232,
+						"offsetMs": 571.5,
+						"scheduleLagMs": 171.5
+					},
+					{
+						"kind": "reverse",
+						"transactionMs": 28.5,
+						"offsetMs": 660.0999999940395,
+						"scheduleLagMs": 180.09999999403954
+					},
+					{
+						"kind": "resize",
+						"transactionMs": 6.299999997019768,
+						"offsetMs": 782.9000000059605,
+						"scheduleLagMs": 222.90000000596046
+					},
+					{
+						"kind": "remove",
+						"transactionMs": 14.799999997019768,
+						"offsetMs": 868,
+						"scheduleLagMs": 228
+					},
+					{
+						"kind": "undo",
+						"transactionMs": 29.400000005960464,
+						"offsetMs": 946.7999999970198,
+						"scheduleLagMs": 226.79999999701977
+					},
+					{
+						"kind": "rotate",
+						"transactionMs": 13,
+						"offsetMs": 1056.5,
+						"scheduleLagMs": 256.5
+					},
+					{
+						"kind": "resize",
+						"transactionMs": 7.9000000059604645,
+						"offsetMs": 1166,
+						"scheduleLagMs": 286
+					},
+					{
+						"kind": "reverse",
+						"transactionMs": 27.200000002980232,
+						"offsetMs": 1246.5999999940395,
+						"scheduleLagMs": 286.59999999403954
+					},
+					{
+						"kind": "resize",
+						"transactionMs": 7.299999997019768,
+						"offsetMs": 1354,
+						"scheduleLagMs": 314
+					},
+					{
+						"kind": "remove",
+						"transactionMs": 15.799999997019768,
+						"offsetMs": 1447.2000000029802,
+						"scheduleLagMs": 327.20000000298023
+					},
+					{
+						"kind": "undo",
+						"transactionMs": 27.5,
+						"offsetMs": 1539,
+						"scheduleLagMs": 339
+					},
+					{
+						"kind": "rotate",
+						"transactionMs": 10.199999988079071,
+						"offsetMs": 1636.4000000059605,
+						"scheduleLagMs": 356.40000000596046
+					},
+					{
+						"kind": "resize",
+						"transactionMs": 8.599999994039536,
+						"offsetMs": 1732.7000000029802,
+						"scheduleLagMs": 372.70000000298023
+					}
+				],
+				"interactionMs": 1841.5,
+				"LayoutCount": 43,
+				"RecalcStyleCount": 73,
+				"LayoutDuration": 0.293862,
+				"RecalcStyleDuration": 0.6589499999999999,
+				"ScriptDuration": 0.5928579999999999,
+				"TaskDuration": 2.205743,
+				"durationMs": 3263,
+				"bcr": 17400,
+				"computedStyles": 9000,
+				"frameCount": 99,
+				"medianFrameMs": 16.699999999999818,
+				"p95FrameMs": 116.60000000000036,
+				"maximumFrameMs": 150,
+				"framesOver25ms": 23,
+				"estimatedMissed60HzRafs": 96,
+				"longAnimationFrames": 18,
+				"longTasks": 12,
+				"forcedStyleLayoutMsInLongFrames": 302.79999999999995,
+				"observerCost": {
+					"enabled": false,
+					"calls": 0,
+					"records": 0,
+					"milliseconds": 0
+				},
+				"activeAtDeadline": 0,
+				"nativeAtDeadline": 0,
+				"correctness": {
+					"expectedCount": 500,
+					"domCount": 500,
+					"uniqueCount": 500,
+					"orderMatches": true,
+					"maximumResidualTransform": 0,
+					"visible": 500,
+					"participants": 500,
+					"active": 0,
+					"minimumOpacity": 1,
+					"outOfFlow": 0,
+					"inert": 0
+				},
+				"maxTransactionMs": 71.69999998807907,
+				"medianTransactionMs": 14,
+				"maxScheduleLagMs": 372.70000000298023
+			},
+			"inclusiveCategoriesOverlap": true,
+			"topEvents": [
+				{
+					"thread": "CrRendererMain",
+					"name": "ThreadControllerImpl::RunTask",
+					"count": 484,
+					"inclusiveMs": 2204.4260000000017,
+					"maximumMs": 116.885
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "v8.callFunction",
+					"count": 548,
+					"inclusiveMs": 1730.8459999999998,
+					"maximumMs": 77.98
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "ProxyMain::BeginMainFrame",
+					"count": 100,
+					"inclusiveMs": 1147.7250000000001,
+					"maximumMs": 59.569
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "FunctionCall",
+					"count": 548,
+					"inclusiveMs": 862.6869999999967,
+					"maximumMs": 50.562
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "TimerFire",
+					"count": 19,
+					"inclusiveMs": 862.6790000000001,
+					"maximumMs": 77.985
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "UpdateLayoutTree",
+					"count": 73,
+					"inclusiveMs": 659.9710000000001,
+					"maximumMs": 16.02
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "Layout",
+					"count": 43,
+					"inclusiveMs": 290.972,
+					"maximumMs": 16.445
+				},
+				{
+					"thread": "ThreadPoolForegroundWorker",
+					"name": "ThreadPool_RunTask",
+					"count": 638,
+					"inclusiveMs": 284.6539999999998,
+					"maximumMs": 16.48
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "FireAnimationFrame",
+					"count": 136,
+					"inclusiveMs": 240.91700000000014,
+					"maximumMs": 13.215
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "Paint",
+					"count": 44,
+					"inclusiveMs": 185.403,
+					"maximumMs": 5.653
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "Receive mojo message",
+					"count": 35,
+					"inclusiveMs": 135.08399999999992,
+					"maximumMs": 116.688
+				},
+				{
+					"thread": "ThreadPoolForegroundWorker",
+					"name": "TaskGraphRunner::RunTask",
+					"count": 676,
+					"inclusiveMs": 69.67700000000005,
+					"maximumMs": 0.727
+				},
+				{
+					"thread": "ThreadPoolForegroundWorker",
+					"name": "RasterizerTaskImpl::RunOnWorkerThread",
+					"count": 574,
+					"inclusiveMs": 66.02299999999995,
+					"maximumMs": 0.724
+				},
+				{
+					"thread": "ThreadPoolForegroundWorker",
+					"name": "RasterTask",
+					"count": 574,
+					"inclusiveMs": 63.976999999999904,
+					"maximumMs": 0.721
+				},
+				{
+					"thread": "ThreadPoolForegroundWorker",
+					"name": "ZeroCopyRasterBuffer::Playback",
+					"count": 574,
+					"inclusiveMs": 61.571,
+					"maximumMs": 0.718
+				},
+				{
+					"thread": "ThreadPoolForegroundWorker",
+					"name": "DisplayItemList::Raster",
+					"count": 574,
+					"inclusiveMs": 58.50899999999992,
+					"maximumMs": 0.71
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "PrePaint",
+					"count": 123,
+					"inclusiveMs": 55.61400000000004,
+					"maximumMs": 3.115
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "Layerize",
+					"count": 100,
+					"inclusiveMs": 47.612999999999985,
+					"maximumMs": 2.315
+				},
+				{
+					"thread": "Compositor",
+					"name": "ThreadControllerImpl::RunTask",
+					"count": 946,
+					"inclusiveMs": 47.342000000000084,
+					"maximumMs": 1.055
+				},
+				{
+					"thread": "VizCompositorThread",
+					"name": "ThreadControllerImpl::RunTask",
+					"count": 520,
+					"inclusiveMs": 42.85,
+					"maximumMs": 1.667
+				},
+				{
+					"thread": "ThreadPoolForegroundWorker",
+					"name": "V8.GC_MC_BACKGROUND_MARKING",
+					"count": 74,
+					"inclusiveMs": 40.376,
+					"maximumMs": 2.212
+				},
+				{
+					"thread": "ThreadPoolForegroundWorker",
+					"name": "V8.GC_SCAVENGER_BACKGROUND_SCAVENGE_PARALLEL",
+					"count": 31,
+					"inclusiveMs": 25.164,
+					"maximumMs": 1.396
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "HitTest",
+					"count": 31,
+					"inclusiveMs": 19.607000000000003,
+					"maximumMs": 1.42
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "MajorGC",
+					"count": 3,
+					"inclusiveMs": 17.346,
+					"maximumMs": 6.51
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "V8.GCFinalizeMC",
+					"count": 3,
+					"inclusiveMs": 16.413999999999998,
+					"maximumMs": 6.491
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "V8.GC_MARK_COMPACTOR",
+					"count": 3,
+					"inclusiveMs": 16.392,
+					"maximumMs": 6.485
+				},
+				{
+					"thread": "Compositor",
+					"name": "ProxyImpl::ReadyToCommit",
+					"count": 34,
+					"inclusiveMs": 13.815,
+					"maximumMs": 1.049
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "MinorGC",
+					"count": 4,
+					"inclusiveMs": 12.134,
+					"maximumMs": 5.171
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "V8.GCScavenger",
+					"count": 4,
+					"inclusiveMs": 12.02,
+					"maximumMs": 5.145
+				},
+				{
+					"thread": "Compositor",
+					"name": "EpollEvent",
+					"count": 264,
+					"inclusiveMs": 11.571,
+					"maximumMs": 0.112
+				},
+				{
+					"thread": "Compositor",
+					"name": "LayerTreeHostImpl::CommitComplete",
+					"count": 34,
+					"inclusiveMs": 10.522,
+					"maximumMs": 0.83
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "V8.GC_SCAVENGER",
+					"count": 4,
+					"inclusiveMs": 9.799,
+					"maximumMs": 3.89
+				},
+				{
+					"thread": "Compositor",
+					"name": "auto cc::LayerTreeHostImpl::PrepareTiles()::(lambda)::operator()()::(lambda)::operator()(uint32_t) const",
+					"count": 57,
+					"inclusiveMs": 9.796999999999999,
+					"maximumMs": 0.689
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "V8.GC_SCAVENGER_SCAVENGE",
+					"count": 4,
+					"inclusiveMs": 9.742,
+					"maximumMs": 3.87
+				},
+				{
+					"thread": "Compositor",
+					"name": "auto cc::TileManager::PrepareTiles(const GlobalStateThatImpactsTilePriority &)::(lambda)::operator()()::(lambda)::operator()(uint32_t) const",
+					"count": 57,
+					"inclusiveMs": 9.675999999999997,
+					"maximumMs": 0.687
+				},
+				{
+					"thread": "Compositor",
+					"name": "TileManager::PrepareTiles",
+					"count": 57,
+					"inclusiveMs": 9.538999999999998,
+					"maximumMs": 0.685
+				},
+				{
+					"thread": "ThreadPoolForegroundWorker",
+					"name": "V8.GC_BACKGROUND_SAFEPOINT",
+					"count": 3,
+					"inclusiveMs": 9.347000000000001,
+					"maximumMs": 5.053
+				},
+				{
+					"thread": "Compositor",
+					"name": "TileManager::CheckForCompletedTasksAndIssueSignals",
+					"count": 91,
+					"inclusiveMs": 9.240999999999996,
+					"maximumMs": 0.671
+				},
+				{
+					"thread": "Chrome_ChildIOThread",
+					"name": "EpollEvent",
+					"count": 255,
+					"inclusiveMs": 8.76,
+					"maximumMs": 0.099
+				},
+				{
+					"thread": "ThreadPoolForegroundWorker",
+					"name": "V8.GC_MC_BACKGROUND_EVACUATE_COPY",
+					"count": 18,
+					"inclusiveMs": 7.403,
+					"maximumMs": 0.638
+				}
+			]
+		},
+		{
+			"count": 500,
+			"mode": "instant",
+			"rate": 4,
+			"path": "/tmp/astra-production-traces-attribution/layout-500-instant-4x.json",
+			"bytes": 5247083,
+			"sha256": "0eb70e2438a6d4e028be26125ab378cc1acce3a62782481b0d970b95ff7df974",
+			"eventCount": 23445,
+			"peakActive": 0,
+			"row": {
+				"count": 500,
+				"mode": "instant",
+				"rate": 4,
+				"iteration": "trace",
+				"transactions": [
+					{
+						"kind": "reverse",
+						"transactionMs": 31.299999997019768,
+						"offsetMs": 0,
+						"scheduleLagMs": 0
+					},
+					{
+						"kind": "resize",
+						"transactionMs": 0.09999999403953552,
+						"offsetMs": 79.5,
+						"scheduleLagMs": 0
+					},
+					{
+						"kind": "remove",
+						"transactionMs": 5,
+						"offsetMs": 159.70000000298023,
+						"scheduleLagMs": 0
+					},
+					{
+						"kind": "undo",
+						"transactionMs": 7.5,
+						"offsetMs": 239.90000000596046,
+						"scheduleLagMs": 0
+					},
+					{
+						"kind": "rotate",
+						"transactionMs": 1,
+						"offsetMs": 319.79999999701977,
+						"scheduleLagMs": 0
+					},
+					{
+						"kind": "resize",
+						"transactionMs": 0,
+						"offsetMs": 400.09999999403954,
+						"scheduleLagMs": 0.09999999403953552
+					},
+					{
+						"kind": "reverse",
+						"transactionMs": 23.700000002980232,
+						"offsetMs": 479.79999999701977,
+						"scheduleLagMs": 0
+					},
+					{
+						"kind": "resize",
+						"transactionMs": 0,
+						"offsetMs": 559.5,
+						"scheduleLagMs": 0
+					},
+					{
+						"kind": "remove",
+						"transactionMs": 2.199999988079071,
+						"offsetMs": 639.9000000059605,
+						"scheduleLagMs": 0
+					},
+					{
+						"kind": "undo",
+						"transactionMs": 3.7999999970197678,
+						"offsetMs": 719.2999999970198,
+						"scheduleLagMs": 0
+					},
+					{
+						"kind": "rotate",
+						"transactionMs": 1,
+						"offsetMs": 800.0999999940395,
+						"scheduleLagMs": 0.09999999403953552
+					},
+					{
+						"kind": "resize",
+						"transactionMs": 0.09999999403953552,
+						"offsetMs": 879.2000000029802,
+						"scheduleLagMs": 0
+					},
+					{
+						"kind": "reverse",
+						"transactionMs": 22.700000002980232,
+						"offsetMs": 959.5999999940395,
+						"scheduleLagMs": 0
+					},
+					{
+						"kind": "resize",
+						"transactionMs": 0,
+						"offsetMs": 1039.5,
+						"scheduleLagMs": 0
+					},
+					{
+						"kind": "remove",
+						"transactionMs": 2,
+						"offsetMs": 1120.0999999940395,
+						"scheduleLagMs": 0.09999999403953552
+					},
+					{
+						"kind": "undo",
+						"transactionMs": 4.299999997019768,
+						"offsetMs": 1199.2999999970198,
+						"scheduleLagMs": 0
+					},
+					{
+						"kind": "rotate",
+						"transactionMs": 1,
+						"offsetMs": 1280,
+						"scheduleLagMs": 0
+					},
+					{
+						"kind": "resize",
+						"transactionMs": 0,
+						"offsetMs": 1360.7999999970198,
+						"scheduleLagMs": 0.7999999970197678
+					}
+				],
+				"interactionMs": 1440.2000000029802,
+				"LayoutCount": 18,
+				"RecalcStyleCount": 18,
+				"LayoutDuration": 0.12355100000000001,
+				"RecalcStyleDuration": 0.025469,
+				"ScriptDuration": 0.011213,
+				"TaskDuration": 0.481362,
+				"durationMs": 2848.8999999910593,
+				"bcr": 0,
+				"computedStyles": 0,
+				"frameCount": 166,
+				"medianFrameMs": 16.699999999999818,
+				"p95FrameMs": 16.700000000000728,
+				"maximumFrameMs": 50,
+				"framesOver25ms": 3,
+				"estimatedMissed60HzRafs": 5,
+				"longAnimationFrames": 3,
+				"longTasks": 0,
+				"forcedStyleLayoutMsInLongFrames": 0,
+				"observerCost": {
+					"enabled": false,
+					"calls": 0,
+					"records": 0,
+					"milliseconds": 0
+				},
+				"activeAtDeadline": 0,
+				"nativeAtDeadline": 0,
+				"correctness": {
+					"expectedCount": 500,
+					"domCount": 500,
+					"uniqueCount": 500,
+					"orderMatches": true,
+					"maximumResidualTransform": 0,
+					"visible": 500,
+					"participants": 0,
+					"active": 0,
+					"minimumOpacity": 1,
+					"outOfFlow": 0,
+					"inert": 0
+				},
+				"maxTransactionMs": 31.299999997019768,
+				"medianTransactionMs": 2,
+				"maxScheduleLagMs": 0.7999999970197678
+			},
+			"inclusiveCategoriesOverlap": true,
+			"topEvents": [
+				{
+					"thread": "CrRendererMain",
+					"name": "ThreadControllerImpl::RunTask",
+					"count": 516,
+					"inclusiveMs": 480.55399999999906,
+					"maximumMs": 32.787
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "ProxyMain::BeginMainFrame",
+					"count": 167,
+					"inclusiveMs": 339.9230000000002,
+					"maximumMs": 32.783
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "Paint",
+					"count": 36,
+					"inclusiveMs": 138.607,
+					"maximumMs": 6.016
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "Layout",
+					"count": 18,
+					"inclusiveMs": 123.40700000000002,
+					"maximumMs": 19.541
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "v8.callFunction",
+					"count": 190,
+					"inclusiveMs": 89.99900000000004,
+					"maximumMs": 23.664
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "TimerFire",
+					"count": 19,
+					"inclusiveMs": 76.75000000000001,
+					"maximumMs": 23.671
+				},
+				{
+					"thread": "ThreadPoolForegroundWorker",
+					"name": "ThreadPool_RunTask",
+					"count": 199,
+					"inclusiveMs": 63.496,
+					"maximumMs": 3.956
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "Receive mojo message",
+					"count": 31,
+					"inclusiveMs": 41.68299999999999,
+					"maximumMs": 31.55
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "PrePaint",
+					"count": 186,
+					"inclusiveMs": 41.607000000000085,
+					"maximumMs": 3.006
+				},
+				{
+					"thread": "Compositor",
+					"name": "ThreadControllerImpl::RunTask",
+					"count": 892,
+					"inclusiveMs": 34.53800000000005,
+					"maximumMs": 0.438
+				},
+				{
+					"thread": "ThreadPoolForegroundWorker",
+					"name": "TaskGraphRunner::RunTask",
+					"count": 414,
+					"inclusiveMs": 33.053000000000004,
+					"maximumMs": 0.213
+				},
+				{
+					"thread": "ThreadPoolForegroundWorker",
+					"name": "RasterizerTaskImpl::RunOnWorkerThread",
+					"count": 360,
+					"inclusiveMs": 31.046999999999986,
+					"maximumMs": 0.198
+				},
+				{
+					"thread": "ThreadPoolForegroundWorker",
+					"name": "RasterTask",
+					"count": 360,
+					"inclusiveMs": 29.809999999999977,
+					"maximumMs": 0.195
+				},
+				{
+					"thread": "VizCompositorThread",
+					"name": "ThreadControllerImpl::RunTask",
+					"count": 431,
+					"inclusiveMs": 29.513000000000027,
+					"maximumMs": 1.39
+				},
+				{
+					"thread": "ThreadPoolForegroundWorker",
+					"name": "ZeroCopyRasterBuffer::Playback",
+					"count": 360,
+					"inclusiveMs": 28.62200000000001,
+					"maximumMs": 0.192
+				},
+				{
+					"thread": "ThreadPoolForegroundWorker",
+					"name": "DisplayItemList::Raster",
+					"count": 360,
+					"inclusiveMs": 26.933000000000007,
+					"maximumMs": 0.188
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "UpdateLayoutTree",
+					"count": 18,
+					"inclusiveMs": 25.787,
+					"maximumMs": 3.921
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "Layerize",
+					"count": 167,
+					"inclusiveMs": 24.79500000000002,
+					"maximumMs": 2.305
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "FireAnimationFrame",
+					"count": 168,
+					"inclusiveMs": 14.467000000000006,
+					"maximumMs": 0.833
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "FunctionCall",
+					"count": 190,
+					"inclusiveMs": 12.835999999999997,
+					"maximumMs": 0.826
+				},
+				{
+					"thread": "Compositor",
+					"name": "EpollEvent",
+					"count": 205,
+					"inclusiveMs": 8.916999999999996,
+					"maximumMs": 0.136
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "MainFrameAborted",
+					"count": 149,
+					"inclusiveMs": 7.861999999999991,
+					"maximumMs": 0.569
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "LocalFrameView::ScheduleAnimation",
+					"count": 336,
+					"inclusiveMs": 7.774999999999989,
+					"maximumMs": 0.67
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "MinorGC",
+					"count": 6,
+					"inclusiveMs": 7.7139999999999995,
+					"maximumMs": 1.891
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "V8.GCScavenger",
+					"count": 6,
+					"inclusiveMs": 7.598999999999999,
+					"maximumMs": 1.866
+				},
+				{
+					"thread": "Compositor",
+					"name": "ProxyImpl::BeginMainFrameAbortedOnImplThread",
+					"count": 149,
+					"inclusiveMs": 7.575999999999999,
+					"maximumMs": 0.124
+				},
+				{
+					"thread": "Chrome_ChildIOThread",
+					"name": "EpollEvent",
+					"count": 221,
+					"inclusiveMs": 7.125,
+					"maximumMs": 0.107
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "V8.GC_SCAVENGER",
+					"count": 6,
+					"inclusiveMs": 6.907,
+					"maximumMs": 1.859
+				},
+				{
+					"thread": "CrRendererMain",
+					"name": "V8.GC_SCAVENGER_SCAVENGE",
+					"count": 6,
+					"inclusiveMs": 6.851,
+					"maximumMs": 1.846
+				},
+				{
+					"thread": "Compositor",
+					"name": "ProxyImpl::ReadyToCommit",
+					"count": 18,
+					"inclusiveMs": 6.396999999999999,
+					"maximumMs": 0.417
+				},
+				{
+					"thread": "ThreadPoolForegroundWorker",
+					"name": "V8.GC_MC_BACKGROUND_MARKING",
+					"count": 17,
+					"inclusiveMs": 5.8859999999999975,
+					"maximumMs": 1.141
+				},
+				{
+					"thread": "Compositor",
+					"name": "Scheduler::BeginImplFrame",
+					"count": 172,
+					"inclusiveMs": 5.572999999999999,
+					"maximumMs": 0.137
+				},
+				{
+					"thread": "Compositor",
+					"name": "auto cc::Scheduler::SendDidNotProduceFrame(const viz::BeginFrameArgs &, FrameSkippedReason)::(lambda)::operator()()::(lambda)::operator()(uint32_t) const",
+					"count": 421,
+					"inclusiveMs": 5.553999999999998,
+					"maximumMs": 0.098
+				},
+				{
+					"thread": "Compositor",
+					"name": "SimpleWatcher::OnHandleReady",
+					"count": 209,
+					"inclusiveMs": 5.540999999999988,
+					"maximumMs": 0.096
+				},
+				{
+					"thread": "Compositor",
+					"name": "auto cc::LayerTreeHostImpl::PrepareTiles()::(lambda)::operator()()::(lambda)::operator()(uint32_t) const",
+					"count": 36,
+					"inclusiveMs": 5.3469999999999995,
+					"maximumMs": 0.311
+				},
+				{
+					"thread": "Compositor",
+					"name": "TileManager::CheckForCompletedTasksAndIssueSignals",
+					"count": 55,
+					"inclusiveMs": 5.300999999999999,
+					"maximumMs": 0.428
+				},
+				{
+					"thread": "Compositor",
+					"name": "auto cc::TileManager::PrepareTiles(const GlobalStateThatImpactsTilePriority &)::(lambda)::operator()()::(lambda)::operator()(uint32_t) const",
+					"count": 36,
+					"inclusiveMs": 5.273000000000001,
+					"maximumMs": 0.309
+				},
+				{
+					"thread": "Compositor",
+					"name": "LayerTreeHostImpl::CommitComplete",
+					"count": 18,
+					"inclusiveMs": 5.227,
+					"maximumMs": 0.346
+				},
+				{
+					"thread": "Compositor",
+					"name": "TileManager::PrepareTiles",
+					"count": 36,
+					"inclusiveMs": 5.201000000000001,
+					"maximumMs": 0.306
+				},
+				{
+					"thread": "CrBrowserMain",
+					"name": "ThreadControllerImpl::RunTask",
+					"count": 129,
+					"inclusiveMs": 4.691999999999996,
+					"maximumMs": 0.111
+				}
+			]
+		}
+	],
+	"package": {
+		"path": "/tmp/astra-motion-production-a2BJGU/astra-motion-0.0.1.tgz",
+		"bytes": 41671,
+		"sha256": "10db85792911a9a5b49af9b0eee0ff797c806351dd730a66d6ba3f95c3e12745"
+	},
+	"browser": {
+		"version": "151.0.7922.34",
+		"userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.7922.34 Safari/537.36",
+		"resources": [
+			"http://127.0.0.1:5290/_app/immutable/assets/0.CTlMR9Zm.css",
+			"http://127.0.0.1:5290/_app/immutable/assets/13.Z6cFBafg.css",
+			"http://127.0.0.1:5290/_app/immutable/entry/start.DFzsLLdm.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/C-kirydz.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/BrgHTh3R.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/CGWAFff5.js",
+			"http://127.0.0.1:5290/_app/immutable/entry/app.BYbeFwSm.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/xihTtKlq.js",
+			"http://127.0.0.1:5290/_app/immutable/nodes/0.BP5d5prq.js",
+			"http://127.0.0.1:5290/_app/immutable/nodes/13.BZi9ZdXB.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/9j6hv9At.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/BGAJL2xS.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/YNOue9ZU.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/MbGfyy_n.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/DdUJsD7S.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/usiw7-wl.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/CSzItPAv.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/0mnYWB-0.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/D023nQGm.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/D8MYIrRf.js",
+			"http://127.0.0.1:5290/_app/immutable/nodes/1.ChEaeM4E.js"
+		],
+		"gpu": {
+			"devices": [
+				{
+					"vendorId": 65535,
+					"deviceId": 65535,
+					"vendorString": "Google Inc. (Google)",
+					"deviceString": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver-5.0.0)",
+					"driverVendor": "SwANGLE",
+					"driverVersion": "5.0.0"
+				}
+			],
+			"auxAttributes": {
+				"amdSwitchable": false,
+				"canSupportThreadedTextureMailbox": false,
+				"directRenderingVersion": "",
+				"displayType": "ANGLE_SWIFTSHADER",
+				"glExtensions": "GL_AMD_performance_monitor GL_ANGLE_base_vertex_base_instance_shader_builtin GL_ANGLE_blob_cache GL_ANGLE_client_arrays GL_ANGLE_clip_cull_distance GL_ANGLE_compressed_texture_etc GL_ANGLE_copy_texture_3d GL_ANGLE_depth_texture GL_ANGLE_framebuffer_blit GL_ANGLE_framebuffer_multisample GL_ANGLE_get_image GL_ANGLE_get_serialized_context_string GL_ANGLE_get_tex_level_parameter GL_ANGLE_instanced_arrays GL_ANGLE_memory_object_flags GL_ANGLE_memory_size GL_ANGLE_multi_draw GL_ANGLE_pack_reverse_row_order GL_ANGLE_polygon_mode GL_ANGLE_program_binary_readiness_query GL_ANGLE_program_cache_control GL_ANGLE_read_only_depth_stencil_feedback_loops GL_ANGLE_relaxed_vertex_attribute_type GL_ANGLE_renderability_validation GL_ANGLE_request_extension GL_ANGLE_rgbx_internal_format GL_ANGLE_robust_client_memory GL_ANGLE_robust_fragment_shader_output GL_ANGLE_robust_resource_initialization GL_ANGLE_shader_pixel_local_storage GL_ANGLE_shader_pixel_local_storage_coherent GL_ANGLE_stencil_texturing GL_ANGLE_texture_compression_dxt3 GL_ANGLE_texture_compression_dxt5 GL_ANGLE_texture_multisample GL_ANGLE_texture_usage GL_ANGLE_translated_shader_source GL_ANGLE_vulkan_image GL_ANGLE_yuv_internal_format GL_APPLE_clip_distance GL_ARM_rgba8 GL_ARM_shader_framebuffer_fetch GL_ARM_shader_framebuffer_fetch_depth_stencil GL_CHROMIUM_bind_generates_resource GL_CHROMIUM_bind_uniform_location GL_CHROMIUM_copy_compressed_texture GL_CHROMIUM_copy_texture GL_CHROMIUM_lose_context GL_EXT_EGL_image_array GL_EXT_EGL_image_external_wrap_modes GL_EXT_EGL_image_storage GL_EXT_base_instance GL_EXT_blend_minmax GL_EXT_buffer_storage GL_EXT_clear_texture GL_EXT_clip_control GL_EXT_clip_cull_distance GL_EXT_color_buffer_float GL_EXT_color_buffer_half_float GL_EXT_compressed_ETC1_RGB8_sub_texture GL_EXT_conservative_depth GL_EXT_copy_image GL_EXT_debug_label GL_EXT_debug_marker GL_EXT_depth_clamp GL_EXT_discard_framebuffer GL_EXT_disjoint_timer_query GL_EXT_draw_buffers GL_EXT_draw_buffers_indexed GL_EXT_draw_elements_base_vertex GL_EXT_float_blend GL_EXT_frag_depth GL_EXT_instanced_arrays GL_EXT_map_buffer_range GL_EXT_memory_object GL_EXT_memory_object_fd GL_EXT_occlusion_query_boolean GL_EXT_polygon_offset_clamp GL_EXT_read_format_bgra GL_EXT_robustness GL_EXT_sRGB GL_EXT_sRGB_write_control GL_EXT_semaphore GL_EXT_semaphore_fd GL_EXT_separate_shader_objects GL_EXT_shader_framebuffer_fetch GL_EXT_shader_framebuffer_fetch_non_coherent GL_EXT_shader_non_constant_global_initializers GL_EXT_shader_texture_lod GL_EXT_shadow_samplers GL_EXT_texture_border_clamp GL_EXT_texture_compression_bptc GL_EXT_texture_compression_dxt1 GL_EXT_texture_compression_rgtc GL_EXT_texture_compression_s3tc_srgb GL_EXT_texture_cube_map_array GL_EXT_texture_filter_anisotropic GL_EXT_texture_format_BGRA8888 GL_EXT_texture_lod_bias GL_EXT_texture_mirror_clamp_to_edge GL_EXT_texture_rg GL_EXT_texture_sRGB_R8 GL_EXT_texture_sRGB_RG8 GL_EXT_texture_sRGB_decode GL_EXT_texture_shadow_lod GL_EXT_texture_storage GL_EXT_texture_type_2_10_10_10_REV GL_EXT_unpack_subimage GL_KHR_blend_equation_advanced GL_KHR_debug GL_KHR_robust_buffer_access_behavior GL_KHR_robustness GL_KHR_texture_compression_astc_ldr GL_NV_fence GL_NV_framebuffer_blit GL_NV_pack_subimage GL_NV_pixel_buffer_object GL_NV_polygon_mode GL_NV_read_depth GL_NV_read_depth_stencil GL_NV_read_stencil GL_NV_shader_noperspective_interpolation GL_OES_EGL_image GL_OES_EGL_image_external GL_OES_EGL_image_external_essl3 GL_OES_EGL_sync GL_OES_compressed_EAC_R11_signed_texture GL_OES_compressed_EAC_R11_unsigned_texture GL_OES_compressed_EAC_RG11_signed_texture GL_OES_compressed_EAC_RG11_unsigned_texture GL_OES_compressed_ETC1_RGB8_texture GL_OES_compressed_ETC2_RGB8_texture GL_OES_compressed_ETC2_RGBA8_texture GL_OES_compressed_ETC2_punchthroughA_RGBA8_texture GL_OES_compressed_ETC2_punchthroughA_sRGB8_alpha_texture GL_OES_compressed_ETC2_sRGB8_alpha8_texture GL_OES_compressed_ETC2_sRGB8_texture GL_OES_compressed_paletted_texture GL_OES_copy_image GL_OES_depth24 GL_OES_depth32 GL_OES_depth_texture GL_OES_depth_texture_cube_map GL_OES_draw_buffers_indexed GL_OES_draw_elements_base_vertex GL_OES_element_index_uint GL_OES_fbo_render_mipmap GL_OES_get_program_binary GL_OES_mapbuffer GL_OES_packed_depth_stencil GL_OES_required_internalformat GL_OES_rgb8_rgba8 GL_OES_sample_shading GL_OES_sample_variables GL_OES_shader_multisample_interpolation GL_OES_standard_derivatives GL_OES_surfaceless_context GL_OES_texture_3D GL_OES_texture_border_clamp GL_OES_texture_cube_map_array GL_OES_texture_float GL_OES_texture_float_linear GL_OES_texture_half_float GL_OES_texture_half_float_linear GL_OES_texture_npot GL_OES_texture_stencil8 GL_OES_texture_storage_multisample_2d_array GL_OES_vertex_array_object GL_OES_vertex_half_float GL_OES_vertex_type_10_10_10_2 GL_OVR_multiview GL_OVR_multiview2 GL_QCOM_texture_lod_bias ",
+				"glImplementationParts": "(gl=egl-angle,angle=swiftshader)",
+				"glRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver-5.0.0)",
+				"glResetNotificationStrategy": 33362,
+				"glVendor": "Google Inc. (Google)",
+				"glVersion": "OpenGL ES 3.0 (ANGLE 2.1.28222 git hash: 6dab7c7e742b)",
+				"glWsExtensions": "EGL_EXT_create_context_robustness EGL_ANGLE_surface_orientation EGL_KHR_create_context EGL_KHR_image EGL_KHR_image_base EGL_EXT_image_gl_colorspace EGL_KHR_gl_colorspace EGL_KHR_gl_texture_2D_image EGL_KHR_gl_texture_cubemap_image EGL_KHR_gl_renderbuffer_image EGL_KHR_get_all_proc_addresses EGL_KHR_fence_sync EGL_KHR_wait_sync EGL_ANGLE_create_context_webgl_compatibility EGL_CHROMIUM_create_context_bind_generates_resource EGL_KHR_swap_buffers_with_damage EGL_EXT_pixel_format_float EGL_KHR_surfaceless_context EGL_ANGLE_display_texture_share_group EGL_ANGLE_display_semaphore_share_group EGL_ANGLE_create_context_client_arrays EGL_ANGLE_program_cache_control EGL_ANGLE_robust_resource_initialization EGL_ANGLE_create_context_extensions_enabled EGL_ANDROID_blob_cache EGL_ANDROID_recordable EGL_ANGLE_create_context_backwards_compatible EGL_KHR_no_config_context EGL_IMG_context_priority EGL_KHR_create_context_no_error EGL_KHR_reusable_sync EGL_EXT_buffer_age EGL_ANGLE_create_surface_swap_interval EGL_ANGLE_vulkan_image EGL_KHR_partial_update EGL_ANGLE_global_fence_sync EGL_ANGLE_memory_usage_report ",
+				"glWsVendor": "Google Inc. (Google)",
+				"glWsVersion": "1.5 (ANGLE 2.1.28222 git hash: 6dab7c7e742b)",
+				"hardwareSupportsVulkan": false,
+				"inProcessGpu": false,
+				"initializationTime": 0.065296,
+				"isAsan": false,
+				"isClangCoverage": false,
+				"jpegDecodeAcceleratorSupported": false,
+				"maxMsaaSamples": "4",
+				"optimus": false,
+				"passthroughCmdDecoder": true,
+				"pixelShaderVersion": "3.00",
+				"processCrashCount": 0,
+				"sandboxed": false,
+				"skiaBackendType": "None",
+				"subpixelFontRendering": true,
+				"targetCpuBits": 64,
+				"vertexShaderVersion": "3.00",
+				"visibilityCallbackCallCount": 0
+			},
+			"featureStatus": {
+				"2d_canvas": "unavailable_software",
+				"direct_rendering_display_compositor": "disabled_off_ok",
+				"gpu_compositing": "disabled_software",
+				"multiple_raster_threads": "enabled_on",
+				"opengl": "disabled_off",
+				"rasterization": "disabled_software",
+				"raw_draw": "disabled_off_ok",
+				"skia_graphite": "disabled_off",
+				"trees_in_viz": "disabled_off",
+				"video_decode": "disabled_software",
+				"video_encode": "disabled_software",
+				"vulkan": "disabled_off",
+				"webgl": "unavailable_software",
+				"webgpu": "unavailable_software",
+				"webgpu_on_vk_via_gl_interop": "disabled_off",
+				"webnn": "unavailable_software"
+			},
+			"driverBugWorkarounds": [],
+			"videoDecoding": [],
+			"videoEncoding": []
+		}
+	}
+}

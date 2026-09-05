@@ -1,0 +1,185 @@
+{
+	"date": "2026-09-05",
+	"engine": "Playwright WebKit 26.5",
+	"naturalRuns": 25,
+	"naturalFailuresBeforeFix": 10,
+	"sampleNaturalFailure": {
+		"run": 0,
+		"before": {
+			"time": 1118,
+			"computed": "0.802496",
+			"inline": "1",
+			"latest": 1,
+			"value": 1,
+			"animation": "finished",
+			"animations": [
+				{
+					"state": "finished",
+					"currentTime": 211,
+					"keyframes": [
+						{
+							"composite": "auto",
+							"easing": "linear",
+							"offset": null,
+							"computedOffset": 0,
+							"opacity": "1"
+						},
+						{
+							"composite": "auto",
+							"easing": "linear",
+							"offset": null,
+							"computedOffset": 1,
+							"opacity": "0.8"
+						}
+					]
+				}
+			]
+		},
+		"afterTick": {
+			"time": 1120,
+			"computed": "0.8",
+			"inline": "1",
+			"latest": 1,
+			"value": 1,
+			"animations": [
+				{
+					"state": "finished",
+					"currentTime": 200,
+					"keyframes": [
+						{
+							"composite": "auto",
+							"easing": "linear",
+							"offset": null,
+							"computedOffset": 0,
+							"opacity": "1"
+						},
+						{
+							"composite": "auto",
+							"easing": "linear",
+							"offset": null,
+							"computedOffset": 1,
+							"opacity": "0.8"
+						}
+					]
+				},
+				{
+					"state": "finished",
+					"currentTime": 0,
+					"keyframes": []
+				}
+			]
+		},
+		"childExiting": {
+			"time": 1226,
+			"computed": "1",
+			"inline": "1",
+			"latest": 1,
+			"value": 1,
+			"animations": [
+				{
+					"state": "running",
+					"currentTime": 52,
+					"keyframes": []
+				}
+			]
+		}
+	},
+	"forcedFinishBeforeFix": {
+		"before": {
+			"time": 941,
+			"computed": "0.8",
+			"inline": "1",
+			"latest": 1,
+			"value": 1,
+			"animation": "finished",
+			"animations": [
+				{
+					"state": "finished",
+					"currentTime": 200,
+					"keyframes": [
+						{
+							"composite": "auto",
+							"easing": "linear",
+							"offset": null,
+							"computedOffset": 0,
+							"opacity": "1"
+						},
+						{
+							"composite": "auto",
+							"easing": "linear",
+							"offset": null,
+							"computedOffset": 1,
+							"opacity": "0.8"
+						}
+					]
+				}
+			]
+		},
+		"afterTick": {
+			"time": 943,
+			"computed": "0.8",
+			"inline": "1",
+			"latest": 1,
+			"value": 1,
+			"animations": [
+				{
+					"state": "finished",
+					"currentTime": 200,
+					"keyframes": [
+						{
+							"composite": "auto",
+							"easing": "linear",
+							"offset": null,
+							"computedOffset": 0,
+							"opacity": "1"
+						},
+						{
+							"composite": "auto",
+							"easing": "linear",
+							"offset": null,
+							"computedOffset": 1,
+							"opacity": "0.8"
+						}
+					]
+				},
+				{
+					"state": "finished",
+					"currentTime": 0,
+					"keyframes": []
+				}
+			]
+		},
+		"childExiting": {
+			"time": 1094,
+			"computed": "1",
+			"inline": "1",
+			"latest": 1,
+			"value": 1,
+			"animations": [
+				{
+					"state": "running",
+					"currentTime": 113,
+					"keyframes": []
+				}
+			]
+		}
+	},
+	"staleFinishBeforeCallbackSuppression": {
+		"forward": {
+			"midpoint": 0.4,
+			"afterTwoFrames": 0.8,
+			"oldFinishCalls": 1
+		},
+		"backward": {
+			"midpoint": 0.15,
+			"afterTwoFrames": 0.3,
+			"oldFinishCalls": 1
+		},
+		"reverse-repeat": {
+			"midpoint": 0.15,
+			"afterTwoFrames": 0.3,
+			"oldFinishCalls": 1
+		}
+	},
+	"methodology": "Development Vitest in real WebKit. Native finish() creates a deterministic asynchronous finish-event boundary; no synthetic finish event or dependency patch. Natural run uses ordinary Svelte reactive state and native browser animation."
+}

@@ -1,0 +1,28 @@
+<script lang="ts">
+ import Div from '../src/lib/html/Div.svelte'
+ import AnimatePresence from '../src/lib/components/AnimatePresence.svelte'
+ let { shared = false, media = false, count=1 }: { shared?:boolean; media?:boolean; count?:number } = $props()
+ let shown = $state(true)
+ let moved = $state(false)
+</script>
+<button onclick={() => shown = !shown}>Toggle</button>
+<button onclick={() => moved = !moved}>Move</button>
+<div style={`display:flex;justify-content:${moved?'flex-end':'flex-start'};width:500px`}>
+ <div><div><div><div><div><div><div>
+  <Div layout initial={false} transition={{duration:1}} data-testid="deep" style="width:40px;height:40px;background:red"/>
+ </div></div></div></div></div></div></div>
+</div>
+{#if shared}
+ {#each Array.from({length:count},(_,i)=>i) as id (id)}
+  <Div layoutId={`audit-${id}`} initial={false} style="width:40px;height:40px"/>
+ {/each}
+{/if}
+{#if media}
+ <AnimatePresence>
+  {#if shown}
+   <Div key="media" initial={false} exit={{opacity:0}} transition={{duration:1}} data-testid="media">
+    <canvas width="40" height="40"></canvas>
+   </Div>
+  {/if}
+ </AnimatePresence>
+{/if}

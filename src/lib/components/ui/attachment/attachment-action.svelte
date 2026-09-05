@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { Button, type ButtonProps } from "$lib/components/ui/button/index.js";
-	import { cn } from "$lib/utils.js";
+	import { Button, type ButtonProps } from '$lib/components/ui/button/index.js';
+	import { cn } from '$lib/utils.js';
 
 	let {
 		ref = $bindable(null),
 		class: className,
-		variant = "ghost",
-		size = "icon-xs",
+		variant = 'ghost',
+		size = 'icon-xs',
 		...restProps
 	}: ButtonProps = $props();
 </script>
@@ -16,6 +16,6 @@
 	data-slot="attachment-action"
 	{variant}
 	{size}
-	class={cn("cn-attachment-action", className)}
+	class={cn('cn-attachment-action', className)}
 	{...restProps}
 />

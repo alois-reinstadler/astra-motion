@@ -1,0 +1,32 @@
+{
+	"date": "2026-09-05",
+	"engine": "motion-dom@13.2.0",
+	"browserSuites": {
+		"chromium": {
+			"passed": 146,
+			"files": 28,
+			"durationSeconds": 84.0
+		},
+		"firefox": {
+			"passed": 146,
+			"files": 28,
+			"durationSeconds": 83.87
+		},
+		"webkit": {
+			"passed": 146,
+			"files": 28,
+			"durationSeconds": 115.36
+		}
+	},
+	"browserTotal": 438,
+	"additionalStateOrchestrationChecks": 54,
+	"serverCompilerTests": 41,
+	"svelteKitTests": 27,
+	"typecheck": {
+		"errors": 0,
+		"warnings": 0
+	},
+	"paintParticipants": 100,
+	"paintAnimationGeometryReads": 0,
+	"methodology": "Real browser suites run sequentially, strict geometry assertions retained. Final transition resolution additionally qualified in 54 state/orchestration cases. Kit uses existing development server and one Playwright worker. No production application build or real mobile-device performance campaign."
+}

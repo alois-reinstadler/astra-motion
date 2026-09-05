@@ -1,0 +1,39 @@
+{
+	".": [
+		"Motion",
+		"MotionConfig",
+		"Presence",
+		"createAnimate",
+		"createInView",
+		"createLayout",
+		"createMotion",
+		"createScroll",
+		"mapValue",
+		"motionStore",
+		"motionValue",
+		"popLayout",
+		"presence",
+		"shouldReduceMotion",
+		"springValue",
+		"stagger",
+		"transformValue",
+		"updateLayout"
+	],
+	"./layout": ["createLayout", "updateLayout"],
+	"./presence": ["Presence", "popLayout", "presence"],
+	"./routes": ["routeShared", "routeTransitions"],
+	"./policy": ["shouldReduceMotion"],
+	"./state": ["createMotion"],
+	"./values": [
+		"mapValue",
+		"motionStore",
+		"motionValue",
+		"springValue",
+		"stagger",
+		"transformValue"
+	],
+	"./animate": ["createAnimate"],
+	"./scroll": ["createScroll"],
+	"./state/lite": ["createMotion"],
+	"./in-view": ["createInView"]
+}

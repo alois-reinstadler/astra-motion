@@ -1,0 +1,10 @@
+import {svelteMotionOptimize} from '../src/lib/vite.ts'
+const source=`<script>
+import { motion } from '@humanspeak/svelte-motion'
+const literal = '<motion.div>example</motion.div>'
+</script>
+<motion.div>{literal}</motion.div>`
+const transform=svelteMotionOptimize().transform as (code:string,id:string)=>{code:string;map:unknown}
+const result=transform(source,'Example.svelte')
+console.log(JSON.stringify({source,output:result.code,map:result.map},null,2))
+if(!result.code.includes("const literal = '<SvelteMotionDiv>example</SvelteMotionDiv>'")) throw new Error('Reproduction did not occur')

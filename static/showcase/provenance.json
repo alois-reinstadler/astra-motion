@@ -1,0 +1,73 @@
+{
+  "retrieved": "2026-09-05",
+  "usageGuidelines": "https://www.nasa.gov/nasa-brand-center/images-and-media/",
+  "assets": [
+    {
+      "file": "namib.jpg",
+      "url": "https://images-assets.nasa.gov/image/iss073e0511487/iss073e0511487~medium.jpg",
+      "metadata": {
+        "center": "JSC",
+        "date_created": "2025-08-20T00:00:00Z",
+        "description": "iss073e0511487 (Aug. 20, 2025) --- A portion of the hot, arid Namib Desert near the Atlantic coast, with its sand dunes created by strong onshore winds close to the NamibRand Nature Reserve, is pictured from the International Space Station as it orbited 262 miles above Namibia.",
+        "description_508": "D4_2071158_20250820T134226_R_2025-08-20 13-42-26.NEF",
+        "media_type": "image",
+        "nasa_id": "iss073e0511487",
+        "title": "A portion of the hot, arid Namib Desert near the Atlantic coast",
+        "album": [
+          "Expedition_73"
+        ]
+      }
+    },
+    {
+      "file": "urmia.jpg",
+      "url": "https://images-assets.nasa.gov/image/iss044e002419/iss044e002419~medium.jpg",
+      "metadata": {
+        "center": "JSC",
+        "date_created": "2015-06-20T00:00:00Z",
+        "description": "ISS044E002419 (06/20/2015) ---  This Earth observation of Iran was taken by members of Expedition 44 on the International Space Station on June 20, 2015. Described as \"Earth Art\" it is the western shore of Lake Urmia near G\u00fclmanxana, Iran (~36.6N, 45.3E).",
+        "media_type": "image",
+        "nasa_id": "iss044e002419",
+        "title": "Earth Observations taken by Expedition 44 crewmember"
+      }
+    },
+    {
+      "file": "caicos.jpg",
+      "url": "https://images-assets.nasa.gov/image/STS100-708-078/STS100-708-078~medium.jpg",
+      "metadata": {
+        "center": "JSC",
+        "date_created": "2001-04-28T00:00:00Z",
+        "description": "STS100-708-78 (19 April-1 May 2001) --- Southwest of the Bahamas and north of Hispaniola lie the Turks and Caicos Islands, photographed by the astronaut/cosmonaut crew aboard the Earth-orbiting Space Shuttle Endeavour. In this view, the extensive shallow water areas of Caicos Bank (turquoise blue) dominate to the south of the Caicos Islands.  Caicos Bank covers an area of 7,680 square kilometers (1.9 million acres).  The coral reefs of Caicos are primarily along the north deep water edge of the islands, and in a barrier along the south margin of the bank.  The area is known for its marine caves and blowholes.  To the east of Caicos Bank, near the tail of the Shuttle, is the island of Grand Turk, part of the much smaller Turks Bank.  The channel that runs between the two banks is more than 2,200 meters (1.4 miles) deep.",
+        "media_type": "image",
+        "nasa_id": "STS100-708-078",
+        "title": "Earth observation image of Caicos Island, Bahamas taken during STS-100"
+      }
+    },
+    {
+      "file": "lena.jpg",
+      "url": "https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e002160/GSFC_20171208_Archive_e002160~medium.jpg",
+      "metadata": {
+        "album": [
+          "Test"
+        ],
+        "center": "GSFC",
+        "date_created": "2017-12-08T00:00:00Z",
+        "description": "Image taken 7/27/2000:  The Lena River, some 2,800 miles (4,400 km) long, is one of the largest rivers in the world. The Lena Delta Reserve is the most extensive protected wilderness area in Russia. It is an important refuge and breeding grounds for many species of Siberian wildlife.   The Lena Delta can be found on Landsat 7 WRS Path 131 Row 8/9, center: 72.21, 126.15.  To learn more about the Landsat satellite go to:  <a href=\"http://landsat.gsfc.nasa.gov/\" rel=\"nofollow\">landsat.gsfc.nasa.gov/</a>",
+        "keywords": [
+          "Lena Delta",
+          "earth",
+          "satellite",
+          "aerial",
+          "nasa",
+          "goddard",
+          "goddardspaceflightcenter",
+          "earthday2010",
+          "landsatsattellite"
+        ],
+        "location": "Greenbelt, MD",
+        "media_type": "image",
+        "nasa_id": "GSFC_20171208_Archive_e002160",
+        "title": "Lena Delta"
+      }
+    }
+  ]
+}

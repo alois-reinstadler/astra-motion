@@ -1,0 +1,1723 @@
+{
+	"date": "2026-09-05T09:31:46.370Z",
+	"status": "complete",
+	"command": [
+		"--url",
+		"http://127.0.0.1:5290",
+		"--counts",
+		"500",
+		"--rates",
+		"6",
+		"--modes",
+		"automatic,explicit",
+		"--repeats",
+		"1",
+		"--steps",
+		"120",
+		"--memory-cycles",
+		"0",
+		"--output",
+		"docs/research/production-performance-sustained.json",
+		"--package-tarball",
+		"/tmp/astra-motion-production-a2BJGU/astra-motion-0.0.1.tgz"
+	],
+	"environment": {
+		"platform": "linux",
+		"kernel": "6.6.87.2-microsoft-standard-WSL2",
+		"node": "v25.8.2",
+		"cpu": "AMD Ryzen 7 7800X3D 8-Core Processor",
+		"logicalCpus": 16,
+		"memoryBytes": 16292966400,
+		"loadAtStart": [0.6, 0.57, 0.57],
+		"loadAtEnd": [0.93, 0.69, 0.61]
+	},
+	"method": {
+		"productionRequired": true,
+		"viewport": {
+			"width": 1280,
+			"height": 1040
+		},
+		"rates": [6],
+		"counts": [500],
+		"modes": ["automatic", "explicit"],
+		"repeats": 1,
+		"steps": 120,
+		"requestedGapMs": 80,
+		"settleWindowMs": 1400,
+		"readInstrumentation": true,
+		"warmup": "two six-operation cycles per fresh browser/configuration",
+		"cpu": "CDP relative slowdown, not calibrated hardware or a physical mobile device",
+		"frames": "RAF intervals; missed-refresh estimate is not a measurement of compositor dropped frames",
+		"memory": "separate 1x mount/destroy run; forced GC checkpoints; no strong node arrays retained by fixture",
+		"traces": "separate diagnostic runs; not pooled with primary timing samples"
+	},
+	"rows": [
+		{
+			"count": 500,
+			"mode": "automatic",
+			"rate": 6,
+			"iteration": 0,
+			"transactions": [
+				{
+					"kind": "reverse",
+					"transactionMs": 50.900000005960464,
+					"offsetMs": 0,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0,
+					"offsetMs": 310.70000000298023,
+					"scheduleLagMs": 230.70000000298023
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 6.699999988079071,
+					"offsetMs": 562.3000000119209,
+					"scheduleLagMs": 402.30000001192093
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 8.099999994039536,
+					"offsetMs": 824.4000000059605,
+					"scheduleLagMs": 584.4000000059605
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 4.5999999940395355,
+					"offsetMs": 1143.9000000059605,
+					"scheduleLagMs": 823.9000000059605
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.4000000059604645,
+					"offsetMs": 1347.4000000059605,
+					"scheduleLagMs": 947.4000000059605
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 36.400000005960464,
+					"offsetMs": 1589,
+					"scheduleLagMs": 1109
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000000894069672,
+					"offsetMs": 1903.5,
+					"scheduleLagMs": 1343.5
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 6.399999991059303,
+					"offsetMs": 2200.6000000089407,
+					"scheduleLagMs": 1560.6000000089407
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 9.599999994039536,
+					"offsetMs": 2555.9000000059605,
+					"scheduleLagMs": 1835.9000000059605
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 3.9000000059604645,
+					"offsetMs": 2904.4000000059605,
+					"scheduleLagMs": 2104.4000000059605
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.09999999403953552,
+					"offsetMs": 3086.9000000059605,
+					"scheduleLagMs": 2206.9000000059605
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 82.90000000596046,
+					"offsetMs": 3387.4000000059605,
+					"scheduleLagMs": 2427.4000000059605
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 1.6000000089406967,
+					"offsetMs": 3729.2000000029802,
+					"scheduleLagMs": 2689.2000000029802
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 8.5,
+					"offsetMs": 3975.7000000029802,
+					"scheduleLagMs": 2855.7000000029802
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 11.5,
+					"offsetMs": 4254.600000008941,
+					"scheduleLagMs": 3054.6000000089407
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 3.2000000029802322,
+					"offsetMs": 4592.9000000059605,
+					"scheduleLagMs": 3312.9000000059605
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0,
+					"offsetMs": 4753.9000000059605,
+					"scheduleLagMs": 3393.9000000059605
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 36,
+					"offsetMs": 4999.300000011921,
+					"scheduleLagMs": 3559.300000011921
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000000894069672,
+					"offsetMs": 5314.70000000298,
+					"scheduleLagMs": 3794.7000000029802
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 7.799999997019768,
+					"offsetMs": 5550.800000011921,
+					"scheduleLagMs": 3950.800000011921
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 8.700000002980232,
+					"offsetMs": 5817.800000011921,
+					"scheduleLagMs": 4137.800000011921
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 2.9000000059604645,
+					"offsetMs": 6139,
+					"scheduleLagMs": 4379
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.29999999701976776,
+					"offsetMs": 6343.800000011921,
+					"scheduleLagMs": 4503.800000011921
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 36.099999994039536,
+					"offsetMs": 6576.9000000059605,
+					"scheduleLagMs": 4656.9000000059605
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.7999999970197678,
+					"offsetMs": 6875.20000000298,
+					"scheduleLagMs": 4875.20000000298
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 7.4000000059604645,
+					"offsetMs": 7153.4000000059605,
+					"scheduleLagMs": 5073.4000000059605
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 7.5,
+					"offsetMs": 7462,
+					"scheduleLagMs": 5302
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 2.4000000059604645,
+					"offsetMs": 7753.5,
+					"scheduleLagMs": 5513.5
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0,
+					"offsetMs": 7899.600000008941,
+					"scheduleLagMs": 5579.600000008941
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 34.400000005960464,
+					"offsetMs": 8151.5,
+					"scheduleLagMs": 5751.5
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 1.2999999970197678,
+					"offsetMs": 8470.60000000894,
+					"scheduleLagMs": 5990.600000008941
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 5.300000011920929,
+					"offsetMs": 8708.5,
+					"scheduleLagMs": 6148.5
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 8.200000002980232,
+					"offsetMs": 8973.20000000298,
+					"scheduleLagMs": 6333.20000000298
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 3,
+					"offsetMs": 9294.60000000894,
+					"scheduleLagMs": 6574.600000008941
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.19999998807907104,
+					"offsetMs": 9479.800000011921,
+					"scheduleLagMs": 6679.800000011921
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 36,
+					"offsetMs": 9713.20000000298,
+					"scheduleLagMs": 6833.20000000298
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.6000000089406967,
+					"offsetMs": 10003.70000000298,
+					"scheduleLagMs": 7043.70000000298
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 5.0999999940395355,
+					"offsetMs": 10265.40000000596,
+					"scheduleLagMs": 7225.4000000059605
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 12.099999994039536,
+					"offsetMs": 10551.10000000894,
+					"scheduleLagMs": 7431.100000008941
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 3.0999999940395355,
+					"offsetMs": 10843.40000000596,
+					"scheduleLagMs": 7643.4000000059605
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 1.2000000029802322,
+					"offsetMs": 10983.10000000894,
+					"scheduleLagMs": 7703.100000008941
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 35.79999999701977,
+					"offsetMs": 11276.10000000894,
+					"scheduleLagMs": 7916.100000008941
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.20000000298023224,
+					"offsetMs": 11587.90000000596,
+					"scheduleLagMs": 8147.9000000059605
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 3.800000011920929,
+					"offsetMs": 11835,
+					"scheduleLagMs": 8315
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 7.5,
+					"offsetMs": 12092.800000011921,
+					"scheduleLagMs": 8492.800000011921
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 2.6000000089406967,
+					"offsetMs": 12449.10000000894,
+					"scheduleLagMs": 8769.10000000894
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0,
+					"offsetMs": 12604,
+					"scheduleLagMs": 8844
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 37,
+					"offsetMs": 12832.20000000298,
+					"scheduleLagMs": 8992.20000000298
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.29999999701976776,
+					"offsetMs": 13133.40000000596,
+					"scheduleLagMs": 9213.40000000596
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 4.9000000059604645,
+					"offsetMs": 13394.5,
+					"scheduleLagMs": 9394.5
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 8.099999994039536,
+					"offsetMs": 13653.10000000894,
+					"scheduleLagMs": 9573.10000000894
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 1.7999999970197678,
+					"offsetMs": 13942.800000011921,
+					"scheduleLagMs": 9782.800000011921
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.09999999403953552,
+					"offsetMs": 14092.800000011921,
+					"scheduleLagMs": 9852.800000011921
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 43.8999999910593,
+					"offsetMs": 14370.800000011921,
+					"scheduleLagMs": 10050.800000011921
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000000894069672,
+					"offsetMs": 14683.5,
+					"scheduleLagMs": 10283.5
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 5.0999999940395355,
+					"offsetMs": 14917.10000000894,
+					"scheduleLagMs": 10437.10000000894
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 7.9000000059604645,
+					"offsetMs": 15182.20000000298,
+					"scheduleLagMs": 10622.20000000298
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 2.7999999970197678,
+					"offsetMs": 15503.90000000596,
+					"scheduleLagMs": 10863.90000000596
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000000894069672,
+					"offsetMs": 15659.70000000298,
+					"scheduleLagMs": 10939.70000000298
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 37.599999994039536,
+					"offsetMs": 15890.10000000894,
+					"scheduleLagMs": 11090.10000000894
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 1,
+					"offsetMs": 16209.90000000596,
+					"scheduleLagMs": 11329.90000000596
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 4.9000000059604645,
+					"offsetMs": 16470.30000001192,
+					"scheduleLagMs": 11510.300000011921
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 7.5999999940395355,
+					"offsetMs": 16723.90000000596,
+					"scheduleLagMs": 11683.90000000596
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 2.5,
+					"offsetMs": 17018.10000000894,
+					"scheduleLagMs": 11898.10000000894
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000000894069672,
+					"offsetMs": 17166.5,
+					"scheduleLagMs": 11966.5
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 38,
+					"offsetMs": 17450.70000000298,
+					"scheduleLagMs": 12170.70000000298
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.09999999403953552,
+					"offsetMs": 17754.40000000596,
+					"scheduleLagMs": 12394.40000000596
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 3.7000000029802322,
+					"offsetMs": 17987.10000000894,
+					"scheduleLagMs": 12547.10000000894
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 13.899999991059303,
+					"offsetMs": 18268.30000001192,
+					"scheduleLagMs": 12748.300000011921
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 2.7000000029802322,
+					"offsetMs": 18586.70000000298,
+					"scheduleLagMs": 12986.70000000298
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 1.1000000089406967,
+					"offsetMs": 18751.5,
+					"scheduleLagMs": 13071.5
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 36.5,
+					"offsetMs": 18992.30000001192,
+					"scheduleLagMs": 13232.300000011921
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0,
+					"offsetMs": 19311.10000000894,
+					"scheduleLagMs": 13471.10000000894
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 5.200000002980232,
+					"offsetMs": 19542.60000000894,
+					"scheduleLagMs": 13622.60000000894
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 6.700000002980232,
+					"offsetMs": 19800,
+					"scheduleLagMs": 13800
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 3.2000000029802322,
+					"offsetMs": 20092,
+					"scheduleLagMs": 14012
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 1.0999999940395355,
+					"offsetMs": 20267.60000000894,
+					"scheduleLagMs": 14107.60000000894
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 37.099999994039536,
+					"offsetMs": 20547.60000000894,
+					"scheduleLagMs": 14307.60000000894
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0,
+					"offsetMs": 20832.80000001192,
+					"scheduleLagMs": 14512.800000011921
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 5.299999997019768,
+					"offsetMs": 21070.90000000596,
+					"scheduleLagMs": 14670.90000000596
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 6.4000000059604645,
+					"offsetMs": 21373.70000000298,
+					"scheduleLagMs": 14893.70000000298
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 2.5999999940395355,
+					"offsetMs": 21652.60000000894,
+					"scheduleLagMs": 15092.60000000894
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.09999999403953552,
+					"offsetMs": 21795.90000000596,
+					"scheduleLagMs": 15155.90000000596
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 36.5,
+					"offsetMs": 22038.40000000596,
+					"scheduleLagMs": 15318.40000000596
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 1.2000000029802322,
+					"offsetMs": 22388.10000000894,
+					"scheduleLagMs": 15588.10000000894
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 5.600000008940697,
+					"offsetMs": 22639.20000000298,
+					"scheduleLagMs": 15759.20000000298
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 7.4000000059604645,
+					"offsetMs": 22898.70000000298,
+					"scheduleLagMs": 15938.70000000298
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 1.5999999940395355,
+					"offsetMs": 23186.40000000596,
+					"scheduleLagMs": 16146.40000000596
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0,
+					"offsetMs": 23336.90000000596,
+					"scheduleLagMs": 16216.90000000596
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 34.3999999910593,
+					"offsetMs": 23594.60000000894,
+					"scheduleLagMs": 16394.60000000894
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.09999999403953552,
+					"offsetMs": 23881.90000000596,
+					"scheduleLagMs": 16601.90000000596
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 5.399999991059303,
+					"offsetMs": 24111.80000001192,
+					"scheduleLagMs": 16751.80000001192
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 9.200000002980232,
+					"offsetMs": 24403.70000000298,
+					"scheduleLagMs": 16963.70000000298
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 2.5999999940395355,
+					"offsetMs": 24737.10000000894,
+					"scheduleLagMs": 17217.10000000894
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 1.1000000089406967,
+					"offsetMs": 24901.70000000298,
+					"scheduleLagMs": 17301.70000000298
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 36.30000001192093,
+					"offsetMs": 25141.5,
+					"scheduleLagMs": 17461.5
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.09999999403953552,
+					"offsetMs": 25457.40000000596,
+					"scheduleLagMs": 17697.40000000596
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 4.9000000059604645,
+					"offsetMs": 25688.70000000298,
+					"scheduleLagMs": 17848.70000000298
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 6.899999991059303,
+					"offsetMs": 25951.30000001192,
+					"scheduleLagMs": 18031.30000001192
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 3.0999999940395355,
+					"offsetMs": 26238.80000001192,
+					"scheduleLagMs": 18238.80000001192
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.09999999403953552,
+					"offsetMs": 26411.60000000894,
+					"scheduleLagMs": 18331.60000000894
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 34.29999999701977,
+					"offsetMs": 26668.10000000894,
+					"scheduleLagMs": 18508.10000000894
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.5999999940395355,
+					"offsetMs": 26958.80000001192,
+					"scheduleLagMs": 18718.80000001192
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 5.200000002980232,
+					"offsetMs": 27195.20000000298,
+					"scheduleLagMs": 18875.20000000298
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 7,
+					"offsetMs": 27488.90000000596,
+					"scheduleLagMs": 19088.90000000596
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 2.6000000089406967,
+					"offsetMs": 27765,
+					"scheduleLagMs": 19285
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.5,
+					"offsetMs": 27909.70000000298,
+					"scheduleLagMs": 19349.70000000298
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 35.30000001192093,
+					"offsetMs": 28156.5,
+					"scheduleLagMs": 19516.5
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.09999999403953552,
+					"offsetMs": 28473.30000001192,
+					"scheduleLagMs": 19753.30000001192
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 5.5,
+					"offsetMs": 28703.40000000596,
+					"scheduleLagMs": 19903.40000000596
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 7.200000002980232,
+					"offsetMs": 28971.10000000894,
+					"scheduleLagMs": 20091.10000000894
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 2.6000000089406967,
+					"offsetMs": 29288,
+					"scheduleLagMs": 20328
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0,
+					"offsetMs": 29447,
+					"scheduleLagMs": 20407
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 35.79999999701977,
+					"offsetMs": 29705.40000000596,
+					"scheduleLagMs": 20585.40000000596
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0,
+					"offsetMs": 30030,
+					"scheduleLagMs": 20830
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 3.7000000029802322,
+					"offsetMs": 30270,
+					"scheduleLagMs": 20990
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 8.299999997019768,
+					"offsetMs": 30555.60000000894,
+					"scheduleLagMs": 21195.60000000894
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 2.5,
+					"offsetMs": 30843.80000001192,
+					"scheduleLagMs": 21403.80000001192
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.6000000089406967,
+					"offsetMs": 30996.5,
+					"scheduleLagMs": 21476.5
+				}
+			],
+			"interactionMs": 31244.30000001192,
+			"LayoutCount": 643,
+			"RecalcStyleCount": 765,
+			"LayoutDuration": 5.764149,
+			"RecalcStyleDuration": 9.836217,
+			"ScriptDuration": 11.711615,
+			"TaskDuration": 31.565911,
+			"durationMs": 32671.69999998808,
+			"bcr": 124000,
+			"computedStyles": 126000,
+			"frameCount": 197,
+			"medianFrameMs": 233.29999999999563,
+			"p95FrameMs": 316.70000000000437,
+			"maximumFrameMs": 366.7000000000007,
+			"framesOver25ms": 126,
+			"estimatedMissed60HzRafs": 1763,
+			"longAnimationFrames": 121,
+			"longTasks": 241,
+			"forcedStyleLayoutMsInLongFrames": 7843.299999999999,
+			"activeAtDeadline": 0,
+			"nativeAtDeadline": 0,
+			"correctness": {
+				"expectedCount": 500,
+				"domCount": 500,
+				"uniqueCount": 500,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 500,
+				"participants": 500,
+				"active": 0,
+				"minimumOpacity": 1,
+				"outOfFlow": 0,
+				"inert": 0
+			},
+			"maxTransactionMs": 82.90000000596046,
+			"medianTransactionMs": 3.800000011920929,
+			"maxScheduleLagMs": 21476.5,
+			"idleMounted": {
+				"durationMs": 707.7000000029802,
+				"bcr": 0,
+				"computedStyles": 0,
+				"frames": 42,
+				"active": 0,
+				"native": 0
+			},
+			"initial": {
+				"expectedCount": 500,
+				"domCount": 500,
+				"uniqueCount": 500,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 500,
+				"participants": 500,
+				"active": 0
+			},
+			"errors": []
+		},
+		{
+			"count": 500,
+			"mode": "explicit",
+			"rate": 6,
+			"iteration": 0,
+			"transactions": [
+				{
+					"kind": "reverse",
+					"transactionMs": 63.79999999701977,
+					"offsetMs": 0,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 11.700000002980232,
+					"offsetMs": 208.70000000298023,
+					"scheduleLagMs": 128.70000000298023
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 24.299999997019768,
+					"offsetMs": 338.40000000596046,
+					"scheduleLagMs": 178.40000000596046
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 37.099999994039536,
+					"offsetMs": 463.30000001192093,
+					"scheduleLagMs": 223.30000001192093
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 13,
+					"offsetMs": 605.4000000059605,
+					"scheduleLagMs": 285.40000000596046
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 12.099999994039536,
+					"offsetMs": 742.6000000089407,
+					"scheduleLagMs": 342.6000000089407
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 66.69999998807907,
+					"offsetMs": 873.3000000119209,
+					"scheduleLagMs": 393.30000001192093
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 10.699999988079071,
+					"offsetMs": 1054.800000011921,
+					"scheduleLagMs": 494.80000001192093
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 24.799999997019768,
+					"offsetMs": 1220.1000000089407,
+					"scheduleLagMs": 580.1000000089407
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 39,
+					"offsetMs": 1354.5,
+					"scheduleLagMs": 634.5
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 12.599999994039536,
+					"offsetMs": 1492.9000000059605,
+					"scheduleLagMs": 692.9000000059605
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 11.5,
+					"offsetMs": 1616.2000000029802,
+					"scheduleLagMs": 736.2000000029802
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 73.40000000596046,
+					"offsetMs": 1752.9000000059605,
+					"scheduleLagMs": 792.9000000059605
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 13.799999997019768,
+					"offsetMs": 1985.9000000059605,
+					"scheduleLagMs": 945.9000000059605
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 18.900000005960464,
+					"offsetMs": 2147.4000000059605,
+					"scheduleLagMs": 1027.4000000059605
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 35.20000000298023,
+					"offsetMs": 2258.2000000029802,
+					"scheduleLagMs": 1058.2000000029802
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 11.5,
+					"offsetMs": 2393.7000000029802,
+					"scheduleLagMs": 1113.7000000029802
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 10.300000011920929,
+					"offsetMs": 2514,
+					"scheduleLagMs": 1154
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 67.70000000298023,
+					"offsetMs": 2643.4000000059605,
+					"scheduleLagMs": 1203.4000000059605
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 12,
+					"offsetMs": 2845.9000000059605,
+					"scheduleLagMs": 1325.9000000059605
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 25,
+					"offsetMs": 2986.300000011921,
+					"scheduleLagMs": 1386.300000011921
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 48.30000001192093,
+					"offsetMs": 3144,
+					"scheduleLagMs": 1464
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 16,
+					"offsetMs": 3329.800000011921,
+					"scheduleLagMs": 1569.800000011921
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 10.5,
+					"offsetMs": 3493.1000000089407,
+					"scheduleLagMs": 1653.1000000089407
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 42.29999999701977,
+					"offsetMs": 3614.4000000059605,
+					"scheduleLagMs": 1694.4000000059605
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 11.099999994039536,
+					"offsetMs": 3778.1000000089407,
+					"scheduleLagMs": 1778.1000000089407
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 18.5,
+					"offsetMs": 3898.300000011921,
+					"scheduleLagMs": 1818.300000011921
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 33.599999994039536,
+					"offsetMs": 4008.1000000089407,
+					"scheduleLagMs": 1848.1000000089407
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 14,
+					"offsetMs": 4142.9000000059605,
+					"scheduleLagMs": 1902.9000000059605
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 11.299999997019768,
+					"offsetMs": 4282.9000000059605,
+					"scheduleLagMs": 1962.9000000059605
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 47.29999999701977,
+					"offsetMs": 4414.20000000298,
+					"scheduleLagMs": 2014.2000000029802
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 11.799999997019768,
+					"offsetMs": 4607.70000000298,
+					"scheduleLagMs": 2127.7000000029802
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 18.599999994039536,
+					"offsetMs": 4733,
+					"scheduleLagMs": 2173
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 33,
+					"offsetMs": 4844.9000000059605,
+					"scheduleLagMs": 2204.9000000059605
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 12.5,
+					"offsetMs": 4970,
+					"scheduleLagMs": 2250
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 10.700000002980232,
+					"offsetMs": 5093,
+					"scheduleLagMs": 2293
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 40.30000001192093,
+					"offsetMs": 5216,
+					"scheduleLagMs": 2336
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 9.700000002980232,
+					"offsetMs": 5375.100000008941,
+					"scheduleLagMs": 2415.1000000089407
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 20.900000005960464,
+					"offsetMs": 5496,
+					"scheduleLagMs": 2456
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 38.5,
+					"offsetMs": 5631.5,
+					"scheduleLagMs": 2511.5
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 11,
+					"offsetMs": 5761,
+					"scheduleLagMs": 2561
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 10.700000002980232,
+					"offsetMs": 5877.100000008941,
+					"scheduleLagMs": 2597.1000000089407
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 40,
+					"offsetMs": 5997,
+					"scheduleLagMs": 2637
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 9.599999994039536,
+					"offsetMs": 6151.300000011921,
+					"scheduleLagMs": 2711.300000011921
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 17.200000002980232,
+					"offsetMs": 6278.600000008941,
+					"scheduleLagMs": 2758.6000000089407
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 32.70000000298023,
+					"offsetMs": 6388.9000000059605,
+					"scheduleLagMs": 2788.9000000059605
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 12,
+					"offsetMs": 6515.9000000059605,
+					"scheduleLagMs": 2835.9000000059605
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 9.899999991059303,
+					"offsetMs": 6662.800000011921,
+					"scheduleLagMs": 2902.800000011921
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 44.599999994039536,
+					"offsetMs": 6809.800000011921,
+					"scheduleLagMs": 2969.800000011921
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 10.600000008940697,
+					"offsetMs": 6986.5,
+					"scheduleLagMs": 3066.5
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 15.800000011920929,
+					"offsetMs": 7104,
+					"scheduleLagMs": 3104
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 37.599999994039536,
+					"offsetMs": 7208.600000008941,
+					"scheduleLagMs": 3128.6000000089407
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 12.599999994039536,
+					"offsetMs": 7354.600000008941,
+					"scheduleLagMs": 3194.6000000089407
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 10.600000008940697,
+					"offsetMs": 7478.5,
+					"scheduleLagMs": 3238.5
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 48.79999999701977,
+					"offsetMs": 7608.4000000059605,
+					"scheduleLagMs": 3288.4000000059605
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 12.199999988079071,
+					"offsetMs": 7801.800000011921,
+					"scheduleLagMs": 3401.800000011921
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 16.5,
+					"offsetMs": 7949.600000008941,
+					"scheduleLagMs": 3469.6000000089407
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 36,
+					"offsetMs": 8050.70000000298,
+					"scheduleLagMs": 3490.7000000029802
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 9.799999997019768,
+					"offsetMs": 8183.600000008941,
+					"scheduleLagMs": 3543.6000000089407
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 10.299999997019768,
+					"offsetMs": 8300.70000000298,
+					"scheduleLagMs": 3580.7000000029802
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 40.400000005960464,
+					"offsetMs": 8422.70000000298,
+					"scheduleLagMs": 3622.7000000029802
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 13.5,
+					"offsetMs": 8581,
+					"scheduleLagMs": 3701
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 17.399999991059303,
+					"offsetMs": 8718.10000000894,
+					"scheduleLagMs": 3758.1000000089407
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 34.3999999910593,
+					"offsetMs": 8826.800000011921,
+					"scheduleLagMs": 3786.800000011921
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 13.5,
+					"offsetMs": 8958.40000000596,
+					"scheduleLagMs": 3838.4000000059605
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 9.600000008940697,
+					"offsetMs": 9094.5,
+					"scheduleLagMs": 3894.5
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 39.6000000089407,
+					"offsetMs": 9210,
+					"scheduleLagMs": 3930
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 10.400000005960464,
+					"offsetMs": 9364,
+					"scheduleLagMs": 4004
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 16.399999991059303,
+					"offsetMs": 9487.300000011921,
+					"scheduleLagMs": 4047.300000011921
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 31.399999991059303,
+					"offsetMs": 9597.300000011921,
+					"scheduleLagMs": 4077.300000011921
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 11.200000002980232,
+					"offsetMs": 9722,
+					"scheduleLagMs": 4122
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 9.5,
+					"offsetMs": 9835.10000000894,
+					"scheduleLagMs": 4155.100000008941
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 47.5,
+					"offsetMs": 9948.800000011921,
+					"scheduleLagMs": 4188.800000011921
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 10.200000002980232,
+					"offsetMs": 10137,
+					"scheduleLagMs": 4297
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 16.100000008940697,
+					"offsetMs": 10251,
+					"scheduleLagMs": 4331
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 34.3999999910593,
+					"offsetMs": 10354.60000000894,
+					"scheduleLagMs": 4354.600000008941
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 13.799999997019768,
+					"offsetMs": 10493.10000000894,
+					"scheduleLagMs": 4413.100000008941
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 10.799999997019768,
+					"offsetMs": 10616.70000000298,
+					"scheduleLagMs": 4456.70000000298
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 43.20000000298023,
+					"offsetMs": 10738.5,
+					"scheduleLagMs": 4498.5
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 10.200000002980232,
+					"offsetMs": 10898.20000000298,
+					"scheduleLagMs": 4578.20000000298
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 17.600000008940697,
+					"offsetMs": 11016.5,
+					"scheduleLagMs": 4616.5
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 45.5,
+					"offsetMs": 11121,
+					"scheduleLagMs": 4641
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 13.5,
+					"offsetMs": 11319.20000000298,
+					"scheduleLagMs": 4759.20000000298
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 9.600000008940697,
+					"offsetMs": 11436.20000000298,
+					"scheduleLagMs": 4796.20000000298
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 44.69999998807907,
+					"offsetMs": 11592.300000011921,
+					"scheduleLagMs": 4872.300000011921
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 10.399999991059303,
+					"offsetMs": 11760.60000000894,
+					"scheduleLagMs": 4960.600000008941
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 17.099999994039536,
+					"offsetMs": 11882.300000011921,
+					"scheduleLagMs": 5002.300000011921
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 37.599999994039536,
+					"offsetMs": 12013.800000011921,
+					"scheduleLagMs": 5053.800000011921
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 12.400000005960464,
+					"offsetMs": 12155.5,
+					"scheduleLagMs": 5115.5
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 10.299999997019768,
+					"offsetMs": 12280.90000000596,
+					"scheduleLagMs": 5160.9000000059605
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 46.6000000089407,
+					"offsetMs": 12401.5,
+					"scheduleLagMs": 5201.5
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 12.700000002980232,
+					"offsetMs": 12594,
+					"scheduleLagMs": 5314
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 18.799999997019768,
+					"offsetMs": 12719.90000000596,
+					"scheduleLagMs": 5359.9000000059605
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 33.599999994039536,
+					"offsetMs": 12835.20000000298,
+					"scheduleLagMs": 5395.20000000298
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 12.299999997019768,
+					"offsetMs": 12966.90000000596,
+					"scheduleLagMs": 5446.9000000059605
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 10.200000002980232,
+					"offsetMs": 13086.90000000596,
+					"scheduleLagMs": 5486.9000000059605
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 44.599999994039536,
+					"offsetMs": 13210.60000000894,
+					"scheduleLagMs": 5530.600000008941
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 11.300000011920929,
+					"offsetMs": 13398,
+					"scheduleLagMs": 5638
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 17.900000005960464,
+					"offsetMs": 13520,
+					"scheduleLagMs": 5680
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 46.900000005960464,
+					"offsetMs": 13639.40000000596,
+					"scheduleLagMs": 5719.4000000059605
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 12.799999997019768,
+					"offsetMs": 13783.800000011921,
+					"scheduleLagMs": 5783.800000011921
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 9.799999997019768,
+					"offsetMs": 13908.20000000298,
+					"scheduleLagMs": 5828.20000000298
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 42.79999999701977,
+					"offsetMs": 14039.10000000894,
+					"scheduleLagMs": 5879.100000008941
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 9.900000005960464,
+					"offsetMs": 14200.20000000298,
+					"scheduleLagMs": 5960.20000000298
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 16.200000002980232,
+					"offsetMs": 14318.10000000894,
+					"scheduleLagMs": 5998.100000008941
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 32,
+					"offsetMs": 14421.300000011921,
+					"scheduleLagMs": 6021.300000011921
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 11.900000005960464,
+					"offsetMs": 14542.40000000596,
+					"scheduleLagMs": 6062.4000000059605
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 11,
+					"offsetMs": 14669.90000000596,
+					"scheduleLagMs": 6109.9000000059605
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 42.70000000298023,
+					"offsetMs": 14786,
+					"scheduleLagMs": 6146
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 9.900000005960464,
+					"offsetMs": 14951,
+					"scheduleLagMs": 6231
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 15.899999991059303,
+					"offsetMs": 15073.300000011921,
+					"scheduleLagMs": 6273.300000011921
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 32.3999999910593,
+					"offsetMs": 15191.300000011921,
+					"scheduleLagMs": 6311.300000011921
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 12.300000011920929,
+					"offsetMs": 15321.90000000596,
+					"scheduleLagMs": 6361.9000000059605
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 10.5,
+					"offsetMs": 15460.5,
+					"scheduleLagMs": 6420.5
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 50.5,
+					"offsetMs": 15594,
+					"scheduleLagMs": 6474
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 10.599999994039536,
+					"offsetMs": 15773.40000000596,
+					"scheduleLagMs": 6573.4000000059605
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 16.600000008940697,
+					"offsetMs": 15891,
+					"scheduleLagMs": 6611
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 34.69999998807907,
+					"offsetMs": 15998.800000011921,
+					"scheduleLagMs": 6638.800000011921
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 12.700000002980232,
+					"offsetMs": 16130.10000000894,
+					"scheduleLagMs": 6690.100000008941
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 10,
+					"offsetMs": 16250.60000000894,
+					"scheduleLagMs": 6730.600000008941
+				}
+			],
+			"interactionMs": 16372.20000000298,
+			"LayoutCount": 266,
+			"RecalcStyleCount": 392,
+			"LayoutDuration": 2.581565,
+			"RecalcStyleDuration": 5.1969460000000005,
+			"ScriptDuration": 3.9062940000000004,
+			"TaskDuration": 16.724448,
+			"durationMs": 17807,
+			"bcr": 116000,
+			"computedStyles": 60000,
+			"frameCount": 198,
+			"medianFrameMs": 116.60000000000218,
+			"p95FrameMs": 183.29999999999927,
+			"maximumFrameMs": 233.29999999999927,
+			"framesOver25ms": 128,
+			"estimatedMissed60HzRafs": 870,
+			"longAnimationFrames": 120,
+			"longTasks": 223,
+			"forcedStyleLayoutMsInLongFrames": 2869.1000000000013,
+			"activeAtDeadline": 0,
+			"nativeAtDeadline": 0,
+			"correctness": {
+				"expectedCount": 500,
+				"domCount": 500,
+				"uniqueCount": 500,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 500,
+				"participants": 500,
+				"active": 0,
+				"minimumOpacity": 1,
+				"outOfFlow": 0,
+				"inert": 0
+			},
+			"maxTransactionMs": 73.40000000596046,
+			"medianTransactionMs": 15.899999991059303,
+			"maxScheduleLagMs": 6730.600000008941,
+			"idleMounted": {
+				"durationMs": 703.4000000059605,
+				"bcr": 0,
+				"computedStyles": 0,
+				"frames": 42,
+				"active": 0,
+				"native": 0
+			},
+			"initial": {
+				"expectedCount": 500,
+				"domCount": 500,
+				"uniqueCount": 500,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 500,
+				"participants": 500,
+				"active": 0
+			},
+			"errors": []
+		}
+	],
+	"memory": [],
+	"traces": [],
+	"package": {
+		"path": "/tmp/astra-motion-production-a2BJGU/astra-motion-0.0.1.tgz",
+		"bytes": 41671,
+		"sha256": "10db85792911a9a5b49af9b0eee0ff797c806351dd730a66d6ba3f95c3e12745"
+	},
+	"browser": {
+		"version": "151.0.7922.34",
+		"userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.7922.34 Safari/537.36",
+		"resources": [
+			"http://127.0.0.1:5290/_app/immutable/assets/0.CTlMR9Zm.css",
+			"http://127.0.0.1:5290/_app/immutable/assets/13.Z6cFBafg.css",
+			"http://127.0.0.1:5290/_app/immutable/entry/start.DFzsLLdm.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/C-kirydz.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/CGWAFff5.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/BrgHTh3R.js",
+			"http://127.0.0.1:5290/_app/immutable/entry/app.BYbeFwSm.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/xihTtKlq.js",
+			"http://127.0.0.1:5290/_app/immutable/nodes/0.BP5d5prq.js",
+			"http://127.0.0.1:5290/_app/immutable/nodes/13.BZi9ZdXB.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/9j6hv9At.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/BGAJL2xS.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/YNOue9ZU.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/MbGfyy_n.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/CSzItPAv.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/DdUJsD7S.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/usiw7-wl.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/0mnYWB-0.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/D023nQGm.js",
+			"http://127.0.0.1:5290/_app/immutable/chunks/D8MYIrRf.js",
+			"http://127.0.0.1:5290/_app/immutable/nodes/1.ChEaeM4E.js"
+		],
+		"gpu": {
+			"devices": [
+				{
+					"vendorId": 65535,
+					"deviceId": 65535,
+					"vendorString": "Google Inc. (Google)",
+					"deviceString": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver-5.0.0)",
+					"driverVendor": "SwANGLE",
+					"driverVersion": "5.0.0"
+				}
+			],
+			"auxAttributes": {
+				"amdSwitchable": false,
+				"canSupportThreadedTextureMailbox": false,
+				"directRenderingVersion": "",
+				"displayType": "ANGLE_SWIFTSHADER",
+				"glExtensions": "GL_AMD_performance_monitor GL_ANGLE_base_vertex_base_instance_shader_builtin GL_ANGLE_blob_cache GL_ANGLE_client_arrays GL_ANGLE_clip_cull_distance GL_ANGLE_compressed_texture_etc GL_ANGLE_copy_texture_3d GL_ANGLE_depth_texture GL_ANGLE_framebuffer_blit GL_ANGLE_framebuffer_multisample GL_ANGLE_get_image GL_ANGLE_get_serialized_context_string GL_ANGLE_get_tex_level_parameter GL_ANGLE_instanced_arrays GL_ANGLE_memory_object_flags GL_ANGLE_memory_size GL_ANGLE_multi_draw GL_ANGLE_pack_reverse_row_order GL_ANGLE_polygon_mode GL_ANGLE_program_binary_readiness_query GL_ANGLE_program_cache_control GL_ANGLE_read_only_depth_stencil_feedback_loops GL_ANGLE_relaxed_vertex_attribute_type GL_ANGLE_renderability_validation GL_ANGLE_request_extension GL_ANGLE_rgbx_internal_format GL_ANGLE_robust_client_memory GL_ANGLE_robust_fragment_shader_output GL_ANGLE_robust_resource_initialization GL_ANGLE_shader_pixel_local_storage GL_ANGLE_shader_pixel_local_storage_coherent GL_ANGLE_stencil_texturing GL_ANGLE_texture_compression_dxt3 GL_ANGLE_texture_compression_dxt5 GL_ANGLE_texture_multisample GL_ANGLE_texture_usage GL_ANGLE_translated_shader_source GL_ANGLE_vulkan_image GL_ANGLE_yuv_internal_format GL_APPLE_clip_distance GL_ARM_rgba8 GL_ARM_shader_framebuffer_fetch GL_ARM_shader_framebuffer_fetch_depth_stencil GL_CHROMIUM_bind_generates_resource GL_CHROMIUM_bind_uniform_location GL_CHROMIUM_copy_compressed_texture GL_CHROMIUM_copy_texture GL_CHROMIUM_lose_context GL_EXT_EGL_image_array GL_EXT_EGL_image_external_wrap_modes GL_EXT_EGL_image_storage GL_EXT_base_instance GL_EXT_blend_minmax GL_EXT_buffer_storage GL_EXT_clear_texture GL_EXT_clip_control GL_EXT_clip_cull_distance GL_EXT_color_buffer_float GL_EXT_color_buffer_half_float GL_EXT_compressed_ETC1_RGB8_sub_texture GL_EXT_conservative_depth GL_EXT_copy_image GL_EXT_debug_label GL_EXT_debug_marker GL_EXT_depth_clamp GL_EXT_discard_framebuffer GL_EXT_disjoint_timer_query GL_EXT_draw_buffers GL_EXT_draw_buffers_indexed GL_EXT_draw_elements_base_vertex GL_EXT_float_blend GL_EXT_frag_depth GL_EXT_instanced_arrays GL_EXT_map_buffer_range GL_EXT_memory_object GL_EXT_memory_object_fd GL_EXT_occlusion_query_boolean GL_EXT_polygon_offset_clamp GL_EXT_read_format_bgra GL_EXT_robustness GL_EXT_sRGB GL_EXT_sRGB_write_control GL_EXT_semaphore GL_EXT_semaphore_fd GL_EXT_separate_shader_objects GL_EXT_shader_framebuffer_fetch GL_EXT_shader_framebuffer_fetch_non_coherent GL_EXT_shader_non_constant_global_initializers GL_EXT_shader_texture_lod GL_EXT_shadow_samplers GL_EXT_texture_border_clamp GL_EXT_texture_compression_bptc GL_EXT_texture_compression_dxt1 GL_EXT_texture_compression_rgtc GL_EXT_texture_compression_s3tc_srgb GL_EXT_texture_cube_map_array GL_EXT_texture_filter_anisotropic GL_EXT_texture_format_BGRA8888 GL_EXT_texture_lod_bias GL_EXT_texture_mirror_clamp_to_edge GL_EXT_texture_rg GL_EXT_texture_sRGB_R8 GL_EXT_texture_sRGB_RG8 GL_EXT_texture_sRGB_decode GL_EXT_texture_shadow_lod GL_EXT_texture_storage GL_EXT_texture_type_2_10_10_10_REV GL_EXT_unpack_subimage GL_KHR_blend_equation_advanced GL_KHR_debug GL_KHR_robust_buffer_access_behavior GL_KHR_robustness GL_KHR_texture_compression_astc_ldr GL_NV_fence GL_NV_framebuffer_blit GL_NV_pack_subimage GL_NV_pixel_buffer_object GL_NV_polygon_mode GL_NV_read_depth GL_NV_read_depth_stencil GL_NV_read_stencil GL_NV_shader_noperspective_interpolation GL_OES_EGL_image GL_OES_EGL_image_external GL_OES_EGL_image_external_essl3 GL_OES_EGL_sync GL_OES_compressed_EAC_R11_signed_texture GL_OES_compressed_EAC_R11_unsigned_texture GL_OES_compressed_EAC_RG11_signed_texture GL_OES_compressed_EAC_RG11_unsigned_texture GL_OES_compressed_ETC1_RGB8_texture GL_OES_compressed_ETC2_RGB8_texture GL_OES_compressed_ETC2_RGBA8_texture GL_OES_compressed_ETC2_punchthroughA_RGBA8_texture GL_OES_compressed_ETC2_punchthroughA_sRGB8_alpha_texture GL_OES_compressed_ETC2_sRGB8_alpha8_texture GL_OES_compressed_ETC2_sRGB8_texture GL_OES_compressed_paletted_texture GL_OES_copy_image GL_OES_depth24 GL_OES_depth32 GL_OES_depth_texture GL_OES_depth_texture_cube_map GL_OES_draw_buffers_indexed GL_OES_draw_elements_base_vertex GL_OES_element_index_uint GL_OES_fbo_render_mipmap GL_OES_get_program_binary GL_OES_mapbuffer GL_OES_packed_depth_stencil GL_OES_required_internalformat GL_OES_rgb8_rgba8 GL_OES_sample_shading GL_OES_sample_variables GL_OES_shader_multisample_interpolation GL_OES_standard_derivatives GL_OES_surfaceless_context GL_OES_texture_3D GL_OES_texture_border_clamp GL_OES_texture_cube_map_array GL_OES_texture_float GL_OES_texture_float_linear GL_OES_texture_half_float GL_OES_texture_half_float_linear GL_OES_texture_npot GL_OES_texture_stencil8 GL_OES_texture_storage_multisample_2d_array GL_OES_vertex_array_object GL_OES_vertex_half_float GL_OES_vertex_type_10_10_10_2 GL_OVR_multiview GL_OVR_multiview2 GL_QCOM_texture_lod_bias ",
+				"glImplementationParts": "(gl=egl-angle,angle=swiftshader)",
+				"glRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver-5.0.0)",
+				"glResetNotificationStrategy": 33362,
+				"glVendor": "Google Inc. (Google)",
+				"glVersion": "OpenGL ES 3.0 (ANGLE 2.1.28222 git hash: 6dab7c7e742b)",
+				"glWsExtensions": "EGL_EXT_create_context_robustness EGL_ANGLE_surface_orientation EGL_KHR_create_context EGL_KHR_image EGL_KHR_image_base EGL_EXT_image_gl_colorspace EGL_KHR_gl_colorspace EGL_KHR_gl_texture_2D_image EGL_KHR_gl_texture_cubemap_image EGL_KHR_gl_renderbuffer_image EGL_KHR_get_all_proc_addresses EGL_KHR_fence_sync EGL_KHR_wait_sync EGL_ANGLE_create_context_webgl_compatibility EGL_CHROMIUM_create_context_bind_generates_resource EGL_KHR_swap_buffers_with_damage EGL_EXT_pixel_format_float EGL_KHR_surfaceless_context EGL_ANGLE_display_texture_share_group EGL_ANGLE_display_semaphore_share_group EGL_ANGLE_create_context_client_arrays EGL_ANGLE_program_cache_control EGL_ANGLE_robust_resource_initialization EGL_ANGLE_create_context_extensions_enabled EGL_ANDROID_blob_cache EGL_ANDROID_recordable EGL_ANGLE_create_context_backwards_compatible EGL_KHR_no_config_context EGL_IMG_context_priority EGL_KHR_create_context_no_error EGL_KHR_reusable_sync EGL_EXT_buffer_age EGL_ANGLE_create_surface_swap_interval EGL_ANGLE_vulkan_image EGL_KHR_partial_update EGL_ANGLE_global_fence_sync EGL_ANGLE_memory_usage_report ",
+				"glWsVendor": "Google Inc. (Google)",
+				"glWsVersion": "1.5 (ANGLE 2.1.28222 git hash: 6dab7c7e742b)",
+				"hardwareSupportsVulkan": false,
+				"inProcessGpu": false,
+				"initializationTime": 0.043263,
+				"isAsan": false,
+				"isClangCoverage": false,
+				"jpegDecodeAcceleratorSupported": false,
+				"maxMsaaSamples": "4",
+				"optimus": false,
+				"passthroughCmdDecoder": true,
+				"pixelShaderVersion": "3.00",
+				"processCrashCount": 0,
+				"sandboxed": false,
+				"skiaBackendType": "None",
+				"subpixelFontRendering": true,
+				"targetCpuBits": 64,
+				"vertexShaderVersion": "3.00",
+				"visibilityCallbackCallCount": 0
+			},
+			"featureStatus": {
+				"2d_canvas": "unavailable_software",
+				"direct_rendering_display_compositor": "disabled_off_ok",
+				"gpu_compositing": "disabled_software",
+				"multiple_raster_threads": "enabled_on",
+				"opengl": "disabled_off",
+				"rasterization": "disabled_software",
+				"raw_draw": "disabled_off_ok",
+				"skia_graphite": "disabled_off",
+				"trees_in_viz": "disabled_off",
+				"video_decode": "disabled_software",
+				"video_encode": "disabled_software",
+				"vulkan": "disabled_off",
+				"webgl": "unavailable_software",
+				"webgpu": "unavailable_software",
+				"webgpu_on_vk_via_gl_interop": "disabled_off",
+				"webnn": "unavailable_software"
+			},
+			"driverBugWorkarounds": [],
+			"videoDecoding": [],
+			"videoEncoding": []
+		}
+	}
+}

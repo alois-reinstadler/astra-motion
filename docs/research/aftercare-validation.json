@@ -1,0 +1,145 @@
+{
+	"date": "2026-09-05",
+	"status": "development-browser-qualified",
+	"versions": {
+		"svelte": "5.57.0",
+		"sveltekit": "2.70.3",
+		"motion": "13.2.0",
+		"motion-dom": "13.2.0"
+	},
+	"core": {
+		"casesPerEngine": 225,
+		"filesPerEngine": 44,
+		"engines": ["chromium", "firefox", "webkit"],
+		"totalPasses": 675,
+		"logs": "/tmp/astra-reconciled-full-{engine}.log"
+	},
+	"serverCompiler": {
+		"cases": 81,
+		"files": 15,
+		"log": "/tmp/astra-final-server.log"
+	},
+	"siteRoutesShowcase": {
+		"casesPerEngine": 35,
+		"totalPasses": 105,
+		"files": 10,
+		"engines": ["chromium", "firefox", "webkit"],
+		"reportedDuration": "2.8m",
+		"log": "/tmp/astra-final-combined-e2e.log",
+		"command": "MOTION_LAB_URL=http://127.0.0.1:5187 pnpm exec playwright test --config playwright.motion.config.ts --workers=1"
+	},
+	"static": {
+		"svelteCheckErrors": 0,
+		"svelteCheckWarnings": 0,
+		"scopedEslint": "passed",
+		"scopedPrettier": "passed",
+		"svelteAutofixer": "zero issues/suggestions on changed components",
+		"guideConsumer": "passed"
+	},
+	"showcaseFrameMeasurements": [
+		{
+			"scene": "Contact sheet",
+			"largestAspectError": 6.667084471168039e-7,
+			"largestTextScaleError": 4.479679999835895e-6,
+			"pixelError": 0.000213623046875,
+			"imageScaleError": 5.23078210656891e-6,
+			"engine": "chromium"
+		},
+		{
+			"scene": "Editing desk",
+			"textError": 5.066409999976429e-6,
+			"imageError": 8.27068975084444e-7,
+			"pixelError": 0.00018310546875,
+			"imageScaleError": 1.104884421376795e-5,
+			"worst": {
+				"frame": 60,
+				"width": 332.0860290527344,
+				"height": 221.39080810546875,
+				"cssWidth": "300px",
+				"cssHeight": "200px",
+				"imageX": 1.1069506186,
+				"imageY": 1.1069528843999998
+			},
+			"engine": "chromium"
+		},
+		{
+			"scene": "Contact sheet",
+			"largestAspectError": 9.859246825838497e-5,
+			"largestTextScaleError": 5.293475076939558e-6,
+			"pixelError": 0.033294677734375,
+			"imageScaleError": 3.744296633878541e-5,
+			"engine": "firefox"
+		},
+		{
+			"scene": "Editing desk",
+			"textError": 4.9543221507519775e-6,
+			"imageError": 9.962752015524323e-5,
+			"pixelError": 0.0250244140625,
+			"imageScaleError": 4.915273160310818e-5,
+			"worst": {
+				"frame": 68,
+				"width": 376.3999938964844,
+				"height": 250.9499969482422,
+				"cssWidth": "471px",
+				"cssHeight": "314px",
+				"imageX": 0.7991640207568409,
+				"imageY": 0.7991854750907805
+			},
+			"engine": "firefox"
+		},
+		{
+			"scene": "Contact sheet",
+			"largestAspectError": 0.0026345452516773893,
+			"largestTextScaleError": 0.0014979999999999993,
+			"pixelError": 0.915130615234375,
+			"imageScaleError": 0.0017560259829316749,
+			"engine": "webkit"
+		},
+		{
+			"scene": "Editing desk",
+			"textError": 8.454119999612431e-7,
+			"imageError": 0.002763326086499207,
+			"pixelError": 0.8660888671875,
+			"imageScaleError": 0.0018415395602773277,
+			"worst": {
+				"frame": 70,
+				"width": 471,
+				"height": 313.422607421875,
+				"cssWidth": "471px",
+				"cssHeight": "314px",
+				"imageX": 1,
+				"imageY": 0.9981618454740001
+			},
+			"engine": "webkit"
+		}
+	],
+	"manual": {
+		"desktop": [1360, 980],
+		"mobile": [390, 844],
+		"horizontalOverflow": false,
+		"pageErrors": 0,
+		"consoleErrors": 0,
+		"screenshots": [
+			"/tmp/astra-fieldwork-root-desktop.png",
+			"/tmp/astra-fieldwork-root-mobile.png",
+			"/tmp/astra-fieldwork-root-mobile-detail.png",
+			"/tmp/astra-fieldwork-queue-desktop.png",
+			"/tmp/astra-fieldwork-queue-mobile.png",
+			"/tmp/astra-story-desktop.png",
+			"/tmp/astra-story-mobile.png",
+			"/tmp/astra-story-mobile-controls.png"
+		]
+	},
+	"qualificationNotes": [
+		"Run Kit sync/check/server tests before browser qualification, not concurrently: generated client files trigger live page reloads. The interrupted combined run is retained at /tmp/astra-final-combined-e2e-hmr.log; frozen isolated rerun passed105/105.",
+		"WebKit projection intentionally rounds box edges. Showcase CSS aligns3:2 geometry; tests bound transient image error to1.25CSSpx and0.5%axis deviation, and settled ratio error below0.0001."
+	],
+	"notQualified": [
+		"production build/packed consumer",
+		"physical Safari/iOS devices",
+		"exhaustive heap/GC",
+		"actual BFCache restoration",
+		"streamed late route content",
+		"full Motion React parity"
+	]
+}

@@ -1,22 +1,30 @@
 {
 	"name": "astra-motion",
 	"version": "0.0.1",
+	"packageManager": "pnpm@11.24.0",
 	"scripts": {
 		"dev": "vite dev",
-		"build": "vite build && npm run prepack",
+		"build": "vite build && pnpm run prepack",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
-		"prepack": "svelte-kit sync && svelte-package && publint",
+		"prepack": "svelte-kit sync && svelte-package && publint --pack false --strict",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:guide": "node scripts/check-motion-guide.mjs",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"test:unit": "vitest",
-		"test": "npm run test:unit -- --run && npm run test:e2e",
-		"test:e2e": "playwright install && playwright test"
+		"test:server": "vitest run --project server",
+		"test:browsers": "vitest run --config vitest.motion.config.ts",
+		"test": "pnpm run test:unit -- --run && pnpm run test:e2e",
+		"test:e2e": "playwright install && playwright test",
+		"test:motion": "vitest run src/lib/motion-lab src/lib/motion/routes.spec.ts",
+		"test:motion:e2e": "playwright test --config playwright.motion.config.ts"
 	},
 	"files": [
-		"dist",
+		"dist/index.js",
+		"dist/index.d.ts",
+		"dist/motion",
 		"!dist/**/*.test.*",
 		"!dist/**/*.spec.*"
 	],
@@ -29,11 +37,63 @@
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
-			"svelte": "./dist/index.js"
+			"svelte": "./dist/index.js",
+			"default": "./dist/index.js"
+		},
+		"./layout": {
+			"types": "./dist/motion/layout.d.ts",
+			"svelte": "./dist/motion/layout.js",
+			"default": "./dist/motion/layout.js"
+		},
+		"./presence": {
+			"types": "./dist/motion/presence-entry.d.ts",
+			"svelte": "./dist/motion/presence-entry.js",
+			"default": "./dist/motion/presence-entry.js"
+		},
+		"./routes": {
+			"types": "./dist/motion/routes.d.ts",
+			"svelte": "./dist/motion/routes.js",
+			"default": "./dist/motion/routes.js"
+		},
+		"./policy": {
+			"types": "./dist/motion/policy.d.ts",
+			"svelte": "./dist/motion/policy.js",
+			"default": "./dist/motion/policy.js"
+		},
+		"./state": {
+			"types": "./dist/motion/motion.svelte.d.ts",
+			"svelte": "./dist/motion/motion.svelte.js",
+			"default": "./dist/motion/motion.svelte.js"
+		},
+		"./values": {
+			"types": "./dist/motion/values.d.ts",
+			"svelte": "./dist/motion/values.js",
+			"default": "./dist/motion/values.js"
+		},
+		"./animate": {
+			"types": "./dist/motion/animate.d.ts",
+			"svelte": "./dist/motion/animate.js",
+			"default": "./dist/motion/animate.js"
+		},
+		"./scroll": {
+			"types": "./dist/motion/scroll.svelte.d.ts",
+			"svelte": "./dist/motion/scroll.svelte.js",
+			"default": "./dist/motion/scroll.svelte.js"
+		},
+		"./state/lite": {
+			"types": "./dist/motion/lite.svelte.d.ts",
+			"svelte": "./dist/motion/lite.svelte.js",
+			"default": "./dist/motion/lite.svelte.js"
+		},
+		"./in-view": {
+			"types": "./dist/motion/in-view.svelte.d.ts",
+			"svelte": "./dist/motion/in-view.svelte.js",
+			"default": "./dist/motion/in-view.svelte.js"
 		}
 	},
 	"peerDependencies": {
-		"svelte": "^5.0.0"
+		"@sveltejs/kit": "^2.70.3",
+		"svelte": "^5.57.0"
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
@@ -42,7 +102,7 @@
 		"@lucide/svelte": "^1.40.0",
 		"@playwright/test": "^1.60.0",
 		"@sveltejs/adapter-static": "^3.0.10",
-		"@sveltejs/kit": "^2.63.0",
+		"@sveltejs/kit": "^2.70.3",
 		"@sveltejs/package": "^2.5.8",
 		"@sveltejs/vite-plugin-svelte": "^7.1.2",
 		"@tailwindcss/vite": "^4.3.0",
@@ -57,6 +117,7 @@
 		"formsnap": "^2.0.1",
 		"globals": "^17.6.0",
 		"layerchart": "^2.3.1",
+		"magic-string": "0.30.21",
 		"mode-watcher": "^1.1.0",
 		"paneforge": "^1.0.2",
 		"playwright": "^1.60.0",
@@ -65,7 +126,7 @@
 		"prettier-plugin-tailwindcss": "^0.8.0",
 		"publint": "^0.3.21",
 		"shadcn-svelte": "^1.6.0",
-		"svelte": "^5.56.1",
+		"svelte": "^5.57.0",
 		"svelte-check": "^4.6.0",
 		"svelte-sonner": "^1.2.1",
 		"sveltekit-superforms": "^2.30.2",
@@ -82,5 +143,14 @@
 	},
 	"keywords": [
 		"svelte"
-	]
+	],
+	"dependencies": {
+		"motion": "13.2.0",
+		"motion-dom": "13.2.0"
+	},
+	"peerDependenciesMeta": {
+		"@sveltejs/kit": {
+			"optional": true
+		}
+	}
 }

@@ -1,0 +1,16 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`counts idle reads for 10 shared layout elements 1`] = `
+{
+  "reads": 150,
+}
+`;
+
+exports[`layout misses a position-only change above observed ancestors 1`] = `
+{
+  "after": 460,
+  "animations": 0,
+  "before": 0,
+  "transform": "",
+}
+`;
