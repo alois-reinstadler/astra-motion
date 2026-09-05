@@ -21,102 +21,124 @@
 		{
 			title: 'Fieldwork — a studio in motion',
 			description:
-				'Four connected product interactions: a photographic contact sheet, editing desk, publishing queue and story.',
+				'A photographic contact sheet, editing desk, publishing queue and reading experience.',
 			category: 'Components',
-			href: '/showcase',
+			slug: 'showcase',
+			anchor: '',
 			mark: '↗',
 			tone: 'coral',
 			tag: 'THE SHOWCASE'
 		},
 		{
-			title: 'The layout collection',
-			description: 'Flex, grid, intrinsic size, nested projection and lists in one place.',
+			title: 'Room for the details',
+			description: 'Expand a card and watch its surface and content move together.',
 			category: 'Layout',
-			href: '/motion-lab',
+			slug: 'layout',
+			anchor: 'automatic',
 			mark: '▦',
 			tone: 'sage',
-			tag: 'START HERE'
+			tag: 'LAYOUT'
 		},
 		{
-			title: 'Accordions, dialogs & cards',
-			description: 'Real shadcn-svelte components with motion, focus and native exit retention.',
-			category: 'Components',
-			href: '/motion-lab/components',
-			mark: '▱',
-			tone: 'coral',
-			tag: 'REAL COMPONENTS'
-		},
-		{
-			title: 'Coordinated presence',
-			description: 'Exit ordering, stagger, wait mode and changing your mind halfway through.',
+			title: 'A little good news',
+			description: 'A notification that enters, leaves, and changes its mind gracefully.',
 			category: 'Presence',
-			href: '/motion-lab/presence',
+			slug: 'state',
+			anchor: 'targets',
 			mark: '◐',
 			tone: 'cream',
-			tag: 'INTERACTIVE'
+			tag: 'ENTER & EXIT'
 		},
 		{
-			title: 'State & interactions',
-			description: 'Initial and update targets, variants, MotionValues and pointer interactions.',
+			title: 'One thought at a time',
+			description: 'Switch between cards with wait or overlapping transitions.',
+			category: 'Presence',
+			slug: 'presence',
+			anchor: 'wait',
+			mark: '⇄',
+			tone: 'coral',
+			tag: 'PRESENCE'
+		},
+		{
+			title: 'Made to be touched',
+			description:
+				'Hover, press, focus, and drag. Small responses that make an interface feel alive.',
 			category: 'Components',
-			href: '/motion-lab/state',
+			slug: 'state',
+			anchor: 'gestures',
 			mark: '↗',
 			tone: 'sage',
-			tag: 'INTERACTIVE'
+			tag: 'GESTURES'
 		},
 		{
-			title: 'Shared route elements',
-			description: 'Follow a product from list to detail, then try browser back and forward.',
-			category: 'Routes',
-			href: '/motion-lab/product',
-			mark: '⇄',
+			title: 'A selection that follows',
+			description: 'A shared highlight moves between tabs without losing its shape.',
+			category: 'Layout',
+			slug: 'shared-layout',
+			anchor: 'identity',
+			mark: '⇆',
 			tone: 'cream',
-			tag: 'SVELTEKIT'
+			tag: 'SHARED ELEMENTS'
 		},
 		{
-			title: 'Scroll-linked motion',
-			description: 'Connect progress to MotionValues and test a contained scrolling surface.',
-			category: 'Scroll & timelines',
-			href: '/motion-lab/scroll',
-			mark: '↓',
+			title: 'Make room for what matters',
+			description: 'Remove a list item and let the others settle into their new places.',
+			category: 'Layout',
+			slug: 'getting-started',
+			anchor: 'motion-component',
+			mark: '▤',
 			tone: 'coral',
+			tag: 'ANIMATED LISTS'
+		},
+		{
+			title: 'Follow the story',
+			description: 'A contained reading panel with scroll-linked progress and a little depth.',
+			category: 'Scroll & timelines',
+			slug: 'scroll',
+			anchor: 'container',
+			mark: '↓',
+			tone: 'sage',
 			tag: 'SCROLL TO TRY'
 		},
 		{
-			title: 'Scoped timelines',
-			description: 'Sequence a small scene with local selectors, playback and interruption.',
+			title: 'A small sequence',
+			description: 'Play, pause, and replay a graphic composition with a scoped timeline.',
 			category: 'Scroll & timelines',
-			href: '/motion-lab/timelines',
+			slug: 'timelines',
+			anchor: 'sequence',
 			mark: '≋',
-			tone: 'sage',
-			tag: 'PLAYBACK'
-		},
-		{
-			title: 'Automatic vs explicit',
-			description: 'Compare observed layout changes with the optional layout.update boundary.',
-			category: 'Layout',
-			href: '/motion-lab/updates',
-			mark: '⇆',
 			tone: 'cream',
-			tag: 'COMPARISON'
+			tag: 'TIMELINES'
 		},
 		{
-			title: 'Stress the edges',
-			description: 'Larger rearrangements, scroll containers and repeated interaction.',
-			category: 'Layout',
-			href: '/motion-lab/extended',
-			mark: '✳',
-			tone: 'coral',
-			tag: 'STRESS TEST'
-		},
-		{
-			title: 'Inherited initial styles',
-			description: 'Parent and child variants with a deterministic server-rendered first frame.',
+			title: 'Everything in its own time',
+			description: 'Reveal a menu with coordinated, staggered child animations.',
 			category: 'Components',
-			href: '/motion-lab/inheritance',
+			slug: 'state',
+			anchor: 'inheritance',
 			mark: '⌘',
 			tone: 'sage',
-			tag: 'SSR & HYDRATION'
+			tag: 'VARIANTS'
+		},
+		{
+			title: 'A moment of discovery',
+			description: 'Watch a card respond as it enters and leaves a scroll viewport.',
+			category: 'Scroll & timelines',
+			slug: 'scroll',
+			anchor: 'in-view',
+			mark: '◒',
+			tone: 'coral',
+			tag: 'VISIBILITY'
+		},
+		{
+			title: 'Motion between pages',
+			description: 'Connect SvelteKit navigation with native page transitions.',
+			category: 'Routes',
+			slug: 'routes',
+			anchor: 'coordinator',
+			mark: '↗',
+			tone: 'cream',
+			tag: 'INTEGRATION GUIDE'
 		}
 	] as const;
 	const filtered = $derived(
@@ -143,8 +165,8 @@
 			<p class="eyebrow">THE EXAMPLE COLLECTION</p>
 			<h1>Less imagining.<br /><em>More trying.</em></h1>
 			<p>
-				Real interfaces, small experiments and the occasional stress test.<br />Find what you’re
-				building. Then give it a push.
+				Interactive examples, with the source right beside them.<br />Find an idea. Try it. Make it
+				yours.
 			</p>
 		</header>
 		<div class="collection-tools">
@@ -172,7 +194,11 @@
 				: ''}
 		</p>
 		<div class="example-grid">
-			{#each filtered as example (example.href)}<a class="example" href={resolve(example.href)}
+			{#each filtered as example (example.title)}<a
+					class="example"
+					href={example.slug === 'showcase'
+						? resolve('/showcase')
+						: resolve(`/docs/[slug]#${example.anchor}`, { slug: example.slug })}
 					><div class="example-art {example.tone}" aria-hidden="true">
 						<span class="art-index"
 							>ASTRA / {String(examples.indexOf(example) + 1).padStart(2, '0')}</span

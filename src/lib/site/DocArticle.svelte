@@ -2,6 +2,8 @@
 	import { resolve } from '$app/paths';
 	import { docs, getRecipe, type DocPage } from './docs.js';
 	import DocCode from './DocCode.svelte';
+	import DocExample from './DocExample.svelte';
+	import { getExample } from './examples.js';
 	let { doc }: { doc: DocPage } = $props();
 	const index = $derived(docs.findIndex((entry) => entry.slug === doc.slug));
 	const previous = $derived(docs[index - 1]);
@@ -23,6 +25,7 @@
 			<p class="lede">{doc.summary}</p>
 		</header>
 		{#each doc.sections as section (section.id)}
+			{@const example = getExample(section.example ?? section.recipe ?? '')}
 			<section id={section.id}>
 				<h2><a href={`#${section.id}`}>{section.title}<span aria-hidden="true">#</span></a></h2>
 				{#each section.text as paragraph (paragraph)}<p>{paragraph}</p>{/each}
@@ -30,7 +33,9 @@
 						{#each section.points as point (point)}<li>{point}</li>{/each}
 					</ul>{/if}
 				{#if section.code}<DocCode source={section.code.source} label={section.code.label} />{/if}
-				{#if section.recipe}
+				{#if example}
+					<DocExample {example} />
+				{:else if section.recipe}
 					{@const recipe = getRecipe(section.recipe)}
 					<DocCode
 						source={recipe.source}
@@ -41,9 +46,6 @@
 								: 'Example.svelte'}
 					/>
 					<p class="recipe-note">{recipe.note}</p>
-					<a class="try-example" href={resolve(recipe.lab)}
-						>Try this example <span aria-hidden="true">↗</span></a
-					>
 				{/if}
 				{#if section.related}<nav class="related" aria-label={`${section.title} guides`}>
 						{#each section.related as slug (slug)}<a href={resolve('/docs/[slug]', { slug })}
@@ -166,20 +168,6 @@
 		padding-left: 15px;
 		border-left: 2px solid #c7ccba;
 		margin-top: 18px;
-	}
-	.try-example {
-		display: inline-flex;
-		gap: 28px;
-		align-items: center;
-		color: var(--site-accent);
-		font-size: 12px;
-		font-weight: 600;
-		text-decoration: none;
-		padding: 5px 0;
-		border-bottom: 1px solid #d3412330;
-	}
-	.try-example:hover {
-		border-color: var(--site-accent);
 	}
 	.related {
 		display: flex;

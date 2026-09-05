@@ -1,5 +1,5 @@
 /** Source-consumer checks only: no application build or package emission. */
-import { mkdtempSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, readFileSync, writeFileSync, rmSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -26,6 +26,16 @@ try {
 	paths['$lib/*'] = [resolve('src/lib/*')];
 	for (const example of authoringExamples) {
 		writeFileSync(join(directory, `${example.id}.svelte`), example.source);
+	}
+	// Check the exact source shown alongside every live documentation preview.
+	for (const filename of readdirSync('src/lib/site/examples').filter((name) =>
+		name.endsWith('.svelte')
+	)) {
+		const source = readFileSync(join('src/lib/site/examples', filename), 'utf8').replaceAll(
+			"'$lib/motion/index.js'",
+			"'astra-motion'"
+		);
+		writeFileSync(join(directory, filename), source);
 	}
 	writeFileSync(
 		join(directory, 'tsconfig.json'),

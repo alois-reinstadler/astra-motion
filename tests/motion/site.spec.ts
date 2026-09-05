@@ -35,24 +35,25 @@ test('home demo keeps identity through repeated layout changes and links into th
 	expect(errors).toEqual([]);
 });
 
-test('example discovery filters, searches, recovers empty results and leads back from the lab', async ({
+test('example discovery filters, searches, and opens a live documentation example', async ({
 	page
 }) => {
 	await page.goto('/examples');
 	await page.getByRole('button', { name: 'Routes', exact: true }).click();
 	await expect(page.locator('.example')).toHaveCount(1);
-	await expect(page.locator('.example')).toContainText('Shared route elements');
+	await expect(page.locator('.example')).toContainText('Motion between pages');
 	await page.getByRole('searchbox', { name: 'Search examples' }).fill('no-such-example');
 	await expect(page.getByRole('heading', { name: 'No examples found.' })).toBeVisible();
 	await page.getByRole('button', { name: 'Show all examples' }).click();
-	await expect(page.locator('.example')).toHaveCount(11);
-	await page.getByRole('searchbox', { name: 'Search examples' }).fill('accordion');
+	await expect(page.locator('.example')).toHaveCount(12);
+	await page.getByRole('searchbox', { name: 'Search examples' }).fill('touched');
 	await expect(page.locator('.example')).toHaveCount(1);
 	await page.locator('.example').click();
-	await expect(page).toHaveURL(/\/motion-lab\/components$/);
+	await expect(page).toHaveURL(/\/docs\/state#gestures$/);
+	await expect(page.locator('[data-example="gestures"]')).toBeVisible();
 	await page
-		.getByRole('navigation', { name: 'Laboratory navigation' })
-		.getByRole('link', { name: 'All examples' })
+		.getByRole('navigation', { name: 'Main navigation' })
+		.getByRole('link', { name: 'Examples', exact: true })
 		.click();
 	await expect(page).toHaveURL(/\/examples$/);
 });
@@ -121,16 +122,16 @@ test('home labels and symbols keep their proportions throughout layout projectio
 	expect(result.currentFonts).toEqual(result.originalFonts);
 });
 
-test('a presence example has a visible matching guide return on mobile', async ({ page }) => {
+test('a presence example can be tried and inspected inside the mobile docs', async ({ page }) => {
 	await page.setViewportSize({ width: 390, height: 844 });
 	await page.goto('/docs/presence');
-	await page.locator('#wait .try-example').click();
-	await expect(page).toHaveURL(/\/motion-lab\/presence$/);
-	const guide = page
-		.getByRole('navigation', { name: 'Laboratory navigation' })
-		.getByRole('link', { name: 'Presence guide' });
-	await expect(guide).toBeInViewport();
-	await guide.click();
+	const example = page.locator('[data-example="wait"]');
+	await example.getByRole('button', { name: 'Next note' }).click();
+	await expect(example.locator('.chapter')).toContainText('02');
+	await example.locator('summary').click();
+	await expect(
+		example.getByRole('region', { name: 'PresenceExample.svelte source' })
+	).toBeVisible();
+	await expect(page.locator('a[href*="motion-lab"]')).toHaveCount(0);
 	await expect(page).toHaveURL(/\/docs\/presence$/);
-	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Presence & exits');
 });

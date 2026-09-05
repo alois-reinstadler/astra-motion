@@ -1,8 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import { compile } from 'svelte/compiler';
 import { docs, getDoc, getRecipe } from './docs.js';
+import { liveExamples } from './examples.js';
 
 describe('documentation sources', () => {
+	it('every live example has standalone public source that compiles for client and server', () => {
+		for (const example of Object.values(liveExamples)) {
+			expect(example.source).toContain("from 'astra-motion'");
+			expect(example.source).not.toContain('$lib/');
+			for (const generate of ['client', 'server'] as const) {
+				expect(compile(example.source, { filename: example.filename, generate }).warnings).toEqual(
+					[]
+				);
+			}
+		}
+	});
 	it('every guide has a unique route and valid anchors and recipe references', () => {
 		expect(new Set(docs.map((doc) => doc.slug)).size).toBe(docs.length);
 		for (const doc of docs) {

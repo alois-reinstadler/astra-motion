@@ -1,5 +1,96 @@
 import { expect, test } from '@playwright/test';
 
+test('live docs examples keep their interactions, reset, and source on the page', async ({
+	page
+}) => {
+	const errors: string[] = [];
+	page.on('pageerror', (error) => errors.push(error.message));
+	await page.goto('/docs/getting-started');
+	const list = page.locator('[data-example="motion-component"]');
+	await list.getByRole('button', { name: 'Complete: Collect a little inspiration' }).click();
+	await expect(list.locator('li.task')).toHaveCount(2);
+	await list.getByRole('button', { name: 'Start again' }).click();
+	await expect(list.locator('li.task')).toHaveCount(3);
+	const notification = page.locator('[data-example="state"]');
+	await notification.getByRole('button', { name: 'Dismiss notification' }).click();
+	await expect(notification.locator('.notification')).toHaveCount(0);
+	await notification.getByRole('button', { name: 'Reset A little good news' }).click();
+	await expect(notification.locator('.notification')).toHaveCount(1);
+	await expect(notification.locator('.notification')).toHaveCSS('opacity', '1');
+	await expect(page.locator('a[href*="motion-lab"]')).toHaveCount(0);
+	expect(errors).toEqual([]);
+});
+
+test('layout, shared selection, gestures and stagger work inside their guides', async ({
+	page
+}) => {
+	const errors: string[] = [];
+	page.on('pageerror', (error) => errors.push(error.message));
+	await page.goto('/docs/layout');
+	const layout = page.locator('[data-example="layout"]');
+	const before = await layout.locator('.record').evaluate((node) => node.clientHeight);
+	await layout.getByRole('button', { name: 'Open player' }).click();
+	await expect
+		.poll(() => layout.locator('.record').evaluate((node) => node.clientHeight))
+		.toBeGreaterThan(before);
+	await page.goto('/docs/shared-layout');
+	const shared = page.locator('[data-example="shared"]');
+	await shared.getByRole('button', { name: 'Rest', exact: true }).click();
+	await expect(shared.getByRole('heading', { name: 'Take the long way.' })).toBeVisible();
+	await page.goto('/docs/state');
+	const variants = page.locator('[data-example="inheritance"]');
+	await variants.getByRole('button', { name: 'Hide menu', exact: false }).click();
+	await expect(variants.locator('.item').last()).toHaveCSS('opacity', '0');
+	await variants.getByRole('button', { name: 'Reveal menu', exact: false }).click();
+	await expect(variants.locator('.item').last()).toHaveCSS('opacity', '1');
+	const gestures = page.locator('[data-example="gestures"]');
+	await gestures.getByRole('button', { name: 'Save to collection' }).click();
+	await expect(gestures.getByRole('button', { name: 'Saved to collection' })).toHaveAttribute(
+		'aria-pressed',
+		'true'
+	);
+	await gestures.getByRole('slider').fill('120');
+	await expect
+		.poll(() =>
+			gestures
+				.locator('.handle')
+				.evaluate((node) => new DOMMatrix(getComputedStyle(node).transform).m41)
+		)
+		.toBeCloseTo(120, 0);
+	expect(errors).toEqual([]);
+});
+
+test('scroll, visibility and timelines stay local and usable with reduced motion', async ({
+	page
+}) => {
+	const errors: string[] = [];
+	page.on('pageerror', (error) => errors.push(error.message));
+	await page.emulateMedia({ reducedMotion: 'reduce' });
+	await page.goto('/docs/scroll');
+	const scroll = page.locator('[data-example="scroll"]');
+	await scroll.locator('.reader').evaluate((node) => {
+		node.scrollTop = node.scrollHeight;
+	});
+	await expect(scroll.locator('progress')).toHaveAttribute('value', '1');
+	const visibility = page.locator('[data-example="in-view"]');
+	await expect(visibility.getByRole('status')).toHaveText('Out of view');
+	await visibility.locator('.viewport').evaluate((node) => {
+		node.scrollTop = node.scrollHeight;
+	});
+	await expect(visibility.getByRole('status')).toHaveText('In view');
+	await expect(visibility.locator('.card')).toHaveCSS('opacity', '1');
+	await visibility.locator('.viewport').evaluate((node) => {
+		node.scrollTop = 0;
+	});
+	await expect(visibility.getByRole('status')).toHaveText('Out of view');
+	await page.goto('/docs/timelines');
+	const timeline = page.locator('[data-example="timeline"]');
+	await timeline.getByRole('button', { name: 'Replay' }).click();
+	await expect(timeline.locator('.disc')).toHaveCSS('opacity', '1');
+	await expect(timeline.getByRole('button', { name: 'Play sequence' })).toBeVisible();
+	expect(errors).toEqual([]);
+});
+
 test('documentation has connected navigation, topic filtering and complete copyable source', async ({
 	page
 }) => {
@@ -22,10 +113,12 @@ test('documentation has connected navigation, topic filtering and complete copya
 		'aria-current',
 		'page'
 	);
-	await page.getByRole('button', { name: 'Copy Example.svelte', exact: true }).click();
+	const example = page.locator('[data-example="layout"]');
+	await example.locator('summary').click();
+	await example.getByRole('button', { name: 'Copy LayoutExample.svelte', exact: true }).click();
 	await expect(page.getByRole('status')).toHaveText('Copied to clipboard');
 	expect(await page.locator('html').getAttribute('data-copied-source')).toContain(
-		"from 'astra-motion/layout'"
+		"from 'astra-motion'"
 	);
 	await page.getByRole('searchbox', { name: 'Find a guide' }).fill('scroll');
 	await expect(navigation.getByRole('link', { name: 'Scroll-linked motion' })).toBeVisible();
@@ -60,10 +153,10 @@ test('mobile documentation opens its contents and navigates without horizontal o
 	await expect(menu).not.toHaveAttribute('open');
 	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Presence & exits');
 	expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-	await expect(page.getByRole('region', { name: 'Example.svelte source' }).first()).toHaveAttribute(
-		'tabindex',
-		'0'
-	);
+	await page.locator('[data-example="state"] summary').click();
+	await expect(
+		page.getByRole('region', { name: 'StateExample.svelte source' }).first()
+	).toHaveAttribute('tabindex', '0');
 });
 
 test('documentation renders without JavaScript and missing guides return 404', async ({
@@ -76,8 +169,9 @@ test('documentation renders without JavaScript and missing guides return 404', a
 	await page.goto('/docs/getting-started');
 	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Getting started');
 	for (const id of ['motion-component', 'first-component']) {
+		await page.locator(`#${id} summary`).click();
 		await expect(
-			page.locator(`#${id}`).getByRole('region', { name: 'Example.svelte source' })
+			page.locator(`#${id}`).getByRole('region', { name: /Example.svelte source/ })
 		).toContainText('initial:');
 	}
 	await expect(

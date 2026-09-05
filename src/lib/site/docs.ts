@@ -1,4 +1,5 @@
 import { authoringExamples } from '$lib/motion-lab/authoring-examples.js';
+import type { LiveExampleId } from './examples.js';
 
 export type RecipeId = (typeof authoringExamples)[number]['id'];
 export interface DocSection {
@@ -7,6 +8,7 @@ export interface DocSection {
 	text: string[];
 	points?: string[];
 	recipe?: RecipeId;
+	example?: LiveExampleId;
 	related?: string[];
 	code?: { label: string; source: string };
 }
@@ -31,7 +33,7 @@ const pages: DocPage[] = [
 				title: 'A small set of tools. A connected system.',
 				text: [
 					'Astra gives Svelte 5 a motion layer for state, presence, layout and shared elements. Svelte owns mounting and destruction. Motion owns springs, interpolation and projection. Browser View Transitions handle page changes.',
-					'Start with a binding on a real element. Add a native transition when that element needs an exit. Your CSS continues to choose its destination.'
+					'Start with a Motion element, or add a binding to your existing markup. Try the examples here, then open View code to take the complete component with you.'
 				],
 				recipe: 'state'
 			},
@@ -99,10 +101,10 @@ const pages: DocPage[] = [
 			},
 			{
 				id: 'first-component',
-				title: 'Attach a binding directly',
+				title: 'Give an element an entrance and an exit',
 				text: [
-					'Create a binding during component initialization. Spread its props onto one real element. The props render initial styles on the server and attach the client runtime to that same element.',
-					'The transition is what keeps an exiting element alive. Without it, a removed Svelte branch is destroyed immediately.'
+					'Motion combines initial, animate, and exit targets on a native element. Toggle this notification to see it appear and leave. Toggle again during the animation to reverse it.',
+					'The component includes the native Svelte transition that keeps its element alive until the exit finishes. Use createMotion bindings directly when integrating with existing markup.'
 				],
 				recipe: 'state'
 			},
@@ -141,6 +143,14 @@ const pages: DocPage[] = [
 					'The child must mount inside its declared parent. Add a global native transition when it should animate on removal of an enclosing branch.'
 				],
 				recipe: 'inheritance'
+			},
+			{
+				id: 'gestures',
+				title: 'Respond to a touch',
+				text: [
+					'Give a button a little feedback on hover, press, and keyboard focus. Add drag to move an element within a set of bounds. Gesture targets use the same springs and values as ordinary animation state.'
+				],
+				example: 'gestures'
 			},
 			{
 				id: 'ownership',
@@ -334,7 +344,7 @@ const pages: DocPage[] = [
 				title: 'Transitions enhance navigation',
 				text: [
 					'Reduced-motion policy and unsupported View Transitions fall back to immediate navigation. Rapid navigation supersedes the earlier transition instead of waiting for old animation playback.',
-					'The laboratory exercises list/detail navigation and history. Browser-specific snapshot clipping and every BFCache or streamed-data edge case are not a universal guarantee. Always keep links and content useful without the enhancement.'
+					'Keep links and content useful without the enhancement. Test history, focus restoration, and streamed content in your own routes, especially when different layouts own the two pages.'
 				]
 			}
 		]
