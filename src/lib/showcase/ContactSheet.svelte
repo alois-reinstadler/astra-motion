@@ -1,6 +1,8 @@
 <script lang="ts">
-	import { onMount, tick } from 'svelte';
+	import { onDestroy, onMount, tick } from 'svelte';
 	import { createLayout } from '$lib/motion/layout.js';
+	import { createAnimate } from '$lib/motion/animate.js';
+	import { createMotion } from '$lib/motion/lite.svelte.js';
 	import { photos, type Photo } from './collection.js';
 	const layout = createLayout({ transition: { type: 'spring', stiffness: 360, damping: 34 } });
 	let selected = $state<Photo | null>(null);
@@ -9,11 +11,38 @@
 	let ready = $state(false);
 	let scene: HTMLElement;
 	let returnId = '';
+	const replacement = createAnimate();
+	const policy = createMotion();
+	let requested: Photo | null = null;
+	let navigation = 0;
+	let replacing = $state(false);
+	let entering = $state(false);
+	function cancelReplacement() {
+		navigation++;
+		replacement.stop();
+		replacing = false;
+		entering = false;
+	}
+	async function settleReplacement() {
+		cancelReplacement();
+		selected = requested;
+		const current = navigation;
+		await tick();
+		if (current !== navigation || !selected || !replacement.current) return;
+		replacement.animate('.photo-replace, .copy-replace', { opacity: 1, x: 0 }, { duration: 0 });
+	}
+	function settleNavigationForPolicy() {
+		if (policy.reducedMotion && replacing) void settleReplacement();
+	}
+	$effect(settleNavigationForPolicy);
+	onDestroy(cancelReplacement);
 	const visible = $derived(photos.filter((photo) => filter === 'All' || photo.category === filter));
 	onMount(() => {
 		ready = true;
 	});
 	async function open(photo: Photo) {
+		cancelReplacement();
+		requested = photo;
 		returnId = photo.id;
 		layout.update(() => {
 			selected = photo;
@@ -22,6 +51,8 @@
 		scene.querySelector<HTMLButtonElement>('[data-contact-close]')?.focus({ preventScroll: true });
 	}
 	async function close() {
+		cancelReplacement();
+		requested = null;
 		layout.update(() => {
 			selected = null;
 		});
@@ -30,18 +61,49 @@
 			.querySelector<HTMLButtonElement>(`[data-contact-open="${returnId}"]`)
 			?.focus({ preventScroll: true });
 	}
-	function step(direction: number) {
+	async function step(direction: -1 | 1) {
 		if (!selected) return;
-		const index = visible.findIndex((photo) => photo.id === selected?.id);
-		layout.update(() => {
-			selected = visible[(index + direction + visible.length) % visible.length];
-		});
+		const index = visible.findIndex((photo) => photo.id === (requested ?? selected)?.id);
+		requested = visible[(index + direction + visible.length) % visible.length];
+		if (policy.reducedMotion) return settleReplacement();
+		const current = ++navigation;
+		replacing = true;
+		await replacement.sequence([
+			['.photo-replace', { x: -direction * 55, opacity: 0 }, { duration: 0.2, ease: 'easeIn' }],
+			['.copy-replace', { x: -direction * 18, opacity: 0 }, { at: 0, duration: 0.16 }]
+		]);
+		if (current !== navigation) return;
+		entering = true;
+		selected = requested;
+		await tick();
+		if (current !== navigation || !replacement.current) return;
+		await replacement.sequence([
+			[
+				'.photo-replace',
+				{ x: [direction * 70, 0], opacity: [0, 1] },
+				{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }
+			],
+			[
+				'.copy-replace',
+				{ x: [direction * 25, 0], opacity: [0, 1] },
+				{ at: 0.08, duration: 0.5, ease: [0.22, 1, 0.36, 1] }
+			]
+		]);
+		if (current === navigation) {
+			replacing = false;
+			entering = false;
+		}
 	}
 </script>
 
 <svelte:window
 	onkeydown={(event) => {
-		if (selected && event.key === 'Escape' && scene?.contains(document.activeElement)) {
+		if (!selected || !scene?.contains(document.activeElement)) return;
+		if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+			event.preventDefault();
+			void step(event.key === 'ArrowLeft' ? -1 : 1);
+		}
+		if (event.key === 'Escape') {
 			event.stopPropagation();
 			void close();
 		}
@@ -50,6 +112,7 @@
 
 <div
 	class="contact"
+	{...policy.props}
 	{@attach (node) => {
 		scene = node;
 	}}
@@ -62,7 +125,7 @@
 		<span class="count">{selected ? 'Loupe view' : `${visible.length} photographs`}</span>
 	</div>
 	{#if selected}
-		<div class="detail">
+		<div class="detail" {@attach replacement.attach}>
 			<div class="detail-tools">
 				<button data-contact-close onclick={close}>← Contact sheet</button>
 				<div>
@@ -73,32 +136,37 @@
 				</div>
 			</div>
 			{#key selected.id}
-				<div class="detail-grid">
-					<div
-						class="photo-frame"
-						{@attach layout({ id: `frame-${selected.id}`, style: { borderRadius: 4 } })}
-					>
-						<img
-							src={selected.src}
-							alt={selected.alt}
-							{@attach layout({ id: `photo-${selected.id}`, mode: 'preserve-aspect' })}
-						/>
-					</div>
-					<div class="detail-copy" {@attach layout({ mode: 'position' })}>
-						<span class="folio"
-							>FIELD NOTE / 0{photos.findIndex((photo) => photo.id === selected?.id) + 1}</span
+				<div class="detail-grid" class:entering>
+					<div class="photo-replace">
+						<div
+							class="photo-frame"
+							{@attach layout({ id: `frame-${selected.id}`, style: { borderRadius: 4 } })}
 						>
-						<h3 {@attach layout({ id: `title-${selected.id}`, mode: 'position' })}>
-							{selected.title}
-						</h3>
-						<p class="location">{selected.location}</p>
-						<p class="note">{selected.note}</p>
-						<div class="meta">
-							<span>COLLECTION</span><strong>Earth, in other words</strong><span>IMAGE CREDIT</span
-							><strong>NASA Image Library</strong>
+							<img
+								src={selected.src}
+								alt={selected.alt}
+								{@attach layout({ id: `photo-${selected.id}`, mode: 'preserve-aspect' })}
+							/>
 						</div>
-						<!-- eslint-disable-next-line svelte/no-navigation-without-resolve --><!-- External NASA record, not an application route. -->
-						<a href={selected.source} target="_blank" rel="noreferrer">Original photograph ↗</a>
+					</div>
+					<div class="copy-replace">
+						<div class="detail-copy" {@attach layout({ mode: 'position' })}>
+							<span class="folio"
+								>FIELD NOTE / 0{photos.findIndex((photo) => photo.id === selected?.id) + 1}</span
+							>
+							<h3 {@attach layout({ id: `title-${selected.id}`, mode: 'position' })}>
+								{selected.title}
+							</h3>
+							<p class="location">{selected.location}</p>
+							<p class="note">{selected.note}</p>
+							<div class="meta">
+								<span>COLLECTION</span><strong>Earth, in other words</strong><span
+									>IMAGE CREDIT</span
+								><strong>NASA Image Library</strong>
+							</div>
+							<!-- eslint-disable-next-line svelte/no-navigation-without-resolve --><!-- External NASA record, not an application route. -->
+							<a href={selected.source} target="_blank" rel="noreferrer">Original photograph ↗</a>
+						</div>
 					</div>
 				</div>
 			{/key}
@@ -163,6 +231,11 @@
 </div>
 
 <style>
+	/* New keyed content stays hidden until Motion has painted its first frame. */
+	.entering .photo-replace,
+	.entering .copy-replace {
+		opacity: 0;
+	}
 	.contact {
 		background: #222720;
 		color: #f5f3e9;
@@ -342,6 +415,10 @@
 		display: flex;
 		gap: 24px;
 	}
+	.photo-replace,
+	.copy-replace {
+		min-width: 0;
+	}
 	.detail-grid {
 		display: grid;
 		grid-template-columns: minmax(0, 1.65fr) minmax(180px, 1fr);
@@ -401,6 +478,10 @@
 	@media (max-width: 800px) {
 		.sheet.dense {
 			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+		.photo-replace,
+		.copy-replace {
+			min-width: 0;
 		}
 		.detail-grid {
 			grid-template-columns: 1fr;

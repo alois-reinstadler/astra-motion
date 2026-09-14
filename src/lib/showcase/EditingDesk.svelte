@@ -62,8 +62,11 @@
 				data-testid="desk-canvas"
 				{@attach layout({ style: { borderRadius: 3 } })}
 			>
-				<div class="paper-top" {@attach layout({ mode: 'position' })}>
-					<span>FIELDWORK</span><span>01 / EARTH</span>
+				<div class="paper-top" {@attach layout()}>
+					<span {@attach layout({ mode: 'position' })}>FIELDWORK</span><span
+						data-testid="desk-edition"
+						{@attach layout({ mode: 'position' })}>01 / EARTH</span
+					>
 				</div>
 				<div class="cover-copy" {@attach layout({ mode: 'position' })}>
 					<p>AN INDEPENDENT JOURNAL</p>
@@ -73,8 +76,12 @@
 				<div class="canvas-image" {@attach layout({ mode: 'preserve-aspect' })}>
 					<img src={photos[0].src} alt={photos[0].alt} />
 				</div>
-				<div class="paper-bottom" {@attach layout({ mode: 'position' })}>
-					<span>Look a little closer.</span><span aria-hidden="true">↗</span>
+				<div class="paper-bottom" {@attach layout()}>
+					<span {@attach layout({ mode: 'position' })}>Look a little closer.</span><span
+						data-testid="desk-arrow"
+						aria-hidden="true"
+						{@attach layout({ mode: 'position' })}>↗</span
+					>
 				</div>
 			</div>
 			<div class="canvas-status">
@@ -177,7 +184,7 @@
 	}
 	.document > span {
 		font-size: 25px;
-		color: #707869;
+		color: #5e6856;
 	}
 	.document strong,
 	.document small {
@@ -189,7 +196,7 @@
 	}
 	.document small {
 		font-size: 10px;
-		color: #707869;
+		color: #5e6856;
 		margin-top: 5px;
 	}
 	button {
@@ -346,7 +353,7 @@
 		align-items: center;
 		gap: 6px;
 		font-size: 9px;
-		color: #707869;
+		color: #5e6856;
 	}
 	.canvas-status > span:last-child {
 		margin-left: 10px;
@@ -454,7 +461,7 @@
 		display: flex;
 		gap: 12px;
 		align-items: center;
-		color: #707869;
+		color: #5e6856;
 	}
 	.inspector-note span {
 		font-size: 30px;

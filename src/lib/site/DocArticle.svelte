@@ -23,6 +23,14 @@
 			<p class="eyebrow">DOCUMENTATION <span>/</span> {doc.group.toUpperCase()}</p>
 			<h1>{doc.title}</h1>
 			<p class="lede">{doc.summary}</p>
+			<details class="compact-contents">
+				<summary>On this page <span aria-hidden="true">+</span></summary>
+				<nav aria-label="Article sections">
+					{#each doc.sections as section (section.id)}
+						<a href={`#${section.id}`}>{section.title}</a>
+					{/each}
+				</nav>
+			</details>
 		</header>
 		{#each doc.sections as section (section.id)}
 			{@const example = getExample(section.example ?? section.recipe ?? '')}
@@ -79,6 +87,40 @@
 </div>
 
 <style>
+	.compact-contents {
+		display: none;
+		margin-top: 26px;
+		border-top: 1px solid var(--site-line);
+	}
+	.compact-contents summary {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 16px 0 0;
+		font-size: 12px;
+		cursor: pointer;
+		list-style: none;
+	}
+	.compact-contents summary::-webkit-details-marker {
+		display: none;
+	}
+	.compact-contents summary span {
+		color: var(--site-accent);
+		font-size: 18px;
+	}
+	.compact-contents[open] summary span {
+		transform: rotate(45deg);
+	}
+	.compact-contents nav {
+		display: grid;
+		gap: 12px;
+		padding-top: 20px;
+	}
+	.compact-contents a {
+		color: var(--site-muted);
+		font-size: 13px;
+		text-underline-offset: 4px;
+	}
 	.article-layout {
 		display: grid;
 		grid-template-columns: minmax(0, 750px) 160px;
@@ -146,7 +188,7 @@
 	}
 	section > p {
 		color: var(--site-muted);
-		font-size: 14px;
+		font-size: 15px;
 		line-height: 1.8;
 		margin: 16px 0;
 	}
@@ -258,6 +300,9 @@
 		outline-offset: 4px;
 	}
 	@media (max-width: 1200px) {
+		.compact-contents {
+			display: block;
+		}
 		.article-layout {
 			grid-template-columns: minmax(0, 1fr);
 		}

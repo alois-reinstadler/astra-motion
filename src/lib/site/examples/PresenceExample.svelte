@@ -11,7 +11,7 @@
 </script>
 
 <div class="example">
-	<div class="mode" aria-label="Transition mode">
+	<div class="mode" role="group" aria-label="Transition mode">
 		<button
 			class:active={mode === 'wait'}
 			aria-pressed={mode === 'wait'}

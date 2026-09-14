@@ -95,7 +95,7 @@
 	}
 	p {
 		margin: 0;
-		color: #85897c;
+		color: #62695a;
 		font-size: 12px;
 	}
 	.choices {
@@ -112,7 +112,7 @@
 		padding: 11px 6px;
 		border: 0;
 		border-radius: 8px;
-		color: #777d6e;
+		color: #58614f;
 		background: transparent;
 		font: inherit;
 		font-size: 12px;

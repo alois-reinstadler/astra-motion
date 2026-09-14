@@ -45,6 +45,8 @@
 	}
 	.layout-example :global(.record) {
 		padding: 18px;
+		overflow: hidden;
+		isolation: isolate;
 		border: 1px solid #dbd9cf;
 		border-radius: 16px;
 		background: #fffdf7;
@@ -86,7 +88,7 @@
 		background: #d34123;
 	}
 	.eyebrow {
-		color: #898d80;
+		color: #62695a;
 		font-size: 9px;
 		letter-spacing: 0.13em;
 	}
@@ -98,7 +100,7 @@
 	}
 	p {
 		margin: 0;
-		color: #838778;
+		color: #62695a;
 		font-size: 11px;
 		line-height: 1.5;
 	}
@@ -110,6 +112,20 @@
 	}
 	.details {
 		padding-top: 25px;
+		animation: details-enter 240ms ease-out 100ms both;
+	}
+	@keyframes details-enter {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.details {
+			animation: none;
+		}
 	}
 	.progress {
 		height: 3px;
@@ -127,7 +143,7 @@
 		display: flex;
 		justify-content: space-between;
 		padding-top: 7px;
-		color: #8b8e82;
+		color: #62695a;
 		font-size: 9px;
 		font-variant-numeric: tabular-nums;
 	}

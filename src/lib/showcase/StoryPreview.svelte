@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onDestroy, onMount } from 'svelte';
+	import { onDestroy, onMount, tick } from 'svelte';
 	import { stagger, type AnimationPlaybackControlsWithThen } from 'motion';
 	import { createScroll } from '../motion/scroll.svelte.js';
 	import { createAnimate } from '../motion/animate.js';
@@ -13,6 +13,84 @@
 	});
 	const meter = reading.animate({ transform: ['scaleX(0)', 'scaleX(1)'] });
 	const opening = createAnimate();
+	const replacement = createAnimate();
+	const space = ' ';
+	const chapters = [
+		['A slower kind', 'of looking.'],
+		['Where the water', 'holds its breath.'],
+		['A thousand shades', 'of blue.'],
+		['Every river', 'finds a way.']
+	];
+	let chapter = $state(0);
+	let requested = 0;
+	let navigation = 0;
+	let replacing = $state(false);
+	let entering = $state(false);
+	let readerElement: HTMLElement;
+	const currentPhoto = $derived(photos[chapter]);
+	async function settleChapter() {
+		const current = ++navigation;
+		replacement.stop();
+		replacing = false;
+		entering = false;
+		chapter = requested;
+		await tick();
+		if (current !== navigation || !replacement.current) return;
+		replacement.animate(
+			'.cover-photograph, .story-word',
+			{ opacity: 1, x: 0, y: 0, scale: 1 },
+			{ duration: 0 }
+		);
+	}
+	function settleNavigationForPolicy() {
+		if (reading.reducedMotion && replacing) void settleChapter();
+	}
+	$effect(settleNavigationForPolicy);
+	async function changeChapter(direction: -1 | 1) {
+		requested = (requested + direction + chapters.length) % chapters.length;
+		readerElement.scrollTop = 0;
+		if (reading.reducedMotion) return settleChapter();
+		const current = ++navigation;
+		replacing = true;
+		await replacement.sequence([
+			['.cover-photograph', { x: -direction * 45, opacity: 0 }, { duration: 0.25, ease: 'easeIn' }],
+			[
+				'.story-word',
+				{ y: -direction * 65, opacity: 0 },
+				{
+					at: 0,
+					duration: 0.2,
+					delay: stagger(0.025, { from: direction === 1 ? 'first' : 'last' })
+				}
+			]
+		]);
+		if (current !== navigation) return;
+		entering = true;
+		chapter = requested;
+		await tick();
+		if (current !== navigation || !replacement.current) return;
+		await replacement.sequence([
+			[
+				'.cover-photograph',
+				{ x: [direction * 85, 0], scale: [1.06, 1], opacity: [0, 1] },
+				{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }
+			],
+			[
+				'.story-word',
+				{ y: [direction * 65, 0], opacity: [0, 1] },
+				{
+					at: 0.08,
+					duration: 0.65,
+					delay: stagger(0.06, { from: direction === 1 ? 'first' : 'last' }),
+					ease: [0.22, 1, 0.36, 1]
+				}
+			]
+		]);
+		if (current === navigation) {
+			replacing = false;
+			entering = false;
+		}
+	}
 	let status = $state<'Ready' | 'Playing' | 'Paused' | 'Complete'>('Ready');
 	let playback: AnimationPlaybackControlsWithThen | undefined;
 	let revision = 0;
@@ -37,11 +115,32 @@
 		playback = opening.sequence([
 			['.opening-kicker', { opacity: [0, 1] }, { duration: 0.5 }],
 			[
-				'.opening-line',
-				{ y: [28, 0], opacity: [0, 1] },
-				{ at: 0.15, duration: 1.2, delay: stagger(0.18), ease: [0.22, 1, 0.36, 1] }
+				'.planet',
+				{ rotate: [-18, 0], scale: [0.72, 1] },
+				{ at: 0, duration: 1.7, ease: [0.22, 1, 0.36, 1] }
 			],
-			['.opening-rule', { scaleX: [0, 1] }, { at: 0.5, duration: 1.2 }]
+			[
+				'.planet-strip:nth-child(odd)',
+				{ x: [-180, 0], opacity: [0, 1] },
+				{ at: 0.05, duration: 1.35, delay: stagger(0.12), ease: [0.22, 1, 0.36, 1] }
+			],
+			[
+				'.planet-strip:nth-child(even)',
+				{ x: [180, 0], opacity: [0, 1] },
+				{ at: 0.14, duration: 1.35, delay: stagger(0.12), ease: [0.22, 1, 0.36, 1] }
+			],
+			['.orbit-grid', { scale: [0.65, 1], opacity: [0, 1] }, { at: 0.1, duration: 1.7 }],
+			[
+				'.satellite-ring',
+				{ rotate: [-150, 210], opacity: [0, 1] },
+				{ at: 0.2, duration: 2.2, ease: [0.22, 1, 0.36, 1] }
+			],
+			[
+				'.opening-line',
+				{ y: [24, 0], opacity: [0, 1] },
+				{ at: 0.65, duration: 1.2, delay: stagger(0.18), ease: [0.22, 1, 0.36, 1] }
+			],
+			['.opening-rule', { scaleX: [0, 1] }, { at: 0.2, duration: 2.2 }]
 		]);
 		void playback.then(() => {
 			if (current === revision) status = 'Complete';
@@ -58,13 +157,16 @@
 		} else replay();
 	}
 
-	onDestroy(() => revision++);
+	onDestroy(() => {
+		revision++;
+		navigation++;
+	});
 </script>
 
 <div class="story-workbench" data-testid="story-workbench">
 	<div class="reader-shell">
 		<div class="reader-toolbar">
-			<span>FIELD NOTES <span class="edition">/ 001</span></span>
+			<span>FIELD NOTES <span class="edition">/ 00{chapter + 1}</span></span>
 			<span data-testid="story-progress-label">{Math.round($progress * 100)}% read</span>
 		</div>
 		<!-- svelte-ignore a11y_no_noninteractive_tabindex (This native scroll region must be keyboard accessible.) -->
@@ -74,6 +176,9 @@
 			tabindex="0"
 			aria-label="Field notes. Scroll to read the landscape story."
 			{@attach reading.container}
+			{@attach (node) => {
+				readerElement = node;
+			}}
 		>
 			<div class="reading-track" aria-hidden="true">
 				<div
@@ -83,15 +188,27 @@
 					{@attach meter}
 				></div>
 			</div>
-			<div class="cover">
-				<img
-					data-testid="story-image"
-					src={photos[0].src}
-					alt={photos[0].alt}
-					{@attach photograph}
-				/>
-				<div class="cover-label"><span>OBSERVATIONS FROM ABOVE</span><span>01—04</span></div>
-				<h3>A slower kind<br />of looking.</h3>
+			<div class="cover" class:entering {@attach replacement.attach}>
+				<div class="cover-photograph">
+					<img
+						data-testid="story-image"
+						src={currentPhoto.src}
+						alt={currentPhoto.alt}
+						{@attach photograph}
+					/>
+				</div>
+				<div class="cover-label">
+					<span>OBSERVATIONS FROM ABOVE</span><span>0{chapter + 1}—04</span>
+				</div>
+				<h3 aria-label={chapters[chapter].join(' ')} data-testid="story-title">
+					{#each chapters[chapter] as line (line)}
+						<span class="title-line" aria-hidden="true"
+							>{#each line.split(' ') as word, index (index)}<span class="word-mask"
+									><span class="story-word">{word}</span></span
+								>{space}{/each}</span
+						>
+					{/each}
+				</h3>
 			</div>
 			<div class="editorial">
 				<div class="byline"><span>THE FIELDWORK JOURNAL</span><span>1 MIN READ</span></div>
@@ -115,16 +232,58 @@
 				<div class="colophon"><span>END OF FIELD NOTE</span><span aria-hidden="true">✳</span></div>
 			</div>
 		</article>
+		<div class="chapter-controls" role="group" aria-label="Browse field notes">
+			<button
+				type="button"
+				data-testid="story-previous"
+				disabled={!hydrated}
+				onclick={() => changeChapter(-1)}><span aria-hidden="true">←</span> Previous</button
+			>
+			<span
+				class="chapter-count"
+				role="status"
+				aria-label={`Field note ${chapter + 1} of ${chapters.length}`}
+				>0{chapter + 1} <span>/ 04</span></span
+			>
+			<button
+				type="button"
+				data-testid="story-next"
+				disabled={!hydrated}
+				onclick={() => changeChapter(1)}>Next <span aria-hidden="true">→</span></button
+			>
+		</div>
 		<p class="reader-hint">Scroll the journal · or focus it and use your arrow keys</p>
 	</div>
 
 	<div class="opening-panel">
-		<div class="opening-caption"><span>THE OPENING FRAME</span><span>01.7s</span></div>
+		<div class="opening-caption"><span>EARTH IN MOTION</span><span>02.4s</span></div>
 		<div class="opening-preview" {@attach opening.attach} data-testid="story-opening">
-			<p class="opening-kicker">A FIELDWORK INVITATION</p>
+			<p class="opening-kicker">SIX FRAGMENTS. ONE WORLD.</p>
+			<div
+				class="orbit-art"
+				role="img"
+				aria-label="Six photographic strips assemble into a blue planet inside orbital rings."
+			>
+				<svg class="orbit-grid" viewBox="0 0 300 300" aria-hidden="true">
+					<circle cx="150" cy="150" r="143" />
+					<ellipse cx="150" cy="150" rx="143" ry="58" transform="rotate(-30 150 150)" />
+					<path d="M150 0v18m0 264v18M0 150h18m264 0h18" />
+				</svg>
+				<div class="planet" aria-hidden="true">
+					{#each [0, 1, 2, 3, 4, 5] as strip (strip)}
+						<div
+							class="planet-strip"
+							style:background-image={`url(${photos[2].src})`}
+							style:background-position={`center ${strip * 20}%`}
+						></div>
+					{/each}
+				</div>
+				<div class="satellite-ring" aria-hidden="true"><span class="satellite"></span></div>
+				<span class="orbit-coordinate" aria-hidden="true">21° N / 72° W</span>
+			</div>
 			<h3>
-				<span class="opening-line">Look</span><span class="opening-line">a little</span><span
-					class="opening-line italic">closer.</span
+				<span class="opening-line">One world.</span><span class="opening-line italic"
+					>Endless motion.</span
 				>
 			</h3>
 			<div class="opening-rule" aria-hidden="true"></div>
@@ -132,22 +291,27 @@
 		<div class="sequence-controls">
 			<button data-testid="story-play" onclick={togglePlayback} disabled={!hydrated}>
 				<span aria-hidden="true">{status === 'Playing' ? 'Ⅱ' : '▷'}</span>
-				{status === 'Playing' ? 'Pause' : status === 'Paused' ? 'Resume' : 'Play opening'}
+				{status === 'Playing' ? 'Pause' : status === 'Paused' ? 'Resume' : 'Play composition'}
 			</button>
 			<button
 				class="replay"
 				data-testid="story-replay"
 				disabled={!hydrated}
 				onclick={replay}
-				aria-label="Replay opening">↻</button
+				aria-label="Replay composition">↻</button
 			>
 		</div>
 		<p class="sequence-state" data-testid="story-sequence-state" role="status">{status}</p>
-		<p class="opening-note">A small introduction. Play it, pause it, make it yours.</p>
+		<p class="opening-note">
+			From fragments to a whole. Replay the assembly, or pause anywhere along the orbit.
+		</p>
 	</div>
 </div>
 
 <style>
+	.entering .story-word {
+		opacity: 0;
+	}
 	.story-workbench {
 		display: grid;
 		grid-template-columns: minmax(0, 1.7fr) minmax(220px, 1fr);
@@ -213,7 +377,7 @@
 		background: #515b45;
 		isolation: isolate;
 	}
-	.cover > img {
+	.cover-photograph img {
 		position: absolute;
 		width: 100%;
 		height: calc(100% + 28px);
@@ -223,11 +387,46 @@
 		position: absolute;
 		inset: 0;
 		z-index: -1;
-		background: linear-gradient(transparent, #131b16bd);
+		background: linear-gradient(180deg, #131b16bf, #131b1600 40%, #131b16d9);
 		content: '';
 	}
-	.cover > img {
+	.cover-photograph {
+		position: absolute;
+		inset: 0;
 		z-index: -2;
+	}
+	.title-line {
+		display: block;
+	}
+	.word-mask {
+		display: inline-block;
+		overflow: clip;
+		vertical-align: top;
+		padding-bottom: 0.13em;
+		margin-bottom: -0.13em;
+	}
+	.story-word {
+		display: inline-block;
+	}
+	.chapter-controls {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 8px;
+		margin-top: 18px;
+	}
+	.chapter-controls button {
+		min-width: 90px;
+		padding-inline: 10px;
+	}
+	.chapter-count {
+		font:
+			11px 'Courier New',
+			monospace;
+		white-space: nowrap;
+	}
+	.chapter-count > span {
+		color: #b5bbae;
 	}
 	.cover-label {
 		position: absolute;
@@ -338,14 +537,82 @@
 			monospace;
 		letter-spacing: 0.07em;
 		color: #b5bbae;
-		margin: 0 0 35px;
+		margin: 0 0 18px;
 	}
 	.opening-preview h3 {
 		margin: 0;
 		font:
-			normal clamp(46px, 5.1vw, 74px)/0.98 Georgia,
+			normal clamp(29px, 3.1vw, 43px)/1.04 Georgia,
 			serif;
 		letter-spacing: -0.05em;
+	}
+	.orbit-art {
+		position: relative;
+		width: 100%;
+		max-width: 300px;
+		aspect-ratio: 1;
+		margin: 0 auto 28px;
+		isolation: isolate;
+	}
+	.orbit-grid {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		fill: none;
+		stroke: #839174;
+		stroke-width: 0.7;
+	}
+	.planet {
+		position: absolute;
+		inset: 16%;
+		border-radius: 50%;
+		overflow: hidden;
+		background: #142b36;
+		box-shadow: 0 0 40px #83b3ad15;
+	}
+	.planet::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		box-shadow:
+			inset -18px -12px 28px #00111bbf,
+			inset 2px 2px 12px #d3f4e94d;
+		pointer-events: none;
+	}
+	.planet-strip {
+		height: calc(100% / 6);
+		width: 100%;
+		background-size: 100% 600%;
+		background-repeat: no-repeat;
+	}
+	.satellite-ring {
+		position: absolute;
+		inset: 2%;
+		border-radius: 50%;
+	}
+	.satellite {
+		position: absolute;
+		top: 50%;
+		right: -4px;
+		width: 9px;
+		height: 9px;
+		margin-top: -4.5px;
+		border-radius: 50%;
+		background: #e9a07f;
+		box-shadow: 0 0 0 5px #e9a07f15;
+	}
+	.orbit-coordinate {
+		position: absolute;
+		bottom: 17%;
+		right: 0;
+		padding: 5px;
+		background: #222720;
+		color: #b5bbae;
+		font:
+			7px 'Courier New',
+			monospace;
 	}
 	.opening-line {
 		display: block;
@@ -359,7 +626,7 @@
 		background: #dca88f;
 		transform-origin: left;
 		width: 52px;
-		margin: 32px 0 38px;
+		margin: 22px 0 25px;
 	}
 	.sequence-controls {
 		display: flex;
@@ -432,7 +699,7 @@
 			font-size: 7px;
 		}
 		.opening-preview h3 {
-			font-size: 65px;
+			font-size: 38px;
 		}
 		.opening-panel {
 			padding: 0 10px 10px;

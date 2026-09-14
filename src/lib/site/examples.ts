@@ -84,7 +84,7 @@ export const liveExamples = {
 	},
 	scroll: {
 		id: 'scroll',
-		title: 'Follow the story',
+		title: 'Make it move',
 		filename: 'ScrollExample.svelte',
 		component: ScrollExample,
 		source: publicSource(ScrollExampleSource)

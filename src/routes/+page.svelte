@@ -1,11 +1,45 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { createAnimate } from '$lib/motion/animate.js';
+	import { stagger, type AnimationPlaybackControlsWithThen } from 'motion';
+	const entrance = createAnimate();
+	let playback: AnimationPlaybackControlsWithThen | undefined;
+	function replayEntrance() {
+		if (playback) {
+			playback.time = 0;
+			playback.play();
+		}
+	}
+
 	let ready = $state(false);
 	onMount(() => {
 		ready = true;
+		playback = entrance.sequence([
+			[
+				'.hero-line',
+				{ y: ['110%', '0%'], rotate: [5, 0] },
+				{ duration: 1.15, delay: stagger(0.14), ease: [0.16, 1, 0.3, 1] }
+			],
+			[
+				'.hero-playground',
+				{ clipPath: ['inset(48% 0 48% 0)', 'inset(0% 0 0% 0)'], opacity: [0, 1] },
+				{ at: 0.18, duration: 1.2, ease: [0.76, 0, 0.24, 1] }
+			],
+			[
+				'.entry-star',
+				{ rotate: [-150, 0], scale: [0.2, 1] },
+				{ at: 0.3, duration: 1.5, ease: [0.16, 1, 0.3, 1] }
+			],
+			[
+				'.hero-description, .hero-actions, .hero-note, .hero .eyebrow',
+				{ opacity: [0, 1] },
+				{ at: 0.6, duration: 0.7, delay: stagger(0.08) }
+			]
+		]);
 	});
 	import { resolve } from '$app/paths';
 	import SiteFrame from '$lib/site/SiteFrame.svelte';
+	import CodeText from '$lib/site/CodeText.svelte';
 	import { createLayout } from '$lib/motion/layout.js';
 	const layout = createLayout({
 		id: 'home-demo',
@@ -31,27 +65,38 @@
 
 <SiteFrame>
 	<main id="site-content">
-		<section class="hero">
+		<section class="hero" {@attach entrance.attach}>
 			<div class="hero-copy">
 				<p class="eyebrow"><span></span> A MOTION SYSTEM FOR SVELTE 5</p>
-				<h1>Make room<br />for <em>movement.</em></h1>
+				<h1>
+					<span class="line-mask"><span class="hero-line">Make room</span></span><span
+						class="line-mask"><span class="hero-line">for <em>movement.</em></span></span
+					>
+				</h1>
 				<p class="hero-description">
 					Your elements. Your CSS.<br />A little less code. A lot more life.
 				</p>
 				<div class="hero-actions">
-					<a class="action primary" href={resolve('/docs/[slug]', { slug: 'getting-started' })}
+					<a
+						data-ui-control
+						class="action primary"
+						href={resolve('/docs/[slug]', { slug: 'getting-started' })}
 						>Start building <span>↗</span></a
-					><a class="action secondary" href={resolve('/examples')}
+					><a data-ui-control class="action secondary" href={resolve('/examples')}
 						>Explore examples <span>→</span></a
 					>
 				</div>
 				<p class="hero-note">Native elements · Motion engine · No compiler required</p>
+				<button data-ui-control class="replay-entrance" disabled={!ready} onclick={replayEntrance}
+					><span aria-hidden="true">↺</span> Replay the entrance</button
+				>
 			</div>
 			<div class="hero-playground">
 				<div class="playground-bar">
 					<span>01 / LIVE PLAYGROUND</span><span class="live-indicator">YOUR CSS, IN MOTION</span>
 				</div>
 				<div class="playground-stage" class:stack={mode === 'stack'}>
+					<span class="entry-emblem" aria-hidden="true"><span class="entry-star">✳</span></span>
 					{#each ordered as piece (piece.id)}
 						<div class="motion-piece {piece.color}" {@attach layout()}>
 							<div class="piece-top" {@attach layout({ mode: 'position' })}>
@@ -64,21 +109,26 @@
 					{/each}
 				</div>
 				<div class="playground-controls">
-					<div class="view-switch" aria-label="Layout mode">
+					<div class="view-switch" role="group" aria-label="Layout mode">
 						<button
+							data-ui-control
 							disabled={!ready}
 							class:active={mode === 'grid'}
 							aria-pressed={mode === 'grid'}
 							onclick={() => (mode = 'grid')}>Grid</button
 						><button
+							data-ui-control
 							disabled={!ready}
 							class:active={mode === 'stack'}
 							aria-pressed={mode === 'stack'}
 							onclick={() => (mode = 'stack')}>Stack</button
 						>
 					</div>
-					<button disabled={!ready} class="shuffle" onclick={() => (reversed = !reversed)}
-						>Reorder <span>⇄</span></button
+					<button
+						data-ui-control
+						disabled={!ready}
+						class="shuffle"
+						onclick={() => (reversed = !reversed)}>Reorder <span>⇄</span></button
 					>
 				</div>
 				<p class="playground-caption">Go ahead. Change your mind mid-animation.</p>
@@ -110,7 +160,12 @@
 			</div>
 			<div class="code-window">
 				<div class="code-title"><span>CardList.svelte</span><span>SVELTE 5</span></div>
-				<pre><code>{code}</code></pre>
+				<!-- svelte-ignore a11y_no_noninteractive_tabindex (Keyboard users need to scroll the code sample.) -->
+				<pre tabindex="0" role="region" aria-label="Layout code example"><CodeText
+						source={code}
+						label="CardList.svelte"
+						dark
+					/></pre>
 				<div class="code-footnote">An attachment. An actual div. That’s the idea.</div>
 			</div>
 		</section>
@@ -184,6 +239,54 @@
 </SiteFrame>
 
 <style>
+	.line-mask {
+		display: block;
+		overflow: clip;
+		padding-bottom: 0.12em;
+		margin-bottom: -0.12em;
+	}
+	.hero-line {
+		display: block;
+		transform-origin: left bottom;
+	}
+	.entry-emblem {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		display: grid;
+		place-items: center;
+		pointer-events: none;
+	}
+	.entry-star {
+		display: block;
+		font-size: 500px;
+		line-height: 1;
+		color: #64734c;
+	}
+	.replay-entrance {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		margin-top: 28px;
+		min-height: 36px;
+		font:
+			10px ui-monospace,
+			monospace;
+		color: var(--site-muted);
+	}
+	.replay-entrance span {
+		font-size: 18px;
+		color: var(--site-accent);
+	}
+	.replay-entrance:hover {
+		color: var(--site-accent);
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.replay-entrance {
+			display: none;
+		}
+	}
+
 	main {
 		max-width: 1440px;
 		margin: auto;
@@ -193,7 +296,7 @@
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: 64px;
-		padding: 88px 0 72px;
+		padding: 68px 0 64px;
 		align-items: center;
 	}
 	.eyebrow {
@@ -280,14 +383,17 @@
 		color: var(--site-muted);
 	}
 	.playground-stage {
-		background: #e8eae0;
+		background: #252b22;
 		padding: 25px;
-		min-height: 365px;
+		min-height: 425px;
 		display: grid;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 		gap: 13px;
 		align-content: center;
-		background-image: radial-gradient(#c8cdbb 0.8px, transparent 0.8px);
+		position: relative;
+		overflow: hidden;
+		isolation: isolate;
+		background-image: radial-gradient(#717a5f 0.8px, transparent 0.8px);
 		background-size: 15px 15px;
 	}
 	.motion-piece {
@@ -300,7 +406,7 @@
 		justify-content: space-between;
 		color: #252821;
 	}
-	.motion-piece:first-child {
+	.motion-piece:first-of-type {
 		grid-row: span 2;
 		height: 299px;
 	}

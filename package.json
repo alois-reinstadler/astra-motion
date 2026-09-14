@@ -126,6 +126,7 @@
 		"prettier-plugin-tailwindcss": "^0.8.0",
 		"publint": "^0.3.21",
 		"shadcn-svelte": "^1.6.0",
+		"shiki": "^4.4.3",
 		"svelte": "^5.57.0",
 		"svelte-check": "^4.6.0",
 		"svelte-sonner": "^1.2.1",

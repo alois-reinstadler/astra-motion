@@ -84,7 +84,7 @@
 		font-size: 23px;
 	}
 	.eyebrow {
-		color: #667455;
+		color: #59644c;
 		font-size: 9px;
 		font-weight: 600;
 		letter-spacing: 0.15em;
@@ -97,7 +97,7 @@
 	}
 	p {
 		margin: 0;
-		color: #6c7263;
+		color: #59644c;
 		font-size: 12px;
 		line-height: 1.5;
 	}

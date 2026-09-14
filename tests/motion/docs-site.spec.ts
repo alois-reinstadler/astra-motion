@@ -189,3 +189,68 @@ test('documentation renders without JavaScript and missing guides return 404', a
 	await context.close();
 	expect((await request.get('/docs/not-a-guide')).status()).toBe(404);
 });
+
+test('client navigation disposes demo exits instead of retaining previous guide sections', async ({
+	page
+}) => {
+	const errors: string[] = [];
+	page.on('pageerror', (error) => errors.push(error.message));
+	await page.goto('/docs/shared-layout');
+	await page.getByRole('button', { name: 'Rest', exact: true }).click();
+	const navigation = page.getByRole('navigation', { name: 'Documentation', exact: true });
+	await navigation.getByRole('link', { name: 'Scroll-linked motion' }).click();
+	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Scroll-linked motion');
+	await expect(page.locator('#identity')).toHaveCount(0);
+	await expect(page.locator('[data-example="shared"]')).toHaveCount(0);
+	await expect(page.locator('article > section')).toHaveCount(5);
+	await navigation.getByRole('link', { name: 'Presence & exits', exact: true }).click();
+	await page
+		.locator('[data-example="state"]')
+		.getByRole('button', { name: 'Dismiss notification' })
+		.click();
+	await navigation.getByRole('link', { name: 'Automatic layout' }).click();
+	await expect(page.locator('[data-example="state"]')).toHaveCount(0);
+	await expect(page.locator('[data-example="wait"]')).toHaveCount(0);
+	await expect(page.locator('[data-example="layout"]')).toHaveCount(1);
+	await page.goBack();
+	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Presence & exits');
+	await expect(page.locator('[data-example="state"] .notification')).toHaveCount(1);
+	await expect(page.locator('[data-example="layout"]')).toHaveCount(0);
+	expect(errors).toEqual([]);
+});
+
+test('the pinned scroll composition assembles, reverses and resets', async ({ page }) => {
+	await page.goto('/docs/scroll');
+	const demo = page.locator('[data-example="scroll"]');
+	const reader = demo.locator('.reader');
+	const paper = demo.locator('.paper').first();
+	await expect(paper).toBeVisible();
+	const initial = await paper.evaluate((node) => getComputedStyle(node).transform);
+	await reader.evaluate((node) => {
+		node.scrollTop = (node.scrollHeight - node.clientHeight) / 2;
+	});
+	await expect(demo.locator('progress')).toHaveAttribute('value', '0.5');
+	await expect(demo.getByRole('heading', { name: 'Bring them together.' })).toBeVisible();
+	await expect
+		.poll(() =>
+			paper.evaluate((node) => {
+				const m = new DOMMatrix(getComputedStyle(node).transform);
+				return Math.abs(m.m41) + Math.abs(m.m42) + Math.abs(m.b);
+			})
+		)
+		.toBeLessThan(0.01);
+	await reader.evaluate((node) => {
+		node.scrollTop = node.scrollHeight;
+	});
+	await expect(demo.locator('progress')).toHaveAttribute('value', '1');
+	await expect(demo.getByRole('heading', { name: 'Let them go.' })).toBeVisible();
+	await reader.evaluate((node) => {
+		node.scrollTop = 0;
+	});
+	await expect.poll(() => paper.evaluate((node) => getComputedStyle(node).transform)).toBe(initial);
+	await reader.evaluate((node) => {
+		node.scrollTop = node.scrollHeight;
+	});
+	await demo.getByRole('button', { name: 'Reset Make it move' }).click();
+	await expect(demo.locator('progress')).toHaveAttribute('value', '0');
+});

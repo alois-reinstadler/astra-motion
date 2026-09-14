@@ -119,7 +119,7 @@
 	}
 	p {
 		margin: 3px 0 0;
-		color: #929686;
+		color: #62695a;
 		font-size: 10px;
 	}
 	.empty {

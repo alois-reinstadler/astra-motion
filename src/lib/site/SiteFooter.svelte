@@ -8,8 +8,10 @@
 		<p>Made for the way Svelte moves.</p>
 	</div>
 	<nav aria-label="Footer navigation">
-		<a href={resolve('/docs')}>Documentation</a><a href={resolve('/examples')}>Examples</a><a
-			href={resolve('/docs/[slug]#api-status', { slug: 'troubleshooting' })}>Status & limitations</a
+		<a href={resolve('/docs')}>Documentation</a><a href={resolve('/showcase')}>Showcase</a><a
+			href={resolve('/examples')}>Examples</a
+		><a href={resolve('/docs/[slug]#api-status', { slug: 'troubleshooting' })}
+			>Status & limitations</a
 		>
 	</nav>
 	<small>Independent project.<br />Powered by Svelte and Motion.</small>

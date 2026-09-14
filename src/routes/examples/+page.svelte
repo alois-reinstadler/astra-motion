@@ -6,6 +6,8 @@
 	});
 	import { resolve } from '$app/paths';
 	import SiteFrame from '$lib/site/SiteFrame.svelte';
+	import DocExample from '$lib/site/DocExample.svelte';
+	import { liveExamples } from '$lib/site/examples.js';
 	const categories = [
 		'All examples',
 		'Layout',
@@ -91,8 +93,8 @@
 			tag: 'ANIMATED LISTS'
 		},
 		{
-			title: 'Follow the story',
-			description: 'A contained reading panel with scroll-linked progress and a little depth.',
+			title: 'Make it move',
+			description: 'Scrub a pinned composition through scatter, assembly and release.',
 			category: 'Scroll & timelines',
 			slug: 'scroll',
 			anchor: 'container',
@@ -169,9 +171,11 @@
 				yours.
 			</p>
 		</header>
+
 		<div class="collection-tools">
 			<nav aria-label="Filter examples">
 				{#each categories as option (option)}<button
+						data-ui-control
 						disabled={!ready}
 						aria-pressed={category === option}
 						class:active={category === option}
@@ -187,6 +191,19 @@
 				/></label
 			>
 		</div>
+		{#if category === 'All examples' && !query.trim()}
+			<section class="featured-study" aria-labelledby="featured-heading">
+				<div class="featured-copy">
+					<p class="eyebrow">FEATURED / SCROLL CHOREOGRAPHY</p>
+					<h2 id="featured-heading">You set<br /><em>the pace.</em></h2>
+					<p>Scatter. Gather. Release. One scroll position conducts the whole composition.</p>
+					<a href={resolve('/docs/[slug]', { slug: 'scroll' })}
+						>Build this interaction <span aria-hidden="true">↗</span></a
+					>
+				</div>
+				<DocExample example={liveExamples.scroll} />
+			</section>
+		{/if}
 		<p class="result-count" aria-live="polite">
 			{filtered.length}
 			{filtered.length === 1 ? 'EXAMPLE' : 'EXAMPLES'}{category !== 'All examples'
@@ -215,6 +232,7 @@
 				<h2>No examples found.</h2>
 				<p>Try another search or show the full collection.</p>
 				<button
+					data-ui-control
 					disabled={!ready}
 					onclick={() => {
 						query = '';
@@ -235,6 +253,45 @@
 </SiteFrame>
 
 <style>
+	.featured-study {
+		display: grid;
+		grid-template-columns: 0.8fr 1.2fr;
+		align-items: center;
+		gap: 60px;
+		margin: 0 0 65px;
+		border-top: 1px solid var(--site-line);
+		padding-top: 25px;
+	}
+	.featured-copy h2 {
+		font-size: clamp(44px, 6vw, 76px);
+		font-weight: 500;
+		letter-spacing: -0.055em;
+		line-height: 1;
+		margin: 0 0 24px;
+	}
+	.featured-copy > p:not(.eyebrow) {
+		max-width: 260px;
+		font-size: 15px;
+		line-height: 1.8;
+		color: var(--site-muted);
+	}
+	.featured-copy a {
+		display: inline-flex;
+		gap: 28px;
+		margin-top: 20px;
+		font-size: 12px;
+	}
+	@media (max-width: 750px) {
+		.featured-study {
+			grid-template-columns: 1fr;
+			gap: 10px;
+			margin-bottom: 40px;
+		}
+		.featured-copy > p:not(.eyebrow) {
+			max-width: 320px;
+		}
+	}
+
 	main {
 		max-width: 1440px;
 		padding: 0 56px;

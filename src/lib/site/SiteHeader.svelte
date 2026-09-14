@@ -25,6 +25,39 @@
 </header>
 
 <style>
+	nav a::after {
+		content: '';
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 1px;
+		background: #c23d22;
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+	}
+	nav a:hover::after,
+	nav a:focus-visible::after,
+	nav a[aria-current]::after {
+		transform: scaleX(1);
+	}
+	.site-logo span {
+		transition: rotate 450ms cubic-bezier(0.2, 0.8, 0.2, 1);
+	}
+	.site-logo:hover span {
+		rotate: 90deg;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		nav a::after,
+		.site-logo span {
+			transition: none;
+		}
+		.site-logo:hover span {
+			rotate: none;
+		}
+	}
+
 	.site-header {
 		display: flex;
 		align-items: center;
@@ -69,11 +102,11 @@
 	nav a {
 		padding: 8px 0;
 		text-decoration: none;
-		border-bottom: 1px solid transparent;
+		position: relative;
+		transition: color 180ms ease;
 	}
 	nav a:hover,
 	nav a[aria-current] {
-		border-color: #d34123;
 		color: #b2321b;
 	}
 	.site-version {

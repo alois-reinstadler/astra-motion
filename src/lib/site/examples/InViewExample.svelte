@@ -24,7 +24,12 @@
 	<!-- svelte-ignore a11y_no_noninteractive_tabindex (This panel supports keyboard scrolling.) -->
 	<section
 		class="viewport"
-		bind:this={panel}
+		{@attach (node) => {
+			panel = node;
+			return () => {
+				panel = undefined;
+			};
+		}}
 		tabindex="0"
 		aria-label="Scroll to reveal a discovery card"
 	>
@@ -33,7 +38,15 @@
 			<h3>Good things<br />come into view.</h3>
 			<p>Scroll inside to find yours <span aria-hidden="true">↓</span></p>
 		</div>
-		<div class="target" bind:this={target}>
+		<div
+			class="target"
+			{@attach (node) => {
+				target = node;
+				return () => {
+					target = undefined;
+				};
+			}}
+		>
 			<div class="card" {...card.props}>
 				<span class="symbol" aria-hidden="true">✳</span>
 				<div>
@@ -104,7 +117,7 @@
 	.number {
 		font-size: 10px;
 		letter-spacing: 0.1em;
-		color: #73766a;
+		color: #555e4b;
 	}
 	h3 {
 		margin: 27px 0 19px;

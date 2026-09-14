@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onDestroy } from 'svelte';
 	import { createMotion, motionStore, motionValue } from '$lib/motion/index.js';
 
 	let saved = $state(false);
@@ -18,7 +19,7 @@
 		whileDrag: { scale: 1.08 },
 		transition: { type: 'spring', stiffness: 400, damping: 24 }
 	});
-	$effect(() => () => x.destroy());
+	onDestroy(() => x.destroy());
 </script>
 
 <div class="example">
@@ -84,7 +85,7 @@
 		padding: 13px 17px;
 		border: 0;
 		border-radius: 4px;
-		background: #d34123;
+		background: #bc3c21;
 		color: #fffaf1;
 		font: inherit;
 		font-size: 13px;
@@ -186,7 +187,7 @@
 		cursor: pointer;
 	}
 	input:focus-visible {
-		outline: 2px solid #d34123;
+		outline: 2px solid #bc3c21;
 		outline-offset: 4px;
 	}
 </style>

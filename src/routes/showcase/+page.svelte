@@ -38,16 +38,23 @@
 
 <SiteFrame>
 	<main id="site-content" class="fieldwork">
-		<header class="showcase-intro">
+		<header class="showcase-intro" class:motion-reduced={reduced}>
 			<div class="intro-top">
 				<span>ASTRA IN PRACTICE / 001</span><a
 					href={resolve('/docs/[slug]', { slug: 'getting-started' })}>Build with Astra ↗</a
 				>
 			</div>
 			<div class="intro-main">
+				<div class="intro-landscape" aria-hidden="true">
+					{#each [photos[0], photos[2], photos[1]] as photo, index (photo.id)}
+						<div class="landscape-panel" style:--panel={index}>
+							<img src={photo.src} alt="" fetchpriority={index === 0 ? 'high' : 'auto'} />
+						</div>
+					{/each}
+				</div>
 				<div>
 					<p class="eyebrow">A STUDIO IN MOTION</p>
-					<h1>Fieldwork<span aria-hidden="true">✳</span></h1>
+					<h1><span class="fieldwork-title">Fieldwork</span><span aria-hidden="true">✳</span></h1>
 				</div>
 				<p class="intro-copy">
 					A little space for<br /><em>big observations.</em><small
@@ -139,8 +146,8 @@
 					</div>
 					<div>
 						<p>
-							A journal to linger in. Follow the landscape as you read, then set the opening title
-							in motion.
+							A journal to linger in. Follow the landscape as you read, then assemble a world from
+							six fragments.
 						</p>
 						<a href={resolve('/docs/[slug]', { slug: 'scroll' })}>Scroll &amp; sequence guides ↗</a>
 					</div>
@@ -189,11 +196,88 @@
 </SiteFrame>
 
 <style>
+	.intro-landscape {
+		position: absolute;
+		inset: 0;
+		display: grid;
+		grid-template-columns: 2fr 1fr 1fr;
+		z-index: -2;
+		gap: 4px;
+	}
+	.landscape-panel {
+		overflow: hidden;
+		animation: landscape-reveal 1.3s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+		animation-delay: calc(var(--panel) * 120ms);
+	}
+	.landscape-panel img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	.intro-main::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background: linear-gradient(180deg, #131b1610, #131b1688 35%, #131b16ed);
+	}
+	.intro-main h1 {
+		color: #fffaf0;
+		font-size: clamp(70px, 9.5vw, 130px);
+	}
+	.intro-main h1 .fieldwork-title {
+		display: inline;
+		font: inherit;
+		letter-spacing: inherit;
+		margin: 0;
+		vertical-align: baseline;
+	}
+	.intro-main .eyebrow {
+		color: #f0b99b;
+	}
+	.intro-main .intro-copy small {
+		color: #e0e4d7;
+	}
+	.intro-main > div:not(.intro-landscape),
+	.intro-main > .intro-copy {
+		animation: title-arrive 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.25s backwards;
+	}
+	@keyframes landscape-reveal {
+		from {
+			clip-path: inset(100% 0 0);
+		}
+		to {
+			clip-path: inset(0);
+		}
+	}
+	@keyframes title-arrive {
+		from {
+			opacity: 0;
+			translate: 0 45px;
+		}
+		to {
+			opacity: 1;
+			translate: 0 0;
+		}
+	}
+	.motion-reduced .landscape-panel,
+	.motion-reduced .intro-main > div,
+	.motion-reduced .intro-main > .intro-copy {
+		animation: none;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.landscape-panel,
+		.intro-main > div:not(.intro-landscape),
+		.intro-main > .intro-copy {
+			animation: none;
+		}
+	}
+
 	.fieldwork {
 		--field-ink: #222720;
 		--field-paper: #f5f3e9;
-		--field-accent: #cf4a2a;
-		--field-muted: #707869;
+		--field-accent: #ba3e21;
+		--field-muted: #626b5b;
 		--field-line: #d3d8c9;
 		max-width: 1328px;
 		padding: 0 56px;
@@ -210,7 +294,7 @@
 			9px ui-monospace,
 			monospace;
 		letter-spacing: 1px;
-		color: #707869;
+		color: #626b5b;
 	}
 	.intro-top a {
 		color: #4b5643;
@@ -225,14 +309,21 @@
 		grid-template-columns: 1.5fr 1fr;
 		align-items: end;
 		gap: 40px;
-		padding: 58px 0 52px;
+		padding: 190px 36px 36px;
+		margin: 25px 0 0;
+		min-height: 380px;
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+		background: #232820;
+		color: #fffaf0;
 	}
 	.eyebrow {
 		font:
 			9px ui-monospace,
 			monospace;
 		letter-spacing: 1.8px;
-		color: #cf4a2a;
+		color: #ba3e21;
 		margin: 0 0 20px;
 	}
 	h1 {
@@ -268,7 +359,7 @@
 		font-size: 12px;
 		line-height: 1.85;
 		letter-spacing: 0;
-		color: #707869;
+		color: #626b5b;
 		margin-top: 20px;
 		max-width: 285px;
 	}
@@ -293,12 +384,12 @@
 		font:
 			8px ui-monospace,
 			monospace;
-		color: #9ba48f;
+		color: #626b5b;
 		margin-right: 5px;
 	}
 	.motion-preference {
 		font-size: 10px;
-		color: #707869;
+		color: #626b5b;
 		display: flex;
 		align-items: center;
 		gap: 7px;
@@ -306,7 +397,7 @@
 		white-space: nowrap;
 	}
 	.motion-preference input {
-		accent-color: #cf4a2a;
+		accent-color: #ba3e21;
 		width: 13px;
 		height: 13px;
 	}
@@ -343,7 +434,7 @@
 	.scene-caption > div > p:not(.eyebrow) {
 		font-size: 12px;
 		line-height: 1.8;
-		color: #707869;
+		color: #626b5b;
 		margin: 0 0 14px;
 	}
 	.scene-caption a {
@@ -361,7 +452,7 @@
 	}
 	.colophon-mark {
 		font-size: 49px;
-		color: #cf4a2a;
+		color: #ba3e21;
 		display: block;
 		margin-bottom: 22px;
 	}
@@ -371,14 +462,14 @@
 	.colophon > div > p {
 		font-size: 12px;
 		line-height: 1.8;
-		color: #707869;
+		color: #626b5b;
 		margin: 20px 0;
 	}
 	.docs-cta {
 		display: inline-flex;
 		gap: 42px;
 		align-items: center;
-		background: #cf4a2a;
+		background: #ba3e21;
 		color: #fff8ed;
 		padding: 15px 20px;
 		text-decoration: none;
@@ -413,6 +504,7 @@
 		font-size: 9px;
 	}
 	.credits a {
+		text-decoration: underline;
 		color: #4b5643;
 		text-underline-offset: 3px;
 	}
@@ -420,7 +512,7 @@
 		font-size: 9px !important;
 	}
 	.fieldwork a:focus-visible {
-		outline: 2px solid #cf4a2a;
+		outline: 2px solid #ba3e21;
 		outline-offset: 5px;
 	}
 	@media (max-width: 900px) {
@@ -447,6 +539,19 @@
 		}
 	}
 	@media (max-width: 600px) {
+		.intro-main h1 {
+			font-size: clamp(55px, 16vw, 78px);
+			letter-spacing: -4px;
+		}
+		.intro-main {
+			min-height: 400px;
+		}
+		.intro-landscape {
+			grid-template-columns: 2fr 1fr;
+		}
+		.landscape-panel:last-child {
+			display: none;
+		}
 		.fieldwork {
 			padding: 0 20px;
 		}
@@ -461,7 +566,7 @@
 		}
 		.intro-main {
 			grid-template-columns: 1fr;
-			padding: 42px 0 30px;
+			padding: 95px 22px 28px;
 			gap: 30px;
 		}
 		h1 {

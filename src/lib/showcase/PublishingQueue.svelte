@@ -52,6 +52,38 @@
 		focused?.focus({ preventScroll: true });
 		announcement = `${items[to].title} moved to position ${to + 1} of ${items.length}.`;
 	}
+	// Keep DOM nodes stationary during capture; commit their order on release.
+	let dragOrder = $state.raw<Photo[] | undefined>();
+	function drag(id: string, center: number, delta: number) {
+		if (!queue || delta === 0) return;
+		dragOrder ??= [...items];
+		const from = items.findIndex((photo) => photo.id === id);
+		const to = from + (delta > 0 ? 1 : -1);
+		const neighbor = items[to];
+		if (from < 0 || !neighbor) return;
+		const node = queue.querySelector<HTMLElement>(`[data-queue-item="${neighbor.id}"]`);
+		if (!node) return;
+		// Use the destination layout, not a sibling's animated visual position.
+		const midpoint = queue.getBoundingClientRect().top + node.offsetTop + node.offsetHeight / 2;
+		if ((delta > 0 && center > midpoint) || (delta < 0 && center < midpoint)) {
+			move(id, delta > 0 ? 1 : -1);
+		}
+	}
+	function finishDrag(cancelled: boolean) {
+		const focused =
+			document.activeElement instanceof HTMLElement && queue?.contains(document.activeElement)
+				? document.activeElement
+				: undefined;
+		layout.update(() => {
+			if (cancelled && dragOrder) {
+				items = dragOrder;
+				announcement = 'Drag cancelled. Original sequence restored.';
+			}
+			dragOrder = undefined;
+		});
+		focused?.focus({ preventScroll: true });
+	}
+
 	async function add(photo = available[0]) {
 		if (!photo || items.some((item) => item.id === photo.id)) return;
 		const active = document.activeElement;
@@ -162,21 +194,27 @@
 					</button>
 				</div>
 			</div>
+			<p id="queue-drag-hint" class="sr-only">
+				Drag the grip to reorder. With the grip focused, use the up and down arrow keys. Escape
+				cancels a drag.
+			</p>
 			<ul
 				class="sequence-list"
 				{@attach attachQueue}
 				aria-label="Issue photograph sequence"
 				data-testid="queue-list"
 			>
-				{#each items as photo, index (photo.id)}
+				{#each dragOrder ?? items as photo (photo.id)}
 					<QueueItem
 						{photo}
-						{index}
+						index={items.findIndex((item) => item.id === photo.id)}
 						total={items.length}
 						{compact}
 						{layout}
 						onmove={(direction) => move(photo.id, direction)}
 						onremove={() => void remove(photo.id)}
+						ondrag={(center, delta) => drag(photo.id, center, delta)}
+						ondragend={finishDrag}
 					/>
 				{/each}
 			</ul>
@@ -187,7 +225,7 @@
 				</div>{/if}
 			<div class="queue-footer">
 				<span>{items.length} of {photos.length} photographs selected</span><span
-					>Reorder. Refine. Repeat.</span
+					>Drag to reorder.</span
 				>
 			</div>
 		</div>
@@ -227,7 +265,7 @@
 			<div class="editor-note">
 				<span class="note-number">04 / EDITOR'S NOTE</span>
 				<p>Let one image answer the next.</p>
-				<span>Use the arrows to find a rhythm. Nothing here is published.</span>
+				<span>Drag a handle, or use the arrows to find a rhythm. Nothing here is published.</span>
 			</div>
 		</aside>
 	</div>

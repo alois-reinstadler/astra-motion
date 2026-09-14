@@ -40,15 +40,15 @@ test('example discovery filters, searches, and opens a live documentation exampl
 }) => {
 	await page.goto('/examples');
 	await page.getByRole('button', { name: 'Routes', exact: true }).click();
-	await expect(page.locator('.example')).toHaveCount(1);
-	await expect(page.locator('.example')).toContainText('Motion between pages');
+	await expect(page.locator('.example-grid > .example')).toHaveCount(1);
+	await expect(page.locator('.example-grid > .example')).toContainText('Motion between pages');
 	await page.getByRole('searchbox', { name: 'Search examples' }).fill('no-such-example');
 	await expect(page.getByRole('heading', { name: 'No examples found.' })).toBeVisible();
 	await page.getByRole('button', { name: 'Show all examples' }).click();
-	await expect(page.locator('.example')).toHaveCount(12);
+	await expect(page.locator('.example-grid > .example')).toHaveCount(12);
 	await page.getByRole('searchbox', { name: 'Search examples' }).fill('touched');
-	await expect(page.locator('.example')).toHaveCount(1);
-	await page.locator('.example').click();
+	await expect(page.locator('.example-grid > .example')).toHaveCount(1);
+	await page.locator('.example-grid > .example').click();
 	await expect(page).toHaveURL(/\/docs\/state#gestures$/);
 	await expect(page.locator('[data-example="gestures"]')).toBeVisible();
 	await page

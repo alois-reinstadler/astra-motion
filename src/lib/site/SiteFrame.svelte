@@ -13,12 +13,84 @@
 </div>
 
 <style>
+	.astra-site :global(.fieldwork button) {
+		transition:
+			color 180ms ease,
+			background-color 180ms ease,
+			border-color 180ms ease,
+			filter 120ms ease;
+	}
+	.astra-site :global(.fieldwork button:active:not(:disabled)) {
+		filter: brightness(0.93);
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.astra-site :global(.fieldwork button) {
+			transition: none;
+		}
+	}
+
+	.astra-site :global(a),
+	.astra-site :global(summary) {
+		transition:
+			color 180ms ease,
+			background-color 180ms ease,
+			border-color 180ms ease;
+	}
+	.astra-site :global(input) {
+		transition:
+			border-color 180ms ease,
+			box-shadow 180ms ease;
+	}
+	.astra-site :global([data-ui-control]) {
+		transition:
+			color 180ms ease,
+			background-color 180ms ease,
+			border-color 180ms ease,
+			box-shadow 180ms ease,
+			translate 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+	}
+	.astra-site :global([data-ui-control]:active:not(:disabled)) {
+		translate: 0 1px;
+	}
+	.astra-site :global(.example-grid > a),
+	.astra-site :global(.feature-grid > a) {
+		transition:
+			translate 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+			box-shadow 220ms ease,
+			border-color 180ms ease,
+			background-color 180ms ease;
+	}
+	@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+		.astra-site :global([data-ui-control]:hover:not(:disabled)) {
+			translate: 0 -2px;
+		}
+		.astra-site :global([data-ui-control]:active:not(:disabled)) {
+			translate: 0 1px;
+		}
+		.astra-site :global(.example-grid > a:hover),
+		.astra-site :global(.feature-grid > a:hover) {
+			translate: 0 -4px;
+			box-shadow: 0 10px 24px #2528210c;
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.astra-site :global(a),
+		.astra-site :global(summary),
+		.astra-site :global(input),
+		.astra-site :global([data-ui-control]) {
+			transition: none;
+		}
+		.astra-site :global([data-ui-control]:active:not(:disabled)) {
+			translate: none;
+		}
+	}
+
 	.astra-site {
 		--site-bg: #f7f7f0;
 		--site-ink: #252821;
 		--site-muted: #64695c;
 		--site-line: #d9d8d0;
-		--site-accent: #d34123;
+		--site-accent: #c23d22;
 		--site-panel: #edeee5;
 		min-height: 100vh;
 		background: var(--site-bg);
