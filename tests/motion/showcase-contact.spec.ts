@@ -112,7 +112,12 @@ test('mobile showcase navigation, complete source and reduced motion are usable'
 	await page.locator('[data-contact-open=namib]').click();
 	await expect(page.locator('[data-contact-close]')).toBeVisible();
 	await page.keyboard.press('Escape');
-	await page.locator('#contact-sheet summary').click();
+	await expect(page.locator('[data-contact-open=namib]')).toBeFocused();
+	const source = page.locator('#contact-sheet summary');
+	// Stop the previous anchor scroll before a real click opens the native disclosure.
+	await source.evaluate((node) => node.scrollIntoView({ behavior: 'instant', block: 'center' }));
+	await source.click();
+	await expect(page.locator('#contact-sheet details')).toHaveAttribute('open');
 	await expect(
 		page.getByRole('button', { name: 'Copy ContactSheet.svelte', exact: true })
 	).toBeVisible();

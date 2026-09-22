@@ -18,25 +18,56 @@ test('photographs exit and enter in the requested direction, including rapid rev
 	await page.locator('[data-contact-open="namib"]').click();
 	const frame = page.locator('.photo-replace');
 	const x = () => frame.evaluate((node) => new DOMMatrix(getComputedStyle(node).transform).m41);
-	const next = page.getByRole('button', { name: 'Next photograph' });
-	await next.click();
-	await expect.poll(x).toBeLessThan(-1);
-	await expect(page.locator('.detail-copy h3')).toHaveText('The edge of stillness');
-	await expect.poll(x).toBeGreaterThan(1);
-	await expect.poll(x).toBeCloseTo(0, 1);
-	await page.getByRole('button', { name: 'Previous photograph' }).click();
-	await expect.poll(x).toBeGreaterThan(1);
-	await expect(page.locator('.detail-copy h3')).toHaveText('A quiet immensity');
-	await expect.poll(x).toBeLessThan(-1);
-	await page.evaluate(() => {
-		const next = document.querySelector<HTMLButtonElement>('[aria-label="Next photograph"]')!;
-		const previous = document.querySelector<HTMLButtonElement>(
-			'[aria-label="Previous photograph"]'
-		)!;
-		next.click();
-		next.click();
-		previous.click();
-	});
+	await frame.evaluate((node) => node.scrollIntoView({ behavior: 'instant', block: 'center' }));
+	for (const direction of [1, -1] as const) {
+		const samples = await page.evaluate(async (direction) => {
+			const original = document.querySelector('.detail-copy h3')!.textContent;
+			const exit: number[] = [];
+			const enter: number[] = [];
+			let enteredTitle = original;
+			document
+				.querySelector<HTMLButtonElement>(
+					direction === 1 ? '[aria-label="Next photograph"]' : '[aria-label="Previous photograph"]'
+				)!
+				.click();
+			for (let frame = 0; frame < 120; frame++) {
+				await new Promise(requestAnimationFrame);
+				// Selection replaces this keyed subtree, so sample the current nodes.
+				const photo = document.querySelector<HTMLElement>('.photo-replace')!;
+				const heading = document.querySelector('.detail-copy h3')!;
+				const x = new DOMMatrix(getComputedStyle(photo).transform).m41;
+				if (heading.textContent === original) exit.push(x);
+				else {
+					enteredTitle = heading.textContent;
+					enter.push(x);
+					if (direction === -1 && x < -1) {
+						// Reverse while the previous photograph is still entering.
+						const next = document.querySelector<HTMLButtonElement>(
+							'[aria-label="Next photograph"]'
+						)!;
+						next.click();
+						next.click();
+						document
+							.querySelector<HTMLButtonElement>('[aria-label="Previous photograph"]')!
+							.click();
+						break;
+					}
+					if (enter.length > 1 && Math.abs(x) < 0.05) break;
+				}
+			}
+			return { exit, enter, enteredTitle };
+		}, direction);
+		// Capture the complete short exit locally; protocol polling can miss its 200ms window.
+		expect(samples.exit.some((x) => x * direction < -1)).toBe(true);
+		expect(samples.enter.some((x) => x * direction > 1)).toBe(true);
+		expect(samples.enteredTitle).toBe(
+			direction === 1 ? 'The edge of stillness' : 'A quiet immensity'
+		);
+		if (direction === 1) {
+			await expect(page.locator('.detail-copy h3')).toHaveText('The edge of stillness');
+			await expect.poll(x).toBeCloseTo(0, 1);
+		}
+	}
 	await expect(page.locator('.detail-copy h3')).toHaveText('The edge of stillness');
 	await expect(frame).toHaveCSS('opacity', '1');
 	await expect.poll(x).toBeCloseTo(0, 1);

@@ -3,6 +3,7 @@ import { expect, test } from '@playwright/test';
 declare global {
 	interface Window {
 		__astraRouteSkips: number;
+		__astraRouteActivity: { ready: number; active: number[]; skipped: number };
 		__astraRouteTest: {
 			supported: boolean;
 			started: number;
@@ -114,16 +115,61 @@ test('reduced motion navigation stays functional without temporary names', async
 	expect(await page.locator('[style*="view-transition-name"]').count()).toBe(0);
 });
 
-test('navigation supersedes an active native transition', async ({ page }) => {
+test('programmatic navigation supersedes an active native transition', async ({ page }) => {
+	const errors: string[] = [];
+	page.on('pageerror', (error) => errors.push(error.message));
+	await page.emulateMedia({ reducedMotion: 'no-preference' });
+	await page.addInitScript(() => {
+		const state = (window.__astraRouteActivity = { ready: 0, active: [] as number[], skipped: 0 });
+		if (!document.startViewTransition) return;
+		const start = document.startViewTransition.bind(document);
+		let sequence = 0;
+		document.startViewTransition = (...args: Parameters<Document['startViewTransition']>) => {
+			const transition = start(...args);
+			const id = ++sequence;
+			void transition.ready.then(
+				() => {
+					state.ready++;
+					state.active.push(id);
+				},
+				() => {}
+			);
+			void transition.finished.then(
+				() => {
+					state.active = state.active.filter((active) => active !== id);
+				},
+				() => {}
+			);
+			const skip = transition.skipTransition.bind(transition);
+			transition.skipTransition = () => {
+				state.skipped++;
+				skip();
+			};
+			return transition;
+		};
+	});
 	await page.goto('/motion-lab/product');
-	// Native snapshot assertions require Kit's client navigation hook to be mounted.
 	await expect(page.getByTestId('delayed-detail')).toBeEnabled();
+	expect(await page.evaluate(() => Boolean(document.startViewTransition))).toBe(true);
+	const duration = await page.addStyleTag({
+		content: '::view-transition-group(*) { animation-duration: 20s !important; }'
+	});
 	await page.getByTestId('product-01').click();
-	await page.getByTestId('collection').click({ noWaitAfter: true });
+	await expect.poll(() => page.evaluate(() => window.__astraRouteActivity.active)).toEqual([1]);
+	// Exercise interruption while snapshots are active. Pointer navigation and history
+	// are covered separately; native snapshot overlays can intercept pointer input.
+	await page.getByTestId('collection').evaluate((link: HTMLAnchorElement) => link.click());
 	await expect(page.getByTestId('product-03')).toBeVisible();
-	await page.getByTestId('product-03').click();
+	await expect.poll(() => page.evaluate(() => window.__astraRouteActivity.active)).toEqual([2]);
+	await page.getByTestId('product-03').evaluate((link: HTMLAnchorElement) => link.click());
 	await expect(page.locator('h1')).toHaveText('Object No. 03');
+	await expect(page).toHaveURL(/product\/03$/);
+	await expect.poll(() => page.evaluate(() => window.__astraRouteActivity.ready)).toBe(3);
+	expect(await page.evaluate(() => window.__astraRouteActivity.skipped)).toBe(2);
+	await duration.evaluate((style) => style.parentNode?.removeChild(style));
+	await expect.poll(() => page.evaluate(() => window.__astraRouteActivity.active)).toEqual([]);
 	await expect.poll(() => page.locator('[style*="view-transition-name"]').count()).toBe(0);
+	expect(errors).toEqual([]);
 });
 
 test('native snapshots accept scoped shared names after programmatic async loading', async ({

@@ -115,7 +115,11 @@ test('documentation has connected navigation, topic filtering and complete copya
 	);
 	const example = page.locator('[data-example="layout"]');
 	await example.locator('summary').click();
-	await example.getByRole('button', { name: 'Copy LayoutExample.svelte', exact: true }).click();
+	const copy = example.getByRole('button', { name: 'Copy LayoutExample.svelte', exact: true });
+	// Position the control before clicking: WebKit can continue native smooth scrolling
+	// after Playwright's actionability check. Keep the actual pointer interaction.
+	await copy.evaluate((node) => node.scrollIntoView({ behavior: 'instant', block: 'center' }));
+	await copy.click();
 	await expect(page.getByRole('status')).toHaveText('Copied to clipboard');
 	expect(await page.locator('html').getAttribute('data-copied-source')).toContain(
 		"from 'astra-motion'"
@@ -225,6 +229,8 @@ test('the pinned scroll composition assembles, reverses and resets', async ({ pa
 	const reader = demo.locator('.reader');
 	const paper = demo.locator('.paper').first();
 	await expect(paper).toBeVisible();
+	// Visibility precedes the scroll attachment's first animation frame.
+	await expect(paper).not.toHaveCSS('transform', 'none');
 	const initial = await paper.evaluate((node) => getComputedStyle(node).transform);
 	await reader.evaluate((node) => {
 		node.scrollTop = (node.scrollHeight - node.clientHeight) / 2;

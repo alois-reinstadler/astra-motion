@@ -7,7 +7,15 @@ test('home demo keeps identity through repeated layout changes and links into th
 	page.on('pageerror', (error) => errors.push(error.message));
 	await page.goto('/');
 	await expect(page.getByRole('heading', { level: 1 })).toContainText('Make room');
-	await page.getByRole('button', { name: 'Stack', exact: true }).click();
+	const stack = page.getByRole('button', { name: 'Stack', exact: true });
+	// The entrance clips the controls before revealing them. Wait for the reveal,
+	// then center the target so native smooth scrolling cannot move a pointer click.
+	await expect(page.locator('.hero-playground')).toHaveCSS(
+		'clip-path',
+		/^inset\(0(?:%|px)?(?: 0(?:%|px)?){0,3}\)$/
+	);
+	await stack.evaluate((node) => node.scrollIntoView({ behavior: 'instant', block: 'center' }));
+	await stack.click();
 	await expect(page.getByRole('button', { name: 'Stack', exact: true })).toHaveAttribute(
 		'aria-pressed',
 		'true'

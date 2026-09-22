@@ -122,15 +122,26 @@ test('inspector exit settles when inherited reduced motion changes live', async 
 			page.locator('.inspector').evaluate((node) => Number(getComputedStyle(node).opacity))
 		)
 		.toBe(1);
+	await page
+		.getByTestId('editing-desk')
+		.evaluate((node) => node.scrollIntoView({ behavior: 'instant', block: 'center' }));
 	const result = await page.evaluate(async () => {
 		const inspector = document.querySelector<HTMLElement>('.inspector')!;
 		document
 			.querySelector<HTMLButtonElement>('[data-testid=editing-desk] .desk-toolbar button')!
 			.click();
-		await new Promise(requestAnimationFrame);
-		await new Promise(requestAnimationFrame);
-		const before = Number(getComputedStyle(inspector).opacity);
-		document.querySelector<HTMLInputElement>('[data-testid=showcase-reduced]')!.click();
+		// Flip the policy on the first partially faded frame, not a fixed frame count.
+		// The 140ms exit can finish between two remote WebKit samples.
+		let before = 0;
+		for (let frame = 0; frame < 120 && inspector.isConnected; frame++) {
+			await new Promise(requestAnimationFrame);
+			const opacity = Number(getComputedStyle(inspector).opacity);
+			if (opacity > 0 && opacity < 1) {
+				before = opacity;
+				document.querySelector<HTMLInputElement>('[data-testid=showcase-reduced]')!.click();
+				break;
+			}
+		}
 		await new Promise(requestAnimationFrame);
 		await new Promise(requestAnimationFrame);
 		return {
@@ -139,7 +150,9 @@ test('inspector exit settles when inherited reduced motion changes live', async 
 		};
 	});
 	expect(result.before).toBeGreaterThan(0);
+	expect(result.before).toBeLessThan(1);
 	expect(result.after).toBe(0);
+	await expect(page.locator('.inspector')).toHaveCount(0);
 	await page.getByTestId('editing-desk').getByRole('button', { name: 'Show inspector' }).click();
 	await expect(page.locator('.inspector')).toHaveCSS('opacity', '1');
 });
