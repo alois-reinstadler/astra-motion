@@ -126,7 +126,25 @@ test('inspector exit settles when inherited reduced motion changes live', async 
 		.getByTestId('editing-desk')
 		.evaluate((node) => node.scrollIntoView({ behavior: 'instant', block: 'center' }));
 	const result = await page.evaluate(async () => {
+		// Let the native anchor scroll and rendering resume before starting a 140ms exit.
+		await new Promise(requestAnimationFrame);
+		await new Promise(requestAnimationFrame);
 		const inspector = document.querySelector<HTMLElement>('.inspector')!;
+		const start = performance.now();
+		const samples: unknown[] = [];
+		for (const type of ['outrostart', 'outroend'])
+			inspector.addEventListener(type, () => {
+				samples.push({
+					type,
+					time: performance.now() - start,
+					opacity: getComputedStyle(inspector).opacity,
+					animations: inspector.getAnimations().map((animation) => ({
+						state: animation.playState,
+						time: animation.currentTime,
+						duration: animation.effect?.getTiming().duration
+					}))
+				});
+			});
 		document
 			.querySelector<HTMLButtonElement>('[data-testid=editing-desk] .desk-toolbar button')!
 			.click();
@@ -136,6 +154,20 @@ test('inspector exit settles when inherited reduced motion changes live', async 
 		for (let frame = 0; frame < 120 && inspector.isConnected; frame++) {
 			await new Promise(requestAnimationFrame);
 			const opacity = Number(getComputedStyle(inspector).opacity);
+			samples.push({
+				type: 'frame',
+				frame,
+				time: performance.now() - start,
+				opacity,
+				connected: inspector.isConnected,
+				scrollY,
+				visibility: document.visibilityState,
+				animations: inspector.getAnimations().map((animation) => ({
+					state: animation.playState,
+					time: animation.currentTime,
+					duration: animation.effect?.getTiming().duration
+				}))
+			});
 			if (opacity > 0 && opacity < 1) {
 				before = opacity;
 				document.querySelector<HTMLInputElement>('[data-testid=showcase-reduced]')!.click();
@@ -146,9 +178,11 @@ test('inspector exit settles when inherited reduced motion changes live', async 
 		await new Promise(requestAnimationFrame);
 		return {
 			before,
+			samples,
 			after: inspector.isConnected ? Number(getComputedStyle(inspector).opacity) : 0
 		};
 	});
+	console.log('Inspector exit diagnostics:', JSON.stringify(result));
 	expect(result.before).toBeGreaterThan(0);
 	expect(result.before).toBeLessThan(1);
 	expect(result.after).toBe(0);

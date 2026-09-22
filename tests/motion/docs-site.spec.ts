@@ -119,7 +119,56 @@ test('documentation has connected navigation, topic filtering and complete copya
 	// Position the control before clicking: WebKit can continue native smooth scrolling
 	// after Playwright's actionability check. Keep the actual pointer interaction.
 	await copy.evaluate((node) => node.scrollIntoView({ behavior: 'instant', block: 'center' }));
+	await copy.focus();
+	await copy.hover();
+	const settled = await copy.evaluate(async (node) => {
+		let previous = '';
+		let unchangedSince = performance.now();
+		const deadline = unchangedSince + 3000;
+		while (performance.now() < deadline) {
+			await new Promise(requestAnimationFrame);
+			const { x, y, width, height } = node.getBoundingClientRect();
+			const position = [scrollX, scrollY, x, y, width, height].join(',');
+			if (position !== previous) {
+				previous = position;
+				unchangedSince = performance.now();
+			} else if (performance.now() - unchangedSince >= 100) return true;
+		}
+		return false;
+	});
+	expect(settled).toBe(true);
+	await page.evaluate(() => {
+		const events: unknown[] = [];
+		Object.assign(window, { copyEvents: events });
+		for (const type of ['pointerdown', 'pointerup', 'mousedown', 'mouseup', 'click', 'focusin']) {
+			document.addEventListener(
+				type,
+				(event) => {
+					const button = document.querySelector('[aria-label="Copy LayoutExample.svelte"]');
+					const bounds = button?.getBoundingClientRect();
+					events.push({
+						type,
+						time: performance.now(),
+						scrollY,
+						target: (event.target as Element)?.outerHTML?.slice(0, 180),
+						button: bounds && { top: bounds.top, bottom: bounds.bottom },
+						point: event instanceof MouseEvent ? [event.clientX, event.clientY] : null
+					});
+				},
+				true
+			);
+		}
+	});
 	await copy.click();
+	console.log(
+		'Copy pointer diagnostics:',
+		await page.evaluate(() => ({
+			events: (window as unknown as { copyEvents: unknown[] }).copyEvents,
+			copied: !!document.documentElement.dataset.copiedSource,
+			scrollY,
+			status: document.querySelector('[role=status]')?.textContent
+		}))
+	);
 	await expect(page.getByRole('status')).toHaveText('Copied to clipboard');
 	expect(await page.locator('html').getAttribute('data-copied-source')).toContain(
 		"from 'astra-motion'"

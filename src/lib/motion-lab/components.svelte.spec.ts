@@ -57,6 +57,16 @@ it('preserves actual dialog focus, labeling, centering and Escape dismissal', as
 			opacity,
 			scroll: [scrollX, scrollY],
 			visibility: document.visibilityState,
+			frame: frameElement
+				? {
+						bounds: frameElement.getBoundingClientRect().toJSON(),
+						wrapperTransform: frameElement.parentElement
+							? getComputedStyle(frameElement.parentElement).transform
+							: null,
+						parentViewport: [parent.innerWidth, parent.innerHeight],
+						parentScroll: [parent.scrollX, parent.scrollY]
+					}
+				: null,
 			focused: document.activeElement?.getAttribute('data-testid'),
 			animations: dialog?.getAnimations().map((animation) => ({
 				playState: animation.playState,
