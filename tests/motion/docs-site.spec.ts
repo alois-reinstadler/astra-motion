@@ -137,38 +137,7 @@ test('documentation has connected navigation, topic filtering and complete copya
 		return false;
 	});
 	expect(settled).toBe(true);
-	await page.evaluate(() => {
-		const events: unknown[] = [];
-		Object.assign(window, { copyEvents: events });
-		for (const type of ['pointerdown', 'pointerup', 'mousedown', 'mouseup', 'click', 'focusin']) {
-			document.addEventListener(
-				type,
-				(event) => {
-					const button = document.querySelector('[aria-label="Copy LayoutExample.svelte"]');
-					const bounds = button?.getBoundingClientRect();
-					events.push({
-						type,
-						time: performance.now(),
-						scrollY,
-						target: (event.target as Element)?.outerHTML?.slice(0, 180),
-						button: bounds && { top: bounds.top, bottom: bounds.bottom },
-						point: event instanceof MouseEvent ? [event.clientX, event.clientY] : null
-					});
-				},
-				true
-			);
-		}
-	});
 	await copy.click();
-	console.log(
-		'Copy pointer diagnostics:',
-		await page.evaluate(() => ({
-			events: (window as unknown as { copyEvents: unknown[] }).copyEvents,
-			copied: !!document.documentElement.dataset.copiedSource,
-			scrollY,
-			status: document.querySelector('[role=status]')?.textContent
-		}))
-	);
 	await expect(page.getByRole('status')).toHaveText('Copied to clipboard');
 	expect(await page.locator('html').getAttribute('data-copied-source')).toContain(
 		"from 'astra-motion'"

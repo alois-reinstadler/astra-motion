@@ -130,46 +130,36 @@ test('inspector exit settles when inherited reduced motion changes live', async 
 		await new Promise(requestAnimationFrame);
 		await new Promise(requestAnimationFrame);
 		const inspector = document.querySelector<HTMLElement>('.inspector')!;
-		const start = performance.now();
-		const samples: unknown[] = [];
-		for (const type of ['outrostart', 'outroend'])
-			inspector.addEventListener(type, () => {
-				samples.push({
-					type,
-					time: performance.now() - start,
-					opacity: getComputedStyle(inspector).opacity,
-					animations: inspector.getAnimations().map((animation) => ({
-						state: animation.playState,
-						time: animation.currentTime,
-						duration: animation.effect?.getTiming().duration
-					}))
-				});
-			});
+		let exiting = false;
+		inspector.addEventListener('outrostart', () => (exiting = true), { once: true });
 		document
 			.querySelector<HTMLButtonElement>('[data-testid=editing-desk] .desk-toolbar button')!
 			.click();
-		// Flip the policy on the first partially faded frame, not a fixed frame count.
-		// The 140ms exit can finish between two remote WebKit samples.
+		// Observe the real native outro before changing policy. On slow WebKit frames,
+		// its clock advances even when no intermediate opacity has painted yet.
 		let before = 0;
+		let activeExit: { state: string; time: number; duration: number } | null = null;
 		for (let frame = 0; frame < 120 && inspector.isConnected; frame++) {
 			await new Promise(requestAnimationFrame);
-			const opacity = Number(getComputedStyle(inspector).opacity);
-			samples.push({
-				type: 'frame',
-				frame,
-				time: performance.now() - start,
-				opacity,
-				connected: inspector.isConnected,
-				scrollY,
-				visibility: document.visibilityState,
-				animations: inspector.getAnimations().map((animation) => ({
-					state: animation.playState,
-					time: animation.currentTime,
-					duration: animation.effect?.getTiming().duration
-				}))
-			});
-			if (opacity > 0 && opacity < 1) {
-				before = opacity;
+			if (!exiting) continue;
+			for (const animation of inspector.getAnimations()) {
+				const time = animation.currentTime;
+				const duration = animation.effect?.getTiming().duration;
+				if (
+					animation.playState === 'running' &&
+					typeof time === 'number' &&
+					Number.isFinite(time) &&
+					time >= 0 &&
+					typeof duration === 'number' &&
+					Number.isFinite(duration) &&
+					time < duration
+				) {
+					activeExit = { state: animation.playState, time, duration };
+					break;
+				}
+			}
+			if (activeExit) {
+				before = Number(getComputedStyle(inspector).opacity);
 				document.querySelector<HTMLInputElement>('[data-testid=showcase-reduced]')!.click();
 				break;
 			}
@@ -178,13 +168,14 @@ test('inspector exit settles when inherited reduced motion changes live', async 
 		await new Promise(requestAnimationFrame);
 		return {
 			before,
-			samples,
+			activeExit,
 			after: inspector.isConnected ? Number(getComputedStyle(inspector).opacity) : 0
 		};
 	});
-	console.log('Inspector exit diagnostics:', JSON.stringify(result));
 	expect(result.before).toBeGreaterThan(0);
-	expect(result.before).toBeLessThan(1);
+	expect(result.activeExit).toMatchObject({ state: 'running' });
+	expect(result.activeExit!.time).toBeGreaterThanOrEqual(0);
+	expect(result.activeExit!.time).toBeLessThan(result.activeExit!.duration);
 	expect(result.after).toBe(0);
 	await expect(page.locator('.inspector')).toHaveCount(0);
 	await page.getByTestId('editing-desk').getByRole('button', { name: 'Show inspector' }).click();

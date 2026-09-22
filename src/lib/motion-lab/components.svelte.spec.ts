@@ -1,4 +1,5 @@
 import { expect, it } from 'vitest';
+import { page } from 'vitest/browser';
 import '../../routes/layout.css';
 import { render } from 'vitest-browser-svelte';
 import { tick } from 'svelte';
@@ -57,6 +58,7 @@ it('preserves actual dialog focus, labeling, centering and Escape dismissal', as
 			opacity,
 			scroll: [scrollX, scrollY],
 			visibility: document.visibilityState,
+			triggerBounds: node('dialog-trigger').getBoundingClientRect().toJSON(),
 			frame: frameElement
 				? {
 						bounds: frameElement.getBoundingClientRect().toJSON(),
@@ -82,8 +84,10 @@ it('preserves actual dialog focus, labeling, centering and Escape dismissal', as
 	document.addEventListener('introend', recordIntro, true);
 	try {
 		sample();
-		node('dialog-trigger').focus();
-		await click('dialog-trigger');
+		// A browser click scrolls the trigger into view before activating it. Calling
+		// focus() then DOM click() can open the scroll-locking dialog mid-scroll.
+		await page.getByTestId('component-dialog-trigger').click();
+		await tick();
 		try {
 			await expect.poll(sample).toBe(1);
 		} catch (error) {

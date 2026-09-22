@@ -18,10 +18,7 @@ export default defineConfig({
 		browser: {
 			enabled: true,
 			screenshotDirectory: `test-results/components/${selected ?? 'matrix'}`,
-			// Vitest sizes its test iframe separately from Playwright's outer page.
-			// Fit the largest fixture (1280x900) so headless CI does not scale the iframe;
-			// the default/mobile inner viewports and native animation clocks stay unchanged.
-			provider: playwright({ contextOptions: { viewport: { width: 1280, height: 1024 } } }),
+			provider: playwright(),
 			instances: engines
 				.filter((browser) => !selected || selected === browser)
 				.map((browser) => ({ browser, headless: true }))
