@@ -76,7 +76,7 @@ all owned browser tabs were closed.
 
 ## Remaining release requirements
 
-- An explicit license decision and a public package release.
+- A public package release. MIT has been selected and added to the repository.
 - Physical Safari/iOS and low-end-device qualification, including interrupted
   animation, scrolling, reduced motion and large-list behavior.
 - An upstream strict-declaration resolution and a release strategy that does not
@@ -145,4 +145,5 @@ time limit. Review found no remaining issues after those corrections.
 
 These results qualify the code revision above. This evidence update changes only
 documentation; strict dependency declarations, physical-device qualification,
-license selection and publication remain subject to the requirements above.
+and publication remain subject to the requirements above. The owner subsequently
+selected MIT; the repository now includes the license and matching package metadata.

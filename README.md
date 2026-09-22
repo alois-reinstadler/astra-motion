@@ -6,7 +6,7 @@ Motion’s projection engine. A separate SvelteKit adapter connects route change
 browser View Transitions.
 
 **Working beta, version 0.0.1.** This repository has not announced a public registry
-release and does not yet include a license. Evaluate the local package before
+release. Astra is [MIT licensed](LICENSE). Evaluate the local package before
 adopting it. Motion 13.2.0 is pinned because the layout adapter uses undocumented
 upstream exports.
 

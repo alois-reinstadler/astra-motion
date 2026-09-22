@@ -101,7 +101,7 @@ const pages: DocPage[] = [
 				text: [
 					'In the Astra checkout, run pnpm run prepack and pnpm pack. The first command builds the library and validates its package; the second creates astra-motion-0.0.1.tgz. pnpm may run prepack again as part of packing.',
 					'From your app directory, install that file using its real path. Use Svelte 5.57.0 or newer within Svelte 5. SvelteKit 2.70.3 or newer within Kit 2 is needed only for astra-motion/routes. Before installing, configure the qualified Motion versions above in your app.',
-					'The package name in the examples refers to this local build. Check the project status before adopting it: a registry release and license are still pending.'
+					'The package name in the examples refers to this local build. Check the project status before adopting it: Astra is MIT licensed, and a public registry release is still pending.'
 				],
 				code: {
 					label: 'Terminal — replace the tarball path with your own',

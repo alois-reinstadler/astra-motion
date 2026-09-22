@@ -4,7 +4,7 @@ There is no publication step in CI. Treat a release as a specific commit, archiv
 
 ## Decisions
 
-- [ ] Choose a license and add matching `LICENSE` and package metadata. Do not publish without this decision.
+- [x] MIT selected; matching `LICENSE` and package metadata are included.
 - [ ] Confirm the package name, version and registry access with the owner; registry availability is not established by a local tarball.
 - [ ] Review the unreleased notes and commit the intended changes.
 - [ ] Choose a public site origin when ready. This is separate from package qualification; without `PUBLIC_SITE_URL`, the site intentionally remains unindexed.

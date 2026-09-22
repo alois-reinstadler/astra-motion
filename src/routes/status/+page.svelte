@@ -108,8 +108,8 @@
 		<h2>Before a public release</h2>
 		<div>
 			<p>
-				The release needs an explicit license, a published package and broader device qualification.
-				There is no release date to plan against yet.
+				Astra is MIT licensed. A public release still needs a published package and broader device
+				qualification. There is no release date to plan against yet.
 			</p>
 			<p>
 				For a bug report, include the smallest component that reproduces the problem, your Svelte
