@@ -77,8 +77,6 @@ all owned browser tabs were closed.
 ## Remaining release requirements
 
 - An explicit license decision and a public package release.
-- Execution of the complete browser matrix on the resulting revision in CI or an
-  environment permitted to launch the test browsers.
 - Physical Safari/iOS and low-end-device qualification, including interrupted
   animation, scrolling, reduced motion and large-list behavior.
 - An upstream strict-declaration resolution and a release strategy that does not
@@ -110,3 +108,41 @@ All 62 distributed runtime/declaration files are byte-identical to the
 `30eb97b7…` archive exercised in shared Chrome above; the README accounts for the
 package content change. Strict dependency checking still reports only the upstream
 `HTMLWebViewElement` error.
+
+## Completed CI qualification
+
+[CI run 35738473583](https://github.com/alois-reinstadler/astra-motion/actions/runs/35738473583)
+passed all seven jobs for commit `2ce7e2c827b279a99392f45cebfef66ff4674a9a`:
+
+- 97 server tests and two qualification-origin tests.
+- 281 component tests in each of Chromium, Firefox and WebKit.
+- 59 production E2E tests in Chromium; 58 in Firefox and WebKit, with one existing
+  Chromium-only touch-input case skipped in each of those engines.
+- Type checking, guide validation, formatting, lint, the dependency upgrade gate,
+  production build, bundle measurement and an independent packed-consumer install.
+
+The new E2E matrix exposed pointer clicks racing native scroll movement and
+protocol polling missing short animation phases. Tests now establish stable click
+positions and sample short motion phases inside the page. Navigation interruption
+checks prove that native transitions are active before superseding them. The live
+reduced-motion check pauses the native exit clock before its endpoint, verifies
+that the visible pose remains without the policy change, then requires it to
+settle at the unchanged clock position when the policy changes. A negative control
+in shared Chrome confirmed that omitting the policy change fails this assertion.
+
+Five full-page accordion, dialog and card integration scenarios now run against
+the production document in all three engines. They retain reversal, native-node
+identity, focus, centering, cleanup, ordering and text-scale assertions. Vitest's
+WebKit iframe showed intermittent rendering stalls in these full-page fixtures;
+viewport sizing and frame sampling did not resolve them. Moving the integration
+checks does not establish that the iframe behavior is fixed. No browser engine is
+excluded, no runtime workaround was added, and the entrance timing limits remain.
+
+Independent review found and corrected three test weaknesses: natural exit
+completion could masquerade as policy-driven settlement; a missing form input could
+escape scale measurement; and shared readiness could relax the original entrance
+time limit. Review found no remaining issues after those corrections.
+
+These results qualify the code revision above. This evidence update changes only
+documentation; strict dependency declarations, physical-device qualification,
+license selection and publication remain subject to the requirements above.
