@@ -56,8 +56,13 @@ it('reopens the same dialog during exit and cleans up a destroyed owner', async 
 
 it('removes cards from flow during filter exits and restores current keyed cards under reversal', async () => {
 	await render(Components);
-	await expect.poll(() => Number(getComputedStyle(node('card-2')).opacity)).toBe(1);
 	const original = node('card-2');
+	// This full-page fixture places the collection below the fold. Bring the
+	// subject into view before checking its rendered entrance; avoid CSS smooth scroll.
+	original.scrollIntoView({ block: 'center', behavior: 'instant' });
+	await expect.poll(() => original.getBoundingClientRect().top).toBeGreaterThanOrEqual(0);
+	await expect.poll(() => original.getBoundingClientRect().bottom).toBeLessThanOrEqual(innerHeight);
+	await expect.poll(() => Number(getComputedStyle(node('card-2')).opacity)).toBe(1);
 	await click('filter');
 	await expect.poll(() => original.style.position).toBe('absolute');
 	expect(node('card-2')).toBe(original);
