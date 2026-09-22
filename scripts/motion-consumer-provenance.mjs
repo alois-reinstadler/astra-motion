@@ -1,3 +1,4 @@
+import { verifyConsumerDependencies } from './motion-consumer-dependencies.mjs';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, writeFileSync, realpathSync } from 'node:fs';
 import { join, resolve } from 'node:path';
@@ -9,6 +10,7 @@ export const identityPath = '/__astra-qualification.json';
 export const digest = (bytes) => createHash('sha256').update(bytes).digest('hex');
 
 export function verifyPackedConsumer(setup) {
+	verifyConsumerDependencies(setup.consumer);
 	const bytes = readFileSync(setup.archive);
 	assert.equal(digest(bytes), setup.sha256, 'Archive differs from recorded SHA-256');
 	assert(
@@ -21,7 +23,7 @@ export function verifyPackedConsumer(setup) {
 	assert(
 		files.every(
 			(file) =>
-				/^package\/(package\.json|README\.md|dist\/index\.(js|d\.ts)|dist\/motion\/.*)$/.test(
+				/^package\/(package\.json|README\.md|LICENSE(?:\.md)?|dist\/index\.(js|d\.ts)|dist\/motion\/.*)$/.test(
 					file
 				) && !file.split('/').includes('..')
 		),

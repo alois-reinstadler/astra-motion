@@ -3,6 +3,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
+import { verifyConsumerDependencies } from './motion-consumer-dependencies.mjs';
 import { stampConsumer } from './motion-consumer-provenance.mjs';
 
 // The copied app has its own node_modules and Kit output. It never aliases repo source.
@@ -33,6 +34,7 @@ writeFileSync(join(directory, 'qualification.json'), JSON.stringify(info, null, 
 // Keep the path even if a consumer check discovers a real packaging failure.
 writeFileSync('/tmp/astra-motion-production-current.json', JSON.stringify(info, null, 2) + '\n');
 run(['install'], consumer);
+console.log(JSON.stringify({ dependencies: verifyConsumerDependencies(consumer) }, null, 2));
 run(['run', 'check'], consumer);
 run(['run', 'build'], consumer);
 stampConsumer(info);

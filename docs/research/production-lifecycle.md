@@ -10,13 +10,13 @@ Prepare the isolated packed consumer with `node scripts/prepare-motion-consumer.
 
 ```sh
 node scripts/qualify-motion-lifecycle.mjs \
-  --url http://127.0.0.1:5290 \
+  --url "$PRODUCTION_LOCAL_URL" \
   --consumer /tmp/your-installed-astra-consumer \
-  --dev-port 5291 \
+  --dev-url "$CONSUMER_DEV_LOCAL_URL" \
   --output /tmp/astra-production-lifecycle.json
 ```
 
-The production server is supplied by the caller. The runner starts and stops a separate Vite dev server in the copied consumer for HMR, edits only its `HmrTile.svelte`, and restores the original file in `finally`. Never pass the repository template as `--consumer`.
+Both servers are supplied by the caller. Set the URL variables to the actual allocated local origins. Locally, use `dev-preview` for the built consumer and a separate `dev-preview start astra-motion-consumer-hmr --cwd /path/to/copied-consumer -- pnpm exec vite dev --host '{host}' --port '{port}' --strictPort` for HMR; `--strictPort` prevents a silent port change. Supply `--consumer` and `--dev-url` together, or omit both to record HMR as not run. The runner edits only the isolated consumer's `HmrTile.svelte` and restores it in `finally`. It launches browser engines but never a server; run it only where browser launches are permitted. Never pass the repository template as `--consumer`.
 
 The source fixtures are in `tests/production/consumer/src/routes/lifecycle`. Root development builds, sync commands and HMR edits must not run against a browser suite's own app; the isolated consumer avoids that previous source of false navigation failures.
 

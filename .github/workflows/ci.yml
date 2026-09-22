@@ -3,6 +3,7 @@ name: CI
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -27,7 +28,12 @@ jobs:
       - run: pnpm run check
       - run: pnpm run lint
       - run: pnpm run check:guide
+      - run: node scripts/check-motion-upgrade.mjs
       - run: pnpm run test:server
+      - run: node --test scripts/qualification-origin.test.mjs
+      - run: pnpm run build
+      - run: node scripts/measure-motion-bundles.mjs
+      - run: node scripts/prepare-motion-consumer.mjs
 
   browsers:
     runs-on: ubuntu-latest
@@ -49,3 +55,66 @@ jobs:
       - run: pnpm run test:browsers
         env:
           MOTION_BROWSER: ${{ matrix.browser }}
+      - name: Upload component browser screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: components-${{ matrix.browser }}
+          path: test-results/components/
+          if-no-files-found: ignore
+
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - uses: pnpm/action-setup@v6
+        with:
+          cache: true
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
+      - run: pnpm run build
+      - name: Run E2E against the production preview
+        env:
+          MOTION_LAB_URL: http://127.0.0.1:4173
+          MOTION_BROWSER: ${{ matrix.browser }}
+        run: |
+          mkdir -p artifacts
+          node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4173 --strictPort > artifacts/preview.log 2>&1 &
+          preview_pid=$!
+          trap 'kill "$preview_pid" 2>/dev/null || true; wait "$preview_pid" 2>/dev/null || true' EXIT
+          ready=false
+          for attempt in $(seq 1 60); do
+            if ! kill -0 "$preview_pid" 2>/dev/null; then
+              cat artifacts/preview.log
+              exit 1
+            fi
+            if curl --fail --silent --max-time 2 "$MOTION_LAB_URL/" > /dev/null; then
+              ready=true
+              break
+            fi
+            sleep 1
+          done
+          if [ "$ready" != true ]; then
+            cat artifacts/preview.log
+            echo "Production preview did not become ready" >&2
+            exit 1
+          fi
+          pnpm run test:motion:e2e --project="$MOTION_BROWSER"
+      - name: Upload E2E report and preview log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-${{ matrix.browser }}
+          path: |
+            playwright-report/
+            test-results/
+            artifacts/preview.log
+          if-no-files-found: ignore

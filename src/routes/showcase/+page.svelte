@@ -29,13 +29,6 @@
 	];
 </script>
 
-<svelte:head
-	><title>Fieldwork — Astra Motion showcase</title><meta
-		name="description"
-		content="A photographic studio built with Svelte-native motion. Explore shared elements, an adaptable editing desk, a publishing queue and a scroll-driven story. Real interactions, complete source."
-	/></svelte:head
->
-
 <SiteFrame>
 	<main id="site-content" class="fieldwork">
 		<header class="showcase-intro" class:motion-reduced={reduced}>

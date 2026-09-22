@@ -18,7 +18,9 @@ try {
 	const manifest = JSON.parse(readFileSync('package.json', 'utf8'));
 	const paths = {};
 	for (const [entry, conditions] of Object.entries(manifest.exports)) {
-		const source = conditions.svelte.replace('./dist/', 'src/lib/').replace(/\.js$/, '.ts');
+		const target =
+			typeof conditions === 'string' ? conditions : (conditions.svelte ?? conditions.default);
+		const source = target.replace('./dist/', 'src/lib/').replace(/\.js$/, '.ts');
 		paths[entry === '.' ? manifest.name : manifest.name + entry.slice(1)] = [resolve(source)];
 	}
 	paths.svelte = [resolve('node_modules/svelte/types/index.d.ts')];

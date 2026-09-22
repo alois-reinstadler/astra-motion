@@ -10,13 +10,6 @@
 	const next = $derived(docs[index + 1]);
 </script>
 
-<svelte:head
-	><title>{doc.title} — Astra documentation</title><meta
-		name="description"
-		content={doc.summary}
-	/></svelte:head
->
-
 <div class="article-layout">
 	<article>
 		<header>
@@ -80,7 +73,7 @@
 				>{/each}
 		</nav>
 		<div class="status">
-			<span class="dot"></span> Working beta
+			<span class="dot"></span> <a href={resolve('/status')}>Working beta</a>
 			<p>Svelte 5 · Motion 13<br />Native elements throughout.</p>
 		</div>
 	</aside>
@@ -137,7 +130,7 @@
 	}
 	.eyebrow {
 		color: var(--site-muted);
-		font-size: 9px;
+		font-size: 11px;
 		letter-spacing: 1.3px;
 		line-height: 1.8;
 		font-weight: 600;
@@ -193,6 +186,7 @@
 		margin: 16px 0;
 	}
 	ul {
+		list-style-type: disc;
 		padding-left: 19px;
 		color: var(--site-muted);
 		font-size: 14px;
@@ -231,7 +225,7 @@
 		align-self: start;
 	}
 	.on-this-page nav > p {
-		font-size: 9px;
+		font-size: 11px;
 		letter-spacing: 1.1px;
 		color: var(--site-muted);
 		margin: 0 0 16px;

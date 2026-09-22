@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<rect width="1200" height="630" fill="#f7f7f0"/>
+<g font-family="Arial, sans-serif" fill="#252821">
+<text x="72" y="103" font-size="48" font-weight="600" letter-spacing="-2">astra</text>
+<text x="190" y="103" font-size="43" fill="#c23d22">✳</text>
+<text x="252" y="96" font-size="15" letter-spacing="4">MOTION</text>
+<path d="M72 140H1128" stroke="#d9d8d0"/>
+<text x="72" y="269" font-size="76" letter-spacing="-3">Motion’s engine.</text>
+<text x="72" y="358" font-size="76" letter-spacing="-3">Svelte’s lifecycle.</text>
+<text x="76" y="428" font-size="25" fill="#64695c">Native elements. Shared layout. Coordinated exits.</text>
+<path d="M72 513H1128" stroke="#d9d8d0"/>
+<text x="76" y="565" font-size="16" letter-spacing="2">AN INDEPENDENT SVELTE 5 LIBRARY</text>
+</g>
+<g transform="translate(990 325)"><rect x="-74" y="-97" width="150" height="172" rx="5" fill="#d9e77e" transform="rotate(-13)"/><rect x="-52" y="-71" width="150" height="172" rx="5" fill="#c23d22"/><path d="M-10 56L53 -7M-7 -7H53V53" fill="none" stroke="#f7f7f0" stroke-width="7"/></g>
+</svg>

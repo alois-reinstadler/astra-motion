@@ -5,6 +5,19 @@ complete recipes are also available with copy buttons and links to live scenario
 at [/motion-lab/guide](/motion-lab/guide). This is a beta adapter over pinned Motion
 13.2.0; see the [qualification report](research/composition-scroll-timelines.md).
 
+## Install a local build
+
+The repository is an unpublished beta. In a checkout, run `pnpm install`,
+`pnpm run prepack` and `pnpm pack`. From the consuming Svelte app, run
+`pnpm add /absolute/path/to/astra-motion/astra-motion-0.0.1.tgz`, replacing the path
+with the generated archive. The package includes the pinned Motion dependencies;
+Svelte 5.57.0 or newer within Svelte 5 is a peer dependency. Only the routes entry
+requires SvelteKit (2.70.3 or newer within Kit 2).
+
+Package imports in this guide refer to that local build. The public site’s
+Getting started guide includes the same installation path. See the
+[current scope and release work](research/motion-focus.md) before adopting it.
+
 ## Choose an entry
 
 | Need                                                                     | Import                    |

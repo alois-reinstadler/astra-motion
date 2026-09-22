@@ -15,7 +15,7 @@ export {
 	type MotionTarget
 } from './motion.svelte.js';
 export { default as MotionConfig } from './MotionConfig.svelte';
-export { default as Motion, type MotionProps, type MotionTag } from './Motion.svelte';
+export { default as Motion, type MotionProps, type MotionTag } from './MotionComponent.svelte';
 export type { MotionConfigOptions } from './config.js';
 export type { GestureOptions } from './gestures.js';
 export * from './values.js';

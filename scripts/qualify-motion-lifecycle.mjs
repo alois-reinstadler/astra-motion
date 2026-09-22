@@ -1,8 +1,7 @@
 import assert from 'node:assert/strict';
-import { spawn } from 'node:child_process';
+import { qualificationOrigin } from './qualification-origin.mjs';
 import { readFile, writeFile, mkdir, realpath } from 'node:fs/promises';
 import path from 'node:path';
-import { setTimeout as delay } from 'node:timers/promises';
 import { chromium, firefox, webkit } from 'playwright';
 
 const argumentsList = process.argv.slice(2);
@@ -10,10 +9,14 @@ function option(name, fallback) {
 	const index = argumentsList.indexOf(name);
 	return index < 0 ? fallback : argumentsList[index + 1];
 }
-const productionURL = option('--url', 'http://127.0.0.1:5290');
+const productionURL = qualificationOrigin(option('--url'), '--url');
 const consumerDirectory = option('--consumer');
 const output = path.resolve(option('--output', 'artifacts/production-lifecycle.json'));
-const devPort = Number(option('--dev-port', '5291'));
+const devURL = option('--dev-url');
+if (Boolean(consumerDirectory) !== Boolean(devURL)) {
+	throw new Error('Supply both --consumer and --dev-url for HMR, or omit both to skip it.');
+}
+const developmentURL = devURL ? qualificationOrigin(devURL, '--dev-url') : undefined;
 const report = {
 	date: new Date().toISOString(),
 	productionURL,
@@ -320,37 +323,18 @@ if (consumerDirectory) {
 			);
 			const component = path.join(consumer, 'src/routes/lifecycle/hmr/HmrTile.svelte');
 			const original = await readFile(component, 'utf8');
-			const server = spawn(
-				path.join(consumer, 'node_modules/.bin/vite'),
-				['dev', '--host', '127.0.0.1', '--port', String(devPort), '--strictPort'],
-				{ cwd: consumer, stdio: ['ignore', 'pipe', 'pipe'] }
-			);
-			let serverLog = '';
-			server.stdout.on('data', (chunk) => {
-				serverLog += chunk;
-			});
-			server.stderr.on('data', (chunk) => {
-				serverLog += chunk;
-			});
 			let browser;
 			try {
-				let available = false;
-				for (let attempt = 0; attempt < 80; attempt++) {
-					try {
-						available = (await fetch(`http://127.0.0.1:${devPort}/lifecycle/hmr`)).ok;
-					} catch {
-						/* server starting */
-					}
-					if (available) break;
-					await delay(100);
-				}
-				assert.ok(available, `Dev consumer did not start: ${serverLog}`);
+				assert.ok(
+					(await fetch(`${developmentURL}/lifecycle/hmr`)).ok,
+					'--dev-url must serve the running isolated consumer dev build'
+				);
 				browser = await chromium.launch();
 				const page = await browser.newPage();
 				const errors = [];
 				page.on('pageerror', (error) => errors.push(error.message));
 				await instrument(page);
-				await page.goto(`http://127.0.0.1:${devPort}/lifecycle/hmr`);
+				await page.goto(`${developmentURL}/lifecycle/hmr`);
 				await until(page, () => document.body.dataset.hmrLive === '1');
 				const documentId = await page.evaluate(() => window.__motionLifecycle.documentId);
 				const revisions = [];
@@ -408,7 +392,6 @@ if (consumerDirectory) {
 			} finally {
 				await writeFile(component, original);
 				await browser?.close();
-				server.kill('SIGTERM');
 			}
 		}
 	);

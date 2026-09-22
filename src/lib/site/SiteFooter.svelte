@@ -5,13 +5,13 @@
 <footer class="site-footer">
 	<div>
 		<a href={resolve('/')} class="footer-brand">astra ✳</a>
-		<p>Made for the way Svelte moves.</p>
+		<p>Motion’s engine. Svelte’s lifecycle.</p>
 	</div>
 	<nav aria-label="Footer navigation">
 		<a href={resolve('/docs')}>Documentation</a><a href={resolve('/showcase')}>Showcase</a><a
 			href={resolve('/examples')}>Examples</a
-		><a href={resolve('/docs/[slug]#api-status', { slug: 'troubleshooting' })}
-			>Status & limitations</a
+		><a href={resolve('/about')}>Why Astra</a><a href={resolve('/status')}>Project status</a><a
+			href="https://github.com/alois-reinstadler/astra-motion">GitHub</a
 		>
 	</nav>
 	<small>Independent project.<br />Powered by Svelte and Motion.</small>
@@ -45,10 +45,14 @@
 	}
 	nav {
 		display: flex;
-		gap: 24px;
+		gap: 0 24px;
+		flex-wrap: wrap;
 		font-size: 12px;
 	}
 	nav a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
 		text-decoration: none;
 	}
 	nav a:hover {

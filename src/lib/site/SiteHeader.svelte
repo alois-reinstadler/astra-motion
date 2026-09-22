@@ -5,7 +5,8 @@
 	const links = [
 		{ href: '/docs', title: 'Documentation' },
 		{ href: '/showcase', title: 'Showcase' },
-		{ href: '/examples', title: 'Examples' }
+		{ href: '/examples', title: 'Examples' },
+		{ href: '/about', title: 'Why Astra' }
 	] as const;
 </script>
 
@@ -17,11 +18,19 @@
 		{#each links as link (link.href)}
 			<a
 				href={resolve(link.href)}
-				aria-current={page.url.pathname.startsWith(link.href) ? 'page' : undefined}>{link.title}</a
+				aria-current={page.url.pathname === resolve(link.href) ||
+				page.url.pathname.startsWith(`${resolve(link.href)}/`)
+					? 'page'
+					: undefined}>{link.title}</a
 			>
 		{/each}
 	</nav>
-	<span class="site-version"><i></i> EARLY ACCESS</span>
+	<a
+		class="site-version"
+		href={resolve('/status')}
+		aria-current={page.url.pathname === resolve('/status') ? 'page' : undefined}
+		><i></i> WORKING BETA</a
+	>
 </header>
 
 <style>
@@ -64,7 +73,7 @@
 		justify-content: space-between;
 		gap: 24px;
 		max-width: 1440px;
-		padding: 27px 56px;
+		padding: 23px 56px;
 		margin: auto;
 		border-bottom: 1px solid #d9d8d0;
 		color: #252821;
@@ -100,6 +109,9 @@
 		font-weight: 550;
 	}
 	nav a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
 		padding: 8px 0;
 		text-decoration: none;
 		position: relative;
@@ -110,14 +122,22 @@
 		color: #b2321b;
 	}
 	.site-version {
+		text-decoration: none;
 		display: flex;
+		min-height: 44px;
 		gap: 8px;
 		align-items: center;
 		font:
-			9px ui-monospace,
+			10px ui-monospace,
 			monospace;
 		letter-spacing: 1px;
 		white-space: nowrap;
+	}
+	.site-version:hover,
+	.site-version[aria-current] {
+		color: #b2321b;
+		text-decoration: underline;
+		text-underline-offset: 4px;
 	}
 	.site-version i {
 		width: 6px;
@@ -136,22 +156,33 @@
 	}
 	@media (max-width: 750px) {
 		.site-header {
-			padding: 22px 24px;
+			padding: 16px 24px;
 			flex-wrap: wrap;
-			gap: 20px;
+			gap: 8px 12px;
 		}
 		.site-logo {
 			font-size: 30px;
 		}
 		.site-version {
+			text-decoration: none;
 			margin-left: auto;
 		}
 		nav {
 			order: 3;
 			width: 100%;
-			gap: 18px;
+			gap: 0 18px;
 			flex-wrap: wrap;
 			font-size: 12px;
+		}
+	}
+	@media (max-width: 370px) {
+		nav {
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 0 24px;
+		}
+		nav a {
+			justify-self: start;
 		}
 	}
 </style>

@@ -5,7 +5,6 @@ import {
 	hover,
 	isPrimaryPointer,
 	motionValue,
-	press,
 	setDragLock,
 	type HTMLVisualElement,
 	type InertiaOptions,
@@ -18,6 +17,7 @@ import {
 	type MotionNodeViewportOptions,
 	type PanInfo
 } from 'motion-dom';
+import { attachPress } from './press.js';
 
 export type GestureState = 'whileHover' | 'whileTap' | 'whileFocus' | 'whileInView' | 'whileDrag';
 
@@ -114,7 +114,7 @@ export function attachMotionGestures(
 	if (initial.whileTap || initial.onTap || initial.onTapStart || initial.onTapCancel) {
 		const originalTabIndex = node.getAttribute('tabindex');
 		cleanups.push(
-			press(node, (_, event) => {
+			attachPress(node, (_, event) => {
 				if (disabled()) return;
 				activate('whileTap', true);
 				getOptions().onTapStart?.(event, { point: point(event) });
@@ -132,7 +132,7 @@ export function attachMotionGestures(
 				node.removeAttribute('tabindex');
 			}
 		});
-		// Motion's public press() supplies Enter. Space mirrors native button
+		// The owned press helper supplies Enter. Space mirrors native button
 		// press feedback without synthesising click or changing activation behavior.
 		on('keydown', (event) => {
 			if (event.key === ' ' && !event.repeat && !disabled()) activate('whileTap', true);
@@ -194,16 +194,22 @@ export function attachMotionGestures(
 			if (disabled() || cancelSession || !isPrimaryPointer(event) || event.button !== 0) return;
 			const options = getOptions();
 			const drag = options.drag;
+			try {
+				validateConstraints(options.dragConstraints);
+			} catch {
+				// Reject transient invalid bounds before allocating or stopping values.
+				return;
+			}
 			const axes = (drag === 'x' ? ['x'] : drag === 'y' ? ['y'] : ['x', 'y']) as ('x' | 'y')[];
 			const pointer = { x: motionValue(event.clientX), y: motionValue(event.clientY) };
 			const origin = { x: 0, y: 0 };
 			if (drag) {
 				for (const axis of axes) {
 					const value = visual.getValue(axis, 0);
-					if (typeof value.get() !== 'number') {
+					if (typeof value.get() !== 'number' || !Number.isFinite(value.get())) {
 						pointer.x.destroy();
 						pointer.y.destroy();
-						throw new Error('Motion drag requires numeric x/y values in CSS pixels.');
+						throw new Error('Motion drag requires finite numeric x/y values in CSS pixels.');
 					}
 					value.stop();
 					origin[axis] = Number(value.get());
@@ -223,8 +229,7 @@ export function attachMotionGestures(
 				offset: { x: 0, y: 0 },
 				velocity: { x: 0, y: 0 }
 			};
-			const bounds = (axis: 'x' | 'y') => {
-				const constraints = getOptions().dragConstraints;
+			const bounds = (axis: 'x' | 'y', constraints: DragConstraints | undefined) => {
 				return axis === 'x'
 					? { min: constraints?.left, max: constraints?.right }
 					: { min: constraints?.top, max: constraints?.bottom };
@@ -232,6 +237,14 @@ export function attachMotionGestures(
 			const process = () => {
 				if (released) return;
 				if (disabled()) {
+					finish(latest, true);
+					return;
+				}
+				try {
+					validateConstraints(getOptions().dragConstraints);
+				} catch {
+					// A reactive constraint can become temporarily invalid mid-drag.
+					// Keep the last finite pose and release every session resource.
 					finish(latest, true);
 					return;
 				}
@@ -254,20 +267,36 @@ export function attachMotionGestures(
 							finish(latest, true);
 							return;
 						}
+					}
+					// User callbacks may synchronously destroy this attachment.
+					// Cleanup must see the active session before any callback runs.
+					started = true;
+					if (drag) {
 						if (projection) projection.isAnimationBlocked = true;
 						activate('whileTap', false);
+						if (released) return;
 						activate('whileDrag', true);
+						if (released) return;
 						getOptions().onDragStart?.(latest, info);
+						if (released) return;
 					}
-					started = true;
 					getOptions().onPanStart?.(latest, info);
+					if (released) return;
 				}
 				if (drag) {
+					const constraints = { ...getOptions().dragConstraints };
+					try {
+						validateConstraints(constraints);
+					} catch {
+						finish(latest, true);
+						return;
+					}
 					for (const axis of axes) {
-						const { min = -Infinity, max = Infinity } = bounds(axis);
+						const { min = -Infinity, max = Infinity } = bounds(axis, constraints);
 						visual.getValue(axis, 0).set(Math.max(min, Math.min(max, origin[axis] + offset[axis])));
 					}
 					getOptions().onDrag?.(latest, info);
+					if (released) return;
 				}
 				getOptions().onPan?.(latest, info);
 			};
@@ -292,9 +321,17 @@ export function attachMotionGestures(
 				activate('whileDrag', false);
 				if (started && !disposed) {
 					getOptions().onPanEnd?.(end, info);
-					if (drag) getOptions().onDragEnd?.(end, info);
+					if (drag && !disposed) getOptions().onDragEnd?.(end, info);
+				}
+				const constraints = { ...getOptions().dragConstraints };
+				let validConstraints = true;
+				try {
+					validateConstraints(constraints);
+				} catch {
+					validConstraints = false;
 				}
 				if (
+					validConstraints &&
 					drag &&
 					started &&
 					!cancelled &&
@@ -306,7 +343,7 @@ export function attachMotionGestures(
 					for (const axis of axes) {
 						const value = visual.getValue(axis, 0);
 						const transition = getOptions().dragTransition;
-						const { min = -Infinity, max = Infinity } = bounds(axis);
+						const { min = -Infinity, max = Infinity } = bounds(axis, constraints);
 						// Explicit resolved endpoints avoid AsyncMotionValueAnimation's equal-keyframe
 						// short circuit; Motion's inertia generator derives its own destination.
 						const release = {
@@ -314,7 +351,7 @@ export function attachMotionGestures(
 							type: 'inertia' as const,
 							isSync: true,
 							velocity: pointer[axis].getVelocity(),
-							...bounds(axis),
+							...bounds(axis, constraints),
 							modifyTarget: (target: number) =>
 								Math.max(min, Math.min(max, transition?.modifyTarget?.(target) ?? target))
 						};

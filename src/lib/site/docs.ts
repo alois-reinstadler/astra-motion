@@ -26,7 +26,7 @@ const pages: DocPage[] = [
 		title: 'Introduction',
 		group: 'Start here',
 		summary:
-			'Motion that belongs in Svelte. Native elements, ordinary state, and the right engine for each kind of movement.',
+			'Connect Motion to Svelte 5: animate native elements, coordinate exits and follow layout changes with ordinary reactive state.',
 		sections: [
 			{
 				id: 'a-small-set-of-tools',
@@ -73,12 +73,40 @@ const pages: DocPage[] = [
 				title: 'Use the checked-in workspace',
 				text: [
 					'Astra is currently developed in this repository. Do not assume that an npm package with this name is this implementation. The examples use the intended package entry points; inside this app, use the source paths below.',
-					'Run pnpm install in a checkout, then pnpm dev for the local site and examples. The qualified baseline is Svelte 5.57.0, SvelteKit 2.70.3 and Motion 13.2.0. SvelteKit is only needed for the routes entry point.'
+					'Clone the repository and run pnpm install, then pnpm dev for the local site and examples. To use Astra in another app, build and install the local package below. The qualified baseline is Svelte 5.57.0, SvelteKit 2.70.3 and Motion 13.2.0. SvelteKit is only needed for the routes entry point.'
 				],
 				code: {
 					label: 'Source imports in this repository',
 					source:
 						"import { createMotion } from '$lib/motion/lite.svelte.js';\nimport { createLayout } from '$lib/motion/layout.js';\nimport { createScroll } from '$lib/motion/scroll.svelte.js';\nimport { createAnimate } from '$lib/motion/animate.js';"
+				}
+			},
+			{
+				id: 'qualified-dependencies',
+				title: 'Keep one Motion engine',
+				text: [
+					'Merge these overrides into your app’s pnpm-workspace.yaml before installing the tarball. Preserve existing workspace settings. The overrides affect the whole app, so check compatibility if another dependency also uses Motion.',
+					'Astra pins its direct dependencies, but Motion uses ranges for transitive dependencies. A fresh install can otherwise load two motion-dom versions. Layout and vanilla animation need the same engine instance; turning off dependency type checking does not fix this.',
+					'The qualified consumer uses skipLibCheck: true because an upstream Motion declaration references the missing HTMLWebViewElement type. Strict declaration compatibility remains open.'
+				],
+				code: {
+					label: 'pnpm-workspace.yaml — merge with your existing configuration',
+					source:
+						'overrides:\n  motion: 13.2.0\n  motion-dom: 13.2.0\n  framer-motion: 13.2.0\n  motion-utils: 13.0.0'
+				}
+			},
+			{
+				id: 'install-local-package',
+				title: 'Install it in your app',
+				text: [
+					'In the Astra checkout, run pnpm run prepack and pnpm pack. The first command builds the library and validates its package; the second creates astra-motion-0.0.1.tgz. pnpm may run prepack again as part of packing.',
+					'From your app directory, install that file using its real path. Use Svelte 5.57.0 or newer within Svelte 5. SvelteKit 2.70.3 or newer within Kit 2 is needed only for astra-motion/routes. Before installing, configure the qualified Motion versions above in your app.',
+					'The package name in the examples refers to this local build. Check the project status before adopting it: a registry release and license are still pending.'
+				],
+				code: {
+					label: 'Terminal — replace the tarball path with your own',
+					source:
+						'git clone https://github.com/alois-reinstadler/astra-motion.git\ncd astra-motion\npnpm install\npnpm run prepack\npnpm pack\n\n# In your Svelte app directory:\npnpm add /absolute/path/to/astra-motion/astra-motion-0.0.1.tgz'
 				}
 			},
 			{

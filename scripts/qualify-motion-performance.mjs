@@ -1,3 +1,4 @@
+import { qualificationOrigin } from './qualification-origin.mjs';
 import { chromium } from 'playwright';
 import { parseArgs } from 'node:util';
 import { cpus, totalmem, release, loadavg } from 'node:os';
@@ -7,7 +8,7 @@ import { dirname, resolve } from 'node:path';
 
 const { values: args } = parseArgs({
 	options: {
-		url: { type: 'string', default: 'http://127.0.0.1:5199' },
+		url: { type: 'string' },
 		output: { type: 'string', default: 'docs/research/production-performance.json' },
 		counts: { type: 'string', default: '100,500' },
 		rates: { type: 'string', default: '1,4,6' },
@@ -24,6 +25,7 @@ const { values: args } = parseArgs({
 		'no-reads': { type: 'boolean', default: false }
 	}
 });
+args.url = qualificationOrigin(args.url, '--url');
 const counts = args.counts.split(',').map(Number);
 const rates = args.rates.split(',').map(Number);
 const modes = args.modes.split(',');

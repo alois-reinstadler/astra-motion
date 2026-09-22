@@ -13,13 +13,14 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
-		"test:unit": "vitest",
+		"test:unit": "vitest run",
 		"test:server": "vitest run --project server",
 		"test:browsers": "vitest run --config vitest.motion.config.ts",
-		"test": "pnpm run test:unit -- --run && pnpm run test:e2e",
-		"test:e2e": "playwright install && playwright test",
+		"test": "pnpm run test:unit && pnpm run test:e2e",
+		"test:e2e": "playwright test",
 		"test:motion": "vitest run src/lib/motion-lab src/lib/motion/routes.spec.ts",
-		"test:motion:e2e": "playwright test --config playwright.motion.config.ts"
+		"test:motion:e2e": "playwright test --config playwright.motion.config.ts",
+		"test:browsers:install": "playwright install"
 	},
 	"files": [
 		"dist/index.js",
@@ -143,7 +144,12 @@
 		"vitest-browser-svelte": "^2.1.1"
 	},
 	"keywords": [
-		"svelte"
+		"svelte",
+		"svelte5",
+		"motion",
+		"animation",
+		"layout",
+		"presence"
 	],
 	"dependencies": {
 		"motion": "13.2.0",
@@ -153,5 +159,13 @@
 		"@sveltejs/kit": {
 			"optional": true
 		}
+	},
+	"description": "Motion\u2019s animation engine integrated with Svelte 5: native elements, coordinated exits and shared layout.",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/alois-reinstadler/astra-motion.git"
+	},
+	"bugs": {
+		"url": "https://github.com/alois-reinstadler/astra-motion/issues"
 	}
 }

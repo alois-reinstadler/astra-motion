@@ -1,0 +1,6 @@
+# Qualification fixture only. Published packages cannot set a consumer's overrides.
+overrides:
+  motion: 13.2.0
+  motion-dom: 13.2.0
+  framer-motion: 13.2.0
+  motion-utils: 13.0.0

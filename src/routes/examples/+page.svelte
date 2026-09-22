@@ -154,21 +154,14 @@
 	);
 </script>
 
-<svelte:head
-	><title>Examples — Astra Motion</title><meta
-		name="description"
-		content="Find Astra Motion examples by use case: layout, presence, real components, route transitions, scroll-linked animation and scoped timelines."
-	/></svelte:head
->
-
 <SiteFrame>
 	<main id="site-content">
 		<header class="examples-intro">
 			<p class="eyebrow">THE EXAMPLE COLLECTION</p>
 			<h1>Less imagining.<br /><em>More trying.</em></h1>
 			<p>
-				Interactive examples, with the source right beside them.<br />Find an idea. Try it. Make it
-				yours.
+				Interactive examples, with the source right beside them.<br />Choose an interaction, test
+				its behavior, and copy the component into your app.
 			</p>
 		</header>
 

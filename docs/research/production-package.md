@@ -105,11 +105,13 @@ consumer. Complete assets, raw/gzip/Brotli sizes, package audit and browser case
 pnpm run build
 node scripts/prepare-motion-consumer.mjs
 # Read /tmp/astra-motion-production-current.json for the copied consumer path.
-# In that directory, start the built Node server:
-HOST=127.0.0.1 PORT=5290 ORIGIN=http://127.0.0.1:5290 node build
-# From the library repository:
-node scripts/qualify-motion-package.mjs
+# Start that consumer's built Node server with the local preview manager:
+dev-preview start astra-motion-consumer --cwd /path/to/copied-consumer -- node build
+# Use the allocated local URL reported by dev-preview:
+node scripts/qualify-motion-package.mjs /tmp/astra-motion-production-current.json "$DEV_LOCAL_URL"
 ```
+
+The qualification command requires an explicit root HTTP(S) origin; `$DEV_LOCAL_URL` must be the actual allocated local URL, set from the preview manager output. It starts browser engines but never a server. Run it only where browser launches are permitted. The independent consumer uses reviewed dependency overrides; those fixture settings do not propagate to package users.
 
 Run root sync/check/server tests before browser qualification, not alongside it:
 Kit generation can reload an active development page. Production consumers have

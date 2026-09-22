@@ -21,5 +21,6 @@
 		"typescript": "6.0.3",
 		"svelte-check": "4.7.6",
 		"@sveltejs/adapter-node": "5.5.7"
-	}
+	},
+	"packageManager": "pnpm@11.24.0"
 }

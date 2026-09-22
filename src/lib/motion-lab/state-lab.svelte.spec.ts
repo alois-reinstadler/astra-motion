@@ -104,16 +104,7 @@ it('fits the mobile viewport and keeps the keyboard-driven card inside its bound
 	expect(card.getBoundingClientRect().right).toBeLessThan(
 		select('.drag-stage').getBoundingClientRect().right
 	);
-	const engine = navigator.userAgent.includes('Firefox')
-		? 'firefox'
-		: navigator.userAgent.includes('Chrome')
-			? 'chromium'
-			: 'webkit';
-	await page.elementLocator(select('#presence')).screenshot({
-		path: `/home/alrein/code/astra-motion/test-results/astra-state-mobile-presence-${engine}.png`
-	});
-	await page.elementLocator(select('#drag')).screenshot({
-		path: `/home/alrein/code/astra-motion/test-results/astra-state-mobile-drag-${engine}.png`
-	});
+	await page.elementLocator(select('#presence')).screenshot();
+	await page.elementLocator(select('#drag')).screenshot();
 	expect(target.querySelectorAll('[data-state-tile]')).toHaveLength(6);
 });

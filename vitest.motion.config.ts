@@ -3,6 +3,10 @@ import { playwright } from '@vitest/browser-playwright';
 import base from './vite.config.js';
 
 const engines = ['chromium', 'firefox', 'webkit'] as const;
+const selected = process.env.MOTION_BROWSER;
+if (selected && !engines.some((engine) => engine === selected)) {
+	throw new Error(`MOTION_BROWSER must be one of: ${engines.join(', ')}`);
+}
 export default defineConfig({
 	...base,
 	optimizeDeps: { include: ['bits-ui'] },
@@ -13,9 +17,10 @@ export default defineConfig({
 		exclude: ['src/lib/motion-lab/performance.svelte.spec.ts'],
 		browser: {
 			enabled: true,
+			screenshotDirectory: `test-results/components/${selected ?? 'matrix'}`,
 			provider: playwright(),
 			instances: engines
-				.filter((browser) => !process.env.MOTION_BROWSER || process.env.MOTION_BROWSER === browser)
+				.filter((browser) => !selected || selected === browser)
 				.map((browser) => ({ browser, headless: true }))
 		}
 	}

@@ -244,22 +244,24 @@ reverse, resize, remove/undo and destroy/remount checks.
 
 ```sh
 node scripts/qualify-motion-performance.mjs \
-  --url http://127.0.0.1:5290 --memory-cycles 50 --traces \
+  --url "$PRODUCTION_LOCAL_URL" --memory-cycles 50 --traces \
   --package-tarball /path/to/astra-motion-0.0.1.tgz \
   --output docs/research/production-performance.json
 
 node scripts/qualify-motion-performance.mjs \
-  --url http://127.0.0.1:5290 --traces --traces-only \
+  --url "$PRODUCTION_LOCAL_URL" --traces --traces-only \
   --trace-dir /tmp/astra-production-traces-attribution \
   --package-tarball /path/to/astra-motion-0.0.1.tgz \
   --output docs/research/production-performance-attribution.json
 
 node scripts/qualify-motion-performance.mjs \
-  --url http://127.0.0.1:5290 --counts 500 --rates 6 \
+  --url "$PRODUCTION_LOCAL_URL" --counts 500 --rates 6 \
   --modes automatic,explicit --repeats 1 --steps 120 --memory-cycles 0 \
   --package-tarball /path/to/astra-motion-0.0.1.tgz \
   --output docs/research/production-performance-sustained.json
 ```
+
+`PRODUCTION_LOCAL_URL` must be the actual root HTTP(S) origin of the running consumer, allocated by `dev-preview` locally. There is no default port. This script launches Chromium but never a server; run it only where browser launches are permitted.
 
 Run captures in isolation from builds, other browser suites and source reloads.
 The initial matrix's trace summaries omit observer callback timing because the

@@ -8,6 +8,8 @@
 	let { children }: { children: Snippet } = $props();
 </script>
 
+<svelte:head><link rel="icon" href="data:," /></svelte:head>
+
 <nav aria-label="Qualification">
 	<a href={resolve('/')}>Exports</a><a href={resolve('/state')}>State</a><a
 		href={resolve('/layout')}>Layout</a

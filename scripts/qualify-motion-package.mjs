@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { qualificationOrigin } from './qualification-origin.mjs';
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { gzipSync, brotliCompressSync } from 'node:zlib';
@@ -10,10 +11,10 @@ import {
 	verifyPackedConsumer
 } from './motion-consumer-provenance.mjs';
 
+const origin = qualificationOrigin(process.argv[3], 'Second argument (preview origin)');
 const setup = JSON.parse(
 	readFileSync(process.argv[2] ?? '/tmp/astra-motion-production-current.json', 'utf8')
 );
-const origin = process.argv[3] ?? 'http://127.0.0.1:5290';
 const result = {
 	archive: setup.archive,
 	sha256: setup.sha256,
@@ -53,7 +54,7 @@ result.provenance = {
 	servedIdentityVerified: true
 };
 for (const conditions of Object.values(packed.exports)) {
-	for (const target of Object.values(conditions))
+	for (const target of typeof conditions === 'string' ? [conditions] : Object.values(conditions))
 		assert(archiveFiles.includes('package/' + target.slice(2)), `Missing export target: ${target}`);
 }
 const installed = readdirSync(join(setup.consumer, 'node_modules/.pnpm'));

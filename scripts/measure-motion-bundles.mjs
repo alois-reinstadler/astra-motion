@@ -74,6 +74,11 @@ for (const [name, input] of Object.entries(features)) {
 		minifiedBytes: Buffer.byteLength(code),
 		gzipBytes: gzipSync(code).byteLength,
 		brotliBytes: brotliCompressSync(code).byteLength,
+		containsMotion: output.some(
+			(chunk) =>
+				chunk.type === 'chunk' &&
+				Object.keys(chunk.modules).some((id) => /node_modules\/(motion|motion-dom)\//.test(id))
+		),
 		containsReact:
 			output.some(
 				(chunk) =>
@@ -91,5 +96,5 @@ const result = {
 	motionDom: JSON.parse(readFileSync('node_modules/motion-dom/package.json', 'utf8')).version,
 	results
 };
-writeFileSync('docs/research/bundle-sizes.json', JSON.stringify(result, null, 2));
+writeFileSync('docs/research/bundle-sizes.json', JSON.stringify(result, null, '\t') + '\n');
 console.log(JSON.stringify(result, null, 2));

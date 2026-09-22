@@ -56,13 +56,6 @@
 	const code = `const layout = createLayout();\n\n{#each items as item (item.id)}\n  <div {@attach layout()}>\n    <div {@attach layout({ mode: 'position' })}>\n      {item.name}\n    </div>\n  </div>\n{/each}`;
 </script>
 
-<svelte:head
-	><title>Astra Motion — Made for the way Svelte moves</title><meta
-		name="description"
-		content="Svelte-native presence, automatic layout, shared elements and route transitions. Explore Astra Motion, read the guides and try the interactive examples."
-	/></svelte:head
->
-
 <SiteFrame>
 	<main id="site-content">
 		<section class="hero" {@attach entrance.attach}>
@@ -74,7 +67,8 @@
 					>
 				</h1>
 				<p class="hero-description">
-					Your elements. Your CSS.<br />A little less code. A lot more life.
+					Motion’s animation engine, connected to Svelte.<br />Animate your elements, from the first
+					render to the final exit.
 				</p>
 				<div class="hero-actions">
 					<a
@@ -140,8 +134,8 @@
 		</div>
 		<section class="introduction">
 			<div>
-				<p class="eyebrow">LESS CEREMONY. MORE SVELTE.</p>
-				<h2>Normal markup.<br /><em>Extraordinary continuity.</em></h2>
+				<p class="eyebrow">BUILT AROUND YOUR MARKUP</p>
+				<h2>Change the layout.<br /><em>Keep the connection.</em></h2>
 			</div>
 			<p>
 				Astra connects Svelte’s lifecycle to Motion’s animation engine. Elements enter and leave
@@ -226,14 +220,12 @@
 			</div>
 		</section>
 		<aside class="beta-note">
-			<span>AN OPEN WORK IN PROGRESS</span>
+			<span>WORKING BETA</span>
 			<p>
-				Astra is in early development. The API is taking shape, and the limitations are documented.
-				Explore it here before choosing it for production.
+				Available from the repository. Start with one interaction and read the supported scope and
+				known limits before adopting it.
 			</p>
-			<a href={resolve('/docs/[slug]#api-status', { slug: 'troubleshooting' })}
-				>Read project status ↗</a
-			>
+			<a href={resolve('/status')}>Read project status ↗</a>
 		</aside>
 	</main>
 </SiteFrame>
@@ -742,7 +734,7 @@
 			letter-spacing: -3px;
 		}
 		.eyebrow {
-			font-size: 8px;
+			font-size: 11px;
 			letter-spacing: 1.3px;
 		}
 		.hero-description {
