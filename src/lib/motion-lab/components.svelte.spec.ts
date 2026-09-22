@@ -38,9 +38,65 @@ it('reverses the actual accordion without stretching text or losing expanded sta
 
 it('preserves actual dialog focus, labeling, centering and Escape dismissal', async () => {
 	await render(Components);
-	node('dialog-trigger').focus();
-	await click('dialog-trigger');
-	await expect.poll(() => Number(getComputedStyle(node('dialog')).opacity)).toBe(1);
+	const started = performance.now();
+	const samples: unknown[] = [];
+	const events: unknown[] = [];
+	const recordIntro = (event: Event) => {
+		if (
+			!(event.target instanceof HTMLElement) ||
+			event.target.dataset.testid !== 'component-dialog'
+		)
+			return;
+		events.push({ type: event.type, elapsed: performance.now() - started });
+	};
+	const sample = () => {
+		const dialog = document.querySelector<HTMLElement>('[data-testid="component-dialog"]');
+		const opacity = dialog ? Number(getComputedStyle(dialog).opacity) : null;
+		samples.push({
+			elapsed: performance.now() - started,
+			opacity,
+			scroll: [scrollX, scrollY],
+			visibility: document.visibilityState,
+			focused: document.activeElement?.getAttribute('data-testid'),
+			animations: dialog?.getAnimations().map((animation) => ({
+				playState: animation.playState,
+				pending: animation.pending,
+				startTime: animation.startTime,
+				currentTime: animation.currentTime,
+				timing: animation.effect?.getComputedTiming()
+			}))
+		});
+		return opacity;
+	};
+	document.addEventListener('introstart', recordIntro, true);
+	document.addEventListener('introend', recordIntro, true);
+	try {
+		sample();
+		node('dialog-trigger').focus();
+		await click('dialog-trigger');
+		try {
+			await expect.poll(sample).toBe(1);
+		} catch (error) {
+			// Observe briefly after failure without turning eventual settlement into a pass.
+			// Native intro clocks and scroll positions distinguish delayed frames from a stuck pose.
+			for (let index = 0; index < 10; index++) {
+				await wait(50);
+				sample();
+			}
+			console.error(
+				'Dialog intro failure diagnostics',
+				JSON.stringify({
+					viewport: { width: innerWidth, height: innerHeight, framed: window !== window.top },
+					events,
+					samples
+				})
+			);
+			throw error;
+		}
+	} finally {
+		document.removeEventListener('introstart', recordIntro, true);
+		document.removeEventListener('introend', recordIntro, true);
+	}
 	const dialog = node('dialog');
 	expect(dialog.getAttribute('role')).toBe('dialog');
 	expect(dialog.getAttribute('aria-labelledby')).toBeTruthy();
