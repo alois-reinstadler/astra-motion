@@ -77,7 +77,7 @@ The accordion uses its **existing two DOM elements** deliberately: native Svelte
 
 The opt-in Card transition is global so a keyed parent list can remove the Card component while Svelte retains its actual root div. Symbol-keyed attachments forwarded through rest props allow `popLayout` without adding a list-item wrapper. Dialog/overlay merge Motion props with Bits props using the public Bits `mergeProps`, retaining all style metadata and ref attachments.
 
-Try `/motion-lab/components`: live accordion content, interruptible dialog with focus/owner cleanup, and six filterable/reorderable/removable cards. The new `components.svelte.spec.ts` exercises the actual wrappers; the lifecycle-only fixture remains a separate control.
+Try `/motion-lab/components`: live accordion content, interruptible dialog with focus/owner cleanup, and six filterable/reorderable/removable cards. `tests/motion/components.spec.ts` exercises the actual wrappers in the production document across all three browser engines; the lifecycle-only component fixture remains a separate control.
 
 Final wrapper qualification: **12/12 actual-component cases pass across Chromium, Firefox and WebKit**, alongside the **15/15 lifecycle control cases**. Tests synchronize on a visible first frame/focus before reversal; headless WebKit can defer an initial frame beyond a fixed short sleep. Assertions retain intermediate flow geometry, node identity, centering and final focus requirements.
 

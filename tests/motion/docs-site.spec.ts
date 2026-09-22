@@ -1,4 +1,28 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Locator } from '@playwright/test';
+
+// Native scrolling can outlive Playwright's two-frame actionability check in WebKit.
+// Wait before the action being tested, without retrying that action or disabling motion.
+async function settlePointerTarget(target: Locator) {
+	await target.evaluate((node) => node.scrollIntoView({ behavior: 'instant', block: 'center' }));
+	await target.focus();
+	await target.hover();
+	const settled = await target.evaluate(async (node) => {
+		let previous = '';
+		let unchangedSince = performance.now();
+		const deadline = unchangedSince + 3000;
+		while (performance.now() < deadline) {
+			await new Promise(requestAnimationFrame);
+			const { x, y, width, height } = node.getBoundingClientRect();
+			const position = [scrollX, scrollY, x, y, width, height].join(',');
+			if (position !== previous) {
+				previous = position;
+				unchangedSince = performance.now();
+			} else if (performance.now() - unchangedSince >= 100) return true;
+		}
+		return false;
+	});
+	expect(settled).toBe(true);
+}
 
 test('live docs examples keep their interactions, reset, and source on the page', async ({
 	page
@@ -118,25 +142,7 @@ test('documentation has connected navigation, topic filtering and complete copya
 	const copy = example.getByRole('button', { name: 'Copy LayoutExample.svelte', exact: true });
 	// Position the control before clicking: WebKit can continue native smooth scrolling
 	// after Playwright's actionability check. Keep the actual pointer interaction.
-	await copy.evaluate((node) => node.scrollIntoView({ behavior: 'instant', block: 'center' }));
-	await copy.focus();
-	await copy.hover();
-	const settled = await copy.evaluate(async (node) => {
-		let previous = '';
-		let unchangedSince = performance.now();
-		const deadline = unchangedSince + 3000;
-		while (performance.now() < deadline) {
-			await new Promise(requestAnimationFrame);
-			const { x, y, width, height } = node.getBoundingClientRect();
-			const position = [scrollX, scrollY, x, y, width, height].join(',');
-			if (position !== previous) {
-				previous = position;
-				unchangedSince = performance.now();
-			} else if (performance.now() - unchangedSince >= 100) return true;
-		}
-		return false;
-	});
-	expect(settled).toBe(true);
+	await settlePointerTarget(copy);
 	await copy.click();
 	await expect(page.getByRole('status')).toHaveText('Copied to clipboard');
 	expect(await page.locator('html').getAttribute('data-copied-source')).toContain(
@@ -221,16 +227,21 @@ test('client navigation disposes demo exits instead of retaining previous guide 
 	await page.getByRole('button', { name: 'Rest', exact: true }).click();
 	const navigation = page.getByRole('navigation', { name: 'Documentation', exact: true });
 	await navigation.getByRole('link', { name: 'Scroll-linked motion' }).click();
+	await expect(page).toHaveURL(/\/docs\/scroll$/);
 	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Scroll-linked motion');
 	await expect(page.locator('#identity')).toHaveCount(0);
 	await expect(page.locator('[data-example="shared"]')).toHaveCount(0);
 	await expect(page.locator('article > section')).toHaveCount(5);
-	await navigation.getByRole('link', { name: 'Presence & exits', exact: true }).click();
+	const presence = navigation.getByRole('link', { name: 'Presence & exits', exact: true });
+	await settlePointerTarget(presence);
+	await presence.click();
+	await expect(page).toHaveURL(/\/docs\/presence$/);
 	await page
 		.locator('[data-example="state"]')
 		.getByRole('button', { name: 'Dismiss notification' })
 		.click();
 	await navigation.getByRole('link', { name: 'Automatic layout' }).click();
+	await expect(page).toHaveURL(/\/docs\/layout$/);
 	await expect(page.locator('[data-example="state"]')).toHaveCount(0);
 	await expect(page.locator('[data-example="wait"]')).toHaveCount(0);
 	await expect(page.locator('[data-example="layout"]')).toHaveCount(1);
