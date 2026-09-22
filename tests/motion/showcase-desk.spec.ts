@@ -137,7 +137,7 @@ test('inspector exit settles when inherited reduced motion changes live', async 
 			.click();
 		// Observe the real native outro before changing policy. On slow WebKit frames,
 		// its clock advances even when no intermediate opacity has painted yet.
-		let before = 0;
+		let nativeExit: Animation | undefined;
 		let activeExit: { state: string; time: number; duration: number } | null = null;
 		for (let frame = 0; frame < 120 && inspector.isConnected; frame++) {
 			await new Promise(requestAnimationFrame);
@@ -155,27 +155,55 @@ test('inspector exit settles when inherited reduced motion changes live', async 
 					time < duration
 				) {
 					activeExit = { state: animation.playState, time, duration };
+					nativeExit = animation;
 					break;
 				}
 			}
-			if (activeExit) {
-				before = Number(getComputedStyle(inspector).opacity);
-				document.querySelector<HTMLInputElement>('[data-testid=showcase-reduced]')!.click();
-				break;
-			}
+			if (nativeExit) break;
 		}
-		await new Promise(requestAnimationFrame);
-		await new Promise(requestAnimationFrame);
-		return {
-			before,
-			activeExit,
-			after: inspector.isConnected ? Number(getComputedStyle(inspector).opacity) : 0
-		};
+		if (!nativeExit || !activeExit) throw new Error('No running native inspector outro observed');
+		try {
+			// Hold the real retention clock halfway through its authored duration. A slow
+			// frame or a no-op policy handler must not pass by naturally finishing the exit.
+			nativeExit.pause();
+			nativeExit.currentTime = activeExit.duration / 2;
+			await nativeExit.ready;
+			const pausedTime = nativeExit.currentTime;
+			await new Promise(requestAnimationFrame);
+			await new Promise(requestAnimationFrame);
+			const before = Number(getComputedStyle(inspector).opacity);
+			const held = inspector.isConnected && nativeExit.playState === 'paused';
+			const heldTime = nativeExit.currentTime;
+			document.querySelector<HTMLInputElement>('[data-testid=showcase-reduced]')!.click();
+			await new Promise(requestAnimationFrame);
+			await new Promise(requestAnimationFrame);
+			return {
+				activeExit,
+				before,
+				held,
+				pausedTime,
+				heldTime,
+				after: Number(getComputedStyle(inspector).opacity),
+				afterTime: nativeExit.currentTime,
+				stillPaused: nativeExit.playState === 'paused',
+				retained: inspector.isConnected
+			};
+		} finally {
+			// Svelte still owns retention; restore its clock even if an assertion fails.
+			nativeExit.play();
+		}
 	});
 	expect(result.before).toBeGreaterThan(0);
 	expect(result.activeExit).toMatchObject({ state: 'running' });
 	expect(result.activeExit!.time).toBeGreaterThanOrEqual(0);
 	expect(result.activeExit!.time).toBeLessThan(result.activeExit!.duration);
+	expect(result.held).toBe(true);
+	expect(result.pausedTime).toBeGreaterThanOrEqual(0);
+	expect(result.pausedTime).toBeLessThan(result.activeExit!.duration);
+	expect(result.heldTime).toBe(result.pausedTime);
+	expect(result.afterTime).toBe(result.pausedTime);
+	expect(result.stillPaused).toBe(true);
+	expect(result.retained).toBe(true);
 	expect(result.after).toBe(0);
 	await expect(page.locator('.inspector')).toHaveCount(0);
 	await page.getByTestId('editing-desk').getByRole('button', { name: 'Show inspector' }).click();

@@ -84,12 +84,35 @@ it('preserves actual dialog focus, labeling, centering and Escape dismissal', as
 	document.addEventListener('introend', recordIntro, true);
 	try {
 		sample();
-		// A browser click scrolls the trigger into view before activating it. Calling
-		// focus() then DOM click() can open the scroll-locking dialog mid-scroll.
+		// Activate the dialog through browser input, as a user would.
 		await page.getByTestId('component-dialog-trigger').click();
 		await tick();
 		try {
-			await expect.poll(sample).toBe(1);
+			// Observe a visual transition on rendering frames, with a separate deadline:
+			// awaiting RAF inside expect.poll would leave its timeout unable to interrupt
+			// a stalled callback. Neither this observer nor its timer advances animation.
+			const opacity = await new Promise<number | null>((resolve, reject) => {
+				let animationFrame = 0;
+				const deadline = setTimeout(() => read(true), 1000);
+				const cleanup = () => {
+					cancelAnimationFrame(animationFrame);
+					clearTimeout(deadline);
+				};
+				function read(atDeadline = false) {
+					try {
+						const current = sample();
+						if (current === 1 || atDeadline) {
+							cleanup();
+							resolve(current);
+						} else animationFrame = requestAnimationFrame(() => read());
+					} catch (error) {
+						cleanup();
+						reject(error);
+					}
+				}
+				animationFrame = requestAnimationFrame(() => read());
+			});
+			expect(opacity).toBe(1);
 		} catch (error) {
 			// Observe briefly after failure without turning eventual settlement into a pass.
 			// Native intro clocks and scroll positions distinguish delayed frames from a stuck pose.
