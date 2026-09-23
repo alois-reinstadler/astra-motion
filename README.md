@@ -12,6 +12,11 @@ upstream exports.
 
 ## Try it locally
 
+Try the [live site](https://alois-reinstadler.github.io/astra-motion/) or
+[Fieldwork showcase](https://alois-reinstadler.github.io/astra-motion/showcase) on your phone.
+The GitHub Pages workflow deploys pushes to `agent/astra-ergonomics` and `main`.
+It builds with `BASE_PATH=/astra-motion`; local development uses the root path.
+
 ```sh
 git clone https://github.com/alois-reinstadler/astra-motion.git
 cd astra-motion

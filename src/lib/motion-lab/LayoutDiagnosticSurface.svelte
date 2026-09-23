@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { asset } from '$app/paths';
 	import { untrack } from 'svelte';
 	import { createLayout, type LayoutOptions } from '../motion/layout.js';
 	let {
@@ -41,7 +42,7 @@
 		data-probe="image"
 		{@attach method !== 'static' && nested ? layout({ mode: 'preserve-aspect' }) : undefined}
 	>
-		<img src="/showcase/namib.jpg" alt="Parallel dunes in the Namib Desert" />
+		<img src={asset('/showcase/namib.jpg')} alt="Parallel dunes in the Namib Desert" />
 	</div>
 	<section data-probe="accordion" {@attach method === 'static' ? undefined : layout({ mode })}>
 		<strong

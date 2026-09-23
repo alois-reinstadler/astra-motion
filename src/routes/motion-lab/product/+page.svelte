@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
+	import { asset, resolve } from '$app/paths';
 	import { goto } from '$app/navigation';
 	import { untrack } from 'svelte';
 	import { routeShared } from '$lib/motion/routes.js';
@@ -28,7 +28,7 @@
 				data-testid={`product-${id}`}
 				{@attach routeShared(`background-${id}`)}
 				><img
-					src="/object.svg"
+					src={asset('/object.svg')}
 					alt={`Sculptural arch, object ${id}`}
 					width="600"
 					height="500"

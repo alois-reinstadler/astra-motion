@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
+	import { asset, resolve } from '$app/paths';
 	import { createLayout, presence, popLayout, Presence } from '$lib/motion/index.js';
 	const layout = createLayout({
 		id: 'lab',
@@ -196,7 +196,7 @@
 				>
 					<div class="art" {@attach layout({ id: 'product-art' })}>
 						<img
-							src="/object.svg"
+							src={asset('/object.svg')}
 							alt="Sculptural arch"
 							width="600"
 							height="500"

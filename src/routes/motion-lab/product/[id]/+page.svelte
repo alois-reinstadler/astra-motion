@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
+	import { asset, resolve } from '$app/paths';
 	import { routeShared } from '$lib/motion/routes.js';
 	import type { PageData } from './$types.js';
 	let { data }: { data: PageData } = $props();
@@ -10,7 +10,7 @@
 	<a href={resolve('/motion-lab/product')} data-testid="collection">← The collection</a>
 	<article {@attach routeShared(`background-${data.id}`)}>
 		<img
-			src="/object.svg"
+			src={asset('/object.svg')}
 			alt={`Sculptural arch, object ${data.id}`}
 			width="600"
 			height="500"

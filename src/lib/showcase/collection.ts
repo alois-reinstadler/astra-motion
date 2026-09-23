@@ -1,3 +1,5 @@
+import { asset } from '$app/paths';
+
 /** Local NASA photographs. Fieldwork's titles are editorial labels; original records below. */
 export interface Photo {
 	id: string;
@@ -15,7 +17,7 @@ export const photos: Photo[] = [
 		id: 'namib',
 		title: 'A quiet immensity',
 		location: 'Namib Desert · Namibia',
-		src: '/showcase/namib.jpg',
+		src: asset('/showcase/namib.jpg'),
 		alt: 'Rust-coloured parallel dunes stretching across the Namib Desert, photographed from orbit.',
 		color: '#cc7950',
 		category: 'Land',
@@ -26,7 +28,7 @@ export const photos: Photo[] = [
 		id: 'urmia',
 		title: 'The edge of stillness',
 		location: 'Lake Urmia · Iran',
-		src: '/showcase/urmia.jpg',
+		src: asset('/showcase/urmia.jpg'),
 		alt: 'Pale green water meeting the softly patterned western shoreline of Lake Urmia.',
 		color: '#b6c2ac',
 		category: 'Water',
@@ -37,7 +39,7 @@ export const photos: Photo[] = [
 		id: 'caicos',
 		title: 'An impossible blue',
 		location: 'Caicos Bank · Atlantic Ocean',
-		src: '/showcase/caicos.jpg',
+		src: asset('/showcase/caicos.jpg'),
 		alt: 'Turquoise shallows of Caicos Bank surrounded by dark ocean, photographed from the space shuttle.',
 		color: '#4d9daf',
 		category: 'Water',
@@ -48,7 +50,7 @@ export const photos: Photo[] = [
 		id: 'lena',
 		title: 'Every river returns',
 		location: 'Lena Delta · Russia',
-		src: '/showcase/lena.jpg',
+		src: asset('/showcase/lena.jpg'),
 		alt: 'False-colour satellite image of branching Lena River channels in lime green and deep violet.',
 		color: '#a4b765',
 		category: 'Land',
