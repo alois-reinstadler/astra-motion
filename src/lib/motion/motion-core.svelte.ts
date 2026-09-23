@@ -26,7 +26,12 @@ import {
 	type MotionConfigOptions
 } from './config.js';
 import { shouldReduceMotion } from './policy.js';
-import { ensureMotionVisual, registerMotionVisual, scheduleMotionState } from './visual.js';
+import {
+	assertMotionTransformOwnership,
+	ensureMotionVisual,
+	registerMotionVisual,
+	scheduleMotionState
+} from './visual.js';
 import { createPresenceTimeline, type PresenceTimeline } from './presence-state.js';
 import type { attachMotionGestures, GestureOptions } from './gestures.js';
 import { resolveMotionTarget } from './targets.js';
@@ -34,6 +39,7 @@ import { coordinatePresence } from './presence-batch.js';
 import { claimMotionOwnership } from './ownership.js';
 import { prepareMotionHandoff } from './motion-compat.js';
 import { renderedMotionStyle } from './rendered-style.js';
+import { snapshotMotionOptions } from './options-snapshot.js';
 import {
 	ensureMotionAnimationState,
 	animateMotionDefinition,
@@ -249,6 +255,19 @@ function createBinding(
 	let presenceDirection: 'in' | 'out' = 'in';
 	let disposed = false;
 	let preferenceVersion = $state(0);
+	let deferredError = $state.raw<{ error: unknown }>();
+	function withBoundary(action: () => void) {
+		try {
+			action();
+		} catch (error) {
+			// Work queued after attachment still belongs to this binding's component.
+			// Throw from its effect so <svelte:boundary> can recover and dispose it.
+			deferredError = { error };
+		}
+	}
+	$effect(() => {
+		if (deferredError) throw deferredError.error;
+	});
 	let generation = 0;
 	let removeLayout: void | (() => void);
 	let layoutKeys: unknown[] = [];
@@ -356,6 +375,7 @@ function createBinding(
 		if (!visual || disposed) return;
 		assertFeatures(config);
 		assertTransformOwnership(config, visual);
+		if (element) assertMotionTransformOwnership(element, props(config));
 		syncLayout(config);
 		visual.update(
 			{
@@ -456,13 +476,17 @@ function createBinding(
 		}
 		const unobserve = observeMotionPreference(() => {
 			preferenceVersion++;
-			refresh(options());
+			withBoundary(() => refresh(options()));
 		});
-		const unconfigure = observeMotionConfig(inherited, () => refresh(options()));
+		const unconfigure = observeMotionConfig(inherited, () =>
+			withBoundary(() => refresh(options()))
+		);
 		queueMicrotask(() => {
 			if (disposed || generation !== version) return;
-			visual = ensureMotionVisual(node)!;
-			refresh(options());
+			withBoundary(() => {
+				visual = ensureMotionVisual(node)!;
+				refresh(options());
+			});
 		});
 		return () => {
 			if (generation !== version || disposed) return;
@@ -495,13 +519,18 @@ function createBinding(
 		// Lexical variant followers must observe their parent's labels even when a
 		// reduced parent settles directly instead of dispatching Motion animation state.
 		parentSource();
-		const current = options();
+		const current = snapshotMotionOptions(options());
+		// Variant functions can themselves read reactive custom data or state.
+		assertFeatures(current);
+		assertTransformOwnership(current, visual);
 		const latest = ++revision;
 		const version = generation;
 		queueMicrotask(() => {
 			if (!element || disposed || generation !== version || latest !== revision) return;
-			visual = ensureMotionVisual(element)!;
-			refresh(current);
+			withBoundary(() => {
+				visual = ensureMotionVisual(element!)!;
+				refresh(current);
+			});
 		});
 	}
 	$effect(observeStateTargets);
@@ -574,7 +603,7 @@ function createBinding(
 					{
 						complete() {
 							transitioning = false;
-							if (direction === 'in' && !disposed) refresh(options());
+							if (direction === 'in' && !disposed) withBoundary(() => refresh(options()));
 						}
 					},
 					previousTimeline ? () => previousTimeline.progress : undefined,
@@ -601,6 +630,8 @@ function createBinding(
 				);
 			try {
 				assertTransformOwnership(options(), visual, target);
+				if (element)
+					assertMotionTransformOwnership(element, props(), resolved(options(), target, visual));
 			} catch (error) {
 				return Promise.reject(error);
 			}

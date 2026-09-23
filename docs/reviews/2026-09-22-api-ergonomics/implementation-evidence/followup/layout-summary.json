@@ -1,0 +1,617 @@
+{
+	"note": "Geometry and transform metrics, not a sharpness score. Last transformed frame to settled box includes normal frame motion; linear cases can move multiple pixels in their last frame.",
+	"comparisons": [
+		{
+			"dpr": 1.0,
+			"method": "automatic",
+			"action": "resize",
+			"frames": 81,
+			"oldSnapshotError": {
+				"x": 0.0,
+				"y": -3.0,
+				"width": 0.0,
+				"height": 0.0
+			},
+			"final": {
+				"x": 40.375,
+				"y": 325.375,
+				"width": 631.25,
+				"height": 498.546875
+			},
+			"maxTextScaleDeviation": 7.644995780875519e-6,
+			"clientWidthBeforeAfter": [1440, 1440]
+		},
+		{
+			"dpr": 1.0,
+			"method": "automatic",
+			"action": "reversal",
+			"frames": 96,
+			"oldSnapshotError": {
+				"x": 0.0,
+				"y": 0.0,
+				"width": 0.0,
+				"height": 0.0
+			},
+			"final": {
+				"x": 40.375,
+				"y": 325.375,
+				"width": 631.25,
+				"height": 498.546875
+			},
+			"maxTextScaleDeviation": 7.590586368011465e-6,
+			"clientWidthBeforeAfter": [1440, 1440]
+		},
+		{
+			"dpr": 1.0,
+			"method": "automatic",
+			"action": "accordion",
+			"frames": 81,
+			"oldSnapshotError": {
+				"x": 0.0,
+				"y": 0.0,
+				"width": 0.0,
+				"height": 0.0
+			},
+			"final": {
+				"x": 40.375,
+				"y": 325.375,
+				"width": 631.25,
+				"height": 647.046875
+			},
+			"maxTextScaleDeviation": 4.874679999988807e-6,
+			"clientWidthBeforeAfter": [1440, 1425]
+		},
+		{
+			"dpr": 1.0,
+			"method": "automatic",
+			"action": "parent",
+			"frames": 81,
+			"oldSnapshotError": {
+				"x": 0.0,
+				"y": 0.0,
+				"width": 0.0,
+				"height": 0.0
+			},
+			"final": {
+				"x": 40.375,
+				"y": 325.375,
+				"width": 541.375,
+				"height": 614.453125
+			},
+			"maxTextScaleDeviation": 8.620657711899682e-6,
+			"clientWidthBeforeAfter": [1425, 1440]
+		},
+		{
+			"dpr": 1.0,
+			"method": "explicit",
+			"action": "resize",
+			"frames": 81,
+			"oldSnapshotError": {
+				"x": 0.0,
+				"y": 0.0,
+				"width": 0.0,
+				"height": 0.0
+			},
+			"final": {
+				"x": 40.375,
+				"y": 325.375,
+				"width": 631.25,
+				"height": 498.546875
+			},
+			"maxTextScaleDeviation": 8.329621838942813e-6,
+			"clientWidthBeforeAfter": [1440, 1440]
+		},
+		{
+			"dpr": 1.0,
+			"method": "explicit",
+			"action": "reversal",
+			"frames": 96,
+			"oldSnapshotError": {
+				"x": 0.0,
+				"y": 0.0,
+				"width": 0.0,
+				"height": 0.0
+			},
+			"final": {
+				"x": 40.375,
+				"y": 325.375,
+				"width": 631.25,
+				"height": 498.546875
+			},
+			"maxTextScaleDeviation": 9.082310470365229e-6,
+			"clientWidthBeforeAfter": [1440, 1440]
+		},
+		{
+			"dpr": 1.0,
+			"method": "explicit",
+			"action": "accordion",
+			"frames": 81,
+			"oldSnapshotError": {
+				"x": 0.0,
+				"y": 0.0,
+				"width": 0.0,
+				"height": 0.0
+			},
+			"final": {
+				"x": 40.375,
+				"y": 325.375,
+				"width": 631.25,
+				"height": 647.046875
+			},
+			"maxTextScaleDeviation": 4.963099999866216e-6,
+			"clientWidthBeforeAfter": [1440, 1425]
+		},
+		{
+			"dpr": 1.0,
+			"method": "explicit",
+			"action": "parent",
+			"frames": 81,
+			"oldSnapshotError": {
+				"x": 0.0,
+				"y": 0.0,
+				"width": 0.0,
+				"height": 0.0
+			},
+			"final": {
+				"x": 40.375,
+				"y": 325.375,
+				"width": 541.375,
+				"height": 614.453125
+			},
+			"maxTextScaleDeviation": 8.422431085786108e-6,
+			"clientWidthBeforeAfter": [1425, 1440]
+		},
+		{
+			"dpr": 1.25,
+			"method": "automatic",
+			"action": "resize",
+			"frames": 81,
+			"oldSnapshotError": {
+				"x": 0.0,
+				"y": 0.0,
+				"width": 0.0,
+				"height": 0.0
+			},
+			"final": {
+				"x": 40.375,
+				"y": 325.375,
+				"width": 631.25,
+				"height": 498.546875
+			},
+			"maxTextScaleDeviation": 7.231129913742862e-6,
+			"clientWidthBeforeAfter": [1440, 1440]
+		},
+		{
+			"dpr": 1.25,
+			"method": "automatic",
+			"action": "reversal",
+			"frames": 96,
+			"oldSnapshotError": {
+				"x": 0.0,
+				"y": 0.0,
+				"width": 0.0,
+				"height": 0.0
+			},
+			"final": {
+				"x": 40.375,
+				"y": 325.375,
+				"width": 631.25,
+				"height": 498.546875
+			},
+			"maxTextScaleDeviation": 7.920681819983955e-6,
+			"clientWidthBeforeAfter": [1440, 1440]
+		},
+		{
+			"dpr": 1.25,
+			"method": "automatic",
+			"action": "accordion",
+			"frames": 81,
+			"oldSnapshotError": {
+				"x": 0.0,
+				"y": 0.0,
+				"width": 0.0,
+				"height": 0.0
+			},
+			"final": {
+				"x": 40.375,
+				"y": 325.375,
+				"width": 631.25,
+				"height": 647.046875
+			},
+			"maxTextScaleDeviation": 4.66105000007655e-6,
+			"clientWidthBeforeAfter": [1440, 1425]
+		},
+		{
+			"dpr": 1.25,
+			"method": "automatic",
+			"action": "parent",
+			"frames": 81,
+			"oldSnapshotError": {
+				"x": 0.0,
+				"y": 0.0,
+				"width": 0.0,
+				"height": 0.0
+			},
+			"final": {
+				"x": 40.375,
+				"y": 325.375,
+				"width": 541.375,
+				"height": 614.453125
+			},
+			"maxTextScaleDeviation": 8.456039892745792e-6,
+			"clientWidthBeforeAfter": [1425, 1440]
+		},
+		{
+			"dpr": 1.25,
+			"method": "explicit",
+			"action": "resize",
+			"frames": 81,
+			"oldSnapshotError": {
+				"x": 0.0,
+				"y": 0.0,
+				"width": 0.0,
+				"height": 0.0
+			},
+			"final": {
+				"x": 40.375,
+				"y": 325.375,
+				"width": 631.25,
+				"height": 498.546875
+			},
+			"maxTextScaleDeviation": 8.926327719982474e-6,
+			"clientWidthBeforeAfter": [1440, 1440]
+		},
+		{
+			"dpr": 1.25,
+			"method": "explicit",
+			"action": "reversal",
+			"frames": 96,
+			"oldSnapshotError": {
+				"x": 0.0,
+				"y": 0.0,
+				"width": 0.0,
+				"height": 0.0
+			},
+			"final": {
+				"x": 40.375,
+				"y": 325.375,
+				"width": 631.25,
+				"height": 498.546875
+			},
+			"maxTextScaleDeviation": 8.896600700136759e-6,
+			"clientWidthBeforeAfter": [1440, 1440]
+		},
+		{
+			"dpr": 1.25,
+			"method": "explicit",
+			"action": "accordion",
+			"frames": 81,
+			"oldSnapshotError": {
+				"x": 0.0,
+				"y": 0.0,
+				"width": 0.0,
+				"height": 0.0
+			},
+			"final": {
+				"x": 40.375,
+				"y": 325.375,
+				"width": 631.25,
+				"height": 647.046875
+			},
+			"maxTextScaleDeviation": 4.552360000076305e-6,
+			"clientWidthBeforeAfter": [1440, 1425]
+		},
+		{
+			"dpr": 1.25,
+			"method": "explicit",
+			"action": "parent",
+			"frames": 81,
+			"oldSnapshotError": {
+				"x": 0.0,
+				"y": 0.0,
+				"width": 0.0,
+				"height": 0.0
+			},
+			"final": {
+				"x": 40.375,
+				"y": 325.375,
+				"width": 541.375,
+				"height": 614.453125
+			},
+			"maxTextScaleDeviation": 7.508407625644864e-6,
+			"clientWidthBeforeAfter": [1425, 1440]
+		},
+		{
+			"dpr": 2.0,
+			"method": "automatic",
+			"action": "resize",
+			"frames": 81,
+			"oldSnapshotError": {
+				"x": 0.0,
+				"y": 0.0,
+				"width": 0.0,
+				"height": 0.0
+			},
+			"final": {
+				"x": 40.375,
+				"y": 325.375,
+				"width": 631.25,
+				"height": 498.546875
+			},
+			"maxTextScaleDeviation": 7.5595592627930586e-6,
+			"clientWidthBeforeAfter": [1440, 1440]
+		},
+		{
+			"dpr": 2.0,
+			"method": "automatic",
+			"action": "reversal",
+			"frames": 96,
+			"oldSnapshotError": {
+				"x": 0.0,
+				"y": 0.0,
+				"width": 0.0,
+				"height": 0.0
+			},
+			"final": {
+				"x": 40.375,
+				"y": 325.375,
+				"width": 631.25,
+				"height": 498.546875
+			},
+			"maxTextScaleDeviation": 8.252411531017856e-6,
+			"clientWidthBeforeAfter": [1440, 1440]
+		},
+		{
+			"dpr": 2.0,
+			"method": "automatic",
+			"action": "accordion",
+			"frames": 81,
+			"oldSnapshotError": {
+				"x": 0.0,
+				"y": 0.0,
+				"width": 0.0,
+				"height": 0.0
+			},
+			"final": {
+				"x": 40.375,
+				"y": 325.375,
+				"width": 631.25,
+				"height": 647.046875
+			},
+			"maxTextScaleDeviation": 4.651360000051952e-6,
+			"clientWidthBeforeAfter": [1440, 1425]
+		},
+		{
+			"dpr": 2.0,
+			"method": "automatic",
+			"action": "parent",
+			"frames": 81,
+			"oldSnapshotError": {
+				"x": 0.0,
+				"y": 0.0,
+				"width": 0.0,
+				"height": 0.0
+			},
+			"final": {
+				"x": 40.375,
+				"y": 325.375,
+				"width": 541.375,
+				"height": 614.453125
+			},
+			"maxTextScaleDeviation": 7.513166499162338e-6,
+			"clientWidthBeforeAfter": [1425, 1440]
+		},
+		{
+			"dpr": 2.0,
+			"method": "explicit",
+			"action": "resize",
+			"frames": 81,
+			"oldSnapshotError": {
+				"x": 0.0,
+				"y": 0.0,
+				"width": 0.0,
+				"height": 0.0
+			},
+			"final": {
+				"x": 40.375,
+				"y": 325.375,
+				"width": 631.25,
+				"height": 498.546875
+			},
+			"maxTextScaleDeviation": 8.329621838942813e-6,
+			"clientWidthBeforeAfter": [1440, 1440]
+		},
+		{
+			"dpr": 2.0,
+			"method": "explicit",
+			"action": "reversal",
+			"frames": 96,
+			"oldSnapshotError": {
+				"x": 0.0,
+				"y": 0.0,
+				"width": 0.0,
+				"height": 0.0
+			},
+			"final": {
+				"x": 40.375,
+				"y": 325.375,
+				"width": 631.25,
+				"height": 498.546875
+			},
+			"maxTextScaleDeviation": 8.896600700136759e-6,
+			"clientWidthBeforeAfter": [1440, 1440]
+		},
+		{
+			"dpr": 2.0,
+			"method": "explicit",
+			"action": "accordion",
+			"frames": 81,
+			"oldSnapshotError": {
+				"x": 0.0,
+				"y": 0.0,
+				"width": 0.0,
+				"height": 0.0
+			},
+			"final": {
+				"x": 40.375,
+				"y": 325.375,
+				"width": 631.25,
+				"height": 647.046875
+			},
+			"maxTextScaleDeviation": 4.66105000007655e-6,
+			"clientWidthBeforeAfter": [1440, 1425]
+		},
+		{
+			"dpr": 2.0,
+			"method": "explicit",
+			"action": "parent",
+			"frames": 81,
+			"oldSnapshotError": {
+				"x": 0.0,
+				"y": 0.0,
+				"width": 0.0,
+				"height": 0.0
+			},
+			"final": {
+				"x": 40.375,
+				"y": 325.375,
+				"width": 541.375,
+				"height": 614.453125
+			},
+			"maxTextScaleDeviation": 7.508407625644864e-6,
+			"clientWidthBeforeAfter": [1425, 1440]
+		}
+	],
+	"showcase": {
+		"desk": {
+			"surface": {
+				"lastFrameToSettled": {
+					"x": 0.0,
+					"y": 0.010406494140625,
+					"width": 0,
+					"height": -3.0517578125e-5
+				}
+			},
+			"copy": {
+				"lastFrameToSettled": {
+					"x": -0.011444091796875,
+					"y": 0.0,
+					"width": -3.0517578125e-5,
+					"height": 0.0
+				}
+			},
+			"image": {
+				"lastFrameToSettled": {
+					"x": -0.015777587890625,
+					"y": -0.0001220703125,
+					"width": 0.031524658203125,
+					"height": 0.02099609375
+				}
+			},
+			"edition": {
+				"lastFrameToSettled": {
+					"x": 0.011474609375,
+					"y": 0.0,
+					"width": 0.0,
+					"height": 0
+				}
+			}
+		},
+		"deskReversal": {
+			"surface": {
+				"lastFrameToSettled": {
+					"x": 0.0,
+					"y": 0.012115478515625,
+					"width": 0,
+					"height": -3.0517578125e-5
+				}
+			},
+			"copy": {
+				"lastFrameToSettled": {
+					"x": -0.012481689453125,
+					"y": 0.0,
+					"width": 3.0517578125e-5,
+					"height": 0.0
+				}
+			},
+			"image": {
+				"lastFrameToSettled": {
+					"x": -0.01690673828125,
+					"y": 0.0008544921875,
+					"width": 0.0338134765625,
+					"height": 0.0225830078125
+				}
+			},
+			"edition": {
+				"lastFrameToSettled": {
+					"x": 0.012451171875,
+					"y": 0.0,
+					"width": 0.0,
+					"height": 0
+				}
+			}
+		},
+		"deskReflow": {
+			"surface": {
+				"lastFrameToSettled": {
+					"x": -0.0135498046875,
+					"y": 0.0,
+					"width": 0,
+					"height": 0.0
+				}
+			}
+		},
+		"contact": {
+			"frame": {
+				"lastFrameToSettled": {
+					"x": -0.011993408203125,
+					"y": 0.0,
+					"width": 0,
+					"height": 0
+				}
+			},
+			"photo": {
+				"lastFrameToSettled": {
+					"x": 0.0,
+					"y": 0.0011749267578125,
+					"width": -0.07818603515625,
+					"height": -0.05206298828125
+				}
+			},
+			"text": {
+				"lastFrameToSettled": {
+					"x": -0.0633544921875,
+					"y": 0.0293121337890625,
+					"width": 0.0,
+					"height": 0.0
+				}
+			}
+		},
+		"contactReversal": {
+			"frame": {
+				"lastFrameToSettled": {
+					"x": -0.011993408203125,
+					"y": 0.0,
+					"width": 0,
+					"height": 0
+				}
+			},
+			"photo": {
+				"lastFrameToSettled": {
+					"x": 3.0517578125e-5,
+					"y": 0.001129150390625,
+					"width": -0.0740966796875,
+					"height": -0.049468994140625
+				}
+			},
+			"text": {
+				"lastFrameToSettled": {
+					"x": -0.0655517578125,
+					"y": 0.0303192138671875,
+					"width": 0.0,
+					"height": 0.0
+				}
+			}
+		}
+	}
+}

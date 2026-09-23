@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getAllContexts, mount, onMount, unmount } from 'svelte';
+	import { getAllContexts, mount, untrack, unmount } from 'svelte';
 	import ExamplePreview from './ExamplePreview.svelte';
 	import DocCode from './DocCode.svelte';
 	import type { LiveExample } from './examples.js';
@@ -16,9 +16,11 @@
 			void unmount(instance, { outro: false });
 		};
 	}
-	onMount(() => {
-		ready = true;
-	});
+	$effect(() =>
+		untrack(() => {
+			ready = true;
+		})
+	);
 </script>
 
 <div class="example" data-example={example.id}>

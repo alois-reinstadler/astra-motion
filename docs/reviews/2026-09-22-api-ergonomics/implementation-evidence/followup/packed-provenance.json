@@ -1,0 +1,14 @@
+{
+	"archive": "/tmp/astra-motion-production-wijsCW/astra-motion-0.0.1.tgz",
+	"sha256": "6003a70b91ff00a396269040c22b7135b07f53b41d2c042a57bf2e90496dd8ad",
+	"consumer": "/tmp/astra-motion-production-wijsCW/consumer",
+	"created": "2026-09-23T02:03:36.428Z",
+	"package": "0.0.1",
+	"files": 584,
+	"buildId": "1027f0fd696aa04afd651d7127eb254965eeacf9c392442de4c176644f0513e9",
+	"installedFilesCompared": true,
+	"identityPath": "/__astra-qualification.json",
+	"servedIdentityVerified": true,
+	"browserTestSourceVerified": true,
+	"regressionSha256": "38a5cfc1c3b8773dc40afb4bb07559163b2e4b1ff1b61d76d6c51f372fc246d8"
+}

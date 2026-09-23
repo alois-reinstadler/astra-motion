@@ -1,0 +1,1135 @@
+{
+	"numTotalTestSuites": 18,
+	"numPassedTestSuites": 18,
+	"numFailedTestSuites": 0,
+	"numPendingTestSuites": 0,
+	"numTotalTests": 96,
+	"numPassedTests": 96,
+	"numFailedTests": 0,
+	"numPendingTests": 0,
+	"numTodoTests": 0,
+	"snapshot": {
+		"added": 0,
+		"failure": false,
+		"filesAdded": 0,
+		"filesRemoved": 0,
+		"filesRemovedList": [],
+		"filesUnmatched": 0,
+		"filesUpdated": 0,
+		"matched": 0,
+		"total": 0,
+		"unchecked": 0,
+		"uncheckedKeysByFile": [],
+		"unmatched": 0,
+		"updated": 0,
+		"didUpdate": false
+	},
+	"startTime": 1790114688667,
+	"success": true,
+	"testResults": [
+		{
+			"assertionResults": [
+				{
+					"ancestorTitles": ["automatic Svelte layout uses ordinary assignments"],
+					"fullName": "automatic Svelte layout uses ordinary assignments projects CSS flex alignment changes with no explicit update boundary",
+					"status": "passed",
+					"title": "projects CSS flex alignment changes with no explicit update boundary",
+					"duration": 1229.6999998092651,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": ["automatic Svelte layout uses ordinary assignments"],
+					"fullName": "automatic Svelte layout uses ordinary assignments projects intrinsic text-driven height and the following sibling",
+					"status": "passed",
+					"title": "projects intrinsic text-driven height and the following sibling",
+					"duration": 1245.8000001907349,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": ["automatic Svelte layout uses ordinary assignments"],
+					"fullName": "automatic Svelte layout uses ordinary assignments reorders keyed children, pops an exit and reverses it during sibling movement",
+					"status": "passed",
+					"title": "reorders keyed children, pops an exit and reverses it during sibling movement",
+					"duration": 1939.6999998092651,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": ["automatic Svelte layout uses ordinary assignments"],
+					"fullName": "automatic Svelte layout uses ordinary assignments hands a shared ID to a replacement node using cached geometry",
+					"status": "passed",
+					"title": "hands a shared ID to a replacement node using cached geometry",
+					"duration": 1186.1999998092651,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": ["automatic Svelte layout uses ordinary assignments"],
+					"fullName": "automatic Svelte layout uses ordinary assignments observes assignments after an async boundary and releases a parent during animation",
+					"status": "passed",
+					"title": "observes assignments after an async boundary and releases a parent during animation",
+					"duration": 1101.3000001907349,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": ["automatic Svelte layout uses ordinary assignments"],
+					"fullName": "automatic Svelte layout uses ordinary assignments ignores Motion-owned transform writes instead of repeatedly starting geometry transactions",
+					"status": "passed",
+					"title": "ignores Motion-owned transform writes instead of repeatedly starting geometry transactions",
+					"duration": 1318.5,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				}
+			],
+			"startTime": 1790114697322,
+			"endTime": 1790114705347.5,
+			"status": "passed",
+			"message": "",
+			"name": "/home/node/repos/astra-motion/src/lib/motion-lab/automatic-layout.svelte.spec.ts"
+		},
+		{
+			"assertionResults": [
+				{
+					"ancestorTitles": [],
+					"fullName": "notifies only descendants and leaves unrelated state and plain layout bindings untouched",
+					"status": "passed",
+					"title": "notifies only descendants and leaves unrelated state and plain layout bindings untouched",
+					"duration": 39,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "delivers ancestor policy changes through paused nested providers and respects retained overrides",
+					"status": "passed",
+					"title": "delivers ancestor policy changes through paused nested providers and respects retained overrides",
+					"duration": 1064.2999997138977,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				}
+			],
+			"startTime": 1790114724352,
+			"endTime": 1790114725455.3,
+			"status": "passed",
+			"message": "",
+			"name": "/home/node/repos/astra-motion/src/lib/motion-lab/config-scope.svelte.spec.ts"
+		},
+		{
+			"assertionResults": [
+				{
+					"ancestorTitles": [],
+					"fullName": "initial:false keeps the final keyframe throughout first client appearance",
+					"status": "passed",
+					"title": "initial:false keeps the final keyframe throughout first client appearance",
+					"duration": 190.7000002861023,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "imperative animation respects live reduced motion",
+					"status": "passed",
+					"title": "imperative animation respects live reduced motion",
+					"duration": 32.5,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "imperative animation rejects replacing a retained exit",
+					"status": "passed",
+					"title": "imperative animation rejects replacing a retained exit",
+					"duration": 34.80000019073486,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "stop cancels the native intro sampler and imperative animation can replace it",
+					"status": "passed",
+					"title": "stop cancels the native intro sampler and imperative animation can replace it",
+					"duration": 396.80000019073486,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				}
+			],
+			"startTime": 1790114727665,
+			"endTime": 1790114728320.8,
+			"status": "passed",
+			"message": "",
+			"name": "/home/node/repos/astra-motion/src/lib/motion-lab/initial-false.svelte.spec.ts"
+		},
+		{
+			"assertionResults": [
+				{
+					"ancestorTitles": ["registered Motion projection and native Svelte presence"],
+					"fullName": "registered Motion projection and native Svelte presence retains the outgoing DOM and reverses the same node",
+					"status": "passed",
+					"title": "retains the outgoing DOM and reverses the same node",
+					"duration": 681.4000000953674,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": ["registered Motion projection and native Svelte presence"],
+					"fullName": "registered Motion projection and native Svelte presence waits for outro and renders only the latest requested value",
+					"status": "passed",
+					"title": "waits for outro and renders only the latest requested value",
+					"duration": 637.7000002861023,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": ["registered Motion projection and native Svelte presence"],
+					"fullName": "registered Motion projection and native Svelte presence projects CSS flex movement from the previous box and retargets in flight",
+					"status": "passed",
+					"title": "projects CSS flex movement from the previous box and retargets in flight",
+					"duration": 884.6000003814697,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": ["registered Motion projection and native Svelte presence"],
+					"fullName": "registered Motion projection and native Svelte presence pops list exits out of flow before the outro ends and reflows siblings",
+					"status": "passed",
+					"title": "pops list exits out of flow before the outro ends and reflows siblings",
+					"duration": 479.7000002861023,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": ["registered Motion projection and native Svelte presence"],
+					"fullName": "registered Motion projection and native Svelte presence shares identities across DOM nodes and keeps independent scopes separate",
+					"status": "passed",
+					"title": "shares identities across DOM nodes and keeps independent scopes separate",
+					"duration": 918.6999998092651,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": ["registered Motion projection and native Svelte presence"],
+					"fullName": "registered Motion projection and native Svelte presence projects intrinsic accordion height and settles at the CSS target",
+					"status": "passed",
+					"title": "projects intrinsic accordion height and settles at the CSS target",
+					"duration": 975.0999999046326,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": ["registered Motion projection and native Svelte presence"],
+					"fullName": "registered Motion projection and native Svelte presence preserves Motion-owned authored transforms through nested projection",
+					"status": "passed",
+					"title": "preserves Motion-owned authored transforms through nested projection",
+					"duration": 919.5,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": ["registered Motion projection and native Svelte presence"],
+					"fullName": "registered Motion projection and native Svelte presence survives reorder/remove/column/parent destruction during active projection",
+					"status": "passed",
+					"title": "survives reorder/remove/column/parent destruction during active projection",
+					"duration": 1643.4000000953674,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				}
+			],
+			"startTime": 1790114706305,
+			"endTime": 1790114713448.4,
+			"status": "passed",
+			"message": "",
+			"name": "/home/node/repos/astra-motion/src/lib/motion-lab/layout.svelte.spec.ts"
+		},
+		{
+			"assertionResults": [
+				{
+					"ancestorTitles": [],
+					"fullName": "keeps initial=false keyframes settled while state and projection use their declared trees",
+					"status": "passed",
+					"title": "keeps initial=false keyframes settled while state and projection use their declared trees",
+					"duration": 332.09999990463257,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "responds to the declared parent and ignores an intervening controlling binding",
+					"status": "passed",
+					"title": "responds to the declared parent and ignores an intervening controlling binding",
+					"duration": 982.0999999046326,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				}
+			],
+			"startTime": 1790114722390,
+			"endTime": 1790114723705.1,
+			"status": "passed",
+			"message": "",
+			"name": "/home/node/repos/astra-motion/src/lib/motion-lab/lexical-inheritance.svelte.spec.ts"
+		},
+		{
+			"assertionResults": [
+				{
+					"ancestorTitles": [],
+					"fullName": "retains keyed list items for exit and reverses on the same native element",
+					"status": "passed",
+					"title": "retains keyed list items for exit and reverses on the same native element",
+					"duration": 300.7999997138977,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "preserves keyed native elements through reorder and inherits provider options",
+					"status": "passed",
+					"title": "preserves keyed native elements through reorder and inherits provider options",
+					"duration": 14.100000381469727,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "forwards native attributes, events and refs and merges reactive author styles",
+					"status": "passed",
+					"title": "forwards native attributes, events and refs and merges reactive author styles",
+					"duration": 212.59999990463257,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				}
+			],
+			"startTime": 1790114729079,
+			"endTime": 1790114729607.6,
+			"status": "passed",
+			"message": "",
+			"name": "/home/node/repos/astra-motion/src/lib/motion-lab/motion-component.svelte.spec.ts"
+		},
+		{
+			"assertionResults": [
+				{
+					"ancestorTitles": [],
+					"fullName": "preserves native input conversion, binding/event ordering and form reset",
+					"status": "passed",
+					"title": "preserves native input conversion, binding/event ordering and form reset",
+					"duration": 51.19999980926514,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "updates checkbox, textarea, object selects and details in both directions",
+					"status": "passed",
+					"title": "updates checkbox, textarea, object selects and details in both directions",
+					"duration": 15.399999618530273,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "forwards files, handlers, attachments and typed refs and cleans them up after exit",
+					"status": "passed",
+					"title": "forwards files, handlers, attachments and typed refs and cleans them up after exit",
+					"duration": 121.10000038146973,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "gives replacement input/select branches independent motion ownership and protects their refs",
+					"status": "passed",
+					"title": "gives replacement input/select branches independent motion ownership and protects their refs",
+					"duration": 70.5,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				}
+			],
+			"startTime": 1790114732399,
+			"endTime": 1790114732657.5,
+			"status": "passed",
+			"message": "",
+			"name": "/home/node/repos/astra-motion/src/lib/motion-lab/native-elements.svelte.spec.ts"
+		},
+		{
+			"assertionResults": [
+				{
+					"ancestorTitles": [],
+					"fullName": "tracks nested object/getter/component targets, keyframes and custom reads without replacing MotionValues",
+					"status": "passed",
+					"title": "tracks nested object/getter/component targets, keyframes and custom reads without replacing MotionValues",
+					"duration": 134.39999961853027,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "catches deferred transform takeover in the nearest Svelte boundary",
+					"status": "passed",
+					"title": "catches deferred transform takeover in the nearest Svelte boundary",
+					"duration": 4.299999713897705,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "catches an initial CSS transform conflict before the deferred visual mounts",
+					"status": "passed",
+					"title": "catches an initial CSS transform conflict before the deferred visual mounts",
+					"duration": 52.5,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				}
+			],
+			"startTime": 1790114733256,
+			"endTime": 1790114733447.5,
+			"status": "passed",
+			"message": "",
+			"name": "/home/node/repos/astra-motion/src/lib/motion-lab/nested-options.svelte.spec.ts"
+		},
+		{
+			"assertionResults": [
+				{
+					"ancestorTitles": [],
+					"fullName": "keeps an in-flight state animation through a same-node attachment rebind",
+					"status": "passed",
+					"title": "keeps an in-flight state animation through a same-node attachment rebind",
+					"duration": 580.3000001907349,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "retains native outro completion through same-node attachment rebind",
+					"status": "passed",
+					"title": "retains native outro completion through same-node attachment rebind",
+					"duration": 573.4000000953674,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "uses current options when a binding remounts on a new element",
+					"status": "passed",
+					"title": "uses current options when a binding remounts on a new element",
+					"duration": 10.099999904632568,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "does not strand a native intro when its attachment is rebound",
+					"status": "passed",
+					"title": "does not strand a native intro when its attachment is rebound",
+					"duration": 557.5,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "does not revive a retained exit when an imperative integration replaces its attachment",
+					"status": "passed",
+					"title": "does not revive a retained exit when an imperative integration replaces its attachment",
+					"duration": 527.6999998092651,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				}
+			],
+			"startTime": 1790114716991,
+			"endTime": 1790114719240.7,
+			"status": "passed",
+			"message": "",
+			"name": "/home/node/repos/astra-motion/src/lib/motion-lab/rebind-review.svelte.spec.ts"
+		},
+		{
+			"assertionResults": [
+				{
+					"ancestorTitles": [],
+					"fullName": "pairs retained sources, preserves persistent identities, and reverses out-only transitions (ancestor outro: false)",
+					"status": "passed",
+					"title": "pairs retained sources, preserves persistent identities, and reverses out-only transitions (ancestor outro: false)",
+					"duration": 175,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "pairs retained sources, preserves persistent identities, and reverses out-only transitions (ancestor outro: true)",
+					"status": "passed",
+					"title": "pairs retained sources, preserves persistent identities, and reverses out-only transitions (ancestor outro: true)",
+					"duration": 200.40000009536743,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "still diagnoses two live incoming destinations",
+					"status": "passed",
+					"title": "still diagnoses two live incoming destinations",
+					"duration": 32.40000009536743,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "pairs an outgoing source that was already authored inert",
+					"status": "passed",
+					"title": "pairs an outgoing source that was already authored inert",
+					"duration": 32.40000009536743,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "restores names and removes document lifecycle listeners on disposal",
+					"status": "passed",
+					"title": "restores names and removes document lifecycle listeners on disposal",
+					"duration": 34.80000019073486,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "pairs a plain source retained only by an unrelated outgoing sibling, then reverses it",
+					"status": "passed",
+					"title": "pairs a plain source retained only by an unrelated outgoing sibling, then reverses it",
+					"duration": 65.19999980926514,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				}
+			],
+			"startTime": 1790114730116,
+			"endTime": 1790114730656.2,
+			"status": "passed",
+			"message": "",
+			"name": "/home/node/repos/astra-motion/src/lib/motion-lab/route-presence-review.svelte.spec.ts"
+		},
+		{
+			"assertionResults": [
+				{
+					"ancestorTitles": [],
+					"fullName": "scopes selectors, sequences labels, and clears finished playback",
+					"status": "passed",
+					"title": "scopes selectors, sequences labels, and clears finished playback",
+					"duration": 190.40000009536743,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "retargets an in-flight timeline and prevents stale later segments",
+					"status": "passed",
+					"title": "retargets an in-flight timeline and prevents stale later segments",
+					"duration": 698.1999998092651,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "cleans up native playback and ownership when detached",
+					"status": "passed",
+					"title": "cleans up native playback and ownership when detached",
+					"duration": 34.40000009536743,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "rejects out-of-scope and conflicting ownership without partial animation",
+					"status": "passed",
+					"title": "rejects out-of-scope and conflicting ownership without partial animation",
+					"duration": 1.5,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "disables timeline delays and repetition under reduced motion",
+					"status": "passed",
+					"title": "disables timeline delays and repetition under reduced motion",
+					"duration": 12.800000190734863,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "releases canceled controls without waiting on an unresolved upstream promise",
+					"status": "passed",
+					"title": "releases canceled controls without waiting on an unresolved upstream promise",
+					"duration": 33.90000009536743,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "keeps paused playback owned, and rejects replay after teardown",
+					"status": "passed",
+					"title": "keeps paused playback owned, and rejects replay after teardown",
+					"duration": 265.80000019073486,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "rejects authored CSS transforms and allows Motion-owned continuation",
+					"status": "passed",
+					"title": "rejects authored CSS transforms and allows Motion-owned continuation",
+					"duration": 66.59999990463257,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "reacquires completed playback when replayed and releases it on scope cleanup",
+					"status": "passed",
+					"title": "reacquires completed playback when replayed and releases it on scope cleanup",
+					"duration": 66.5,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "settles an infinitely repeating active timeline when central policy changes",
+					"status": "passed",
+					"title": "settles an infinitely repeating active timeline when central policy changes",
+					"duration": 102,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "guards finished callbacks across replay and rejects targets moved outside the scope",
+					"status": "passed",
+					"title": "guards finished callbacks across replay and rejects targets moved outside the scope",
+					"duration": 15.099999904632568,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "blocks every mutating control after attachment cleanup",
+					"status": "passed",
+					"title": "blocks every mutating control after attachment cleanup",
+					"duration": 33.700000286102295,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "inherits configured duration for single animations and default sequence segments",
+					"status": "passed",
+					"title": "inherits configured duration for single animations and default sequence segments",
+					"duration": 382.5,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "preserves authored transforms through paint-only sequences and still rejects later transform takeover",
+					"status": "passed",
+					"title": "preserves authored transforms through paint-only sequences and still rejects later transform takeover",
+					"duration": 99.40000009536743,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				}
+			],
+			"startTime": 1790114719833,
+			"endTime": 1790114721838.4,
+			"status": "passed",
+			"message": "",
+			"name": "/home/node/repos/astra-motion/src/lib/motion-lab/scoped-animate.svelte.spec.ts"
+		},
+		{
+			"assertionResults": [
+				{
+					"ancestorTitles": [],
+					"fullName": "tracks a container and reverses its linked animation without queued playback",
+					"status": "passed",
+					"title": "tracks a container and reverses its linked animation without queued playback",
+					"duration": 233.7000002861023,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "tracks target offsets separately from its animated child",
+					"status": "passed",
+					"title": "tracks target offsets separately from its animated child",
+					"duration": 63.700000286102295,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "tracks the horizontal axis",
+					"status": "passed",
+					"title": "tracks the horizontal axis",
+					"duration": 105.30000019073486,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "finishes visual effects under reduced motion while retaining accurate semantic progress",
+					"status": "passed",
+					"title": "finishes visual effects under reduced motion while retaining accurate semantic progress",
+					"duration": 84.7999997138977,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "cleans up detached participants and reconnects a new scroller",
+					"status": "passed",
+					"title": "cleans up detached participants and reconnects a new scroller",
+					"duration": 177.59999990463257,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "updates the container range after resize and rapid direction changes",
+					"status": "passed",
+					"title": "updates the container range after resize and rapid direction changes",
+					"duration": 547.8999996185303,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "applies inherited reduced-motion policy while a native outro retains a paused child",
+					"status": "passed",
+					"title": "applies inherited reduced-motion policy while a native outro retains a paused child",
+					"duration": 874.5999999046326,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "applies a live OS reduction event while the child is retained by its outro",
+					"status": "passed",
+					"title": "applies a live OS reduction event while the child is retained by its outro",
+					"duration": 70.09999990463257,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				}
+			],
+			"startTime": 1790114714192,
+			"endTime": 1790114716352.1,
+			"status": "passed",
+			"message": "",
+			"name": "/home/node/repos/astra-motion/src/lib/motion-lab/scroll.svelte.spec.ts"
+		},
+		{
+			"assertionResults": [
+				{
+					"ancestorTitles": [],
+					"fullName": "preserves authored CSS transform for an opacity-only binding",
+					"status": "passed",
+					"title": "preserves authored CSS transform for an opacity-only binding",
+					"duration": 5.099999904632568,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "preserves authored CSS scale for an opacity-only binding",
+					"status": "passed",
+					"title": "preserves authored CSS scale for an opacity-only binding",
+					"duration": 1.0999999046325684,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "preserves authored CSS translate for an opacity-only binding",
+					"status": "passed",
+					"title": "preserves authored CSS translate for an opacity-only binding",
+					"duration": 0.9000000953674316,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "preserves authored CSS rotate for an opacity-only binding",
+					"status": "passed",
+					"title": "preserves authored CSS rotate for an opacity-only binding",
+					"duration": 0.6999998092651367,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "rejects authored CSS scale before acquiring a state visual",
+					"status": "passed",
+					"title": "rejects authored CSS scale before acquiring a state visual",
+					"duration": 2.0999999046325684,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "rejects authored CSS translate before acquiring a state visual",
+					"status": "passed",
+					"title": "rejects authored CSS translate before acquiring a state visual",
+					"duration": 0.7999997138977051,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "rejects authored CSS rotate before acquiring a state visual",
+					"status": "passed",
+					"title": "rejects authored CSS rotate before acquiring a state visual",
+					"duration": 1,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "accepts CSS individual transforms explicitly reset to none with Motion initial transforms",
+					"status": "passed",
+					"title": "accepts CSS individual transforms explicitly reset to none with Motion initial transforms",
+					"duration": 1.5,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				}
+			],
+			"startTime": 1790114734630,
+			"endTime": 1790114734643.5,
+			"status": "passed",
+			"message": "",
+			"name": "/home/node/repos/astra-motion/src/lib/motion-lab/state-css-transforms.svelte.spec.ts"
+		},
+		{
+			"assertionResults": [
+				{
+					"ancestorTitles": [],
+					"fullName": "preserves the current projection and native paint effect when application style props change",
+					"status": "passed",
+					"title": "preserves the current projection and native paint effect when application style props change",
+					"duration": 758.9000000953674,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				}
+			],
+			"startTime": 1790114726365,
+			"endTime": 1790114727123.9,
+			"status": "passed",
+			"message": "",
+			"name": "/home/node/repos/astra-motion/src/lib/motion-lab/style-composition.svelte.spec.ts"
+		},
+		{
+			"assertionResults": [
+				{
+					"ancestorTitles": [],
+					"fullName": "resolves .settled exactly once with stopped while leaving legacy then pending",
+					"status": "passed",
+					"title": "resolves .settled exactly once with stopped while leaving legacy then pending",
+					"duration": 18.199999809265137,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "resolves .settled exactly once with cancelled while leaving legacy then pending",
+					"status": "passed",
+					"title": "resolves .settled exactly once with cancelled while leaving legacy then pending",
+					"duration": 22.699999809265137,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "resolves .settled exactly once with replaced while leaving legacy then pending",
+					"status": "passed",
+					"title": "resolves .settled exactly once with replaced while leaving legacy then pending",
+					"duration": 33.60000038146973,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "resolves .settled exactly once with detached while leaving legacy then pending",
+					"status": "passed",
+					"title": "resolves .settled exactly once with detached while leaving legacy then pending",
+					"duration": 33.19999980926514,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "scope.stop settles every active run and releases their owners",
+					"status": "passed",
+					"title": "scope.stop settles every active run and releases their owners",
+					"duration": 1.5999999046325684,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "reacquiring completed playback creates a fresh settlement promise without changing the previous result",
+					"status": "passed",
+					"title": "reacquiring completed playback creates a fresh settlement promise without changing the previous result",
+					"duration": 115.2999997138977,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "manual completion keeps the 'opacity' endpoint for repeat=Infinity / 'loop' / speed=1",
+					"status": "passed",
+					"title": "manual completion keeps the 'opacity' endpoint for repeat=Infinity / 'loop' / speed=1",
+					"duration": 16,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "manual completion keeps the 'opacity' endpoint for repeat=1 / 'reverse' / speed=1",
+					"status": "passed",
+					"title": "manual completion keeps the 'opacity' endpoint for repeat=1 / 'reverse' / speed=1",
+					"duration": 16.5,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "manual completion keeps the 'opacity' endpoint for repeat=+0 / 'loop' / speed=-1",
+					"status": "passed",
+					"title": "manual completion keeps the 'opacity' endpoint for repeat=+0 / 'loop' / speed=-1",
+					"duration": 16.800000190734863,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "manual completion keeps the 'opacity' endpoint for repeat=Infinity / 'loop' / speed=+0",
+					"status": "passed",
+					"title": "manual completion keeps the 'opacity' endpoint for repeat=Infinity / 'loop' / speed=+0",
+					"duration": 16.59999990463257,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "manual completion keeps the 'x' endpoint for repeat=Infinity / 'loop' / speed=1",
+					"status": "passed",
+					"title": "manual completion keeps the 'x' endpoint for repeat=Infinity / 'loop' / speed=1",
+					"duration": 1.4000000953674316,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "manual completion keeps the 'x' endpoint for repeat=1 / 'reverse' / speed=1",
+					"status": "passed",
+					"title": "manual completion keeps the 'x' endpoint for repeat=1 / 'reverse' / speed=1",
+					"duration": 14.800000190734863,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "manual completion keeps the 'x' endpoint for repeat=+0 / 'loop' / speed=-1",
+					"status": "passed",
+					"title": "manual completion keeps the 'x' endpoint for repeat=+0 / 'loop' / speed=-1",
+					"duration": 16.90000009536743,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "observes live local getter and proxy policies, finishing original repeating controls at their visible endpoint",
+					"status": "passed",
+					"title": "observes live local getter and proxy policies, finishing original repeating controls at their visible endpoint",
+					"duration": 34.39999961853027,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "disposes local policy subscriptions and settles retained control handles on component removal",
+					"status": "passed",
+					"title": "disposes local policy subscriptions and settles retained control handles on component removal",
+					"duration": 31.800000190734863,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "settles and releases externally attached timeline cleanup",
+					"status": "passed",
+					"title": "settles and releases externally attached timeline cleanup",
+					"duration": 52.200000286102295,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "settles and releases externally attached timeline complete",
+					"status": "passed",
+					"title": "settles and releases externally attached timeline complete",
+					"duration": 51.299999713897705,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "settles and releases externally attached timeline cancel",
+					"status": "passed",
+					"title": "settles and releases externally attached timeline cancel",
+					"duration": 51.59999990463257,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "cancels externally driven progress on live reduced motion without leaving .settled pending",
+					"status": "passed",
+					"title": "cancels externally driven progress on live reduced motion without leaving .settled pending",
+					"duration": 53.19999980926514,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				}
+			],
+			"startTime": 1790114731280,
+			"endTime": 1790114731880.2,
+			"status": "passed",
+			"message": "",
+			"name": "/home/node/repos/astra-motion/src/lib/motion-lab/timeline-settlement.svelte.spec.ts"
+		},
+		{
+			"assertionResults": [
+				{
+					"ancestorTitles": [],
+					"fullName": "rejects imperative raw targets without replacing an existing decomposed pose",
+					"status": "passed",
+					"title": "rejects imperative raw targets without replacing an existing decomposed pose",
+					"duration": 74.30000019073486,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "guards imperative transform history even when it was absent from declarative options",
+					"status": "passed",
+					"title": "guards imperative transform history even when it was absent from declarative options",
+					"duration": 17.300000190734863,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				},
+				{
+					"ancestorTitles": [],
+					"fullName": "keeps raw-only transforms usable and diagnoses switching them to decomposed values",
+					"status": "passed",
+					"title": "keeps raw-only transforms usable and diagnoses switching them to decomposed values",
+					"duration": 13.699999809265137,
+					"failureMessages": [],
+					"meta": {},
+					"tags": []
+				}
+			],
+			"startTime": 1790114734033,
+			"endTime": 1790114734138.7,
+			"status": "passed",
+			"message": "",
+			"name": "/home/node/repos/astra-motion/src/lib/motion-lab/transform-ownership.svelte.spec.ts"
+		}
+	]
+}

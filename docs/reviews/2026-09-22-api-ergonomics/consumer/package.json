@@ -1,0 +1,25 @@
+{
+	"name": "astra-adversarial-consumer",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"packageManager": "pnpm@11.24.0",
+	"scripts": {
+		"check": "svelte-kit sync && svelte-check --tsconfig tsconfig.json",
+		"build": "vite build"
+	},
+	"dependencies": {
+		"astra-motion": "file:./astra-motion.tgz",
+		"bits-ui": "2.19.0"
+	},
+	"devDependencies": {
+		"svelte": "5.57.0",
+		"@sveltejs/kit": "2.70.3",
+		"@sveltejs/vite-plugin-svelte": "7.3.0",
+		"@sveltejs/adapter-node": "5.5.7",
+		"vite": "8.2.2",
+		"typescript": "6.0.3",
+		"svelte-check": "4.7.6",
+		"@types/node": "24.13.3"
+	}
+}

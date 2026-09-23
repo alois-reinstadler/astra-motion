@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onDestroy, onMount, tick } from 'svelte';
+	import { onDestroy, untrack, tick } from 'svelte';
 	import { createLayout } from '$lib/motion/layout.js';
 	import { createAnimate } from '$lib/motion/animate.js';
 	import { createMotion } from '$lib/motion/lite.svelte.js';
@@ -37,9 +37,11 @@
 	$effect(settleNavigationForPolicy);
 	onDestroy(cancelReplacement);
 	const visible = $derived(photos.filter((photo) => filter === 'All' || photo.category === filter));
-	onMount(() => {
-		ready = true;
-	});
+	$effect(() =>
+		untrack(() => {
+			ready = true;
+		})
+	);
 	async function open(photo: Photo) {
 		cancelReplacement();
 		requested = photo;

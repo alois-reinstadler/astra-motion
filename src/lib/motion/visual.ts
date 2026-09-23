@@ -3,12 +3,17 @@ import {
 	visualElementStore,
 	buildHTMLStyles,
 	camelToDash,
+	transformProps,
+	isAnimationControls,
 	type MotionNodeOptions,
+	type MotionStyle,
 	type ResolvedValues,
+	type TargetAndTransition,
 	type VisualElement
 } from 'motion-dom';
 import { ensureMotionAnimationState, cancelMotionSequence } from './animation.js';
 import { prepareMotionHandoff } from './motion-compat.js';
+import { resolveMotionTarget } from './targets.js';
 
 /** One state/projection value owner per native element. Kept private to the adapter. */
 interface MotionVisualRecord {
@@ -20,6 +25,7 @@ interface MotionVisualRecord {
 	canAnimate: () => boolean;
 	parent?: () => HTMLElement | undefined;
 	original: Map<string, { value: string; priority: string }>;
+	transformOwned?: boolean;
 }
 const records = new Map<HTMLElement, MotionVisualRecord>();
 
@@ -30,13 +36,48 @@ export function hasActiveMotionVisual(node: HTMLElement) {
 	return records.get(node)?.active === true;
 }
 
-export function ensureMotionVisual(node: HTMLElement): HTMLVisualElement | undefined {
+/** Paint-only bindings leave authored transforms alone, until a transform is actually requested. */
+export function assertMotionTransformOwnership(
+	node: HTMLElement,
+	props?: MotionNodeOptions & { style?: MotionStyle },
+	additional?: TargetAndTransition
+) {
 	const record = records.get(node);
-	if (!record) return undefined;
-	if (record.visual) return record.visual;
+	if (!record || record.transformOwned) return;
+	props ??= record.props();
+	const transforms = (values: object | undefined) =>
+		Object.entries(values ?? {}).some(
+			([key, value]) => value != null && (key === 'transform' || transformProps.has(key))
+		);
+	const definitions = [
+		props.initial === false ? undefined : props.initial,
+		props.animate,
+		props.exit,
+		props.whileHover,
+		props.whileTap,
+		props.whileFocus,
+		props.whileDrag,
+		props.whileInView
+	];
+	const needsTransform =
+		props.layout ||
+		props.drag ||
+		transforms(props.style) ||
+		transforms(record.initial) ||
+		transforms(record.visual?.latestValues) ||
+		transforms(additional) ||
+		transforms(additional?.transitionEnd) ||
+		definitions.some((definition) => {
+			if (typeof definition === 'boolean' || isAnimationControls(definition)) return false;
+			const target = resolveMotionTarget(props!, definition, props!.custom, record.visual);
+			return transforms(target) || transforms(target.transitionEnd);
+		});
+	if (!needsTransform) return;
 	const expected = { style: {}, vars: {}, transform: {}, transformOrigin: {} };
 	buildHTMLStyles(expected, record.initial);
-	const authoredTransform = (expected.style as { transform?: string }).transform;
+	const authoredTransform =
+		record.visual?.renderState.style.transform ??
+		(expected.style as { transform?: string }).transform;
 	const computed = getComputedStyle(node);
 	if (
 		(computed.transform !== 'none' && node.style.transform !== authoredTransform) ||
@@ -48,6 +89,14 @@ export function ensureMotionVisual(node: HTMLElement): HTMLVisualElement | undef
 			'Astra motion: move CSS transform/translate/rotate/scale into the binding style/targets (x, y, rotate, scale), or put it on an outer element. Motion owns this element’s transform.'
 		);
 	}
+	record.transformOwned = true;
+}
+
+export function ensureMotionVisual(node: HTMLElement): HTMLVisualElement | undefined {
+	const record = records.get(node);
+	if (!record) return undefined;
+	assertMotionTransformOwnership(node);
+	if (record.visual) return record.visual;
 	let parent: HTMLVisualElement | undefined;
 	const declaredParent = record.parent?.();
 	if (record.parent) {

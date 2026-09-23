@@ -2,9 +2,42 @@ import {
 	AsyncMotionValueAnimation,
 	GroupAnimation,
 	NativeAnimationExtended,
+	NativeAnimation,
 	getFinalKeyframe,
 	type AnimationPlaybackControls
 } from 'motion-dom';
+
+/** Complete the original playback, including WAAPI loops and playback frozen at speed zero. */
+export function completeMotionPlayback(playback: AnimationPlaybackControls): void {
+	if (playback instanceof GroupAnimation) {
+		for (const animation of playback.animations) completeMotionPlayback(animation);
+		return;
+	}
+	if (playback instanceof AsyncMotionValueAnimation) {
+		// Completion, unlike cancellation, intentionally resolves pending keyframes.
+		completeMotionPlayback(playback.animation);
+		return;
+	}
+	if (playback instanceof NativeAnimation) {
+		const handle = (playback as unknown as { animation: Animation }).animation;
+		const timing = handle.effect?.getTiming();
+		const infinite = timing?.iterations === Infinity;
+		const frozen = playback.speed === 0;
+		// WAAPI finish() rejects an infinite end time or zero playback rate. Keep
+		// Motion's repeat/direction options unchanged so its original finish handler
+		// commits the correct endpoint and resolves existing then()/finished callers.
+		if (infinite) handle.effect?.updateTiming({ iterations: 1 });
+		if (frozen) playback.speed = 1;
+		if (infinite || frozen) {
+			void playback.finished.then(() => {
+				// Preserve the original playback contract when these controls are replayed.
+				if (infinite) handle.effect?.updateTiming({ iterations: timing!.iterations });
+				if (frozen) playback.speed = 0;
+			});
+		}
+	}
+	playback.complete();
+}
 
 /**
  * Motion 13.2 cancellation boundary. Keep these two private fields isolated here:

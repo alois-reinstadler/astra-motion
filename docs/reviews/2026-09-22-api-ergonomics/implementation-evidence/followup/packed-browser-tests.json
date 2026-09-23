@@ -1,0 +1,32 @@
+{
+	"browser": "Chrome 152.0.7977.82, shared headed browser via Chrome MCP",
+	"invocation": "Automated browser-side cases also imported by scripts/qualify-motion-package.mjs; the Playwright launcher/matrix was not executed",
+	"cases": [
+		{
+			"case": "inherited variant pose in raw SSR and hydrated HTML",
+			"passed": true
+		},
+		{
+			"case": "nested mutation and replacement without remount, tag/direct/getter",
+			"passed": true
+		},
+		{
+			"case": "native text/number/checkbox bindings, typed refs, events and ref cleanup",
+			"passed": true
+		},
+		{
+			"case": "timeline stop settles cancelled and holds its pose",
+			"passed": true
+		},
+		{
+			"case": "live local reduced-motion policy finishes replay with a fresh settlement",
+			"passed": true
+		},
+		{
+			"case": "shared route handoff while unrelated exit retains a non-inert source",
+			"passed": true,
+			"oldName": "astra_005b00220022002c002200630061007200640022005d"
+		}
+	],
+	"consoleErrorsOrWarnings": []
+}

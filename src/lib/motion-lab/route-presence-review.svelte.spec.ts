@@ -13,7 +13,7 @@ vi.mock('$app/navigation', () => ({
 import RoutePresenceReview from './RoutePresenceReview.svelte';
 
 async function review(
-	props: { nested?: boolean; duplicate?: boolean; authoredInert?: boolean },
+	props: { nested?: boolean; sibling?: boolean; duplicate?: boolean; authoredInert?: boolean },
 	run: (
 		screen: ReturnType<typeof render<typeof RoutePresenceReview>>,
 		navigate: (value?: boolean) => Promise<ViewTransition>
@@ -83,12 +83,10 @@ it('still diagnoses two live incoming destinations', async () => {
 	});
 });
 
-it('does not silently exclude a source that was already authored inert', async () => {
+it('pairs an outgoing source that was already authored inert', async () => {
 	await review({ authoredInert: true }, async (screen, navigate) => {
 		await navigate();
-		expect(screen.component.issues()).toEqual([
-			'Duplicate routeShared ID in one scope; this pair was skipped.'
-		]);
+		expect(screen.component.issues()).toEqual([]);
 	});
 });
 
@@ -114,4 +112,21 @@ it('restores names and removes document lifecycle listeners on disposal', async 
 		added.mockRestore();
 		removed.mockRestore();
 	}
+});
+
+it('pairs a plain source retained only by an unrelated outgoing sibling, then reverses it', async () => {
+	await review({ sibling: true }, async (screen, navigate) => {
+		const source = document.querySelector<HTMLElement>('[data-route-source]')!;
+		await navigate();
+		const destination = document.querySelector<HTMLElement>('[data-route-destination]')!;
+		expect(source.isConnected).toBe(true);
+		expect(source.closest('[inert]')).toBeNull();
+		expect(source.style.viewTransitionName).toBe('');
+		expect(destination.style.viewTransitionName).toMatch(/^astra_/);
+		expect(screen.component.issues()).toEqual([]);
+		await navigate(false);
+		expect(document.querySelector('[data-route-source]')).toBe(source);
+		expect(source.style.viewTransitionName).toMatch(/^astra_/);
+		expect(screen.component.issues()).toEqual([]);
+	});
 });

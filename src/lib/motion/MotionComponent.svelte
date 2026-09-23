@@ -13,11 +13,11 @@
 
 <script lang="ts" generics="Tag extends MotionTag = 'div'">
 	import { untrack } from 'svelte';
-	import { createMotion } from './motion.svelte.js';
+	import { createComponentMotion } from './component-motion.js';
 	let {
 		as = 'div' as Tag,
 		motion = {},
-		ref = $bindable(null),
+		ref = $bindable(),
 		style,
 		children,
 		...attributes
@@ -31,7 +31,7 @@
 		}
 		return as;
 	});
-	const binding = createMotion(() => motion);
+	const binding = createComponentMotion(() => motion);
 	const motionTransition = binding.transition;
 	// Keep tag-specific attributes on the public API; the dynamic element forwards them unchanged.
 	// @ts-expect-error TS2590: generic native event unions exceed TypeScript's internal forwarding limit.

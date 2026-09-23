@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { untrack } from 'svelte';
 	import { createAnimate } from '$lib/motion/index.js';
 
 	const scene = createAnimate();
@@ -34,13 +34,15 @@
 		} else replay();
 	}
 
-	onMount(() => {
-		mounted = true;
-		replay();
-		return () => {
-			mounted = false;
-		};
-	});
+	$effect(() =>
+		untrack(() => {
+			mounted = true;
+			replay();
+			return () => {
+				mounted = false;
+			};
+		})
+	);
 </script>
 
 <div class="example">

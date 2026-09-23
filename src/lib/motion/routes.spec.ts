@@ -7,6 +7,12 @@ const lifecycle = vi.hoisted(() => ({
 	config: {} as { reducedMotion?: 'always' | 'never' | 'user' }
 }));
 const configReader = vi.hoisted(() => () => lifecycle.config);
+const retained = vi.hoisted(() => new WeakSet<HTMLElement>());
+
+vi.mock('./route-activity.svelte.js', () => ({
+	registerRouteActivity: (node: HTMLElement) => () => !retained.has(node),
+	checkpointRouteActivity: () => {}
+}));
 
 vi.mock('$app/navigation', () => ({
 	onNavigate: (callback: (navigation: OnNavigate) => unknown) => (lifecycle.navigate = callback)
@@ -107,6 +113,28 @@ afterEach(() => {
 });
 
 describe('route transition coordinator', () => {
+	it('pairs a live destination while an outgoing Svelte branch retains a non-inert source', async () => {
+		const browser = browserTransition();
+		stubDocument({ startViewTransition: browser.start });
+		const source = element();
+		shared('retained', source);
+		const onDiagnostic = vi.fn();
+		routeTransitions({ reducedMotion: 'never', onDiagnostic });
+		const completion = deferred();
+		navigate(completion.promise);
+		const name = source.style.getPropertyValue('view-transition-name');
+		const updating = browser.update();
+		retained.add(source);
+		const destination = element();
+		shared('retained', destination);
+		completion.resolve();
+		await updating;
+		expect(source.isConnected).toBe(true);
+		expect(source.style.getPropertyValue('view-transition-name')).toBe('');
+		expect(destination.style.getPropertyValue('view-transition-name')).toBe(name);
+		expect(onDiagnostic).not.toHaveBeenCalled();
+	});
+
 	it('releases navigation after old capture, pairs new nodes and restores authored names', async () => {
 		const browser = browserTransition();
 		stubDocument({ startViewTransition: browser.start });

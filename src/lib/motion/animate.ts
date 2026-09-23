@@ -16,7 +16,8 @@ import type { Attachment } from 'svelte/attachments';
 import { readMotionConfig, observeMotionConfig, observeMotionPreference } from './config.js';
 import { shouldReduceMotion, type MotionPolicy } from './policy.js';
 import { claimMotionOwnership } from './ownership.js';
-import { prepareMotionHandoff } from './motion-compat.js';
+import { completeMotionPlayback, prepareMotionHandoff } from './motion-compat.js';
+import { observeAnimatePolicy } from './animate-policy.svelte.js';
 
 export type ScopedTarget = string | Element | Iterable<Element>;
 export type ScopedSequence = (
@@ -24,6 +25,18 @@ export type ScopedSequence = (
 	| SequenceLabelWithTime
 	| [ScopedTarget, DOMKeyframesDefinition, SegmentTransitionOptions?]
 )[];
+export type AnimationCancellationReason = 'stopped' | 'cancelled' | 'replaced' | 'detached';
+export type AnimationSettlement =
+	{ status: 'finished' } | { status: 'cancelled'; reason: AnimationCancellationReason };
+export interface ScopedAnimationControls extends AnimationPlaybackControlsWithThen {
+	/** Resolves on completion or cancellation. Reacquiring finished controls creates a new promise. */
+	readonly settled: Promise<AnimationSettlement>;
+	/**
+	 * Cleanup cancels this run. External progress disables Motion's completion callback:
+	 * complete() and live reduced motion therefore detach it and settle as cancelled.
+	 */
+	attachTimeline: AnimationPlaybackControlsWithThen['attachTimeline'];
+}
 export interface AnimateScope {
 	attach: Attachment<Element>;
 	/** Selectors only resolve descendants of the attached root. Pass the root directly to animate it. */
@@ -31,8 +44,8 @@ export interface AnimateScope {
 		target: ScopedTarget,
 		keyframes: DOMKeyframesDefinition,
 		options?: AnimationOptions
-	): AnimationPlaybackControlsWithThen;
-	sequence(sequence: ScopedSequence, options?: SequenceOptions): AnimationPlaybackControlsWithThen;
+	): ScopedAnimationControls;
+	sequence(sequence: ScopedSequence, options?: SequenceOptions): ScopedAnimationControls;
 	/** Stop every owned playback at its current pose. A stopped scope can be used again. */
 	stop(): void;
 	readonly current: Element | undefined;
@@ -55,13 +68,11 @@ export function createAnimate(policy: MotionPolicy | (() => MotionPolicy) = {}):
 		nodes: Set<Element>;
 		release: () => void;
 		finish: () => void;
-		stop: () => void;
+		stop: (reason?: AnimationCancellationReason) => void;
 	};
 	const runs = new Set<Run>();
 	const reduced = () =>
-		untrack(() =>
-			shouldReduceMotion({ ...inherited(), ...(typeof policy === 'function' ? policy() : policy) })
-		);
+		shouldReduceMotion({ ...inherited(), ...(typeof policy === 'function' ? policy() : policy) });
 	const resolve = (target: ScopedTarget): Element[] => {
 		if (!root)
 			throw new Error('Astra motion: attach the animation scope before starting playback.');
@@ -84,15 +95,15 @@ export function createAnimate(policy: MotionPolicy | (() => MotionPolicy) = {}):
 			throw new Error('Astra motion: animation targets must belong to the attached scope.');
 		return [...new Set(nodes)];
 	};
-	const stop = () => {
+	const stop = (reason: AnimationCancellationReason = 'stopped') => {
 		for (const run of [...runs]) {
-			run.stop();
+			run.stop(reason);
 		}
 	};
 	function start(
 		nodes: Element[],
 		transformNodes: ReadonlySet<Element>,
-		play: (forceReduce?: boolean) => AnimationPlaybackControlsWithThen
+		play: () => AnimationPlaybackControlsWithThen
 	) {
 		const releases: (() => void)[] = [];
 		try {
@@ -122,7 +133,7 @@ export function createAnimate(policy: MotionPolicy | (() => MotionPolicy) = {}):
 		// Replacing any subject cancels its previous sequence as a whole: no stale later segment.
 		for (const run of [...runs])
 			if (nodes.some((node) => run.nodes.has(node))) {
-				run.stop();
+				run.stop('replaced');
 			}
 		let native: AnimationPlaybackControlsWithThen;
 		try {
@@ -133,19 +144,44 @@ export function createAnimate(policy: MotionPolicy | (() => MotionPolicy) = {}):
 		}
 		const mountedGeneration = generation;
 		let stopped = false;
+		let finishing = false;
+		let detachTimeline: (() => void) | undefined;
 		let playbackRevision = 0;
+		let resolveSettlement: (outcome: AnimationSettlement) => void;
+		let settlementPending = true;
+		let settled = new Promise<AnimationSettlement>((resolve) => (resolveSettlement = resolve));
+		function settle(outcome: AnimationSettlement) {
+			if (!settlementPending) return;
+			settlementPending = false;
+			resolveSettlement(outcome);
+		}
+		Object.defineProperty(native, 'settled', { enumerable: true, get: () => settled });
 		const run: Run = {
 			controls: native,
 			nodes: new Set(nodes),
-			stop: () => {
+			stop: (reason = 'stopped') => {
+				if (stopped) return;
 				stopped = true;
 				prepareMotionHandoff(native);
-				native.stop();
-				run.release();
+				try {
+					if (detachTimeline) {
+						const detach = detachTimeline;
+						detachTimeline = undefined;
+						detach();
+					} else native.stop();
+				} finally {
+					run.release();
+					settle({ status: 'cancelled', reason });
+				}
 			},
 			finish: () => {
-				run.stop();
-				start(nodes, transformNodes, () => play(true));
+				if (finishing || stopped) return;
+				if (detachTimeline) {
+					run.stop('cancelled');
+					return;
+				}
+				finishing = true;
+				completeMotionPlayback(native);
 			},
 			release: () => {
 				playbackRevision++;
@@ -166,7 +202,10 @@ export function createAnimate(policy: MotionPolicy | (() => MotionPolicy) = {}):
 		const observeFinish = () => {
 			const current = ++playbackRevision;
 			void native.then(() => {
-				if (current === playbackRevision) run.release();
+				if (current === playbackRevision) {
+					run.release();
+					settle({ status: 'finished' });
+				}
 			});
 		};
 		observeFinish();
@@ -185,7 +224,11 @@ export function createAnimate(policy: MotionPolicy | (() => MotionPolicy) = {}):
 				releases.splice(0).forEach((release) => release());
 				throw error;
 			}
-			for (const other of [...runs]) if (nodes.some((node) => other.nodes.has(node))) other.stop();
+			for (const other of [...runs])
+				if (nodes.some((node) => other.nodes.has(node))) other.stop('replaced');
+			finishing = false;
+			settlementPending = true;
+			settled = new Promise<AnimationSettlement>((resolve) => (resolveSettlement = resolve));
 			runs.add(run);
 		};
 		// Completed playback can still write through seek/complete, not just play(). Every
@@ -196,8 +239,18 @@ export function createAnimate(policy: MotionPolicy | (() => MotionPolicy) = {}):
 				if (['play', 'pause', 'complete', 'attachTimeline'].includes(String(key)))
 					return (...args: unknown[]) => {
 						acquirePlayback();
-						const result = value.apply(target, args);
-						if (key !== 'pause') observeFinish();
+						if (key === 'attachTimeline' && detachTimeline)
+							throw new Error('Astra motion: playback already has an external timeline.');
+						const result =
+							key === 'complete'
+								? detachTimeline
+									? run.finish()
+									: completeMotionPlayback(target)
+								: value.apply(target, args);
+						if (key === 'attachTimeline') detachTimeline = result;
+						if (key !== 'pause' && !stopped) observeFinish();
+						if (key === 'play' && untrack(reduced)) run.finish();
+						if (key === 'attachTimeline') return () => run.stop('cancelled');
 						return result;
 					};
 				if (key === 'stop' || key === 'cancel')
@@ -210,8 +263,17 @@ export function createAnimate(policy: MotionPolicy | (() => MotionPolicy) = {}):
 						else {
 							stopped = true;
 							prepareMotionHandoff(target, { settleFinished: false });
-							target.cancel();
-							run.release();
+							try {
+								if (detachTimeline) {
+									const detach = detachTimeline;
+									detachTimeline = undefined;
+									detach();
+								}
+								target.cancel();
+							} finally {
+								run.release();
+								settle({ status: 'cancelled', reason: 'cancelled' });
+							}
 						}
 					};
 				return typeof value === 'function' ? value.bind(target) : value;
@@ -220,22 +282,24 @@ export function createAnimate(policy: MotionPolicy | (() => MotionPolicy) = {}):
 				acquirePlayback();
 				return Reflect.set(target, key, value, target);
 			}
-		});
+		}) as ScopedAnimationControls;
 	}
 	const attach: Attachment<Element> = (node) => {
 		if (root) throw new Error('Astra motion: an animation scope can attach to one root at a time.');
 		root = node;
 		generation++;
-		const settle = () => {
-			if (reduced())
-				for (const run of [...runs]) {
-					run.finish();
-				}
-		};
-		const cleanup = [observeMotionPreference(settle), observeMotionConfig(inherited, settle)];
+		const settle = () =>
+			untrack(() => {
+				if (reduced()) for (const run of [...runs]) run.finish();
+			});
+		const cleanup = [
+			observeMotionPreference(settle),
+			observeMotionConfig(inherited, settle),
+			observeAnimatePolicy(reduced, settle)
+		];
 		return () => {
-			stop();
 			cleanup.forEach((release) => release());
+			stop('detached');
 			root = undefined;
 		};
 	};
@@ -243,11 +307,11 @@ export function createAnimate(policy: MotionPolicy | (() => MotionPolicy) = {}):
 		attach,
 		animate(target, keyframes, options = {}) {
 			const nodes = resolve(target);
-			return start(nodes, new Set(transforms(keyframes) ? nodes : []), (forceReduce) =>
+			return start(nodes, new Set(transforms(keyframes) ? nodes : []), () =>
 				motionAnimate(nodes, keyframes, {
 					...untrack(inherited).transition,
 					...options,
-					...(forceReduce || reduced()
+					...(untrack(reduced)
 						? { skipAnimations: true, duration: 0, delay: 0, repeat: 0, repeatDelay: 0 }
 						: {})
 				})
@@ -272,11 +336,11 @@ export function createAnimate(policy: MotionPolicy | (() => MotionPolicy) = {}):
 			});
 			if (!nodes.length)
 				throw new Error('Astra motion: a scoped sequence needs at least one animation segment.');
-			return start(nodes, transformNodes, (forceReduce) =>
+			return start(nodes, transformNodes, () =>
 				motionAnimate(resolved, {
 					...options,
 					defaultTransition: { ...untrack(inherited).transition, ...options.defaultTransition },
-					...(forceReduce || reduced()
+					...(untrack(reduced)
 						? { skipAnimations: true, duration: 0, delay: 0, repeat: 0, repeatDelay: 0 }
 						: {})
 				})

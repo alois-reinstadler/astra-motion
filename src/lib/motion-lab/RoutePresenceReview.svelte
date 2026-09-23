@@ -3,9 +3,15 @@
 	import { routeShared, routeTransitions } from '../motion/routes.js';
 	let {
 		nested = false,
+		sibling = false,
 		duplicate = false,
 		authoredInert = false
-	}: { nested?: boolean; duplicate?: boolean; authoredInert?: boolean } = $props();
+	}: {
+		nested?: boolean;
+		sibling?: boolean;
+		duplicate?: boolean;
+		authoredInert?: boolean;
+	} = $props();
 	let detail = $state(false);
 	const diagnostics: string[] = [];
 	routeTransitions({
@@ -29,6 +35,9 @@
 				Duplicate
 			</div>{/if}
 	</section>
+{:else if sibling}
+	<div data-route-source {@attach routeShared('review-object')}>Plain source</div>
+	<aside out:fade|global={{ duration: 1000 }}>An unrelated sibling retains the whole branch</aside>
 {:else if nested}
 	<section out:fade|global={{ duration: 1000 }}>
 		<div

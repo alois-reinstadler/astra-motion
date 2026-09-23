@@ -1,4 +1,4 @@
-# Astra motion: research prototype
+# Astra Motion: architecture and contracts
 
 **Recommendation: adopt the Svelte/Motion hybrid with the exact dependency pin and
 scoped adapter compatibility fix, without compiler integration.** Automatic layout now uses ordinary
@@ -61,8 +61,18 @@ records; it does not repeatedly query the document.
 
 ### Dependency contract
 
-Only `motion-dom` is a runtime dependency, pinned to **13.2.0**. Its transitive
-`motion-utils` resolves to **13.0.0**. Every import uses the package root.
+The published archive contains one DOM-only engine: `motion-dom@13.2.0`, the
+`framer-motion@13.2.0` DOM entry and `motion-utils@13.0.0`. These are exact build
+dependencies. Source imports use the public Motion package roots; prepack copies
+only the DOM ESM dependency graph and rewrites runtime/type imports to that shared
+packaged engine. Consumers do not install Motion separately or add app overrides.
+
+Upstream ESM boundaries and licenses are preserved. The archive includes version
+and source-hash provenance. Runtime algorithms are unchanged; the declaration
+transformation removes an unsupported Electron-only `webview` member rather than
+inventing a browser global. Strict packed-consumer type checking is a release gate.
+Create MotionValues through Astra’s root or `/values` entry so their engine identity
+matches its adapters. A separately installed Motion package is outside that contract.
 
 **These projection exports are framework-independent internals, not stable documented
 end-user APIs.** Upstream explicitly excludes undocumented APIs from compatibility
@@ -87,8 +97,33 @@ actual element destruction. Native Svelte CSS transitions use its WAAPI machiner
 ## Public API
 
 The package has independent `astra-motion/layout`, `/presence`, `/state`, `/values`, `/policy` and `/routes`
-entry points. The root exports local motion; the routes entry requires SvelteKit.
-Svelte 5.57+ is the tested baseline. Kit is an optional peer for routes.
+entry points, plus `/animate`, `/scroll`, `/in-view` and `/state/lite`.
+Begin with the root entry for local motion; the routes entry requires SvelteKit.
+Svelte 5.57+ within Svelte 5 is the baseline. Kit 2.70.3+ within Kit 2 is an optional
+peer for routes.
+
+### Recommended authoring model
+
+Use `motion.div`, `motion.button`, `motion.input` and the other HTML tag components
+for new markup. They render one real element, forward native attributes/events,
+provide typed `bind:ref`, and include SSR motion styles and a native global transition.
+Input value/checkbox/file, textarea/select value and details open bindings are
+implemented explicitly. `Motion as` remains compatible; its dynamic element does
+not gain those form bindings.
+
+Use `createMotion` for existing native markup, native directives such as `bind:group`,
+parent-scoped styles and headless components. Spread its props, merge authored styles,
+and install its native transition. Each binding owns one simultaneously mounted node.
+Nested tag components establish variant ancestry during SSR; native bindings use
+`parent.child()`. Both preserve the DOM containment contract. For portaled content,
+create an independent native binding rather than inheriting an outside visual parent.
+See the complete [authoring and forwarding contracts](authoring.md).
+
+Root imports are the default; focused entries are optional bundle optimizations.
+The lite binding retains the authoring contract but excludes layout and gestures.
+Svelte owns state, element lifetime, semantics and native form bindings. Astra connects
+those lifetimes and context to Motion’s animation engine; it does not add general CSS
+functionality or replace the headless component’s focus/accessibility ownership.
 
 ### Local presence and rapid reversal
 
@@ -304,7 +339,10 @@ Use numeric application transforms through `layout({ style: { rotate: -8, scale:
 so Motion can compose them with projection. Existing arbitrary CSS transforms are
 rejected with a diagnostic and left intact, not overwritten at registration. Do not
 apply competing CSS transform animations to a registered element. Unregistered
-transformed ancestors, CSS 3D matrices and perspective are not qualified.
+transformed ancestors, CSS 3D matrices and perspective are not qualified. A state
+binding that only animates paint (for example opacity) preserves existing CSS
+transforms. It checks for conflicting ownership if transforms, layout or drag are
+subsequently requested.
 
 Default layout has no initial animation or hidden SSR state. Attachment-only numeric
 styles are applied on the client. For initial transforms and matching SSR markup,
@@ -383,7 +421,11 @@ respond to live OS and configuration changes; nested overrides remain independen
 The narrow legacy `presence` helper checks its policy when a transition is created.
 Native Svelte's retained-outro clock cannot be shortened after it starts: reduction
 settles the visual target immediately while Svelte finishes its original retention.
-External MotionValue springs remain owned by their creator. Route policy stays explicit.
+Caller-created MotionValue springs remain owned by their creator. Routes inherit
+ancestor configuration and observe live policy changes; explicit route options win.
+A `MotionConfig` rendered in a component cannot configure bindings already created
+in that component’s script. Put the provider above their owning component or pass
+explicit options. Tag components beneath that provider inherit it.
 
 ## Compiler spike: possible, not adopted
 
@@ -440,22 +482,36 @@ Custom components forward attachment-bearing props to their native root using Sv
 <Card {...{ [createAttachmentKey()]: layout() }}>Native root, forwarded attachment.</Card>
 ```
 
-The forwarded attachment participates in automatic observation. There is no `<Motion.div>` family
-or compiler guess about a component’s root.
+The forwarded attachment participates in automatic observation. The `motion.tag`
+components cover known native HTML tags; they do not guess an arbitrary component’s
+root. Native attributes/events/ref, styles, snippets and headless lifetime handling
+remain the reusable component’s integration contract.
 
 ## Measurements and test evidence
 
 Read [validation report](research/validation.md) for exact commands, results, coverage
-and unverified cases. Raw benchmark files are alongside it. No production application
-build was run. Isolated in-memory feature bundles measure tree shaking with host
-Svelte/SvelteKit externalized.
+and unverified cases. Raw benchmark files are alongside it. The [production qualification](research/production-qualification.md) records later
+packed application builds and runtime checks. Isolated in-memory feature bundles
+measure tree shaking with host Svelte/SvelteKit externalized; they are not application
+transfer-size measurements.
 
 The original settled-width cache experiment has been superseded by real cached Motion
 projection tests covering nested geometry, interruption, shared replacement and scrolling.
 No custom projection backend is shipped. The original decisive timing test
 shows attachment pre-effects observe old width 100 with already-reordered children;
-component pre sees the earlier state. This mixed snapshot invalidates the blanket
-before-commit assumption.
+component pre can see an earlier state in that fixture. This mixed snapshot invalidates
+a blanket before-commit assumption. [Svelte issue #16648](https://github.com/sveltejs/svelte/issues/16648)
+clarifies that a child pre-effect may run after its parent has updated the DOM;
+async block updates add another ordering boundary.
+
+Use `$effect` with `untrack` and returned cleanup for extra browser setup when
+incidental reads should not become dependencies. Keep targets and live policy tracked.
+Attachments own node-specific work, while SSR/context initialization stays outside
+browser effects. `untrack` does not improve measurement timing: automatic layout
+uses cached observations and explicit transactions take fresh pre-change geometry.
+Do not derive keyed child order from setup callback order either; the registration
+problem discussed in [issue #8547](https://github.com/sveltejs/svelte/issues/8547)
+requires current DOM ordering for connected participants.
 
 ## Known limits and adoption gate
 
@@ -470,9 +526,10 @@ before-commit assumption.
 - **No general CSS-transform coexistence.** The adapter has an explicit ownership
   contract. Transformed unregistered ancestors, custom transform origins, 3D/sticky
   edge cases, overflow clipping, shadows and aspect changes need broader qualification.
-- **SSR inheritance needs explicit child styles.** `createMotion` renders resolved initial
-  targets, but arbitrary parent/child DOM variant inheritance is built after mounting.
-  Give a variant child initial object values or style values for its server appearance.
+- **SSR inheritance needs declared ancestry.** Nested tag components declare it through
+  context; native bindings use `parent.child()`. Arbitrary DOM ancestry discovered
+  after mounting cannot determine server styles. Children must remain inside their
+  declared parent; portaled content needs an independent native binding.
   Native presence targets must be finite; unresolved `auto`/CSS-variable targets and
   repeating exits are diagnosed. Use layout for intrinsic dimensions.
 - **Global coordination costs O(N).** The 500-node compositing cliff improved materially

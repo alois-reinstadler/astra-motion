@@ -184,6 +184,20 @@ for (const [engine, launcher] of Object.entries({ chromium, firefox, webkit })) 
 		await page.getByRole('button', { name: 'Increment' }).click();
 		await expect(page.locator('output')).toHaveText('11');
 		result.browserCases.push({ engine, case: 'MotionValue store binding', passed: true });
+		// The same browser-native assertions can be invoked through Chrome MCP when
+		// local policy permits only the shared browser. They use the packed app only.
+		await ready('/ergonomics');
+		const ergonomics = await page.evaluate(async () => {
+			const { checkErgonomics } = await import('/ergonomics-regressions.js');
+			return checkErgonomics();
+		});
+		result.browserCases.push(...ergonomics.map((entry) => ({ engine, ...entry })));
+		await ready('/handoff');
+		const handoff = await page.evaluate(async () => {
+			const { checkHandoff } = await import('/ergonomics-regressions.js');
+			return checkHandoff();
+		});
+		result.browserCases.push({ engine, ...handoff });
 		assert.deepEqual(errors, [], `${engine} browser errors`);
 		const noJS = await browser.newContext({ javaScriptEnabled: false });
 		const serverPage = await noJS.newPage();

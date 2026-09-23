@@ -16,6 +16,14 @@ export {
 } from './motion.svelte.js';
 export { default as MotionConfig } from './MotionConfig.svelte';
 export { default as Motion, type MotionProps, type MotionTag } from './MotionComponent.svelte';
+export * as motion from './elements/index.js';
+export type {
+	MotionElementProps,
+	MotionInputProps,
+	MotionSelectProps,
+	MotionTextareaProps,
+	MotionDetailsProps
+} from './elements/types.js';
 export type { MotionConfigOptions } from './config.js';
 export type { GestureOptions } from './gestures.js';
 export * from './values.js';
@@ -24,6 +32,9 @@ export { createInView, type InViewOptions } from './in-view.svelte.js';
 export {
 	createAnimate,
 	type AnimateScope,
+	type ScopedAnimationControls,
+	type AnimationSettlement,
+	type AnimationCancellationReason,
 	type ScopedTarget,
 	type ScopedSequence
 } from './animate.js';

@@ -31,59 +31,57 @@ pnpm run prepack
 pnpm pack
 ```
 
-Before installing in another pnpm app, merge the qualified Motion versions into
-that app's `pnpm-workspace.yaml` (keep any existing workspace settings):
+The tarball includes one qualified DOM-only Motion engine. No consumer dependency
+overrides or separate Motion installation are required. Its declarations are checked
+with `skipLibCheck: false`.
 
-```yaml
-overrides:
-  motion: 13.2.0
-  motion-dom: 13.2.0
-  framer-motion: 13.2.0
-  motion-utils: 13.0.0
-```
-
-These overrides apply to the whole app. Check compatibility with any other Motion
-users before adopting them. Astra's direct dependency pins do not constrain Motion's
-transitive ranges: a fresh install can otherwise load two versions of `motion-dom`.
-The adapter and Motion's vanilla APIs need the same engine instance. The consumer
-qualification checks this; `skipLibCheck` cannot fix a split runtime.
-
-Then run this from your app directory, replacing the path with the generated file:
+Run this from your app directory, replacing the path with the generated file:
 
 ```sh
 pnpm add /absolute/path/to/astra-motion/astra-motion-0.0.1.tgz
 ```
 
 Use Svelte 5.57.0 or newer within Svelte 5. SvelteKit 2.70.3 or newer within Kit 2
-is needed only for `astra-motion/routes`. Keep the override versions above while
-evaluating this beta. Strict dependency declaration checking still hits an upstream
-`HTMLWebViewElement` error; the tested consumer uses `skipLibCheck: true`.
+is needed only for `astra-motion/routes`. Get MotionValues and their helpers from
+`astra-motion` or `astra-motion/values`; interoperability with a separately installed
+Motion engine is not part of Astra’s contract.
 The commands above evaluate this repository’s package; a similarly named registry
 package should not be assumed to be this project.
 
 ## Animate a native element
 
-For component authoring, `Motion` bundles the binding, SSR styles and native exit
-transition. Each instance owns one native HTML element and works in keyed lists:
+Prefer native Svelte transitions for simple enter/exit effects. For new HTML needing
+Astra capabilities, start with a tag component such as `motion.section`, `motion.button`
+or `motion.input`.
+Each renders that real HTML element, includes SSR styles and its native exit
+transition, and works directly in keyed lists:
 
 ```svelte
 <script lang="ts">
-	import { Motion } from 'astra-motion';
+	import { motion } from 'astra-motion';
 	let visible = $state(true);
 </script>
 
 <button onclick={() => (visible = !visible)}>Toggle</button>
 {#if visible}
-	<Motion
-		as="section"
+	<motion.section
 		motion={{
 			initial: { opacity: 0, y: 12 },
 			animate: { opacity: 1, y: 0 },
 			exit: { opacity: 0, y: -12 }
-		}}>A native section, including its exit.</Motion
+		}}
 	>
+		A native section, including its exit.
+	</motion.section>
 {/if}
 ```
+
+Tag components accept the corresponding HTML attributes and event callbacks.
+`motion.input` supports value bindings, and `bind:ref` exposes its typed native DOM
+node. Use `createMotion` on existing native markup when you need native directives,
+`bind:group`, parent-scoped element selectors or headless component integration.
+Generic `<Motion as="button">` remains available; its dynamic element does not add
+native value bindings. See the [binding contract](docs/authoring.md#native-bindings-and-forwarding).
 
 ```svelte
 <script lang="ts">
@@ -167,16 +165,17 @@ Runtime entry points: `astra-motion`, `/layout`, `/presence`, `/state/lite`, `/s
 `createInView(() => element, options)` exposes reactive viewport visibility without an
 animation binding. `Presence` defaults to wait sequencing and also supports `mode="sync"`
 and an `onExitComplete` callback after the outgoing branches finish.
-Choose `/state/lite` for state, native presence, variants and MotionValues; use
-`/state` when the same binding also needs layout or interactions. Both use the same
+Begin with the root import. When optimizing a binding’s bundle, choose `/state/lite`
+for state, native presence, variants and MotionValues, or `/state` for layout and interactions. Both use the same
 binding implementation. The lite entry excludes the projection-node engine and
 gesture module (26,333 bytes gzip versus 40,780 bytes for full state in the September 21
 measurement, host Svelte externalized).
 The project-local shadcn components accept `motion={binding}` (and independent
 `overlayMotion={binding}` on dialogs). They import only the binding type, so ordinary
-widgets do not import the animation engine. Use `parent.child(options)` for explicit
-SSR-safe child variant inheritance. The official `motion@13.2.0` vanilla entry powers
-scroll and timelines; React is neither installed nor imported by this runtime.
+widgets do not import the animation engine. Nested tag components inherit variant ancestry during SSR. Use `parent.child(options)`
+for the equivalent native-binding contract. Descendants must remain inside their
+declared parent in the DOM. The packaged Motion 13.2.0 DOM APIs power scroll and
+timelines; React is neither installed nor imported by this runtime.
 
 ## Project scope and release work
 

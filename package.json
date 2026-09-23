@@ -8,7 +8,7 @@
 		"build": "vite build && pnpm run prepack",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
-		"prepack": "svelte-kit sync && svelte-package && publint --pack false --strict",
+		"prepack": "pnpm run check:elements && svelte-kit sync && svelte-package && node scripts/package-motion-engine.mjs && publint --pack false --strict",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:guide": "node scripts/check-motion-guide.mjs",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -21,7 +21,9 @@
 		"test:e2e": "playwright test",
 		"test:motion": "vitest run src/lib/motion-lab src/lib/motion/routes.spec.ts",
 		"test:motion:e2e": "playwright test --config playwright.motion.config.ts",
-		"test:browsers:install": "playwright install"
+		"test:browsers:install": "playwright install",
+		"check:package": "node scripts/prepare-motion-consumer.mjs",
+		"check:elements": "node scripts/generate-motion-elements.mjs --check"
 	},
 	"files": [
 		"dist/index.js",
@@ -117,10 +119,14 @@
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.19.0",
 		"formsnap": "^2.0.1",
+		"framer-motion": "13.2.0",
 		"globals": "^17.6.0",
 		"layerchart": "^2.3.1",
 		"magic-string": "0.30.21",
 		"mode-watcher": "^1.1.0",
+		"motion": "13.2.0",
+		"motion-dom": "13.2.0",
+		"motion-utils": "13.0.0",
 		"paneforge": "^1.0.2",
 		"playwright": "^1.60.0",
 		"prettier": "^3.8.3",
@@ -152,10 +158,6 @@
 		"layout",
 		"presence"
 	],
-	"dependencies": {
-		"motion": "13.2.0",
-		"motion-dom": "13.2.0"
-	},
 	"peerDependenciesMeta": {
 		"@sveltejs/kit": {
 			"optional": true

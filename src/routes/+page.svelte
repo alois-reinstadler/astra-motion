@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { untrack } from 'svelte';
 	import { createAnimate } from '$lib/motion/animate.js';
 	import { stagger, type AnimationPlaybackControlsWithThen } from 'motion';
 	const entrance = createAnimate();
@@ -12,31 +12,33 @@
 	}
 
 	let ready = $state(false);
-	onMount(() => {
-		ready = true;
-		playback = entrance.sequence([
-			[
-				'.hero-line',
-				{ y: ['110%', '0%'], rotate: [5, 0] },
-				{ duration: 1.15, delay: stagger(0.14), ease: [0.16, 1, 0.3, 1] }
-			],
-			[
-				'.hero-playground',
-				{ clipPath: ['inset(48% 0 48% 0)', 'inset(0% 0 0% 0)'], opacity: [0, 1] },
-				{ at: 0.18, duration: 1.2, ease: [0.76, 0, 0.24, 1] }
-			],
-			[
-				'.entry-star',
-				{ rotate: [-150, 0], scale: [0.2, 1] },
-				{ at: 0.3, duration: 1.5, ease: [0.16, 1, 0.3, 1] }
-			],
-			[
-				'.hero-description, .hero-actions, .hero-note, .hero .eyebrow',
-				{ opacity: [0, 1] },
-				{ at: 0.6, duration: 0.7, delay: stagger(0.08) }
-			]
-		]);
-	});
+	$effect(() =>
+		untrack(() => {
+			ready = true;
+			playback = entrance.sequence([
+				[
+					'.hero-line',
+					{ y: ['110%', '0%'], rotate: [5, 0] },
+					{ duration: 1.15, delay: stagger(0.14), ease: [0.16, 1, 0.3, 1] }
+				],
+				[
+					'.hero-playground',
+					{ clipPath: ['inset(48% 0 48% 0)', 'inset(0% 0 0% 0)'], opacity: [0, 1] },
+					{ at: 0.18, duration: 1.2, ease: [0.76, 0, 0.24, 1] }
+				],
+				[
+					'.entry-star',
+					{ rotate: [-150, 0], scale: [0.2, 1] },
+					{ at: 0.3, duration: 1.5, ease: [0.16, 1, 0.3, 1] }
+				],
+				[
+					'.hero-description, .hero-actions, .hero-note, .hero .eyebrow',
+					{ opacity: [0, 1] },
+					{ at: 0.6, duration: 0.7, delay: stagger(0.08) }
+				]
+			]);
+		})
+	);
 	import { resolve } from '$app/paths';
 	import SiteFrame from '$lib/site/SiteFrame.svelte';
 	import CodeText from '$lib/site/CodeText.svelte';

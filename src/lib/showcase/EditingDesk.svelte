@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { untrack } from 'svelte';
 	import { createLayout } from '$lib/motion/layout.js';
 	import { createMotion } from '$lib/motion/lite.svelte.js';
 	import { photos } from './collection.js';
@@ -18,9 +18,11 @@
 	let subtitle = $state('Notes from a planet in motion.');
 	let accent = $state<'moss' | 'coral'>('moss');
 	let ready = $state(false);
-	onMount(() => {
-		ready = true;
-	});
+	$effect(() =>
+		untrack(() => {
+			ready = true;
+		})
+	);
 </script>
 
 <div class="desk" data-testid="editing-desk">

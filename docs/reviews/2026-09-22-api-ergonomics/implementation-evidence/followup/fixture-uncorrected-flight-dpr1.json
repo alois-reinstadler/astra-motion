@@ -1,0 +1,123 @@
+{
+	"environment": {
+		"userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36",
+		"dpr": 1,
+		"viewport": [1440, 1000],
+		"scroll": [0, 0],
+		"clientWidth": 1440,
+		"fonts": "loaded",
+		"images": [
+			{ "src": "http://127.0.0.1:4099/showcase/namib.jpg", "complete": true, "width": 1279 }
+		]
+	},
+	"time": 0.4,
+	"controls": 2,
+	"nodes": {
+		"surface": {
+			"x": 40.375,
+			"y": 325.375,
+			"width": 767.375,
+			"height": 535.515625,
+			"transform": "translate(68.0625px, 18.4844px) scale(1.21564, 1.07415)",
+			"computed": "matrix(1.21564, 0, 0, 1.07415, 68.0625, 18.4844)",
+			"scaleX": 1.21564,
+			"scaleY": 1.07415,
+			"cssWidth": "631.25px",
+			"cssHeight": "498.547px",
+			"font": "16px / 24px \"Instrument Sans Variable\", sans-serif",
+			"treeScale": { "x": 1, "y": 1 },
+			"layout": {
+				"animationId": 7,
+				"measuredBox": {
+					"x": { "min": 40.375, "max": 671.625 },
+					"y": { "min": 325.375, "max": 823.921875 }
+				},
+				"layoutBox": {
+					"x": { "min": 40.375, "max": 671.625 },
+					"y": { "min": 325.375, "max": 823.921875 }
+				},
+				"latestValues": {},
+				"source": 11
+			},
+			"target": {
+				"x": { "min": 40.375, "max": 807.75 },
+				"y": { "min": 325.37499999999994, "max": 860.890625 }
+			},
+			"active": true
+		},
+		"copy": {
+			"x": 68.79066467285156,
+			"y": 350.48333740234375,
+			"width": 710.5436401367188,
+			"height": 157.27947998046875,
+			"transform": "",
+			"computed": "none",
+			"scaleX": 1.21564,
+			"scaleY": 1.07415,
+			"cssWidth": "584.5px",
+			"cssHeight": "146.422px",
+			"font": "16px / 24px \"Instrument Sans Variable\", sans-serif",
+			"active": false
+		},
+		"image": {
+			"x": 68.79066467285156,
+			"y": 527.5003662109375,
+			"width": 386.34674072265625,
+			"height": 227.586181640625,
+			"transform": "",
+			"computed": "none",
+			"scaleX": 1.21564,
+			"scaleY": 1.07415,
+			"cssWidth": "317.812px",
+			"cssHeight": "211.875px",
+			"font": "16px / 24px \"Instrument Sans Variable\", sans-serif",
+			"active": false
+		},
+		"accordion": {
+			"x": 63.750022888183594,
+			"y": 780.765625,
+			"width": 720.6249389648438,
+			"height": 56.75006103515625,
+			"transform": "translate(0px, 3.57251px) scale(0.82261, 0.930966) scale(1.23289, 1)",
+			"computed": "matrix(1.01419, 0, 0, 0.930966, 0, 3.57251)",
+			"scaleX": 1.2328899316,
+			"scaleY": 0.9999971288999999,
+			"cssWidth": "584.5px",
+			"cssHeight": "56.75px",
+			"font": "16px / 24px \"Instrument Sans Variable\", sans-serif",
+			"treeScale": { "x": 1.2156435643564356, "y": 1.0741530071771084 },
+			"layout": {
+				"animationId": 7,
+				"measuredBox": {
+					"x": { "min": 63.75, "max": 648.25 },
+					"y": { "min": 743.796875, "max": 800.546875 }
+				},
+				"layoutBox": {
+					"x": { "min": 63.75, "max": 648.25 },
+					"y": { "min": 743.796875, "max": 800.546875 }
+				},
+				"latestValues": {},
+				"source": 12
+			},
+			"target": {
+				"x": { "min": 63.75, "max": 784.375 },
+				"y": { "min": 780.765625, "max": 837.515625 }
+			},
+			"active": true
+		},
+		"label": {
+			"x": 83.93861389160156,
+			"y": 797.140625,
+			"width": 680.247802734375,
+			"height": 24,
+			"transform": "",
+			"computed": "none",
+			"scaleX": 1.2328899316,
+			"scaleY": 0.9999971288999999,
+			"cssWidth": "551.75px",
+			"cssHeight": "24px",
+			"font": "16px / 24px system-ui, sans-serif",
+			"active": false
+		}
+	}
+}

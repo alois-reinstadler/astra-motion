@@ -36,6 +36,7 @@ writeFileSync('/tmp/astra-motion-production-current.json', JSON.stringify(info, 
 run(['install'], consumer);
 console.log(JSON.stringify({ dependencies: verifyConsumerDependencies(consumer) }, null, 2));
 run(['run', 'check'], consumer);
+run(['run', 'check:declarations'], consumer);
 run(['run', 'build'], consumer);
 stampConsumer(info);
 console.log(JSON.stringify(info, null, 2));

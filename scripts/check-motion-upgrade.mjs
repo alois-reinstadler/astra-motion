@@ -46,7 +46,7 @@ const packages = {
 };
 for (const [name, version] of Object.entries(reviewed.pins)) {
 	assert(
-		project.dependencies?.[name] === version,
+		project.devDependencies?.[name] === version,
 		`${name} must be an exact direct pin ${version}; review before changing it`
 	);
 	assert(

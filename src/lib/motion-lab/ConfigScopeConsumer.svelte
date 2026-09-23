@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { untrack } from 'svelte';
 	import { createMotion } from '../motion/motion.svelte.js';
 	import { createLayout } from '../motion/layout.js';
 	import { observeMotionConfig, readMotionConfig } from '../motion/config.js';
@@ -12,7 +12,7 @@
 	});
 	const layout = createLayout();
 	const transition = motion.transition;
-	onMount(() => observeMotionConfig(config, () => report(name)));
+	$effect(() => untrack(() => observeMotionConfig(config, () => report(name))));
 </script>
 
 <div {...motion.props} data-testid={`${name}-motion`} transition:transition>

@@ -1,0 +1,111 @@
+{
+	"environment": {
+		"userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36",
+		"dpr": 1,
+		"viewport": [1440, 1000],
+		"scroll": [0, 1307],
+		"clientWidth": 1425,
+		"fonts": "loaded",
+		"images": [{ "src": "http://127.0.0.1:4099/object.svg", "complete": true, "width": 180 }]
+	},
+	"time": 0.075,
+	"controls": 43,
+	"nodes": {
+		"surface": {
+			"x": 621.671875,
+			"y": 1762.0014038085938,
+			"width": 636.828125,
+			"height": 88.95501708984375,
+			"transform": "translate(0px, -4.25545px) scale(1, 0.792914)",
+			"computed": "matrix(1, 0, 0, 0.792914, 0, -4.25545)",
+			"scaleX": 1,
+			"scaleY": 0.792914,
+			"cssWidth": "636.828px",
+			"cssHeight": "112.188px",
+			"font": "16px / 24px \"Instrument Sans Variable\", sans-serif",
+			"treeScale": { "x": 1, "y": 1 },
+			"layout": {
+				"animationId": 4,
+				"measuredBox": {
+					"x": { "min": 621.671875, "max": 1258.5 },
+					"y": { "min": 1754.640625, "max": 1866.828125 }
+				},
+				"layoutBox": {
+					"x": { "min": 621.671875, "max": 1258.5 },
+					"y": { "min": 1754.640625, "max": 1866.828125 }
+				},
+				"latestValues": {},
+				"source": 2
+			},
+			"target": {
+				"x": { "min": 621.671875, "max": 1258.5 },
+				"y": { "min": 1762.0014105464918, "max": 1850.956431165377 }
+			},
+			"active": true
+		},
+		"label": {
+			"x": 643.671875,
+			"y": 1784.0014038085938,
+			"width": 592.828125,
+			"height": 24,
+			"transform": "translate(0px, 8.87982px) scale(1, 1.26117) scale(1, 1)",
+			"computed": "matrix(1, 0, 0, 1.26117, 0, 8.87982)",
+			"scaleX": 1,
+			"scaleY": 0.9999993493799999,
+			"cssWidth": "592.828px",
+			"cssHeight": "24px",
+			"font": "700 16px / 24px \"Instrument Sans Variable\", sans-serif",
+			"treeScale": { "x": 1, "y": 0.7929138328145747 },
+			"layout": {
+				"animationId": 4,
+				"measuredBox": {
+					"x": { "min": 643.671875, "max": 1236.5 },
+					"y": { "min": 1776.640625, "max": 1800.640625 }
+				},
+				"layoutBox": {
+					"x": { "min": 643.671875, "max": 1236.5 },
+					"y": { "min": 1776.640625, "max": 1800.640625 }
+				},
+				"latestValues": {},
+				"source": 3
+			},
+			"target": {
+				"x": { "min": 643.671875, "max": 1236.5 },
+				"y": { "min": 1784.0014105464918, "max": 1808.0014105464918 }
+			},
+			"active": true
+		},
+		"body": {
+			"x": 643.671875,
+			"y": 1808.0014038085938,
+			"width": 592.828125,
+			"height": 44.1875,
+			"transform": "translate(0px, 17.7841px) scale(1, 1.26117) scale(1, 1)",
+			"computed": "matrix(1, 0, 0, 1.26117, 0, 17.7841)",
+			"scaleX": 1,
+			"scaleY": 0.9999993493799999,
+			"cssWidth": "592.828px",
+			"cssHeight": "44.1875px",
+			"font": "13px / 22.1px \"Instrument Sans Variable\", sans-serif",
+			"treeScale": { "x": 1, "y": 0.7929138328145747 },
+			"layout": {
+				"animationId": 4,
+				"measuredBox": {
+					"x": { "min": 643.671875, "max": 1236.5 },
+					"y": { "min": 1800.640625, "max": 1844.828125 }
+				},
+				"layoutBox": {
+					"x": { "min": 643.671875, "max": 1236.5 },
+					"y": { "min": 1800.640625, "max": 1844.828125 }
+				},
+				"latestValues": {},
+				"source": 43
+			},
+			"target": {
+				"x": { "min": 643.671875, "max": 1236.5 },
+				"y": { "min": 1808.0014105464918, "max": 1852.1889105464918 }
+			},
+			"active": true
+		}
+	}
+}

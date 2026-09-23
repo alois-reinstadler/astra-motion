@@ -1,0 +1,72 @@
+{
+	"surface": {
+		"x": 40.375,
+		"y": 325.375,
+		"width": 903.5,
+		"height": 572.484375,
+		"transform": "",
+		"computed": "none",
+		"scaleX": 1,
+		"scaleY": 1,
+		"cssWidth": "903.5px",
+		"cssHeight": "572.484px",
+		"font": "16px / 24px \"Instrument Sans Variable\", sans-serif",
+		"active": false
+	},
+	"copy": {
+		"x": 63.75,
+		"y": 348.75,
+		"width": 856.75,
+		"height": 121.671875,
+		"transform": "",
+		"computed": "none",
+		"scaleX": 1,
+		"scaleY": 1,
+		"cssWidth": "856.75px",
+		"cssHeight": "121.672px",
+		"font": "16px / 24px \"Instrument Sans Variable\", sans-serif",
+		"active": false
+	},
+	"image": {
+		"x": 63.75,
+		"y": 488.796875,
+		"width": 465.84375,
+		"height": 310.5625,
+		"transform": "",
+		"computed": "none",
+		"scaleX": 1,
+		"scaleY": 1,
+		"cssWidth": "465.844px",
+		"cssHeight": "310.562px",
+		"font": "16px / 24px \"Instrument Sans Variable\", sans-serif",
+		"active": false
+	},
+	"accordion": {
+		"x": 63.75,
+		"y": 817.734375,
+		"width": 856.75,
+		"height": 56.75,
+		"transform": "",
+		"computed": "none",
+		"scaleX": 1,
+		"scaleY": 1,
+		"cssWidth": "856.75px",
+		"cssHeight": "56.75px",
+		"font": "16px / 24px \"Instrument Sans Variable\", sans-serif",
+		"active": false
+	},
+	"label": {
+		"x": 80.125,
+		"y": 834.109375,
+		"width": 824,
+		"height": 24,
+		"transform": "",
+		"computed": "none",
+		"scaleX": 1,
+		"scaleY": 1,
+		"cssWidth": "824px",
+		"cssHeight": "24px",
+		"font": "16px / 24px system-ui, sans-serif",
+		"active": false
+	}
+}

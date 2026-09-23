@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { untrack } from 'svelte';
 	import { resolve } from '$app/paths';
 	import SiteFrame from '$lib/site/SiteFrame.svelte';
 	import MotionConfig from '$lib/motion/MotionConfig.svelte';
@@ -17,9 +17,11 @@
 	import { photos } from '$lib/showcase/collection.js';
 	let reduced = $state(false);
 	let ready = $state(false);
-	onMount(() => {
-		ready = true;
-	});
+	$effect(() =>
+		untrack(() => {
+			ready = true;
+		})
+	);
 	const collectionFile = { name: 'collection.ts', source: collectionSource };
 	const scenes = [
 		{ id: 'contact-sheet', title: 'Collect' },

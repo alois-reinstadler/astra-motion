@@ -65,6 +65,8 @@ describe('registered Motion projection and native Svelte presence', () => {
 		const first = node.getBoundingClientRect().x;
 		element('align').click();
 		await tick();
+		// Automatic projection commits after MutationObserver delivery, beyond Svelte's tick.
+		await frame();
 		const start = node.getBoundingClientRect().x;
 		expect(Math.abs(start - first), debugProjection(node)).toBeLessThan(25);
 		const animation = visualElementStore.get(node)?.projection?.currentAnimation;
@@ -77,6 +79,7 @@ describe('registered Motion projection and native Svelte presence', () => {
 		expect(middle).toBeGreaterThan(first + 5);
 		element('align').click();
 		await tick();
+		await frame();
 		const reversed = node.getBoundingClientRect().x;
 		expect(Math.abs(reversed - middle)).toBeLessThan(55);
 		await wait(850);

@@ -1,0 +1,126 @@
+{
+	"environment": {
+		"userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36",
+		"dpr": 1,
+		"viewport": [1440, 1000],
+		"scroll": [0, 816],
+		"clientWidth": 1425,
+		"fonts": "loaded",
+		"images": [
+			{ "src": "http://127.0.0.1:4099/showcase/namib.jpg", "complete": true, "width": 1279 },
+			{ "src": "http://127.0.0.1:4099/showcase/caicos.jpg", "complete": true, "width": 1280 },
+			{ "src": "http://127.0.0.1:4099/showcase/urmia.jpg", "complete": true, "width": 1279 },
+			{ "src": "http://127.0.0.1:4099/showcase/namib.jpg", "complete": true, "width": 1279 },
+			{ "src": "http://127.0.0.1:4099/showcase/namib.jpg", "complete": true, "width": 1279 },
+			{ "src": "http://127.0.0.1:4099/showcase/namib.jpg", "complete": true, "width": 1279 },
+			{ "src": "http://127.0.0.1:4099/showcase/urmia.jpg", "complete": true, "width": 1279 },
+			{ "src": "http://127.0.0.1:4099/showcase/caicos.jpg", "complete": true, "width": 1280 },
+			{ "src": "http://127.0.0.1:4099/showcase/namib.jpg", "complete": true, "width": 1279 },
+			{ "src": "http://127.0.0.1:4099/showcase/urmia.jpg", "complete": true, "width": 1279 },
+			{ "src": "http://127.0.0.1:4099/showcase/caicos.jpg", "complete": true, "width": 1280 },
+			{ "src": "http://127.0.0.1:4099/showcase/lena.jpg", "complete": true, "width": 1280 },
+			{ "src": "http://127.0.0.1:4099/showcase/namib.jpg", "complete": true, "width": 1279 },
+			{ "src": "http://127.0.0.1:4099/showcase/caicos.jpg", "complete": true, "width": 1280 }
+		]
+	},
+	"time": 0.12,
+	"controls": 30,
+	"nodes": {
+		"frame": {
+			"x": 132.5,
+			"y": 946.3639373779297,
+			"width": 660.5424194335938,
+			"height": 440.361572265625,
+			"transform": "translate(-19.2288px, -12.2365px) scale(0.944982, 0.944982)",
+			"computed": "matrix(0.944982, 0, 0, 0.944982, -19.2288, -12.2365)",
+			"scaleX": 0.944982,
+			"scaleY": 0.944982,
+			"cssWidth": "699px",
+			"cssHeight": "466px",
+			"font": "16px / 24px \"Instrument Sans Variable\", sans-serif",
+			"treeScale": { "x": 1, "y": 1 },
+			"layout": {
+				"animationId": 3,
+				"measuredBox": {
+					"x": { "min": 132.5, "max": 831.5 },
+					"y": { "min": 945.78125, "max": 1411.78125 }
+				},
+				"layoutBox": {
+					"x": { "min": 132.5, "max": 831.5 },
+					"y": { "min": 945.78125, "max": 1411.78125 }
+				},
+				"latestValues": {},
+				"source": 52
+			},
+			"target": {
+				"x": { "min": 132.5, "max": 793.042394629787 },
+				"y": { "min": 946.3639409904578, "max": 1386.7255374103158 }
+			},
+			"active": true
+		},
+		"photo": {
+			"x": 132.5,
+			"y": 946.3639373779297,
+			"width": 660.5424194335938,
+			"height": 440.361572265625,
+			"transform": "scale(1.05822, 1.05822) scale(0.944982, 0.944982)",
+			"computed": "matrix(1, 0, 0, 1, 0, 0)",
+			"scaleX": 0.944982,
+			"scaleY": 0.944982,
+			"cssWidth": "699px",
+			"cssHeight": "466px",
+			"font": "16px / 24px \"Instrument Sans Variable\", sans-serif",
+			"treeScale": { "x": 0.9449819665662189, "y": 0.944981966566219 },
+			"layout": {
+				"animationId": 3,
+				"measuredBox": {
+					"x": { "min": 132.5, "max": 831.5 },
+					"y": { "min": 945.78125, "max": 1411.78125 }
+				},
+				"layoutBox": {
+					"x": { "min": 132.5, "max": 831.5 },
+					"y": { "min": 945.78125, "max": 1411.78125 }
+				},
+				"latestValues": {},
+				"source": 53
+			},
+			"target": {
+				"x": { "min": 132.5, "max": 793.042394629787 },
+				"y": { "min": 946.3639409904578, "max": 1386.7255374103158 }
+			},
+			"active": true
+		},
+		"text": {
+			"x": 653.427490234375,
+			"y": 1098.8387145996094,
+			"width": 424.890625,
+			"height": 44.9375,
+			"transform": "translate(-214.166px, 99.0575px)",
+			"computed": "matrix(1, 0, 0, 1, -214.166, 99.0575)",
+			"scaleX": 1,
+			"scaleY": 1,
+			"cssWidth": "424.891px",
+			"cssHeight": "44.9375px",
+			"font": "42px / 44.94px Georgia, serif",
+			"treeScale": { "x": 1, "y": 1 },
+			"layout": {
+				"animationId": 3,
+				"measuredBox": {
+					"x": { "min": 867.59375, "max": 1292.484375 },
+					"y": { "min": 999.78125, "max": 1044.71875 }
+				},
+				"layoutBox": {
+					"x": { "min": 867.59375, "max": 1292.484375 },
+					"y": { "min": 999.78125, "max": 1044.71875 }
+				},
+				"latestValues": {},
+				"source": 55
+			},
+			"target": {
+				"x": { "min": 653.4274973665913, "max": 1078.3181223665913 },
+				"y": { "min": 1098.8387183778211, "max": 1143.7762183778211 }
+			},
+			"active": true
+		}
+	}
+}

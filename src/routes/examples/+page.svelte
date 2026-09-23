@@ -1,9 +1,11 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { untrack } from 'svelte';
 	let ready = $state(false);
-	onMount(() => {
-		ready = true;
-	});
+	$effect(() =>
+		untrack(() => {
+			ready = true;
+		})
+	);
 	import { resolve } from '$app/paths';
 	import SiteFrame from '$lib/site/SiteFrame.svelte';
 	import DocExample from '$lib/site/DocExample.svelte';

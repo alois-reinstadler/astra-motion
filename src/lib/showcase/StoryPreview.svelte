@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onDestroy, onMount, tick } from 'svelte';
+	import { onDestroy, untrack, tick } from 'svelte';
 	import { stagger, type AnimationPlaybackControlsWithThen } from 'motion';
 	import { createScroll } from '../motion/scroll.svelte.js';
 	import { createAnimate } from '../motion/animate.js';
@@ -95,9 +95,11 @@
 	let playback: AnimationPlaybackControlsWithThen | undefined;
 	let revision = 0;
 	let hydrated = $state(false);
-	onMount(() => {
-		hydrated = true;
-	});
+	$effect(() =>
+		untrack(() => {
+			hydrated = true;
+		})
+	);
 	function settleTransportForPolicy() {
 		// A policy change stops/replaces playback; Motion does not resolve a
 		// stopped control's completion promise. Keep the transport state truthful.

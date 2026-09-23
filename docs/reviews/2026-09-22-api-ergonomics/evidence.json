@@ -1,0 +1,761 @@
+{
+	"reviewedCommit": "ab801d65283e55b4cd34d509960805995cd81b0f",
+	"reviewedDate": "2026-09-22",
+	"archiveSha256": "869468587f075912c2c231a9c7b781d6cc8842958637d597763b036cf5916a17",
+	"browser": "Chrome 152.0.7977.82",
+	"consumerVersions": {
+		"astra-motion": "0.0.1",
+		"svelte": "5.57.0",
+		"kit": "2.70.3",
+		"bits-ui": "2.19.0",
+		"vite": "8.2.2",
+		"typescript": "6.0.3",
+		"svelte-check": "4.7.6",
+		"pnpm": "11.24.0"
+	},
+	"serverTests": {
+		"files": 22,
+		"passed": 97
+	},
+	"observations": {
+		"reactivity-default": {
+			"before": {
+				"object": "none",
+				"getter": "none",
+				"explicit": "none",
+				"component-proxy": "none"
+			},
+			"nested": {
+				"object": "none",
+				"getter": "none",
+				"explicit": "matrix(1, 0, 0, 1, 80, 0)",
+				"component-proxy": "none"
+			},
+			"replaced": {
+				"object": "matrix(1, 0, 0, 1, 160, 0)",
+				"getter": "matrix(1, 0, 0, 1, 160, 0)",
+				"explicit": "matrix(1, 0, 0, 1, 160, 0)",
+				"component-proxy": "matrix(1, 0, 0, 1, 160, 0)"
+			}
+		},
+		"core-qualified": {
+			"reactivity": {
+				"before": {
+					"object": {
+						"x": 0,
+						"opacity": 1,
+						"connected": true
+					},
+					"getter": {
+						"x": 0,
+						"opacity": 1,
+						"connected": true
+					},
+					"explicit": {
+						"x": 0,
+						"opacity": 1,
+						"connected": true
+					},
+					"component-proxy": {
+						"x": 0,
+						"opacity": 1,
+						"connected": true
+					}
+				},
+				"nested": {
+					"object": {
+						"x": 0,
+						"opacity": 1,
+						"connected": true
+					},
+					"getter": {
+						"x": 0,
+						"opacity": 1,
+						"connected": true
+					},
+					"explicit": {
+						"x": 80,
+						"opacity": 1,
+						"connected": true
+					},
+					"component-proxy": {
+						"x": 0,
+						"opacity": 1,
+						"connected": true
+					}
+				},
+				"replace": {
+					"object": {
+						"x": 160,
+						"opacity": 1,
+						"connected": true
+					},
+					"getter": {
+						"x": 160,
+						"opacity": 1,
+						"connected": true
+					},
+					"explicit": {
+						"x": 160,
+						"opacity": 1,
+						"connected": true
+					},
+					"component-proxy": {
+						"x": 160,
+						"opacity": 1,
+						"connected": true
+					}
+				}
+			},
+			"timeline": {
+				"beforeReduce": {
+					"x": 16.2149,
+					"opacity": 1,
+					"connected": true
+				},
+				"afterReduce": {
+					"x": 34.1865,
+					"opacity": 1,
+					"connected": true
+				},
+				"status": "running",
+				"afterStop": {
+					"pose": {
+						"x": 35.5574,
+						"opacity": 1,
+						"connected": true
+					},
+					"status": "running"
+				}
+			},
+			"ownership": "Error: Astra motion: timeline cannot animate an element owned by state. Use the state binding's animate() for motion elements, or animate a separate child.",
+			"scroll": {
+				"beforeReduce": {
+					"x": 41.0628,
+					"opacity": 1,
+					"connected": true
+				},
+				"afterReduce": {
+					"x": 100,
+					"opacity": 1,
+					"connected": true
+				}
+			}
+		},
+		"exits-qualified": {
+			"beforeReduce": {
+				"motion": {
+					"connected": true,
+					"opacity": 0.763964,
+					"x": 14.1622,
+					"inert": true
+				},
+				"fade": {
+					"connected": true,
+					"opacity": 0.614106,
+					"x": 0,
+					"inert": true
+				}
+			},
+			"afterReduce": {
+				"motion": {
+					"connected": true,
+					"opacity": 0,
+					"x": 60,
+					"inert": true
+				},
+				"fade": {
+					"connected": true,
+					"opacity": 0.42186,
+					"x": 0,
+					"inert": true
+				}
+			},
+			"afterClock": {
+				"motion": false,
+				"fade": false
+			},
+			"listExiting": {
+				"same": true,
+				"position": "absolute"
+			},
+			"listUndo": {
+				"same": true,
+				"position": "",
+				"ids": ["item-3", "item-2", "item-1"]
+			},
+			"listAdded": ["item-3", "item-2", "item-1", "item-4"],
+			"waitLatest": "Chapter 3",
+			"variantRemoved": false,
+			"variantRestored": true
+		},
+		"layout-teardown": {
+			"tab": "Details",
+			"card": {
+				"samples": [
+					{
+						"w": 204.88711547851562,
+						"scale": 0.9999981520000001
+					},
+					{
+						"w": 211.91259765625,
+						"scale": 1.00000170192
+					},
+					{
+						"w": 229.9613037109375,
+						"scale": 1.0000030313000001
+					},
+					{
+						"w": 253.51278686523438,
+						"scale": 1.0000029968000002
+					},
+					{
+						"w": 277.40740966796875,
+						"scale": 1.00000296375
+					},
+					{
+						"w": 299.3668212890625,
+						"scale": 1.00000199871
+					},
+					{
+						"w": 317.3396301269531,
+						"scale": 0.9999996342999998
+					},
+					{
+						"w": 333.29754638671875,
+						"scale": 0.9999963794400001
+					},
+					{
+						"w": 346.1497802734375,
+						"scale": 1.0000035892
+					},
+					{
+						"w": 355.7122802734375,
+						"scale": 0.99999607968
+					},
+					{
+						"w": 363.5823974609375,
+						"scale": 1.00000291664
+					},
+					{
+						"w": 369.2120666503906,
+						"scale": 0.9999976744999999
+					},
+					{
+						"w": 373.68414306640625,
+						"scale": 1.00000428496
+					},
+					{
+						"w": 376.7778625488281,
+						"scale": 1.00000145064
+					},
+					{
+						"w": 379.15728759765625,
+						"scale": 0.9999979575299999
+					},
+					{
+						"w": 380.8330993652344,
+						"scale": 1.00000438496
+					},
+					{
+						"w": 381.9917907714844,
+						"scale": 1.0000024902
+					},
+					{
+						"w": 382.7389221191406,
+						"scale": 0.9999951956400001
+					},
+					{
+						"w": 383.2718505859375,
+						"scale": 1.0000003976
+					},
+					{
+						"w": 383.5994567871094,
+						"scale": 0.9999959152799999
+					}
+				],
+				"end": 384
+			},
+			"variantRemoved": true,
+			"stoppedTimelineStatus": "running",
+			"teardown": {
+				"connected": false,
+				"animations": 0,
+				"status": "running"
+			}
+		},
+		"dialog-final": {
+			"removed": true,
+			"focus": "dialog-open"
+		},
+		"hover": {
+			"transform": "matrix(1.05, 0, 0, 1.05, 0, 0)"
+		},
+		"press": {
+			"down": "matrix(0.953058, 0, 0, 0.953058, 0, 0)",
+			"up": "none"
+		},
+		"drag": {
+			"dragged": 0,
+			"reactiveX": 30
+		},
+		"drag-second": {
+			"x": 40
+		},
+		"production-core": {
+			"nested": {
+				"object": "none",
+				"getter": "none",
+				"explicit": "matrix(1, 0, 0, 1, 80, 0)",
+				"component-proxy": "none"
+			},
+			"timeline": {
+				"x": 35.0719,
+				"status": "running"
+			}
+		},
+		"route-production": {
+			"called": 1,
+			"ready": true,
+			"finished": true,
+			"error": null,
+			"url": "/detail",
+			"name": "",
+			"running": 5
+		},
+		"ssr": {
+			"same-provider": "opacity:0.2",
+			"inside-provider": ";opacity:1",
+			"initial-false": ";opacity:0.7",
+			"variant-child": "opacity:1;transform:none",
+			"implicit-child": ";"
+		},
+		"mistakes-qualified": {
+			"member": true,
+			"styleBefore": "opacity:0.2",
+			"styleAfter": "padding:24px",
+			"repeat": "Error: Astra motion: create a separate binding for each native element.",
+			"cssConsole": "Uncaught Error: Astra motion: move CSS transform/translate/rotate/scale into the binding style/targets (x, y, rotate, scale), or put it on an outer element. Motion owns this element\u2019s transform.",
+			"cssBoundaryCaught": false
+		},
+		"final-layout-variants": {
+			"projection": [
+				{
+					"textScale": 0.9999984375,
+					"imageScaleX": 0.9999984375,
+					"imageScaleY": 0.9999965018000001,
+					"aspect": 1.7777777777777777
+				},
+				{
+					"textScale": 1.0000008485999998,
+					"imageScaleX": 1.0000008485999998,
+					"imageScaleY": 0.999999339,
+					"aspect": 1.7777777777777777
+				},
+				{
+					"textScale": 1.0000005514900001,
+					"imageScaleX": 1.0000005514900001,
+					"imageScaleY": 1.00000196883,
+					"aspect": 1.777777608235677
+				},
+				{
+					"textScale": 1.00000118559,
+					"imageScaleX": 1.00000118559,
+					"imageScaleY": 1.0000027740000001,
+					"aspect": 1.7777777777777777
+				},
+				{
+					"textScale": 0.99999829723,
+					"imageScaleX": 0.99999829723,
+					"imageScaleY": 1.0000004256,
+					"aspect": 1.777777608235677
+				},
+				{
+					"textScale": 0.9999997413999999,
+					"imageScaleX": 0.9999997413999999,
+					"imageScaleY": 1.0000032371999998,
+					"aspect": 1.777777608235677
+				},
+				{
+					"textScale": 1.00000001278,
+					"imageScaleX": 1.00000001278,
+					"imageScaleY": 1.00000132044,
+					"aspect": 1.7777779473198785
+				},
+				{
+					"textScale": 1.0000019835,
+					"imageScaleX": 1.0000019835,
+					"imageScaleY": 1.00000235016,
+					"aspect": 1.7777777777777777
+				},
+				{
+					"textScale": 1.0000042460799998,
+					"imageScaleX": 1.0000042460799998,
+					"imageScaleY": 1.00000315385,
+					"aspect": 1.7777779473198785
+				},
+				{
+					"textScale": 0.9999962652400001,
+					"imageScaleX": 0.9999962652400001,
+					"imageScaleY": 0.9999981127199999,
+					"aspect": 1.7777777777777777
+				},
+				{
+					"textScale": 0.9999991392,
+					"imageScaleX": 0.9999991392,
+					"imageScaleY": 1.00000258499,
+					"aspect": 1.7777777777777777
+				},
+				{
+					"textScale": 0.99999760446,
+					"imageScaleX": 0.99999760446,
+					"imageScaleY": 0.99999721914,
+					"aspect": 1.777777608235677
+				},
+				{
+					"textScale": 1.00000354269,
+					"imageScaleX": 1.00000354269,
+					"imageScaleY": 1.00000335292,
+					"aspect": 1.777777608235677
+				},
+				{
+					"textScale": 1.00000417815,
+					"imageScaleX": 1.00000417815,
+					"imageScaleY": 1.0000016733300001,
+					"aspect": 1.777777608235677
+				},
+				{
+					"textScale": 1.0000030448,
+					"imageScaleX": 1.0000030448,
+					"imageScaleY": 1.0000014415199998,
+					"aspect": 1.777777608235677
+				},
+				{
+					"textScale": 0.9999964201499999,
+					"imageScaleX": 0.9999964201499999,
+					"imageScaleY": 1.00000504755,
+					"aspect": 1.7777777777777777
+				},
+				{
+					"textScale": 0.99999796522,
+					"imageScaleX": 0.99999796522,
+					"imageScaleY": 1.000002186,
+					"aspect": 1.7777777777777777
+				},
+				{
+					"textScale": 1.00000233299,
+					"imageScaleX": 1.00000233299,
+					"imageScaleY": 0.99999539904,
+					"aspect": 1.7777777777777777
+				}
+			],
+			"childRetained": true,
+			"childReused": true,
+			"childrenRemoved": true,
+			"scrollReduced": 100,
+			"scrollResumed": 45.8937
+		},
+		"final-route-teardown": {
+			"route": "/detail",
+			"oldScopePresent": false,
+			"oldScrollPresent": false,
+			"running": 0
+		},
+		"route-shared-probe": {
+			"nodes": [
+				{
+					"id": "route-card",
+					"inert": false,
+					"html": "<div id=\"route-card\" style=\"\">Shared route card</div>",
+					"parents": [
+						{
+							"tag": "DIV",
+							"inert": false
+						},
+						{
+							"tag": "DIV",
+							"inert": false
+						},
+						{
+							"tag": "BODY",
+							"inert": false
+						},
+						{
+							"tag": "HTML",
+							"inert": false
+						}
+					]
+				},
+				{
+					"id": "route-detail",
+					"inert": false,
+					"html": "<article id=\"route-detail\" style=\"padding:40px;background:#def\">Shared route card</article>",
+					"parents": [
+						{
+							"tag": "ARTICLE",
+							"inert": false
+						},
+						{
+							"tag": "DIV",
+							"inert": false
+						},
+						{
+							"tag": "BODY",
+							"inert": false
+						},
+						{
+							"tag": "HTML",
+							"inert": false
+						}
+					]
+				}
+			],
+			"pseudos": [
+				"::view-transition-group(root)",
+				"::view-transition-new(root)",
+				"::view-transition-new(root)",
+				"::view-transition-old(root)",
+				"::view-transition-old(root)",
+				"::view-transition-old(astra_005b00220022002c0022007200650076006900650077002d00630061007200640022005d)",
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null
+			],
+			"finished": true
+		},
+		"route-control-plain": {
+			"nodes": [
+				{
+					"id": "route-detail",
+					"name": "astra_005b00220022002c0022007200650076006900650077002d00630061007200640022005d",
+					"inert": false
+				}
+			],
+			"pseudos": [
+				"::view-transition-group(root)",
+				"::view-transition-group(astra_005b00220022002c0022007200650076006900650077002d00630061007200640022005d)",
+				"::view-transition-new(root)",
+				"::view-transition-new(root)",
+				"::view-transition-old(root)",
+				"::view-transition-old(root)",
+				"::view-transition-new(astra_005b00220022002c0022007200650076006900650077002d00630061007200640022005d)",
+				"::view-transition-new(astra_005b00220022002c0022007200650076006900650077002d00630061007200640022005d)",
+				"::view-transition-old(astra_005b00220022002c0022007200650076006900650077002d00630061007200640022005d)",
+				"::view-transition-old(astra_005b00220022002c0022007200650076006900650077002d00630061007200640022005d)"
+			],
+			"finished": true,
+			"consoleWarnings": []
+		},
+		"route-control-exit": {
+			"nodes": [
+				{
+					"id": "route-card",
+					"name": "",
+					"inert": false
+				},
+				{
+					"id": "route-detail",
+					"name": "",
+					"inert": false
+				}
+			],
+			"pseudos": [
+				"::view-transition-group(root)",
+				"::view-transition-new(root)",
+				"::view-transition-new(root)",
+				"::view-transition-old(root)",
+				"::view-transition-old(root)",
+				"::view-transition-old(astra_005b00220022002c0022007200650076006900650077002d00630061007200640022005d)"
+			],
+			"finished": true,
+			"consoleWarning": "Duplicate routeShared ID in one scope; this pair was skipped."
+		},
+		"route-control-marked": {
+			"nodes": [
+				{
+					"id": "route-card",
+					"name": "",
+					"inert": true
+				},
+				{
+					"id": "route-detail",
+					"name": "astra_005b00220022002c0022007200650076006900650077002d00630061007200640022005d",
+					"inert": false
+				}
+			],
+			"pseudos": [
+				"::view-transition-group(astra_005b00220022002c0022007200650076006900650077002d00630061007200640022005d)",
+				"::view-transition-group(root)",
+				"::view-transition-new(root)",
+				"::view-transition-new(root)",
+				"::view-transition-old(root)",
+				"::view-transition-old(root)",
+				"::view-transition-new(astra_005b00220022002c0022007200650076006900650077002d00630061007200640022005d)",
+				"::view-transition-new(astra_005b00220022002c0022007200650076006900650077002d00630061007200640022005d)",
+				"::view-transition-old(astra_005b00220022002c0022007200650076006900650077002d00630061007200640022005d)",
+				"::view-transition-old(astra_005b00220022002c0022007200650076006900650077002d00630061007200640022005d)"
+			],
+			"finished": true,
+			"consoleWarnings": []
+		}
+	},
+	"strict-default": "node_modules/.pnpm/framer-motion@13.4.0/node_modules/framer-motion/dist/dom.d.ts(314,14): error TS2552: Cannot find name 'HTMLWebViewElement'. Did you mean 'HTMLVideoElement'?\nnode_modules/.pnpm/motion-dom@13.3.0/node_modules/motion-dom/dist/index.d.ts(3091,9): error TS2717: Subsequent property declarations must have the same type.  Property 'MotionCheckAppearSync' must be of type '((visualElement: WithAppearProps, valueName: string, value: MotionValue<any>) => void | VoidFunction) | undefined', but here has type '((visualElement: WithAppearProps, valueName: string, value: MotionValue<any>) => void | VoidFunction) | undefined'.\n",
+	"strict-qualified": "node_modules/.pnpm/framer-motion@13.2.0/node_modules/framer-motion/dist/dom.d.ts(314,14): error TS2552: Cannot find name 'HTMLWebViewElement'. Did you mean 'HTMLVideoElement'?\n",
+	"negative-types": "$ svelte-kit sync && svelte-check --tsconfig tsconfig.json\nLoading svelte-check in workspace: /tmp/astra-ergonomics-review/consumer\nGetting Svelte diagnostics...\n\n/tmp/astra-ergonomics-review/consumer/src/type-probes/Negative.svelte:5:25\nError: Object literal may only specify known properties, and 'layout' does not exist in type 'LiteMotionOptions | (() => LiteMotionOptions)'. (ts)\nlet value=$state('');let ref=$state<HTMLInputElement|null>(null);\nconst unsupported=lite({layout:true});\n</script>\n\n/tmp/astra-ergonomics-review/consumer/src/type-probes/Negative.svelte:7:20\nError: Cannot use 'bind:' with this property. It is declared as non-bindable inside the component.\nTo mark a property as bindable: 'let { value = $bindable() } = $props()' (ts)\n</script>\n<Motion as=\"input\" bind:value bind:ref />\n\n====================================\nsvelte-check found 2 errors and 0 warnings in 1 file\n[ELIFECYCLE] Command failed with exit code 1.\n",
+	"graph-default": [
+		{
+			"name": "astra-adversarial-consumer",
+			"version": "0.0.0",
+			"path": "/tmp/astra-ergonomics-review/consumer",
+			"private": true,
+			"dependencies": {
+				"astra-motion": {
+					"from": "astra-motion",
+					"version": "0.0.1",
+					"resolved": "file:../astra-motion-0.0.1.tgz",
+					"path": "/tmp/astra-ergonomics-review/consumer/node_modules/.pnpm/astra-motion@file+..+astra-motion-0.0.1.tgz_@sveltejs+kit@2.70.3_@sveltejs+vite-plugin-_c227674150226ad519b61f2ac600846b/node_modules/astra-motion",
+					"dependencies": {
+						"motion-dom": {
+							"from": "motion-dom",
+							"version": "13.2.0",
+							"resolved": "https://registry.npmjs.org/motion-dom/-/motion-dom-13.2.0.tgz",
+							"path": "/tmp/astra-ergonomics-review/consumer/node_modules/.pnpm/motion-dom@13.2.0/node_modules/motion-dom",
+							"dependencies": {
+								"motion-utils": {
+									"from": "motion-utils",
+									"version": "13.3.0",
+									"resolved": "https://registry.npmjs.org/motion-utils/-/motion-utils-13.3.0.tgz",
+									"path": "/tmp/astra-ergonomics-review/consumer/node_modules/.pnpm/motion-utils@13.3.0/node_modules/motion-utils"
+								}
+							}
+						},
+						"motion": {
+							"from": "motion",
+							"version": "13.2.0",
+							"resolved": "https://registry.npmjs.org/motion/-/motion-13.2.0.tgz",
+							"path": "/tmp/astra-ergonomics-review/consumer/node_modules/.pnpm/motion@13.2.0/node_modules/motion",
+							"dependencies": {
+								"framer-motion": {
+									"from": "framer-motion",
+									"version": "13.4.0",
+									"resolved": "https://registry.npmjs.org/framer-motion/-/framer-motion-13.4.0.tgz",
+									"path": "/tmp/astra-ergonomics-review/consumer/node_modules/.pnpm/framer-motion@13.4.0/node_modules/framer-motion",
+									"dependencies": {
+										"motion-utils": {
+											"from": "motion-utils",
+											"version": "13.3.0",
+											"resolved": "https://registry.npmjs.org/motion-utils/-/motion-utils-13.3.0.tgz",
+											"path": "/tmp/astra-ergonomics-review/consumer/node_modules/.pnpm/motion-utils@13.3.0/node_modules/motion-utils"
+										},
+										"motion-dom": {
+											"from": "motion-dom",
+											"version": "13.3.0",
+											"resolved": "https://registry.npmjs.org/motion-dom/-/motion-dom-13.3.0.tgz",
+											"path": "/tmp/astra-ergonomics-review/consumer/node_modules/.pnpm/motion-dom@13.3.0/node_modules/motion-dom",
+											"dependencies": {
+												"motion-utils": {
+													"from": "motion-utils",
+													"version": "13.3.0",
+													"resolved": "https://registry.npmjs.org/motion-utils/-/motion-utils-13.3.0.tgz",
+													"path": "/tmp/astra-ergonomics-review/consumer/node_modules/.pnpm/motion-utils@13.3.0/node_modules/motion-utils"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	],
+	"graph-qualified": [
+		{
+			"name": "astra-adversarial-consumer",
+			"version": "0.0.0",
+			"path": "/tmp/astra-ergonomics-review/consumer",
+			"private": true,
+			"dependencies": {
+				"astra-motion": {
+					"from": "astra-motion",
+					"version": "0.0.1",
+					"resolved": "file:../astra-motion-0.0.1.tgz",
+					"path": "/tmp/astra-ergonomics-review/consumer/node_modules/.pnpm/astra-motion@file+..+astra-motion-0.0.1.tgz_@sveltejs+kit@2.70.3_@sveltejs+vite-plugin-_c227674150226ad519b61f2ac600846b/node_modules/astra-motion",
+					"dependencies": {
+						"motion-dom": {
+							"from": "motion-dom",
+							"version": "13.2.0",
+							"resolved": "https://registry.npmjs.org/motion-dom/-/motion-dom-13.2.0.tgz",
+							"path": "/tmp/astra-ergonomics-review/consumer/node_modules/.pnpm/motion-dom@13.2.0/node_modules/motion-dom",
+							"dependencies": {
+								"motion-utils": {
+									"from": "motion-utils",
+									"version": "13.0.0",
+									"resolved": "https://registry.npmjs.org/motion-utils/-/motion-utils-13.0.0.tgz",
+									"path": "/tmp/astra-ergonomics-review/consumer/node_modules/.pnpm/motion-utils@13.0.0/node_modules/motion-utils"
+								}
+							}
+						},
+						"motion": {
+							"from": "motion",
+							"version": "13.2.0",
+							"resolved": "https://registry.npmjs.org/motion/-/motion-13.2.0.tgz",
+							"path": "/tmp/astra-ergonomics-review/consumer/node_modules/.pnpm/motion@13.2.0/node_modules/motion",
+							"dependencies": {
+								"framer-motion": {
+									"from": "framer-motion",
+									"version": "13.2.0",
+									"resolved": "https://registry.npmjs.org/framer-motion/-/framer-motion-13.2.0.tgz",
+									"path": "/tmp/astra-ergonomics-review/consumer/node_modules/.pnpm/framer-motion@13.2.0/node_modules/framer-motion",
+									"dependencies": {
+										"motion-utils": {
+											"from": "motion-utils",
+											"version": "13.0.0",
+											"resolved": "https://registry.npmjs.org/motion-utils/-/motion-utils-13.0.0.tgz",
+											"path": "/tmp/astra-ergonomics-review/consumer/node_modules/.pnpm/motion-utils@13.0.0/node_modules/motion-utils"
+										},
+										"motion-dom": {
+											"from": "motion-dom",
+											"version": "13.2.0",
+											"resolved": "https://registry.npmjs.org/motion-dom/-/motion-dom-13.2.0.tgz",
+											"path": "/tmp/astra-ergonomics-review/consumer/node_modules/.pnpm/motion-dom@13.2.0/node_modules/motion-dom",
+											"dependencies": {
+												"motion-utils": {
+													"from": "motion-utils",
+													"version": "13.0.0",
+													"resolved": "https://registry.npmjs.org/motion-utils/-/motion-utils-13.0.0.tgz",
+													"path": "/tmp/astra-ergonomics-review/consumer/node_modules/.pnpm/motion-utils@13.0.0/node_modules/motion-utils"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	],
+	"lockHashes": {
+		"unoverridden": "cd068844e31f9c310e051b476828acd456aa738daf42ff622119c67840b2e32b",
+		"qualified": "b7f09e080ae7070a89f224db21786a61be47a3fc2fe2bc21e1878fb919309730"
+	},
+	"finalChecks": {
+		"repositoryCheck": "0 errors, 0 warnings",
+		"reproductionScript": "pack, independent install, application check and build passed",
+		"consumerCheck": "0 errors, 0 warnings",
+		"strictQualifiedDeclarations": "expected reproduced upstream TS2552 HTMLWebViewElement failure",
+		"sourceEdits": "docs/reviews only"
+	}
+}

@@ -1,12 +1,14 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
+	import { untrack } from 'svelte';
 	import { routeShared } from '$lib/motion/routes.js';
 	let hydrated = $state(false);
-	onMount(() => {
-		hydrated = true;
-	});
+	$effect(() =>
+		untrack(() => {
+			hydrated = true;
+		})
+	);
 </script>
 
 <svelte:head><title>Astra / Objects</title></svelte:head>

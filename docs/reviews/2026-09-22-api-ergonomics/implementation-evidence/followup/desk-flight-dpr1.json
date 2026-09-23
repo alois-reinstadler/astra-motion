@@ -1,0 +1,137 @@
+{
+	"environment": {
+		"userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36",
+		"dpr": 1,
+		"viewport": [1440, 1000],
+		"scroll": [0, 1625],
+		"clientWidth": 1425,
+		"fonts": "loaded",
+		"images": [
+			{ "src": "http://127.0.0.1:4099/showcase/namib.jpg", "complete": true, "width": 1279 },
+			{ "src": "http://127.0.0.1:4099/showcase/caicos.jpg", "complete": true, "width": 1280 },
+			{ "src": "http://127.0.0.1:4099/showcase/urmia.jpg", "complete": true, "width": 1279 },
+			{ "src": "http://127.0.0.1:4099/showcase/namib.jpg", "complete": true, "width": 1279 },
+			{ "src": "http://127.0.0.1:4099/showcase/namib.jpg", "complete": true, "width": 1279 },
+			{ "src": "http://127.0.0.1:4099/showcase/namib.jpg", "complete": true, "width": 1279 },
+			{ "src": "http://127.0.0.1:4099/showcase/urmia.jpg", "complete": true, "width": 1279 },
+			{ "src": "http://127.0.0.1:4099/showcase/caicos.jpg", "complete": true, "width": 1280 },
+			{ "src": "http://127.0.0.1:4099/showcase/namib.jpg", "complete": true, "width": 1279 },
+			{ "src": "http://127.0.0.1:4099/showcase/urmia.jpg", "complete": true, "width": 1279 },
+			{ "src": "http://127.0.0.1:4099/showcase/caicos.jpg", "complete": true, "width": 1280 },
+			{ "src": "http://127.0.0.1:4099/showcase/lena.jpg", "complete": true, "width": 1280 },
+			{ "src": "http://127.0.0.1:4099/showcase/namib.jpg", "complete": true, "width": 1279 },
+			{ "src": "http://127.0.0.1:4099/showcase/caicos.jpg", "complete": true, "width": 1280 }
+		]
+	},
+	"time": 0.075,
+	"controls": 25,
+	"nodes": {
+		"surface": {
+			"x": 498.5111389160156,
+			"y": 1949.7812194824219,
+			"width": 427.9777526855469,
+			"height": 514.349365234375,
+			"transform": "translate(0px, -33.1847px) scale(0.823034, 0.885712)",
+			"computed": "matrix(0.823034, 0, 0, 0.885712, 0, -33.1847)",
+			"scaleX": 0.823034,
+			"scaleY": 0.885712,
+			"cssWidth": "520px",
+			"cssHeight": "580.719px",
+			"font": "16px / 24px \"Instrument Sans Variable\", sans-serif",
+			"treeScale": { "x": 1, "y": 1 },
+			"layout": {
+				"animationId": 22,
+				"measuredBox": {
+					"x": { "min": 452.5, "max": 972.5 },
+					"y": { "min": 1949.78125, "max": 2530.5 }
+				},
+				"layoutBox": {
+					"x": { "min": 452.5, "max": 972.5 },
+					"y": { "min": 1949.78125, "max": 2530.5 }
+				},
+				"latestValues": {},
+				"source": 27
+			},
+			"target": {
+				"x": { "min": 498.5111257963648, "max": 926.4888742036352 },
+				"y": { "min": 1949.78125, "max": 2464.130642624251 }
+			},
+			"active": true
+		},
+		"text": {
+			"x": 522.5111083984375,
+			"y": 2042.6986083984375,
+			"width": 350,
+			"height": 44.71875,
+			"transform": "",
+			"computed": "none",
+			"scaleX": 1.00000277068,
+			"scaleY": 1.0000042764800001,
+			"cssWidth": "350px",
+			"cssHeight": "44.7188px",
+			"font": "43px / 44.72px Georgia, serif",
+			"active": false
+		},
+		"copy": {
+			"x": 522.5111083984375,
+			"y": 2021.6986083984375,
+			"width": 472.00006103515625,
+			"height": 103.71875,
+			"transform": "translate(55.9043px, 14.889px) scale(1.21502, 1.12904) scale(1, 1)",
+			"computed": "matrix(1.21502, 0, 0, 1.12904, 55.9043, 14.889)",
+			"scaleX": 1.00000277068,
+			"scaleY": 1.0000042764800001,
+			"cssWidth": "472px",
+			"cssHeight": "103.719px",
+			"font": "16px / 24px \"Instrument Sans Variable\", sans-serif",
+			"treeScale": { "x": 0.8230341315524431, "y": 0.8857117023072716 },
+			"layout": {
+				"animationId": 22,
+				"measuredBox": {
+					"x": { "min": 476.5, "max": 948.5 },
+					"y": { "min": 2022.78125, "max": 2126.5 }
+				},
+				"layoutBox": {
+					"x": { "min": 476.5, "max": 948.5 },
+					"y": { "min": 2022.78125, "max": 2126.5 }
+				},
+				"latestValues": {},
+				"source": 31
+			},
+			"target": {
+				"x": { "min": 522.5111257963648, "max": 994.5111257963648 },
+				"y": { "min": 2021.6986352753797, "max": 2125.4173852753797 }
+			},
+			"active": true
+		},
+		"image": {
+			"x": 522.5111083984375,
+			"y": 2144.9222412109375,
+			"width": 378.4365234375,
+			"height": 252.291015625,
+			"transform": "translate(-0.436357px, 7.02516px) scale(1.21502, 1.12904) scale(0.803474, 0.803474)",
+			"computed": "matrix(0.976235, 0, 0, 0.907151, -0.436357, 7.02516)",
+			"scaleX": 0.80347459699,
+			"scaleY": 0.8034745265120001,
+			"cssWidth": "471px",
+			"cssHeight": "314px",
+			"font": "16px / 24px \"Instrument Sans Variable\", sans-serif",
+			"treeScale": { "x": 0.8230341315524431, "y": 0.8857117023072716 },
+			"layout": {
+				"animationId": 22,
+				"measuredBox": {
+					"x": { "min": 476.5, "max": 947.5 },
+					"y": { "min": 2148.5, "max": 2462.5 }
+				},
+				"layoutBox": { "x": { "min": 476.5, "max": 947.5 }, "y": { "min": 2148.5, "max": 2462.5 } },
+				"latestValues": {},
+				"source": 32
+			},
+			"target": {
+				"x": { "min": 522.5111257963648, "max": 900.947566841325 },
+				"y": { "min": 2144.922296652231, "max": 2397.2132573488716 }
+			},
+			"active": true
+		}
+	}
+}

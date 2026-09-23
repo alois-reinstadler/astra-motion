@@ -25,7 +25,7 @@ pnpm run build
 node scripts/prepare-motion-consumer.mjs
 ```
 
-`--frozen-lockfile` prevents dependency resolution changes during repository installation. Preparing the consumer packs this checkout, installs it independently, verifies its dependency graph, checks its application types, builds it and stamps its identity. Keep its `qualification.json`, archive SHA-256 and install lockfile with the evidence.
+`--frozen-lockfile` prevents dependency resolution changes during repository installation. Preparing the consumer packs this checkout, installs it independently, verifies its dependency graph, checks application types and strict dependency declarations, builds it and stamps its identity. Keep its `qualification.json`, archive SHA-256 and install lockfile with the evidence.
 
 - [ ] All checks above pass on the release commit.
 - [ ] Run `node scripts/check-motion-consumer-types.mjs /path/to/qualification.json /path/to/strict-types.json`. This checks declarations with `skipLibCheck: false`, writes the complete diagnostics and exits nonzero on failure. An ordinary app check with `skipLibCheck: true` does not satisfy this gate.
@@ -37,11 +37,27 @@ CI owns its production preview process explicitly. Local configs use an existing
 
 ## Dependency boundary
 
-The direct dependencies are `motion@13.2.0` and `motion-dom@13.2.0`. Their upstream ranges are broader. The reviewed qualification graph also requires `framer-motion@13.2.0` and `motion-utils@13.0.0`; the isolated test fixture records all four as pnpm overrides. Those fixture settings are not shipped to consumers. Beta consumers must apply the reviewed overrides themselves, as described in the README, until the distributable dependency strategy is resolved.
+The distributable includes one DOM-only engine: motion-dom and framer-motion DOM
+13.2.0 plus motion-utils 13.0.0. These are exact build dependencies, not ranges for
+consumer package managers to resolve. The qualification app has no Motion overrides
+or direct Motion dependencies. Svelte is the required peer; Kit is optional unless
+the routes entry is used.
 
-The installed-consumer gate checks versions, shared `motion-dom`/`motion-utils` installation paths and Motion export identity. A working demo is not sufficient evidence when this gate fails. Upgrades need a dependency review and a new browser qualification; do not silence duplicate-engine failures with TypeScript settings.
+`package-motion-engine.mjs` preserves the upstream ESM boundaries and licenses,
+rewrites imports to one packaged engine and records version/source-hash provenance.
+Its only upstream declaration correction removes the unsupported Electron `webview`
+member; no replacement global DOM type is introduced. Runtime algorithms are
+unchanged. Review this transformation whenever the upstream pins change.
 
-See [strict consumer typing](research/strict-consumer-types.md) for the reproduced failure and the scoped filename fix.
+The installed-consumer gate checks exact versions, absence of unresolved upstream
+imports, and shared engine identity including public MotionValues. Import values
+from Astra; a separately installed engine is outside this identity contract.
+Compare the tarball size and the downstream feature bundles independently: the
+archive now contains dependencies that were previously downloaded separately.
+
+The [historical strict typing report](research/strict-consumer-types.md) records the
+original upstream failure. The current candidate must pass strict checking without
+that workaround, then pass browser qualification using the same packed archive.
 
 ## Device qualification
 

@@ -3,6 +3,7 @@ import { onDestroy } from 'svelte';
 import type { Attachment } from 'svelte/attachments';
 import { shouldReduceMotion, type MotionPolicy } from './policy.js';
 import { observeMotionConfig, observeMotionPreference, readMotionConfig } from './config.js';
+import { checkpointRouteActivity, registerRouteActivity } from './route-activity.svelte.js';
 
 export interface RouteTransitionOptions extends MotionPolicy {
 	/** Called when animation is skipped because names conflict or the browser rejects it. */
@@ -30,6 +31,7 @@ interface Session {
 
 const participants = new Map<string, Set<HTMLElement>>();
 const identities = new WeakSet<HTMLElement>();
+const activeBranches = new WeakMap<HTMLElement, () => boolean>();
 const owners = new WeakMap<Document, symbol>();
 
 /** Injective UTF-16 encoding: no hash collisions or ambiguous scope separators. */
@@ -81,7 +83,11 @@ function assignNames(
 	restore(session);
 	for (const [name, nodes] of participants) {
 		let connected = [...nodes].filter(
-			(node) => node.isConnected && node.ownerDocument === owner && !isOutgoing(node)
+			(node) =>
+				node.isConnected &&
+				node.ownerDocument === owner &&
+				activeBranches.get(node)?.() !== false &&
+				!isOutgoing(node)
 		);
 		// Svelte sets inert synchronously, but its outrostart waits for a WAAPI
 		// finish event. View Transition capture suppresses frames, so waiting for
@@ -123,6 +129,7 @@ export function routeShared(id: string, options: RouteSharedOptions = {}): Attac
 	return (node) => {
 		if (identities.has(node)) throw new Error('An element can have only one routeShared identity.');
 		identities.add(node);
+		activeBranches.set(node, registerRouteActivity(node));
 		let registered = true;
 		let nodes = participants.get(name);
 		if (!nodes) participants.set(name, (nodes = new Set()));
@@ -131,6 +138,7 @@ export function routeShared(id: string, options: RouteSharedOptions = {}): Attac
 			if (!registered) return;
 			registered = false;
 			identities.delete(node);
+			activeBranches.delete(node);
 			nodes.delete(node);
 			if (nodes.size === 0) participants.delete(name);
 		};
@@ -218,12 +226,14 @@ export function routeTransitions(options: RouteTransitionOptions = {}): void {
 		void committed.catch(() => {});
 
 		try {
+			checkpointRouteActivity(ownerDocument);
 			assignNames(session, options, ownerDocument, isOutgoing, (root) => outgoing.add(root), true);
 			const transition = ownerDocument.startViewTransition(async () => {
 				// Release Kit only once the old view has been captured.
 				release();
 				await committed;
-				if (active === session)
+				if (active === session) {
+					checkpointRouteActivity(ownerDocument);
 					assignNames(
 						session,
 						options,
@@ -232,6 +242,7 @@ export function routeTransitions(options: RouteTransitionOptions = {}): void {
 						(root) => outgoing.add(root),
 						false
 					);
+				}
 			});
 			session.transition = transition;
 			void transition.ready.catch(() => {

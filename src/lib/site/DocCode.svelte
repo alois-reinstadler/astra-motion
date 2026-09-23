@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { untrack } from 'svelte';
 	import CodeText from './CodeText.svelte';
 	let { source, label = 'Example.svelte' }: { source: string; label?: string } = $props();
 	let ready = $state(false);
@@ -17,14 +17,16 @@
 				? 'Select the source to copy it. Clipboard access is unavailable.'
 				: ''
 	);
-	onMount(() => {
-		ready = true;
-		alive = true;
-		return () => {
-			alive = false;
-			clearTimeout(resetTimer);
-		};
-	});
+	$effect(() =>
+		untrack(() => {
+			ready = true;
+			alive = true;
+			return () => {
+				alive = false;
+				clearTimeout(resetTimer);
+			};
+		})
+	);
 	async function copy() {
 		if (pending) return;
 		const text = source;

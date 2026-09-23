@@ -1,6 +1,12 @@
 {
-	"pins": { "motion": "13.2.0", "motion-dom": "13.2.0" },
-	"resolved": { "framer-motion": "13.2.0", "motion-utils": "13.0.0" },
+	"pins": {
+		"motion": "13.2.0",
+		"motion-dom": "13.2.0"
+	},
+	"resolved": {
+		"framer-motion": "13.2.0",
+		"motion-utils": "13.0.0"
+	},
 	"exports": {
 		"motion": ["animate", "cancelFrame", "scroll", "transformProps", "visualElementStore"],
 		"motion-dom": [
@@ -9,6 +15,7 @@
 			"HTMLProjectionNode",
 			"HTMLVisualElement",
 			"JSAnimation",
+			"NativeAnimation",
 			"NativeAnimationExtended",
 			"addScaleCorrector",
 			"animateMotionValue",
@@ -31,7 +38,9 @@
 			"getValueTransition",
 			"getVariantContext",
 			"hover",
+			"isAnimationControls",
 			"isDragActive",
+			"isMotionValue",
 			"isPrimaryPointer",
 			"isTransitionDefined",
 			"mapValue",
