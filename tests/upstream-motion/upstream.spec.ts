@@ -8,9 +8,7 @@ test.beforeEach(async ({ page }) => {
 
 // These characterize the pinned upstream defects. A changed result is a signal to
 // reassess/remove the shim, not an instruction to preserve an upstream bug forever.
-test('Motion 13.2 finished cancellation still writes the old endpoint', async ({
-	page
-}, testInfo) => {
+test('finished cancellation still writes the old endpoint', async ({ page }, testInfo) => {
 	const result = await page.evaluate(() => window.upstream.nativeFinishCancel());
 	await testInfo.attach('upstream-result', {
 		body: JSON.stringify(result, null, 2),

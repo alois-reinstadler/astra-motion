@@ -1,5 +1,9 @@
 import { expect, it } from 'vitest';
-import type { MotionNodeOptions } from 'motion-dom';
+import {
+	AsyncMotionValueAnimation,
+	type MotionNodeOptions,
+	type MotionValueAnimation
+} from 'motion-dom';
 import { animateMotionDefinition } from '../motion/animation.js';
 import { ensureMotionVisual, registerMotionVisual } from '../motion/visual.js';
 const frame = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
@@ -7,6 +11,11 @@ const frames = async () => {
 	await frame();
 	await frame();
 };
+function completeAnimation(animation: MotionValueAnimation | undefined) {
+	if (!(animation instanceof AsyncMotionValueAnimation))
+		throw new Error('Expected animateTarget to create full asynchronous playback controls');
+	animation.complete();
+}
 async function fixture(props: MotionNodeOptions = {}) {
 	const node = document.createElement('div');
 	node.style.opacity = '1';
@@ -41,7 +50,7 @@ it('prevents a queued old completion from applying transitionEnd after a newer t
 			transitionEnd: { visibility: 'hidden' }
 		});
 		await frames();
-		visual.getValue('opacity')!.animation!.complete();
+		completeAnimation(visual.getValue('opacity')!.animation);
 		await animateMotionDefinition(visual, {
 			opacity: 1,
 			transition: { duration: 0 },
@@ -140,7 +149,7 @@ it('does not launch deferred child animation after its parent is destroyed at co
 	try {
 		void animateMotionDefinition(parent.visual, 'active');
 		await frames();
-		parent.visual.getValue('opacity')!.animation!.complete();
+		completeAnimation(parent.visual.getValue('opacity')!.animation);
 		unregister();
 		await parent.cleanup();
 		await frames();

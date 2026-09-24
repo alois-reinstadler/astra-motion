@@ -19,7 +19,7 @@ continues to use Motion's projection engine rather than introducing a second FLI
 - **Svelte** already owns DOM retention, transition reversal, and nested outro groups.
   Ordinary presence is a transition directive. Wait mode only needs to defer the next
   value until a wrapperless branch component is destroyed.
-- **Motion DOM 13.2.0** owns projection, shared stacks, VisualElements, transform
+- **Motion DOM 13.4.2** owns projection, shared stacks, VisualElements, transform
   composition, scale correction, springs and the phased frame scheduler. Reuse it.
 - **Motion Vue 2.4.1** demonstrates the same VisualElement/projection adapter pattern.
   Its framework before/after-update hooks do not transfer directly to Svelte's
@@ -61,8 +61,8 @@ records; it does not repeatedly query the document.
 
 ### Dependency contract
 
-The published archive contains one DOM-only engine: `motion-dom@13.2.0`, the
-`framer-motion@13.2.0` DOM entry and `motion-utils@13.0.0`. These are exact build
+The published archive contains one DOM-only engine: `motion-dom@13.4.2`, the
+`framer-motion@13.4.3` DOM entry and `motion-utils@13.3.0`. These are exact build
 dependencies. Source imports use the public Motion package roots; prepack copies
 only the DOM ESM dependency graph and rewrites runtime/type imports to that shared
 packaged engine. Consumers do not install Motion separately or add app overrides.

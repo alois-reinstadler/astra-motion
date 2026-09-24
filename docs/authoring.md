@@ -6,7 +6,7 @@ or `transition:slide`. When new markup needs Astra capabilities, start with
 Use `createMotion` when an existing native element or component owns the markup. These
 complete recipes are also available with copy buttons and links to live scenarios
 at [/motion-lab/guide](/motion-lab/guide). This is a beta adapter over pinned Motion
-13.2.0; see the [qualification report](research/composition-scroll-timelines.md).
+13.4.3; see the [upgrade qualification](research/motion-upgrade-13.4.md).
 
 ## Install a local build
 

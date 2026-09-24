@@ -73,16 +73,15 @@
 		<div>
 			<ul>
 				<li>
-					Astra pins Motion and motion-dom to 13.2.0, but Motion’s transitive dependencies use
-					ranges. Consumer apps currently need the overrides in the installation guide to keep one
-					qualified engine instance. Layout projection uses undocumented exports; upgrades need
+					Astra packages one qualified DOM engine: Motion DOM 13.4.2, Framer Motion 13.4.3’s DOM
+					entry and Motion Utils 13.3.0. Consumers need no separate Motion installation or
+					dependency overrides. Layout projection uses undocumented exports; upgrades need
 					compatibility testing.
 				</li>
 				<li>
-					Strict dependency type checks currently hit an upstream Motion declaration that references
-					a missing <code>HTMLWebViewElement</code>. The checked consumer uses
-					<code>skipLibCheck: true</code>; projects requiring <code>skipLibCheck: false</code> need an
-					upstream fix.
+					The package removes an unsupported Electron-only <code>HTMLWebViewElement</code>
+					declaration from the bundled types. Strict packed-consumer checks use
+					<code>skipLibCheck: false</code>; upstream runtime algorithms remain unchanged.
 				</li>
 				<li>
 					Large animated layouts are expensive. A recorded 500-participant workload is slow under

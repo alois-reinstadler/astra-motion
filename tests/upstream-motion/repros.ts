@@ -38,7 +38,9 @@ export async function nativeFinishCancel() {
 		if (!native)
 			throw new Error('This browser did not create the expected native opacity animation.');
 		native.finish();
-		const playback = visual.getValue('opacity')!.animation!;
+		const playback = visual.getValue('opacity')!.animation;
+		if (!(playback instanceof AsyncMotionValueAnimation))
+			throw new Error('Expected asynchronous MotionValue playback.');
 		playback.stop();
 		playback.cancel();
 		node.style.opacity = '0.75';
@@ -58,11 +60,11 @@ export async function nativeFinishCancel() {
 export function pendingGetterMeasurements() {
 	const subject = fixture({ opacity: 1 }, 'opacity:1');
 	const unrelated = fixture({ height: 30 }, 'width:100px;height:30px');
-	const original = unrelated.node.getBoundingClientRect.bind(unrelated.node);
+	const original = window.getComputedStyle;
 	let reads = 0;
-	unrelated.node.getBoundingClientRect = () => {
-		reads++;
-		return original();
+	window.getComputedStyle = (node, pseudo) => {
+		if (node === unrelated.node) reads++;
+		return original.call(window, node, pseudo);
 	};
 	try {
 		animateTarget(unrelated.visual, { height: 'auto', transition: { duration: 1 } });
@@ -74,6 +76,7 @@ export function pendingGetterMeasurements() {
 		void playback.animation;
 		return { beforeGetter: before, afterGetter: reads };
 	} finally {
+		window.getComputedStyle = original;
 		subject.cleanup();
 		unrelated.cleanup();
 	}

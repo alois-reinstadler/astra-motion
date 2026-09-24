@@ -4,7 +4,8 @@ import {
 	NativeAnimationExtended,
 	NativeAnimation,
 	getFinalKeyframe,
-	type AnimationPlaybackControls
+	type AnimationPlaybackControls,
+	type MotionValueAnimation
 } from 'motion-dom';
 
 /** Complete the original playback, including WAAPI loops and playback frozen at speed zero. */
@@ -40,14 +41,15 @@ export function completeMotionPlayback(playback: AnimationPlaybackControls): voi
 }
 
 /**
- * Motion 13.2 cancellation boundary. Keep these two private fields isolated here:
+ * Motion cancellation boundary (qualified with motion-dom 13.4.2).
+ * Keep these two private fields isolated here:
  * Async.animation's public getter flushes unrelated pending keyframe measurements;
  * Native.cancel() leaves a queued onfinish able to overwrite a replacement owner.
  * Regression/upgrade gates cover unresolved values, endpoint direction, late events
  * and ownership transfer. No deep imports or dependency/prototype patches.
  */
 export function prepareMotionHandoff(
-	playback: AnimationPlaybackControls | undefined,
+	playback: AnimationPlaybackControls | MotionValueAnimation | undefined,
 	{
 		finishedOnly = false,
 		settleFinished = true

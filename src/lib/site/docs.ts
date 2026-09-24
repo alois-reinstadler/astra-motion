@@ -58,7 +58,7 @@ const pages: DocPage[] = [
 				title: 'An explicit beta',
 				text: [
 					'This repository is an active implementation, with real-browser and SSR regression coverage. The documentation describes the checked-in API, not a claim of complete Motion React parity or an already-published registry release.',
-					'Projection uses framework-independent exports from pinned Motion 13.2.0. Those exports are undocumented upstream, so dependency upgrades need qualification. Start with Getting started, then use the examples directory to explore a specific interaction.'
+					'Projection uses framework-independent exports from pinned Motion DOM 13.4.2. Those exports are undocumented upstream, so dependency upgrades need qualification. Start with Getting started, then use the examples directory to explore a specific interaction.'
 				]
 			}
 		]
@@ -74,7 +74,7 @@ const pages: DocPage[] = [
 				title: 'Use the checked-in workspace',
 				text: [
 					'Astra is currently developed in this repository. Do not assume that an npm package with this name is this implementation. The examples use the public package entry points from the local tarball.',
-					'Clone the repository and run pnpm install, then pnpm dev for the local site and examples. To use Astra in another app, build and install the local package below. The qualified baseline is Svelte 5.57.0, SvelteKit 2.70.3 and Motion 13.2.0. SvelteKit is only needed for the routes entry point.'
+					'Clone the repository and run pnpm install, then pnpm dev for the local site and examples. To use Astra in another app, build and install the local package below. The qualified baseline is Svelte 5.57.0, SvelteKit 2.70.3 and Motion 13.4.3. SvelteKit is only needed for the routes entry point.'
 				],
 				code: {
 					label: 'Public package imports',

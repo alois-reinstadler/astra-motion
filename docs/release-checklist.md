@@ -37,8 +37,8 @@ CI owns its production preview process explicitly. Local configs use an existing
 
 ## Dependency boundary
 
-The distributable includes one DOM-only engine: motion-dom and framer-motion DOM
-13.2.0 plus motion-utils 13.0.0. These are exact build dependencies, not ranges for
+The distributable includes one DOM-only engine: motion-dom 13.4.2, the framer-motion
+13.4.3 DOM entry, and motion-utils 13.3.0. These are exact build dependencies, not ranges for
 consumer package managers to resolve. The qualification app has no Motion overrides
 or direct Motion dependencies. Svelte is the required peer; Kit is optional unless
 the routes entry is used.

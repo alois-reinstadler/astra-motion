@@ -14,6 +14,7 @@ import {
 	transformValue
 } from '../motion/values.js';
 import { get } from 'svelte/store';
+import { prepareMotionHandoff } from '../motion/motion-compat.js';
 
 const nextFrame = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
 const cleanups: (() => void)[] = [];
@@ -103,6 +104,26 @@ it('reuses Motion derived values and springs through the Svelte store bridge', a
 		mapped.destroy();
 		doubled.destroy();
 		spring.destroy();
+	}
+});
+
+it('preserves a spring follower through native handoff checks and retargeting', async () => {
+	const source = motionValue(0);
+	const spring = springValue(source, { stiffness: 500, damping: 40 });
+	try {
+		source.set(100);
+		await expect.poll(() => spring.isAnimating()).toBe(true);
+		const follower = spring.animation;
+		expect(follower).toBeDefined();
+		expect(follower && 'complete' in follower).toBe(false);
+		expect(prepareMotionHandoff(follower)).toBe(false);
+		expect(spring.isAnimating()).toBe(true);
+		source.set(-20);
+		await expect.poll(() => spring.get()).toBeCloseTo(-20, 2);
+		await expect.poll(() => spring.isAnimating()).toBe(false);
+	} finally {
+		spring.destroy();
+		source.destroy();
 	}
 });
 

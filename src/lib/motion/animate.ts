@@ -11,6 +11,7 @@ import {
 	type SequenceLabelWithTime,
 	type SegmentTransitionOptions
 } from 'motion';
+import { styleEffect, svgEffect } from 'motion-dom';
 import { untrack } from 'svelte';
 import type { Attachment } from 'svelte/attachments';
 import { readMotionConfig, observeMotionConfig, observeMotionPreference } from './config.js';
@@ -111,7 +112,11 @@ export function createAnimate(policy: MotionPolicy | (() => MotionPolicy) = {}):
 				releases.push(claimMotionOwnership(node, 'timeline', token));
 				if (transformNodes.has(node)) {
 					const visual = visualElementStore.get(node);
-					const ownsTransform = visual && transforms(visual.latestValues);
+					const ownsTransform =
+						(visual && transforms(visual.latestValues)) ||
+						(node instanceof SVGElement
+							? svgEffect.get(node, 'transform')
+							: node instanceof HTMLElement && styleEffect.get(node, 'transform'));
 					const style = getComputedStyle(node);
 					if (
 						[
@@ -189,11 +194,18 @@ export function createAnimate(policy: MotionPolicy | (() => MotionPolicy) = {}):
 				// Motion can queue a final render while stopping or completing values.
 				// Commit it while this scope still owns the node, then remove the queued
 				// write so a subsequent state/scroll/timeline owner cannot be overwritten.
+				// Since Motion 13.3, plain DOM animate() uses effects whose flush() also
+				// drains their pending queue; no VisualElement is created for these nodes.
 				for (const node of run.nodes) {
 					const visual = visualElementStore.get(node);
-					if (!visual) continue;
-					visual.render();
-					cancelFrame(visual.render);
+					if (visual) {
+						visual.render();
+						cancelFrame(visual.render);
+					} else if (node instanceof SVGElement) {
+						svgEffect.flush(node);
+					} else if (node instanceof HTMLElement) {
+						styleEffect.flush(node);
+					}
 				}
 				releases.splice(0).forEach((release) => release());
 			}
