@@ -186,8 +186,11 @@ timelines; React is neither installed nor imported by this runtime.
 ## Project scope and release work
 
 Astra focuses on adapting Motion to Svelte. The [scope decision](docs/research/motion-focus.md)
-and [independent review](docs/reviews/2026-09-21-motion-focus.md) record the current
-work and its verification. Physical Safari/iOS and low-end-device testing remain
+and [independent review](docs/reviews/2026-09-21-motion-focus.md) record the September 21
+baseline. Current changes and verification are documented in the
+[Motion 13.4 migration](docs/research/motion-upgrade-13.4.md) and
+[projection boundary review](docs/research/projection-boundaries.md).
+Physical Safari/iOS and low-end-device testing remain
 open; large animated layouts have known performance limits. Full Motion React API
 parity is outside the current scope.
 

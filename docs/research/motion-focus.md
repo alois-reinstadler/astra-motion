@@ -1,5 +1,12 @@
 # Motion integration scope
 
+This is the historical September 21 decision and verification record. For the
+current engine pins, bundled consumer declarations and layout qualification, see
+the [Motion 13.4 migration](motion-upgrade-13.4.md),
+[projection boundary review](projection-boundaries.md), and
+[motion system contract](../motion-system.md). The open items below describe the
+rollback revision, not the latest implementation.
+
 Decision recorded September 21, 2026: Astra Motion adapts Motion to Svelte. The
 uncommitted CSS backend experiment has been removed. A second interpolation engine
 would require separate lifecycle, interruption, accessibility and browser support

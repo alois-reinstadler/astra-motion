@@ -24,7 +24,7 @@ import {
 import { observeLayout } from './observe.js';
 import {
 	ProjectionBoundary,
-	observeStickyScroll,
+	observeProjectionScroll,
 	correctBoundarySnapshot
 } from './projection-boundaries.js';
 import { beforeCommit, layoutBridge, synchronousMutation } from './commit.js';
@@ -552,7 +552,7 @@ export function createLayout(options: LayoutGroupOptions = {}) {
 					latestValues,
 					parentProjection(element)
 				);
-				observeStickyScroll(projection as IProjectionNode, element);
+				observeProjectionScroll(projection, element);
 				visual.projection = projection;
 				projection.setOptions({
 					layout: true,

@@ -49,9 +49,20 @@ function near(actual: DOMRect, expected: DOMRect, tolerance = 1.5) {
 	}
 }
 
+function interpolateRect(from: DOMRect, to: DOMRect, progress: number) {
+	const mix = (a: number, b: number) => a + (b - a) * progress;
+	return new DOMRect(
+		mix(from.x, to.x),
+		mix(from.y, to.y),
+		mix(from.width, to.width),
+		mix(from.height, to.height)
+	);
+}
+
 describe('unregistered projection boundaries', () => {
 	it.each([
 		'scale(1.6, .7)',
+		'scale(-1.2, .8)',
 		'rotate(32deg)',
 		'translate(18px, 11px) rotate(-24deg) skewX(13deg) scale(1.3, .8)'
 	])('keeps transformed geometry continuous through %s', async (transform) => {
@@ -79,30 +90,41 @@ describe('unregistered projection boundaries', () => {
 			await f.dispose();
 		}
 	});
-	it.each([false, true])(
-		'does not replay nested scroll inside a sticky clipping boundary (registered: %s)',
-		async (registered) => {
+	it.each([
+		{ registered: false, transform: '' },
+		{ registered: true, transform: '' },
+		{ registered: false, transform: 'rotate(13deg) scale(1.1, .8)' },
+		{ registered: true, transform: 'rotate(13deg) scale(1.1, .8)' }
+	])(
+		'does not replay nested scroll inside sticky clipping (registered: $registered, transform: $transform)',
+		async ({ registered, transform }) => {
 			const f = await fixture();
+			f.host.style.transform = transform;
 			const outer = document.createElement('div');
 			const inner = document.createElement('div');
+			const constraint = document.createElement('div');
 			const spacer = document.createElement('div');
 			const tail = document.createElement('div');
 			outer.style.cssText = 'width:400px;height:300px;overflow:auto;overflow-anchor:none';
 			inner.style.cssText =
 				'width:350px;height:260px;overflow:auto;overflow-anchor:none;margin-top:80px';
 			spacer.style.height = '90px';
+			constraint.style.cssText = 'position:relative;height:260px';
 			tail.style.height = '600px';
 			f.wrapper.style.cssText += ';position:sticky;top:10px;overflow:clip;height:120px';
 			f.host.append(outer);
 			outer.append(inner);
-			inner.append(spacer, f.wrapper, tail);
+			inner.append(constraint, tail);
+			constraint.append(spacer, f.wrapper);
 			const releaseSticky = registered ? f.layout()(f.wrapper) : undefined;
 			await frames();
 			try {
-				for (const scroll of [50, 140, 30, 180]) {
+				for (const scroll of [50, 140, 240, 30, 280]) {
 					inner.scrollTop = scroll;
 					outer.scrollTop = scroll % 50;
 					await frames();
+					const stickyTop = Math.min(Math.max(90 - scroll, 10), 140 - scroll);
+					expect(Math.abs(f.wrapper.offsetTop - scroll - stickyTop)).toBeLessThan(1.5);
 					const before = rect(f.node);
 					// Automatic postcommit projection must refresh the scroll/sticky origin.
 					f.node.style.left = f.node.style.left === '140px' ? '0px' : '140px';
@@ -177,10 +199,23 @@ describe('unregistered projection boundaries', () => {
 	});
 	it('projects a registered parent and descendant through a rotated wrapper together', async () => {
 		const f = await fixture('rotate(18deg) scale(.9, 1.2)');
+		const unregistered = rect(f.node);
 		const releaseParent = f.layout()(f.host);
 		await frames();
+		near(rect(f.node), unregistered);
+		const original = f.wrapper.getAttribute('style');
+		// An unregistered copy supplies independent browser geometry at each endpoint.
+		const reference = f.host.cloneNode(true) as HTMLElement;
+		const referenceNode = reference.firstElementChild!.firstElementChild as HTMLElement;
+		referenceNode.style.removeProperty('transform');
+		reference.style.visibility = 'hidden';
+		document.body.append(reference);
 		try {
 			const before = rect(f.node);
+			reference.style.width = '650px';
+			referenceNode.style.left = '110px';
+			referenceNode.style.width = '120px';
+			const target = rect(referenceNode);
 			f.layout.update(() => {
 				f.host.style.width = '650px';
 				f.node.style.left = '110px';
@@ -196,6 +231,12 @@ describe('unregistered projection boundaries', () => {
 			visualElementStore.get(f.node)!.projection!.currentAnimation!.time = 0.4;
 			await frames();
 			const middle = rect(f.node);
+			near(middle, interpolateRect(before, target, 0.4));
+			expect(f.wrapper.getAttribute('style')).not.toBe(original);
+			reference.style.width = '530px';
+			referenceNode.style.left = '35px';
+			referenceNode.style.width = '85px';
+			const reversedTarget = rect(referenceNode);
 			f.layout.update(() => {
 				f.host.style.width = '530px';
 				f.node.style.left = '35px';
@@ -209,8 +250,80 @@ describe('unregistered projection boundaries', () => {
 			}
 			await frames();
 			near(rect(f.node), middle);
+			for (const element of [f.host, f.node]) {
+				visualElementStore.get(element)!.projection!.currentAnimation!.time = 0.5;
+			}
+			await frames();
+			near(rect(f.node), interpolateRect(middle, reversedTarget, 0.5));
+			for (const element of [f.host, f.node]) {
+				visualElementStore.get(element)!.projection!.currentAnimation!.complete();
+			}
+			await frames();
+			near(rect(f.node), reversedTarget);
+			expect(f.wrapper.getAttribute('style')).toBe(original);
+		} finally {
+			reference.remove();
+			releaseParent?.();
+			await f.dispose();
+		}
+	});
+	it('restores compensated wrapper declarations on teardown and permits reattachment', async () => {
+		const f = await fixture();
+		f.wrapper.style.cssText +=
+			';translate:12px 6px!important;rotate:21deg!important;scale:.9 1.2!important;transform:skewX(8deg)!important';
+		const original = f.wrapper.getAttribute('style');
+		let releaseParent: (() => void) | void = f.layout()(f.host);
+		try {
+			await frames();
+			f.layout.update(() => {
+				f.host.style.width = '650px';
+				f.node.style.left = '100px';
+			});
+			await seek(f.host, 0.3);
+			expect(f.wrapper.getAttribute('style')).not.toBe(original);
+			releaseParent?.();
+			releaseParent = undefined;
+			await frames();
+			expect(f.wrapper.getAttribute('style')).toBe(original);
+			releaseParent = f.layout()(f.host);
+			await frames();
+			const before = rect(f.node);
+			f.layout.update(() => {
+				f.node.style.left = '150px';
+			});
+			await seek(f.node, 0);
+			near(rect(f.node), before);
+			expect(f.wrapper.getAttribute('style')).toBe(original);
 		} finally {
 			releaseParent?.();
+			await f.dispose();
+		}
+		expect(f.wrapper.getAttribute('style')).toBe(original);
+	});
+	it('keeps a fixed ancestor in viewport space after late registration on a scrolled page', async () => {
+		const f = await fixture('rotate(18deg)');
+		const spacer = document.createElement('div');
+		spacer.style.height = '2000px';
+		const originalScroll = { x: window.scrollX, y: window.scrollY };
+		document.body.append(spacer);
+		let releaseParent: (() => void) | void = undefined;
+		try {
+			window.scrollTo(0, 180);
+			await frames();
+			expect(window.scrollY).toBeGreaterThan(100);
+			const before = rect(f.node);
+			releaseParent = f.layout()(f.host);
+			await frames();
+			near(rect(f.node), before);
+			f.layout.update(() => {
+				f.node.style.left = '100px';
+			});
+			await seek(f.node, 0);
+			near(rect(f.node), before);
+		} finally {
+			releaseParent?.();
+			spacer.remove();
+			window.scrollTo(originalScroll.x, originalScroll.y);
 			await f.dispose();
 		}
 	});

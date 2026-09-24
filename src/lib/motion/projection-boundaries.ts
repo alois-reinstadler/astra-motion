@@ -32,12 +32,47 @@ export function correctStickyScroll(node: IProjectionNode, element: HTMLElement)
 	}
 }
 
-export function observeStickyScroll(node: IProjectionNode, element: HTMLElement) {
+export function observeProjectionScroll(
+	node: InstanceType<typeof HTMLProjectionNode>,
+	element: HTMLElement
+) {
 	const update = node.updateScroll.bind(node);
+	const removeScroll = node.removeElementScroll.bind(node);
+	const applyTransform = node.applyTransform.bind(node);
+	let stickyOffset = { x: 0, y: 0 };
 	node.updateScroll = (phase = 'measure') => {
-		if (getComputedStyle(element).position === 'sticky') node.options.layoutScroll = true;
+		const position = getComputedStyle(element).position;
+		if (position === 'sticky' || position === 'fixed') node.options.layoutScroll = true;
 		update(phase);
-		correctStickyScroll(node, element);
+		correctStickyScroll(node as IProjectionNode, element);
+		stickyOffset =
+			position === 'sticky' && node.scroll
+				? {
+						x: node.scroll.offset.x - element.scrollLeft,
+						y: node.scroll.offset.y - element.scrollTop
+					}
+				: { x: 0, y: 0 };
+	};
+	// Motion removes ancestor scroll when measuring a participant. A sticky
+	// participant also needs its own pinning displacement removed, otherwise a
+	// child's layout update animates the parent's entry/exit or end constraint.
+	node.removeElementScroll = (box) => {
+		const corrected = removeScroll(box);
+		corrected.x.min += stickyOffset.x;
+		corrected.x.max += stickyOffset.x;
+		corrected.y.min += stickyOffset.y;
+		corrected.y.max += stickyOffset.y;
+		return corrected;
+	};
+	node.applyTransform = (box, transformOnly, output) => {
+		const transformed = applyTransform(box, transformOnly, output);
+		if (!transformOnly) {
+			transformed.x.min -= stickyOffset.x;
+			transformed.x.max -= stickyOffset.x;
+			transformed.y.min -= stickyOffset.y;
+			transformed.y.max -= stickyOffset.y;
+		}
+		return transformed;
 	};
 }
 
@@ -53,7 +88,12 @@ export class ProjectionBoundary extends HTMLProjectionNode {
 		return this.authored;
 	}
 	captureOffset() {
-		if (!this.layout) return;
+		// A newly registered parent has no measured origin yet. Comparing its
+		// temporary zero origin to its first layout would invent wrapper movement.
+		if (!this.layout || (this.parent?.instance instanceof HTMLElement && !this.parent.layout)) {
+			this.previousOffset = undefined;
+			return;
+		}
 		this.previousOffset = {
 			x: this.layout.layoutBox.x.min - (this.parent?.layout?.layoutBox.x.min ?? 0),
 			y: this.layout.layoutBox.y.min - (this.parent?.layout?.layoutBox.y.min ?? 0)

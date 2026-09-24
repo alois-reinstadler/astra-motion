@@ -285,7 +285,7 @@ const pages: DocPage[] = [
 				title: 'Measure the right coordinate space',
 				text: [
 					'Register a scroll container with layout({ scroll: true }) when it is part of the projection tree. Use root for an appropriate fixed layout root. These options inform Motion’s geometry measurements; they do not add scroll-linked animation.',
-					'Plain 2D transformed wrappers are measured automatically, including nested rotation, skew, nonuniform scale and custom origins. Nested scroll and sticky boundaries are covered while descendant layout animates. Changing wrapper transforms during projection, perspective and 3D scenes remain outside this contract.'
+					'Plain 2D transformed wrappers are measured automatically, including nested rotation, skew, nonuniform scale and custom origins. Nested scroll and sticky boundaries are covered while descendant layout animates. Changing wrapper transforms during projection, zero-scale transforms, perspective and 3D scenes remain outside this contract.'
 				]
 			}
 		]

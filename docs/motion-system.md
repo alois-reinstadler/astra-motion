@@ -347,7 +347,9 @@ transforms during measurement and restores authored declarations and priorities.
 still owns interpolation and descendant scale correction. Nested scroll/clipping and
 sticky entry/exit use the browser’s actual sticky displacement, so automatic layout
 retargeting does not replay scrolling. Animated wrapper transforms, changing the affine
-basis during a shared handoff, CSS 3D matrices and perspective remain unqualified. A state
+basis during a shared handoff, singular transforms such as zero scale, CSS 3D matrices
+and perspective remain unqualified. See the [boundary review](research/projection-boundaries.md)
+for tested cases and remaining limits. A state
 binding that only animates paint (for example opacity) preserves existing CSS
 transforms. It checks for conflicting ownership if transforms, layout or drag are
 subsequently requested.
