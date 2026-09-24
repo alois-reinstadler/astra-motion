@@ -48,9 +48,42 @@ compensated wrapper declarations on completion, teardown and reattachment.
   parent resizing and crossing the sticky threshold. Console and network checks
   were clean, and the settled layout was captured for visual review.
 
-WebKit used locally extracted Linux dependencies. Full release packaging and
-production deployment checks belong to the final integration run; these focused
-results are not a substitute for that run.
+The combined integration also passed all 990 component-browser tests (171 files)
+across Chromium, Firefox and WebKit, the 110 server tests, full formatting/ESLint,
+guide and upgrade gates, production build, strict publint, and independent consumer
+Svelte/TypeScript checks. The packed consumer passed all 39 runtime cases across
+the three engines, with archive contents, installed files, served build and fetched
+assets checked against their hashes. The reviewed export manifest now includes the
+pre-existing lowercase `motion` namespace; no public export was added by this review.
+
+The complete production E2E run passed 175 cases across the three engines using
+one worker, matching CI's scheduling. Two existing platform-specific touch cases
+were skipped. No application behavior assertions were removed or relaxed.
+
+The showcase photograph regression now observes actual outgoing transform writes
+as well as animation frames. This removes a pre-existing WebKit sampling race when
+a software-rendered frame spans the complete short exit. Five consecutive WebKit
+runs and a targeted three-browser run passed; injected inverted and disabled exits
+both still failed the original direction assertion. Runtime code was unchanged.
+
+The qualified package archive has SHA-256
+`361c7e3d16fda17c3a6912677389be246bd6d2e2d5502f21d4424ea0022782e2`.
+This is local package qualification, not a registry publication.
+
+The [bundle report](bundle-sizes.json) was regenerated with the final runtime.
+Compared with the same measurement on the original main commit `b1b3c8f`, gzip
+sizes changed as follows (bytes):
+
+| Entry        | Before | After | Change |
+| ------------ | -----: | ----: | -----: |
+| Layout       |  30918 | 33635 |  +2717 |
+| State        |  41148 | 43906 |  +2758 |
+| Animate      |  23738 | 21219 |  -2519 |
+| Full runtime |  58027 | 61800 |  +3773 |
+
+WebKit used locally extracted Linux dependencies. Shared Chrome checks covered the
+production boundary page, interrupted resizing and sticky scrolling, with clean
+console/network results and a screenshot review.
 
 ## Limits
 

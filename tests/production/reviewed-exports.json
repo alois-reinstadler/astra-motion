@@ -9,6 +9,7 @@
 		"createMotion",
 		"createScroll",
 		"mapValue",
+		"motion",
 		"motionStore",
 		"motionValue",
 		"popLayout",
