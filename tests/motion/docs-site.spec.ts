@@ -1,6 +1,6 @@
 import { expect, test, type Locator } from '@playwright/test';
 
-// Native scrolling can outlive Playwright's two-frame actionability check in WebKit.
+// Native scrolling can outlive Playwright's two-frame actionability check in Firefox and WebKit.
 // Wait before the action being tested, without retrying that action or disabling motion.
 async function settlePointerTarget(target: Locator) {
 	await target.evaluate((node) => node.scrollIntoView({ behavior: 'instant', block: 'center' }));
@@ -31,7 +31,9 @@ test('live docs examples keep their interactions, reset, and source on the page'
 	page.on('pageerror', (error) => errors.push(error.message));
 	await page.goto('/docs/presence#pop-layout');
 	const list = page.locator('[data-example="motion-component"]');
-	await list.getByRole('button', { name: 'Complete: Collect a little inspiration' }).click();
+	const complete = list.getByRole('button', { name: 'Complete: Collect a little inspiration' });
+	await settlePointerTarget(complete);
+	await complete.click();
 	await expect(list.locator('li.task')).toHaveCount(2);
 	await list.getByRole('button', { name: 'Start again' }).click();
 	await expect(list.locator('li.task')).toHaveCount(3);
