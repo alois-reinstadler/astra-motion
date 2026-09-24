@@ -25,39 +25,54 @@ test('photographs exit and enter in the requested direction, including rapid rev
 			const exit: number[] = [];
 			const enter: number[] = [];
 			let enteredTitle = original;
+			const outgoing = document.querySelector<HTMLElement>('.photo-replace')!;
+			// A software-rendered frame can span the whole 200ms exit. Observe the
+			// real transform writes on the outgoing keyed node before replacement,
+			// including its final write if removal wins the next animation frame.
+			const exitObserver = new MutationObserver(() => {
+				const transform = outgoing.isConnected
+					? getComputedStyle(outgoing).transform
+					: outgoing.style.transform;
+				exit.push(new DOMMatrix(transform || undefined).m41);
+			});
+			exitObserver.observe(outgoing, { attributes: true, attributeFilter: ['style'] });
 			document
 				.querySelector<HTMLButtonElement>(
 					direction === 1 ? '[aria-label="Next photograph"]' : '[aria-label="Previous photograph"]'
 				)!
 				.click();
-			for (let frame = 0; frame < 120; frame++) {
-				await new Promise(requestAnimationFrame);
-				// Selection replaces this keyed subtree, so sample the current nodes.
-				const photo = document.querySelector<HTMLElement>('.photo-replace')!;
-				const heading = document.querySelector('.detail-copy h3')!;
-				const x = new DOMMatrix(getComputedStyle(photo).transform).m41;
-				if (heading.textContent === original) exit.push(x);
-				else {
-					enteredTitle = heading.textContent;
-					enter.push(x);
-					if (direction === -1 && x < -1) {
-						// Reverse while the previous photograph is still entering.
-						const next = document.querySelector<HTMLButtonElement>(
-							'[aria-label="Next photograph"]'
-						)!;
-						next.click();
-						next.click();
-						document
-							.querySelector<HTMLButtonElement>('[aria-label="Previous photograph"]')!
-							.click();
-						break;
+			try {
+				for (let frame = 0; frame < 120; frame++) {
+					await new Promise(requestAnimationFrame);
+					// Selection replaces this keyed subtree, so sample the current nodes.
+					const photo = document.querySelector<HTMLElement>('.photo-replace')!;
+					const heading = document.querySelector('.detail-copy h3')!;
+					const x = new DOMMatrix(getComputedStyle(photo).transform).m41;
+					if (heading.textContent === original) exit.push(x);
+					else {
+						enteredTitle = heading.textContent;
+						enter.push(x);
+						if (direction === -1 && x < -1) {
+							// Reverse while the previous photograph is still entering.
+							const next = document.querySelector<HTMLButtonElement>(
+								'[aria-label="Next photograph"]'
+							)!;
+							next.click();
+							next.click();
+							document
+								.querySelector<HTMLButtonElement>('[aria-label="Previous photograph"]')!
+								.click();
+							break;
+						}
+						if (enter.length > 1 && Math.abs(x) < 0.05) break;
 					}
-					if (enter.length > 1 && Math.abs(x) < 0.05) break;
 				}
+			} finally {
+				exitObserver.disconnect();
 			}
 			return { exit, enter, enteredTitle };
 		}, direction);
-		// Capture the complete short exit locally; protocol polling can miss its 200ms window.
+		// Both assertions use actual DOM transform values, not requested keyframes.
 		expect(samples.exit.some((x) => x * direction < -1)).toBe(true);
 		expect(samples.enter.some((x) => x * direction > 1)).toBe(true);
 		expect(samples.enteredTitle).toBe(
