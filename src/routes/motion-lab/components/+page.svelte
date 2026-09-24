@@ -70,7 +70,9 @@
 	<header class="flex flex-col gap-4">
 		<a
 			href={resolve('/motion-lab')}
-			class="text-sm text-muted-foreground underline underline-offset-4">← Motion lab</a
+			class="text-sm text-muted-foreground underline underline-offset-4"
+		>
+			Motion lab</a
 		>
 		<h1 class="text-4xl font-semibold tracking-tight">Real components. Real interruptions.</h1>
 		<p class="max-w-2xl text-muted-foreground">

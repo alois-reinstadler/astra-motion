@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onDestroy, untrack, tick } from 'svelte';
+	import { onDestroy, onMount, tick } from 'svelte';
 	import { stagger, type AnimationPlaybackControlsWithThen } from 'motion';
 	import { createScroll } from '../motion/scroll.svelte.js';
 	import { createAnimate } from '../motion/animate.js';
@@ -95,11 +95,9 @@
 	let playback: AnimationPlaybackControlsWithThen | undefined;
 	let revision = 0;
 	let hydrated = $state(false);
-	$effect(() =>
-		untrack(() => {
-			hydrated = true;
-		})
-	);
+	onMount(() => {
+		hydrated = true;
+	});
 	function settleTransportForPolicy() {
 		// A policy change stops/replaces playback; Motion does not resolve a
 		// stopped control's completion promise. Keep the transport state truthful.
@@ -239,7 +237,9 @@
 				type="button"
 				data-testid="story-previous"
 				disabled={!hydrated}
-				onclick={() => changeChapter(-1)}><span aria-hidden="true">←</span> Previous</button
+				onclick={() => changeChapter(-1)}
+			>
+				Previous</button
 			>
 			<span
 				class="chapter-count"
@@ -251,8 +251,9 @@
 				type="button"
 				data-testid="story-next"
 				disabled={!hydrated}
-				onclick={() => changeChapter(1)}>Next <span aria-hidden="true">→</span></button
-			>
+				onclick={() => changeChapter(1)}
+				>Next
+			</button>
 		</div>
 		<p class="reader-hint">Scroll the journal · or focus it and use your arrow keys</p>
 	</div>
@@ -300,7 +301,7 @@
 				data-testid="story-replay"
 				disabled={!hydrated}
 				onclick={replay}
-				aria-label="Replay composition">↻</button
+				aria-label="Replay composition">Replay</button
 			>
 		</div>
 		<p class="sequence-state" data-testid="story-sequence-state" role="status">{status}</p>
@@ -661,9 +662,9 @@
 		outline-offset: 4px;
 	}
 	.replay {
-		min-width: 44px;
-		font-size: 20px;
-		padding: 8px;
+		min-width: 64px;
+		font-size: 11px;
+		padding: 10px 12px;
 	}
 	.sequence-state {
 		min-height: 15px;

@@ -15,7 +15,7 @@
 </script>
 
 <svelte:head>
-	<title>Astra / A field guide to motion</title>
+	<title>Astra / Authoring fixtures</title>
 	<meta
 		name="description"
 		content="Complete Svelte-native motion examples: presence, layout, shared elements, scroll and timelines."
@@ -25,15 +25,16 @@
 <main>
 	<header>
 		<a class="brand" href={resolve('/motion-lab')}>astra<span>®</span></a><a
-			href={resolve('/motion-lab')}>Back to the laboratory ↗</a
-		>
+			href={resolve('/motion-lab')}
+			>Back to the laboratory
+		</a>
 	</header>
 	<div class="intro">
-		<p class="eyebrow">THE AUTHORING GUIDE / 001</p>
-		<h1>Ordinary markup.<br /><em>Extraordinary movement.</em></h1>
+		<p class="eyebrow">THE INTEGRATION REFERENCE / 001</p>
+		<h1>Authoring fixtures.<br /><em>Integration contracts.</em></h1>
 		<p class="lede">
-			Start with the smallest tool for the job. Keep your native elements, your CSS and Svelte’s
-			lifecycle.
+			Complete source fixtures used to qualify the public API. For the learning path and focused
+			live examples, start with the documentation.
 		</p>
 	</div>
 	<div class="principles">
@@ -79,7 +80,7 @@
 							>{example.source}</code
 						></pre>
 					<p class="note">{example.note}</p>
-					<a class="try" href={resolve(example.lab)}>Try the interactive lab <span>↗</span></a>
+					<a class="try" href={resolve(example.lab)}>Try the interactive lab </a>
 				</section>
 			{/each}
 			<section id="good-shapes" class="shapes">

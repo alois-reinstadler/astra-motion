@@ -16,20 +16,26 @@
 		guide: { slug: 'getting-started', title: 'Getting started' }
 	};
 	const guide = $derived(
-		guides[page.url.pathname.split('/')[2]] ?? { slug: 'layout', title: 'Layout' }
+		guides[page.route.id?.split('/')[2] ?? ''] ?? { slug: 'layout', title: 'Layout' }
 	);
 </script>
 
 <SiteHeader compact />
 <nav class="lab-navigation" aria-label="Laboratory navigation">
 	<div class="lab-context">
-		<a href={resolve('/examples')}>← All examples</a>
-		<a href={resolve('/docs/[slug]', { slug: guide.slug })}>{guide.title} guide ↗</a>
+		<span>Laboratory <small>Advanced diagnostics</small></span><a href={resolve('/examples')}
+			>Examples</a
+		>
+		<a href={resolve('/docs/[slug]', { slug: guide.slug })}>{guide.title} guide </a>
 	</div>
+	<p class="lab-description">
+		These scenes test integration boundaries and stress cases. Start with the documentation for a
+		focused, copyable example.
+	</p>
 	<div class="lab-topics">
 		<a
 			href={resolve('/motion-lab')}
-			aria-current={page.url.pathname === '/motion-lab' ? 'page' : undefined}>Layout</a
+			aria-current={page.url.pathname === resolve('/motion-lab') ? 'page' : undefined}>Layout</a
 		>
 		<a
 			href={resolve('/motion-lab/components')}
@@ -60,6 +66,19 @@
 {@render children()}
 
 <style>
+	.lab-description {
+		white-space: normal;
+		line-height: 1.6;
+		margin: 0 0 12px;
+	}
+	.lab-context {
+		flex-wrap: wrap;
+	}
+	.lab-context small {
+		margin-left: 10px;
+		color: #64695c;
+	}
+
 	.lab-navigation {
 		white-space: nowrap;
 		padding: 15px 56px;

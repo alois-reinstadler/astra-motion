@@ -4,8 +4,8 @@
 	let { compact = false }: { compact?: boolean } = $props();
 	const links = [
 		{ href: '/docs', title: 'Documentation' },
-		{ href: '/showcase', title: 'Showcase' },
 		{ href: '/examples', title: 'Examples' },
+		{ href: '/showcase', title: 'Showcase' },
 		{ href: '/about', title: 'Why Astra' }
 	] as const;
 </script>

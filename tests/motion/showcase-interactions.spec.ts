@@ -90,7 +90,7 @@ test('photographs exit and enter in the requested direction, including rapid rev
 	await expect(page.locator('[data-contact-open="namib"]')).toBeFocused();
 });
 
-test('edition and arrow stay within the paper through interrupted layout changes', async ({
+test('edition and footer stay within the paper through interrupted layout changes', async ({
 	page
 }) => {
 	await page.setViewportSize({ width: 1280, height: 900 });
@@ -108,7 +108,7 @@ test('edition and arrow stay within the paper through interrupted layout changes
 			await new Promise(requestAnimationFrame);
 			const card = scene.querySelector('[data-testid="desk-canvas"]')!.getBoundingClientRect();
 			for (const node of scene.querySelectorAll(
-				'[data-testid="desk-edition"], [data-testid="desk-arrow"]'
+				'[data-testid="desk-edition"], [data-testid="desk-footer"]'
 			)) {
 				const box = node.getBoundingClientRect();
 				worst = Math.max(

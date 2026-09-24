@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Motion, Presence } from '$lib/motion/index.js';
+	import { motion, Presence } from '$lib/motion/index.js';
 
 	const chapters = [
 		{ title: 'Make room.', text: 'A little space can change everything.', color: '#dfe5d1' },
@@ -26,8 +26,7 @@
 	<div class="stage" aria-live="polite">
 		<Presence value={chapter} {mode}>
 			{#snippet children(index)}
-				<Motion
-					as="article"
+				<motion.article
 					class="chapter"
 					style={`background: ${chapters[index].color}`}
 					motion={{
@@ -41,12 +40,12 @@
 					<h3>{chapters[index].title}</h3>
 					<p>{chapters[index].text}</p>
 					<span class="asterisk" aria-hidden="true">✳</span>
-				</Motion>
+				</motion.article>
 			{/snippet}
 		</Presence>
 	</div>
 	<button class="next" onclick={() => (chapter = (chapter + 1) % chapters.length)}>
-		Next note <span aria-hidden="true">↗</span>
+		Next note
 	</button>
 </div>
 
@@ -133,9 +132,5 @@
 		color: #252821;
 		background: transparent;
 		font-size: 12px;
-	}
-	.next span {
-		font-size: 18px;
-		line-height: 1;
 	}
 </style>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createAttachmentKey } from 'svelte/attachments';
-	import { Motion, createLayout, popLayout } from '$lib/motion/index.js';
+	import { motion, createLayout, popLayout } from '$lib/motion/index.js';
 	const tasks = [
 		{ id: 1, title: 'Collect a little inspiration', category: 'Explore' },
 		{ id: 2, title: 'Try something unexpected', category: 'Create' },
@@ -15,8 +15,7 @@
 	<div class="heading"><span>A GOOD DAY</span><span>{remaining.length} to enjoy</span></div>
 	<ul aria-label="Today's little plans">
 		{#each remaining as task (task.id)}
-			<Motion
-				as="li"
+			<motion.li
 				class="task"
 				{...pop}
 				motion={{
@@ -39,7 +38,7 @@
 					<h3>{task.title}</h3>
 					<p>{task.category}</p>
 				</div>
-			</Motion>
+			</motion.li>
 		{/each}
 		{#if remaining.length === 0}<li class="empty">
 				A day well spent. <span aria-hidden="true">✳</span>
@@ -50,8 +49,8 @@
 		class="restore"
 		onclick={() => (remaining = tasks)}
 		disabled={remaining.length === tasks.length}
-		>Start again <span aria-hidden="true">↺</span></button
-	>
+		>Start again
+	</button>
 </div>
 
 <style>
@@ -151,10 +150,7 @@
 		font-size: 12px;
 		cursor: pointer;
 	}
-	.restore > span {
-		font-size: 18px;
-		line-height: 1;
-	}
+
 	.restore:disabled {
 		color: #a3a699;
 		cursor: default;

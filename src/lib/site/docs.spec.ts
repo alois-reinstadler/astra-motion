@@ -1,9 +1,41 @@
 import { describe, expect, it } from 'vitest';
 import { compile } from 'svelte/compiler';
 import { docs, getDoc, getRecipe } from './docs.js';
-import { liveExamples } from './examples.js';
+import { liveExamples, exampleCatalog } from './examples.js';
 
 describe('documentation sources', () => {
+	it('every catalog preview has one canonical guide section and matching source', () => {
+		for (const example of Object.values(liveExamples)) {
+			const owners = docs.flatMap((doc) =>
+				doc.sections
+					.filter((section) => section.example === example.id)
+					.map((section) => ({ doc, section }))
+			);
+			expect(owners).toHaveLength(1);
+			expect(owners[0].doc.slug).toBe(example.guide);
+			expect(owners[0].section.id).toBe(example.anchor);
+			expect(exampleCatalog.find((entry) => entry.id === example.id)).toMatchObject({
+				title: example.title,
+				slug: example.guide,
+				anchor: example.anchor
+			});
+		}
+	});
+	it('onboarding introduces one working component immediately after installation', () => {
+		const start = getDoc('getting-started')!;
+		expect(start.sections[0].id).toBe('install-local-package');
+		expect(start.sections[1].example).toBe('state');
+		expect(liveExamples.state.snippetLabel).toBe('Notification.svelte');
+		for (const generate of ['client', 'server'] as const) {
+			expect(
+				compile(liveExamples.state.snippet, { filename: 'Notification.svelte', generate }).warnings
+			).toEqual([]);
+		}
+		expect(start.sections.filter((section) => section.example)).toHaveLength(1);
+		expect(start.sections[1].aliases).toContain('motion-component');
+		expect(getDoc('')!.sections.every((section) => !section.example && !section.recipe)).toBe(true);
+	});
+
 	it('every live example has standalone public source that compiles for client and server', () => {
 		for (const example of Object.values(liveExamples)) {
 			expect(example.source).toContain("from 'astra-motion'");

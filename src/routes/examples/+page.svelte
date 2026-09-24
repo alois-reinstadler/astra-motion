@@ -1,150 +1,18 @@
 <script lang="ts">
-	import { untrack } from 'svelte';
+	import { onMount } from 'svelte';
 	let ready = $state(false);
-	$effect(() =>
-		untrack(() => {
-			ready = true;
-		})
-	);
+	onMount(() => {
+		ready = true;
+	});
 	import { resolve } from '$app/paths';
 	import SiteFrame from '$lib/site/SiteFrame.svelte';
-	import DocExample from '$lib/site/DocExample.svelte';
-	import { liveExamples } from '$lib/site/examples.js';
-	const categories = [
-		'All examples',
-		'Layout',
-		'Presence',
-		'Components',
-		'Scroll & timelines',
-		'Routes'
-	] as const;
+	import {
+		exampleCatalog as examples,
+		exampleCategories as categories
+	} from '$lib/site/examples.js';
 	type Category = (typeof categories)[number];
 	let category = $state<Category>('All examples');
 	let query = $state('');
-	const examples = [
-		{
-			title: 'Fieldwork — a studio in motion',
-			description:
-				'A photographic contact sheet, editing desk, publishing queue and reading experience.',
-			category: 'Components',
-			slug: 'showcase',
-			anchor: '',
-			mark: '↗',
-			tone: 'coral',
-			tag: 'THE SHOWCASE'
-		},
-		{
-			title: 'Room for the details',
-			description: 'Expand a card and watch its surface and content move together.',
-			category: 'Layout',
-			slug: 'layout',
-			anchor: 'automatic',
-			mark: '▦',
-			tone: 'sage',
-			tag: 'LAYOUT'
-		},
-		{
-			title: 'A little good news',
-			description: 'A notification that enters, leaves, and changes its mind gracefully.',
-			category: 'Presence',
-			slug: 'state',
-			anchor: 'targets',
-			mark: '◐',
-			tone: 'cream',
-			tag: 'ENTER & EXIT'
-		},
-		{
-			title: 'One thought at a time',
-			description: 'Switch between cards with wait or overlapping transitions.',
-			category: 'Presence',
-			slug: 'presence',
-			anchor: 'wait',
-			mark: '⇄',
-			tone: 'coral',
-			tag: 'PRESENCE'
-		},
-		{
-			title: 'Made to be touched',
-			description:
-				'Hover, press, focus, and drag. Small responses that make an interface feel alive.',
-			category: 'Components',
-			slug: 'state',
-			anchor: 'gestures',
-			mark: '↗',
-			tone: 'sage',
-			tag: 'GESTURES'
-		},
-		{
-			title: 'A selection that follows',
-			description: 'A shared highlight moves between tabs without losing its shape.',
-			category: 'Layout',
-			slug: 'shared-layout',
-			anchor: 'identity',
-			mark: '⇆',
-			tone: 'cream',
-			tag: 'SHARED ELEMENTS'
-		},
-		{
-			title: 'Make room for what matters',
-			description: 'Remove a list item and let the others settle into their new places.',
-			category: 'Layout',
-			slug: 'getting-started',
-			anchor: 'motion-component',
-			mark: '▤',
-			tone: 'coral',
-			tag: 'ANIMATED LISTS'
-		},
-		{
-			title: 'Make it move',
-			description: 'Scrub a pinned composition through scatter, assembly and release.',
-			category: 'Scroll & timelines',
-			slug: 'scroll',
-			anchor: 'container',
-			mark: '↓',
-			tone: 'sage',
-			tag: 'SCROLL TO TRY'
-		},
-		{
-			title: 'A small sequence',
-			description: 'Play, pause, and replay a graphic composition with a scoped timeline.',
-			category: 'Scroll & timelines',
-			slug: 'timelines',
-			anchor: 'sequence',
-			mark: '≋',
-			tone: 'cream',
-			tag: 'TIMELINES'
-		},
-		{
-			title: 'Everything in its own time',
-			description: 'Reveal a menu with coordinated, staggered child animations.',
-			category: 'Components',
-			slug: 'state',
-			anchor: 'inheritance',
-			mark: '⌘',
-			tone: 'sage',
-			tag: 'VARIANTS'
-		},
-		{
-			title: 'A moment of discovery',
-			description: 'Watch a card respond as it enters and leaves a scroll viewport.',
-			category: 'Scroll & timelines',
-			slug: 'scroll',
-			anchor: 'in-view',
-			mark: '◒',
-			tone: 'coral',
-			tag: 'VISIBILITY'
-		},
-		{
-			title: 'Motion between pages',
-			description: 'Connect SvelteKit navigation with native page transitions.',
-			category: 'Routes',
-			slug: 'routes',
-			anchor: 'coordinator',
-			mark: '↗',
-			tone: 'cream',
-			tag: 'INTEGRATION GUIDE'
-		}
-	] as const;
 	const filtered = $derived(
 		examples.filter(
 			(example) =>
@@ -159,11 +27,11 @@
 <SiteFrame>
 	<main id="site-content">
 		<header class="examples-intro">
-			<p class="eyebrow">THE EXAMPLE COLLECTION</p>
-			<h1>Less imagining.<br /><em>More trying.</em></h1>
+			<p class="eyebrow">EXAMPLES</p>
+			<h1>Find the interaction<br /><em>you want to build.</em></h1>
 			<p>
-				Interactive examples, with the source right beside them.<br />Choose an interaction, test
-				its behavior, and copy the component into your app.
+				Each example opens at its explanation and live preview. Try the interaction, read the key
+				idea, then copy its complete source.
 			</p>
 		</header>
 
@@ -186,19 +54,6 @@
 				/></label
 			>
 		</div>
-		{#if category === 'All examples' && !query.trim()}
-			<section class="featured-study" aria-labelledby="featured-heading">
-				<div class="featured-copy">
-					<p class="eyebrow">FEATURED / SCROLL CHOREOGRAPHY</p>
-					<h2 id="featured-heading">You set<br /><em>the pace.</em></h2>
-					<p>Scatter. Gather. Release. One scroll position conducts the whole composition.</p>
-					<a href={resolve('/docs/[slug]', { slug: 'scroll' })}
-						>Build this interaction <span aria-hidden="true">↗</span></a
-					>
-				</div>
-				<DocExample example={liveExamples.scroll} />
-			</section>
-		{/if}
 		<p class="result-count" aria-live="polite">
 			{filtered.length}
 			{filtered.length === 1 ? 'EXAMPLE' : 'EXAMPLES'}{category !== 'All examples'
@@ -211,14 +66,13 @@
 					href={example.slug === 'showcase'
 						? resolve('/showcase')
 						: resolve(`/docs/[slug]#${example.anchor}`, { slug: example.slug })}
-					><div class="example-art {example.tone}" aria-hidden="true">
-						<span class="art-index"
-							>ASTRA / {String(examples.indexOf(example) + 1).padStart(2, '0')}</span
-						><span class="art-mark">{example.mark}</span><span class="art-tag">{example.tag}</span>
+					><div class="example-art" aria-hidden="true">
+						<span class="art-index">{String(examples.indexOf(example) + 1).padStart(2, '0')}</span>
+						<span class="art-tag">{example.category}</span>
 					</div>
 					<div class="example-content">
 						<span class="example-category">{example.category}</span>
-						<h2>{example.title}<span>↗</span></h2>
+						<h2>{example.title}</h2>
 						<p>{example.description}</p>
 					</div></a
 				>{/each}
@@ -232,61 +86,23 @@
 					onclick={() => {
 						query = '';
 						category = 'All examples';
-					}}>Show all examples →</button
-				>
+					}}
+					>Show all examples
+				</button>
 			</div>{/if}
 		<aside>
 			<div>
-				<h2>Want the map before the playground?</h2>
-				<p>The documentation starts with one element and builds from there.</p>
+				<h2>Start with one component.</h2>
+				<p>New to Astra? Install the beta and build a notification in Getting started.</p>
 			</div>
 			<a href={resolve('/docs/[slug]', { slug: 'getting-started' })}
-				>Read the getting started guide ↗</a
-			>
+				>Read the getting started guide
+			</a>
 		</aside>
 	</main>
 </SiteFrame>
 
 <style>
-	.featured-study {
-		display: grid;
-		grid-template-columns: 0.8fr 1.2fr;
-		align-items: center;
-		gap: 60px;
-		margin: 0 0 65px;
-		border-top: 1px solid var(--site-line);
-		padding-top: 25px;
-	}
-	.featured-copy h2 {
-		font-size: clamp(44px, 6vw, 76px);
-		font-weight: 500;
-		letter-spacing: -0.055em;
-		line-height: 1;
-		margin: 0 0 24px;
-	}
-	.featured-copy > p:not(.eyebrow) {
-		max-width: 260px;
-		font-size: 15px;
-		line-height: 1.8;
-		color: var(--site-muted);
-	}
-	.featured-copy a {
-		display: inline-flex;
-		gap: 28px;
-		margin-top: 20px;
-		font-size: 12px;
-	}
-	@media (max-width: 750px) {
-		.featured-study {
-			grid-template-columns: 1fr;
-			gap: 10px;
-			margin-bottom: 40px;
-		}
-		.featured-copy > p:not(.eyebrow) {
-			max-width: 320px;
-		}
-	}
-
 	main {
 		max-width: 1440px;
 		padding: 0 56px;
@@ -385,7 +201,9 @@
 		min-width: 0;
 	}
 	.example-art {
-		height: 220px;
+		height: 88px;
+		background: var(--site-panel);
+		border-bottom: 1px solid var(--site-line);
 		padding: 20px;
 		position: relative;
 		overflow: hidden;
@@ -393,15 +211,7 @@
 		flex-direction: column;
 		justify-content: space-between;
 	}
-	.sage {
-		background: #dce5c2;
-	}
-	.coral {
-		background: #e9a48b;
-	}
-	.cream {
-		background: #e9e6d5;
-	}
+
 	.art-index,
 	.art-tag {
 		font:
@@ -414,20 +224,7 @@
 	.art-tag {
 		align-self: flex-end;
 	}
-	.art-mark {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		font-size: 115px;
-		line-height: 1;
-		font-family: Georgia, serif;
-		font-weight: 400;
-		transition: transform 220ms;
-	}
-	.example:hover .art-mark {
-		transform: translate(-50%, -50%) rotate(-8deg);
-	}
+
 	.example-content {
 		padding: 18px 0;
 	}
@@ -448,9 +245,7 @@
 		justify-content: space-between;
 		gap: 15px;
 	}
-	.example h2 > span {
-		font-weight: 400;
-	}
+
 	.example:hover h2 {
 		color: var(--site-accent);
 	}
@@ -498,14 +293,6 @@
 	.empty button {
 		color: var(--site-accent);
 	}
-	@media (prefers-reduced-motion: reduce) {
-		.art-mark {
-			transition: none;
-		}
-		.example:hover .art-mark {
-			transform: translate(-50%, -50%);
-		}
-	}
 	@media (max-width: 1050px) {
 		.collection-tools {
 			align-items: flex-start;
@@ -546,7 +333,7 @@
 			gap: 18px;
 		}
 		.example-art {
-			height: 230px;
+			height: 74px;
 		}
 		aside {
 			align-items: flex-start;

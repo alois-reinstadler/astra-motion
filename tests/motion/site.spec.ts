@@ -54,7 +54,7 @@ test('example discovery filters, searches, and opens a live documentation exampl
 	await expect(page.getByRole('heading', { name: 'No examples found.' })).toBeVisible();
 	await page.getByRole('button', { name: 'Show all examples' }).click();
 	await expect(page.locator('.example-grid > .example')).toHaveCount(12);
-	await page.getByRole('searchbox', { name: 'Search examples' }).fill('touched');
+	await page.getByRole('searchbox', { name: 'Search examples' }).fill('drag feedback');
 	await expect(page.locator('.example-grid > .example')).toHaveCount(1);
 	await page.locator('.example-grid > .example').click();
 	await expect(page).toHaveURL(/\/docs\/state#gestures$/);
@@ -142,4 +142,49 @@ test('a presence example can be tried and inspected inside the mobile docs', asy
 	).toBeVisible();
 	await expect(page.locator('a[href*="motion-lab"]')).toHaveCount(0);
 	await expect(page).toHaveURL(/\/docs\/presence$/);
+});
+
+test('the first lesson exposes runnable code and every catalog entry opens its promised destination', async ({
+	page
+}) => {
+	await page.goto('/docs');
+	await expect(page.locator('[data-example]')).toHaveCount(0);
+	await page.goto('/docs/getting-started#motion-component');
+	const first = page.locator('#first-component');
+	await expect(first.getByRole('region', { name: 'Notification.svelte source' })).toBeVisible();
+	await expect(first.getByRole('region', { name: 'Notification.svelte source' })).toContainText(
+		"import { motion } from 'astra-motion'"
+	);
+	await expect(first.getByRole('region', { name: 'Notification.svelte source' })).toContainText(
+		'{#if visible}'
+	);
+	await expect(page.locator('[data-example]')).toHaveCount(1);
+	await page.goto('/examples');
+	const destinations = await page.locator('.example-grid > .example').evaluateAll((nodes) =>
+		nodes.map((node) => ({
+			href: (node as HTMLAnchorElement).getAttribute('href')!,
+			title: node.querySelector('h2')!.textContent!
+		}))
+	);
+	for (const destination of destinations) {
+		await page.goto(destination.href);
+		if (destination.href.includes('/showcase')) {
+			await expect(page.getByRole('heading', { level: 1 })).toContainText('Fieldwork');
+		} else {
+			const id = new URL(page.url()).hash.slice(1);
+			const section = page.locator(`#${id}`);
+			await expect(section).toBeVisible();
+			if (destination.href.includes('/docs/routes')) {
+				await expect(
+					section.getByRole('link', { name: 'Try the two-page route demo' })
+				).toHaveAttribute('href', /motion-lab\/product$/);
+			} else {
+				await expect(section.locator('.preview-heading')).toContainText(destination.title);
+				await expect(section.locator('summary')).toContainText('Complete source');
+			}
+		}
+		expect(await page.locator('body').innerText()).not.toMatch(
+			/[\u2190-\u21ff\u27f0-\u27ff\u2900-\u297f\u2b00-\u2b11]/u
+		);
+	}
 });

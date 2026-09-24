@@ -79,9 +79,10 @@
 			Every example uses ordinary Svelte state assignments.
 		</p>
 		<nav>
-			<a href={resolve('/motion-lab')}>Original experiments ↗</a><a
-				href={resolve('/motion-lab/updates')}>Compare update modes ↗</a
-			><a href={resolve('/motion-lab/product')}>Route transitions ↗</a>
+			<a href={resolve('/motion-lab')}>Original experiments </a><a
+				href={resolve('/motion-lab/updates')}
+				>Compare update modes
+			</a><a href={resolve('/motion-lab/product')}>Route transitions </a>
 		</nav>
 	</div>
 	<div class="stress-bar">
@@ -118,7 +119,15 @@
 				immediately.
 			</p>
 		</div>
-		<div class="stage dashboard" bind:this={dashboard}>
+		<div
+			class="stage dashboard"
+			{@attach (node) => {
+				dashboard = node;
+				return () => {
+					dashboard = undefined;
+				};
+			}}
+		>
 			<aside class:expanded={sidebar} {@attach layout()}>
 				<span {@attach layout({ mode: 'position' })}>{sidebar ? 'Index' : 'i'}</span>
 			</aside>
@@ -316,8 +325,8 @@
 	</section>
 	<footer>
 		<strong>ASTRA MOTION</strong><a href={resolve('/motion-lab/updates')}
-			>What does layout.update change? ↗</a
-		>
+			>What does layout.update change?
+		</a>
 	</footer>
 </main>
 

@@ -7,7 +7,7 @@
 
 <svelte:head><title>Astra / Object {data.id}</title></svelte:head>
 <main>
-	<a href={resolve('/motion-lab/product')} data-testid="collection">← The collection</a>
+	<a href={resolve('/motion-lab/product')} data-testid="collection"> The collection</a>
 	<article {@attach routeShared(`background-${data.id}`)}>
 		<img
 			src={asset('/object.svg')}
@@ -23,7 +23,7 @@
 				A small study in continuity. The image, title and surface keep their identity as the route
 				changes around them.
 			</p>
-			<a href={resolve('/motion-lab/product')}>Return to all objects ↗</a>
+			<a href={resolve('/motion-lab/product')}>Return to all objects </a>
 		</div>
 	</article>
 </main>

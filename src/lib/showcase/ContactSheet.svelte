@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onDestroy, untrack, tick } from 'svelte';
+	import { onDestroy, onMount, tick } from 'svelte';
 	import { createLayout } from '$lib/motion/layout.js';
 	import { createAnimate } from '$lib/motion/animate.js';
 	import { createMotion } from '$lib/motion/lite.svelte.js';
@@ -37,11 +37,9 @@
 	$effect(settleNavigationForPolicy);
 	onDestroy(cancelReplacement);
 	const visible = $derived(photos.filter((photo) => filter === 'All' || photo.category === filter));
-	$effect(() =>
-		untrack(() => {
-			ready = true;
-		})
-	);
+	onMount(() => {
+		ready = true;
+	});
 	async function open(photo: Photo) {
 		cancelReplacement();
 		requested = photo;
@@ -129,11 +127,11 @@
 	{#if selected}
 		<div class="detail" {@attach replacement.attach}>
 			<div class="detail-tools">
-				<button data-contact-close onclick={close}>← Contact sheet</button>
+				<button data-contact-close onclick={close}> Contact sheet</button>
 				<div>
-					<button aria-label="Previous photograph" onclick={() => step(-1)}>←</button><button
+					<button aria-label="Previous photograph" onclick={() => step(-1)}>Previous</button><button
 						aria-label="Next photograph"
-						onclick={() => step(1)}>→</button
+						onclick={() => step(1)}>Next</button
 					>
 				</div>
 			</div>
@@ -167,7 +165,7 @@
 								><strong>NASA Image Library</strong>
 							</div>
 							<!-- eslint-disable-next-line svelte/no-navigation-without-resolve --><!-- External NASA record, not an application route. -->
-							<a href={selected.source} target="_blank" rel="noreferrer">Original photograph ↗</a>
+							<a href={selected.source} target="_blank" rel="noreferrer">Original photograph </a>
 						</div>
 					</div>
 				</div>
@@ -213,7 +211,8 @@
 							src={photo.src}
 							alt={photo.alt}
 							{@attach layout({ id: `photo-${photo.id}`, mode: 'preserve-aspect' })}
-						/><span class="expand" aria-hidden="true" {@attach layout({ mode: 'position' })}>↗</span
+						/><span class="expand" aria-hidden="true" {@attach layout({ mode: 'position' })}
+							>Open</span
 						>
 					</div>
 					<div class="photo-caption" {@attach layout({ mode: 'position' })}>
@@ -226,9 +225,7 @@
 		</div>
 	{/if}
 	<div class="contact-footer">
-		<span>AN ORBITAL PERSPECTIVE</span><span
-			>Photography: NASA <span aria-hidden="true">↗</span></span
-		>
+		<span>AN ORBITAL PERSPECTIVE</span><span>Photography: NASA</span>
 	</div>
 </div>
 
@@ -358,11 +355,11 @@
 		bottom: 12px;
 		background: #f5f3e9;
 		color: #222720;
-		width: 28px;
-		height: 28px;
+		padding: 7px 10px;
+		font-size: 10px;
 		display: grid;
 		place-items: center;
-		border-radius: 50%;
+		border-radius: 4px;
 		opacity: 0;
 	}
 	.photo:hover .expand,
@@ -408,6 +405,10 @@
 		align-items: center;
 		justify-content: space-between;
 		padding: 18px 0 22px;
+	}
+	.detail-tools {
+		gap: 16px;
+		flex-wrap: wrap;
 	}
 	.detail-tools button {
 		padding: 8px 0;

@@ -10,6 +10,13 @@ export interface DocSection {
 	recipe?: RecipeId;
 	example?: LiveExampleId;
 	related?: string[];
+	aliases?: string[];
+	links?: {
+		slug?: string;
+		path?: '/status' | '/examples' | '/showcase' | '/motion-lab/product';
+		title: string;
+		detail: string;
+	}[];
 	code?: { label: string; source: string };
 }
 export interface DocPage {
@@ -26,39 +33,91 @@ const pages: DocPage[] = [
 		title: 'Introduction',
 		group: 'Start here',
 		summary:
-			'Connect Motion to Svelte 5: animate native elements, coordinate exits and follow layout changes with ordinary reactive state.',
+			'Learn to animate Svelte interfaces, from one element to coordinated layouts and complete applications.',
 		sections: [
 			{
 				id: 'a-small-set-of-tools',
-				title: 'A small set of tools. A connected system.',
+				title: 'Start with one element',
 				text: [
-					'Astra gives Svelte 5 a motion layer for state, presence, layout and shared elements. Svelte owns mounting and destruction. Motion owns springs, interpolation and projection. Browser View Transitions handle page changes.',
-					'Start with a tag component such as motion.div or motion.button. Use createMotion to add a binding to existing native markup. Try the examples here, then open View code to take the complete component with you.'
+					'Astra connects Motion’s animation engine to Svelte 5. Your state decides what appears; your CSS decides where it belongs. Astra animates the changes and lets Svelte retain elements until their exits finish.',
+					'Start with motion.div or motion.button for new markup. The getting started guide installs the package and builds a notification you can show, dismiss and reverse.'
 				],
-				recipe: 'state'
+				related: ['getting-started']
 			},
 			{
 				id: 'choose-your-entry',
-				title: 'Choose an authoring path',
+				title: 'Learn one interaction at a time',
 				text: [
-					'Prefer native Svelte transitions for simple enter/exit effects. For new HTML needing Astra capabilities, begin with motion tag components from astra-motion. Existing native markup and headless components use createMotion. Feature and lite entries are later bundle optimizations.'
+					'Each guide pairs a focused interaction with its explanation. Read the short example first, try the preview, then open the complete component source when you are ready to use it.'
 				],
-				points: [
-					'Svelte transition:fade, transition:fly and transition:slide — simple native enter/exit effects.',
-					'motion.div, motion.button, motion.input — native tags with motion and supported Svelte bindings.',
-					'createMotion — native directives, scoped styles and existing component integration.',
-					'layout — automatic projection and shared local IDs, through attachments.',
-					'presence() — a standalone opacity transition. binding.transition — a binding’s targets and live policy with native retention. Presence — coordinated branch replacement and waiting for exits.',
-					'scroll and animate — independent scroll and scoped timeline adapters.',
-					'routes — SvelteKit navigation and shared route elements.'
+				links: [
+					{
+						slug: 'state',
+						title: 'Animation state',
+						detail: 'Change targets, add gestures and coordinate variants.'
+					},
+					{
+						slug: 'presence',
+						title: 'Presence & exits',
+						detail: 'Sequence replacements and remove items without a jump.'
+					},
+					{
+						slug: 'layout',
+						title: 'Automatic layout',
+						detail: 'Animate size and position as your CSS changes.'
+					},
+					{
+						slug: 'shared-layout',
+						title: 'Shared elements & groups',
+						detail: 'Keep a selection connected across different elements.'
+					},
+					{
+						slug: 'scroll',
+						title: 'Scroll-linked motion',
+						detail: 'Connect progress and visibility to animation.'
+					},
+					{
+						slug: 'timelines',
+						title: 'Scoped timelines',
+						detail: 'Play a sequence across several elements.'
+					},
+					{
+						slug: 'routes',
+						title: 'SvelteKit routes',
+						detail: 'Enhance navigation with browser View Transitions.'
+					}
 				]
 			},
 			{
-				id: 'current-status',
-				title: 'An explicit beta',
+				id: 'build-with-confidence',
+				title: 'Bring it into your application',
 				text: [
-					'This repository is an active implementation, with real-browser and SSR regression coverage. The documentation describes the checked-in API, not a claim of complete Motion React parity or an already-published registry release.',
-					'Projection uses framework-independent exports from pinned Motion DOM 13.4.2. Those exports are undocumented upstream, so dependency upgrades need qualification. Start with Getting started, then use the examples directory to explore a specific interaction.'
+					'Use the component integration guide when existing markup or a headless UI library owns the element. Set a reduced-motion policy before building larger interactions. Keep the API reference nearby for options and the troubleshooting guide for boundaries.'
+				],
+				related: ['components', 'accessibility', 'api', 'troubleshooting']
+			},
+			{
+				id: 'current-status',
+				title: 'A working beta',
+				text: [
+					'Astra is available from this repository as a locally built package. A public registry release is pending. The examples describe the checked-in API; the project does not promise full Motion React parity.'
+				],
+				links: [
+					{
+						path: '/status',
+						title: 'Project status',
+						detail: 'Supported behavior, known limits and qualification records.'
+					},
+					{
+						path: '/examples',
+						title: 'Examples',
+						detail: 'Find an interaction by the task you are building.'
+					},
+					{
+						path: '/showcase',
+						title: 'Showcase',
+						detail: 'Explore Fieldwork, a complete interface built with Astra.'
+					}
 				]
 			}
 		]
@@ -67,96 +126,51 @@ const pages: DocPage[] = [
 		slug: 'getting-started',
 		title: 'Getting started',
 		group: 'Start here',
-		summary: 'Start with motion tag components, or use createMotion on existing native elements.',
+		summary: 'Install the beta and build one notification with an entrance, an exit and a spring.',
 		sections: [
 			{
-				id: 'use-the-workspace',
-				title: 'Use the checked-in workspace',
-				text: [
-					'Astra is currently developed in this repository. Do not assume that an npm package with this name is this implementation. The examples use the public package entry points from the local tarball.',
-					'Clone the repository and run pnpm install, then pnpm dev for the local site and examples. To use Astra in another app, build and install the local package below. The qualified baseline is Svelte 5.57.0, SvelteKit 2.70.3 and Motion 13.4.3. SvelteKit is only needed for the routes entry point.'
-				],
-				code: {
-					label: 'Public package imports',
-					source:
-						"import { motion, createMotion, createLayout } from 'astra-motion';\nimport { routeTransitions } from 'astra-motion/routes';"
-				}
-			},
-			{
-				id: 'qualified-dependencies',
-				title: 'One packaged Motion engine',
-				text: [
-					'The tarball contains the qualified DOM-only Motion engine. Consumers need no app-wide overrides or separate Motion installation. Strict declaration checking with skipLibCheck: false is part of packed consumer qualification.',
-					'Get MotionValues from astra-motion or astra-motion/values. The packaged adapters and these helpers share one engine; an independently installed Motion package is outside that identity contract.'
-				]
-			},
-			{
 				id: 'install-local-package',
-				title: 'Install it in your app',
+				title: '1. Install the local package',
 				text: [
-					'In the Astra checkout, run pnpm run prepack and pnpm pack. The first command builds the library and validates its package; the second creates astra-motion-0.0.1.tgz. pnpm may run prepack again as part of packing.',
-					'From your app directory, install that file using its real path. Use Svelte 5.57.0 or newer within Svelte 5. SvelteKit 2.70.3 or newer within Kit 2 is needed only for astra-motion/routes. The package includes its qualified DOM engine; no Motion overrides or separate install are required.',
-					'The package name in the examples refers to this local build. Check the project status before adopting it: Astra is MIT licensed, and a public registry release is still pending.'
+					'A public registry release is pending. Build Astra from the repository, then add the resulting tarball to your Svelte app. The package includes its qualified Motion engine; no separate Motion installation is needed.',
+					'Use Svelte 5.57.0 or newer within Svelte 5. Only the routes entry requires SvelteKit 2.70.3 or newer within Kit 2. Replace the tarball path below with the path on your machine.'
 				],
 				code: {
 					label: 'Terminal — replace the tarball path with your own',
 					source:
 						'git clone https://github.com/alois-reinstadler/astra-motion.git\ncd astra-motion\npnpm install\npnpm run prepack\npnpm pack\n\n# In your Svelte app directory:\npnpm add /absolute/path/to/astra-motion/astra-motion-0.0.1.tgz'
-				}
-			},
-			{
-				id: 'lite-or-full',
-				title: 'Optimize entries when needed',
-				text: [
-					'Start with the root import. If bundle measurements justify a narrower binding entry, astra-motion/state/lite supports initial, animate, exit, variants and MotionValues without projection or gestures.',
-					'astra-motion/state supports the same binding with layout and interaction targets. Both entries use the same props spread, transition and child authoring contract. The routes entry remains separate because it requires SvelteKit.'
-				]
-			},
-			{
-				id: 'motion-component',
-				title: 'Start with a tag component',
-				text: [
-					'motion.button renders a real button; motion.div renders a div. Each tag component creates its binding and exit transition, so it can be used directly inside keyed lists.',
-					'Put animation options in motion. Native attributes, typed event callbacks, children and CSS style reach the actual element, with initial SSR styles preserved. Import the motion namespace from astra-motion.',
-					'Use bind:ref for the tag-specific DOM element. Input, textarea and select components support value binding. Generic Motion as remains compatible; its dynamic element does not implement native value bindings.'
-				],
-				recipe: 'motion-component'
-			},
-			{
-				id: 'native-bindings',
-				title: 'Bind values and keep native events',
-				text: [
-					'motion.input implements value binding for value inputs, checked and indeterminate for checkboxes, and files for file inputs. motion.textarea and motion.select support value; multiple selects use arrays. motion.details supports open.',
-					'Tag components forward native props and event callbacks, but native directives are not all component props. Use createMotion on native markup for bind:group, media bindings, readonly dimensions and parent-scoped element selectors. bind:ref exposes the DOM element; bind:this refers to the component.'
-				],
-				recipe: 'form-bindings'
-			},
-			{
-				id: 'existing-markup',
-				title: 'Keep existing native markup',
-				text: [
-					'Spread binding.props for its attachment and SSR style, then add its native transition for exit. Merge authored style after the spread. Native attributes, event callbacks, refs and directives remain on your element.'
-				],
-				recipe: 'native-binding'
+				},
+				aliases: ['use-the-workspace']
 			},
 			{
 				id: 'first-component',
-				title: 'Give an element an entrance and an exit',
+				title: '2. Animate your first component',
 				text: [
-					'Tag components combine initial, animate, and exit targets on a native element. Toggle this notification to see it appear and leave. Toggle again during the animation to reverse it.',
-					'The component includes the native Svelte transition that keeps its element alive until the exit finishes. Use createMotion bindings directly when integrating with existing markup.'
+					'Import the motion namespace. A motion.div renders a real div with the animation options in its motion prop. An ordinary if block controls whether it is present.',
+					'initial sets the entrance pose, animate sets the destination, and exit sets the leaving pose. The component keeps the element alive until its exit finishes. Try dismissing the notification, then showing it again.'
 				],
-				recipe: 'state'
+				aliases: ['motion-component'],
+				example: 'state'
 			},
 			{
 				id: 'the-contract',
-				title: 'Three things to remember',
+				title: '3. Change the interaction',
 				text: [],
 				points: [
-					'One binding owns one simultaneously mounted element. Use tag components in keyed lists, or create a binding inside your own item component.',
-					'Pass a function to createMotion when its options depend on reactive state.',
-					'Motion transition durations use seconds. The small presence() transition uses milliseconds.'
-				]
+					'Change y to alter the travel distance, or the spring’s stiffness and damping to change its feel.',
+					'Use a semantic motion.button for a button, motion.li for a list item, and the matching tag for your element. Native attributes and event handlers stay on that component.',
+					'Motion transition durations use seconds. Reduced motion follows the user’s preference by default.'
+				],
+				related: ['state', 'presence', 'layout', 'accessibility']
+			},
+			{
+				id: 'existing-markup',
+				aliases: ['native-bindings', 'lite-or-full', 'qualified-dependencies'],
+				title: 'When you need more control',
+				text: [
+					'Continue with the animation guides for new UI. Existing markup, form bindings and headless components have a separate integration guide; package entries and engine identity belong in the reference.'
+				],
+				related: ['components', 'api']
 			}
 		]
 	},
@@ -171,26 +185,33 @@ const pages: DocPage[] = [
 				title: 'Initial, animate and exit',
 				text: [
 					'initial supplies the first rendered state, animate supplies the current destination, and exit supplies the target for a native outro. Targets can include opacity, transforms and supported styles. initial: false starts at the animate target and skips the first intro.',
-					'For changing targets, use createMotion(() => ({ animate: ... })). Updates replace the current destination. The binding uses Motion values and animation machinery rather than queuing stale animations.'
+					'Update the motion prop from reactive state to change the destination. A new target interrupts the current animation instead of queuing stale movement. The notification in Getting started demonstrates initial and exit targets; the examples below build on it.'
 				],
-				recipe: 'state'
+				code: {
+					label: 'Reactive target · excerpt',
+					source:
+						"<motion.div motion={{\n  animate: { x: expanded ? 120 : 0 },\n  transition: { type: 'spring', stiffness: 300, damping: 30 }\n}} />"
+				},
+				related: ['getting-started']
 			},
 			{
 				id: 'inheritance',
 				title: 'Coordinate a family of elements',
 				text: [
-					'Nested tag components inherit variant ancestry during SSR. For native bindings, parent.child() declares that ancestry explicitly before the DOM exists. Children must mount inside their declared parent; portals need an independent createMotion binding.',
-					'The child must mount inside its declared parent. Add a global native transition when it should animate on removal of an enclosing branch.'
+					'A parent’s variant label can coordinate its children. Give each child open and closed targets, then use staggerChildren on the parent to offset their start times.',
+					'Nested tag components inherit their parent’s variants, including during server rendering. Keep them inside that parent in the DOM. Existing native bindings use parent.child() to declare the same relationship.'
 				],
-				recipe: 'inheritance'
+				example: 'inheritance'
 			},
 			{
 				id: 'gestures',
 				title: 'Respond to a touch',
 				text: [
-					'Give a button a little feedback on hover, press, and keyboard focus. Add drag to move an element within a set of bounds. Gesture targets use the same springs and values as ordinary animation state.'
+					'Give a button a little feedback on hover, press, and keyboard focus. Add drag to move an element within a set of bounds. Gesture targets use the same springs and values as ordinary animation state.',
+					'This example uses createMotion bindings to add feedback to existing native button and drag markup. Your components explains that integration contract.'
 				],
-				example: 'gestures'
+				example: 'gestures',
+				related: ['components']
 			},
 			{
 				id: 'ownership',
@@ -215,7 +236,7 @@ const pages: DocPage[] = [
 					'A plain if or keyed each block with native transitions lets incoming and outgoing branches animate together. No presence wrapper is needed for this mode.',
 					'Svelte retains outgoing elements until their transition group finishes. Reversing the state before completion can reuse the retained branch and reverse its transition.'
 				],
-				recipe: 'state'
+				related: ['getting-started']
 			},
 			{
 				id: 'wait',
@@ -224,7 +245,7 @@ const pages: DocPage[] = [
 					'Presence defaults to wait: it waits for the whole native outro group, then renders the latest requested value. Rapid changes do not form a queue.',
 					'Use mode="sync" to mount replacements immediately while older branches exit. onExitComplete runs after all outgoing branches finish. Reversed exits and disposal of Presence itself do not notify.'
 				],
-				recipe: 'wait'
+				example: 'wait'
 			},
 			{
 				id: 'pop-layout',
@@ -233,7 +254,7 @@ const pages: DocPage[] = [
 					'popLayout captures the old visual position and removes the outgoing node from flow. Its siblings can immediately reflow and project toward their new positions.',
 					'Give the direct parent position: relative. The exiting item also needs a native outro; the attachment alone does not retain DOM.'
 				],
-				recipe: 'pop'
+				example: 'motion-component'
 			},
 			{
 				id: 'nested-exits',
@@ -242,7 +263,7 @@ const pages: DocPage[] = [
 					'Child variants support ordering and stagger through native transition durations. This works with finite targets. Arbitrary asynchronous promises and infinite exit repeats cannot define the end of a Svelte outro.',
 					'Use transition:...|global for a child that should animate when an enclosing block is destroyed. A local transition only responds to the block that directly owns it.'
 				],
-				recipe: 'inheritance'
+				related: ['state']
 			}
 		]
 	},
@@ -256,9 +277,10 @@ const pages: DocPage[] = [
 				id: 'automatic',
 				title: 'Register elements, then write normal UI code',
 				text: [
-					'createLayout returns a controller and attachment factory. Its participants share measurement and projection scheduling. Layout changes can happen through flex, grid, resizing, content or sibling changes; they do not need to live inside a keyed each block.'
+					'Add layout: true to an element’s motion options. When its size or position changes, Astra animates from the old rectangle to the new one. Open the player below to see the surface grow while its content keeps its proportions.',
+					'Use createLayout to share a controller between related elements. Position-only attachments on the content compensate for the surface’s changing scale. The complete example shows where those attachments belong.'
 				],
-				recipe: 'layout'
+				example: 'layout'
 			},
 			{
 				id: 'explicit-updates',
@@ -302,7 +324,7 @@ const pages: DocPage[] = [
 				text: [
 					'A layout attachment’s id lets different elements represent the same visual entity. Motion handles their shared projection stack and handoff. Tabs, expanded cards and changing selections can use the same pattern.'
 				],
-				recipe: 'shared'
+				example: 'shared'
 			},
 			{
 				id: 'groups',
@@ -326,8 +348,25 @@ const pages: DocPage[] = [
 		slug: 'components',
 		title: 'Your components',
 		group: 'Build with confidence',
-		summary: 'A component can accept motion without becoming a motion component factory.',
+		summary: 'Add motion to existing markup, form controls and reusable or headless components.',
 		sections: [
+			{
+				id: 'existing-markup',
+				title: 'Keep existing native markup',
+				text: [
+					'Spread binding.props for its attachment and SSR style, then add its native transition for exit. Merge authored style after the spread. Native attributes, event callbacks, refs and directives remain on your element.'
+				],
+				recipe: 'native-binding'
+			},
+			{
+				id: 'native-bindings',
+				title: 'Bind values and keep native events',
+				text: [
+					'motion.input implements value binding for value inputs, checked and indeterminate for checkboxes, and files for file inputs. motion.textarea and motion.select support value; multiple selects use arrays. motion.details supports open.',
+					'Tag components forward native props and event callbacks, but native directives are not all component props. Use createMotion on native markup for bind:group, media bindings, readonly dimensions and parent-scoped element selectors. bind:ref exposes the DOM element; bind:this refers to the component.'
+				],
+				recipe: 'form-bindings'
+			},
 			{
 				id: 'forward-a-binding',
 				title: 'Accept a binding. Keep your real element.',
@@ -372,6 +411,14 @@ const pages: DocPage[] = [
 		sections: [
 			{
 				id: 'coordinator',
+				links: [
+					{
+						path: '/motion-lab/product',
+						title: 'Try the two-page route demo',
+						detail:
+							'Open a product and return to its collection. This diagnostic scene uses the route setup below.'
+					}
+				],
 				title: 'Install once, in a persistent layout',
 				text: [
 					'routeTransitions integrates onNavigate with document.startViewTransition. SvelteKit still owns navigation, loading, history, focus and scroll restoration. Unsupported browsers navigate normally.'
@@ -411,7 +458,7 @@ const pages: DocPage[] = [
 					'createScroll gives you a progress MotionValue and attachments for a container, target and linked animation. Omit the container attachment to follow the document. Use axis: x for horizontal scrolling.',
 					'A controller owns one container and optional target, and can drive multiple visual attachments. Motion chooses a supported native or fallback path.'
 				],
-				recipe: 'scroll'
+				example: 'scroll'
 			},
 			{
 				id: 'target',
@@ -426,9 +473,11 @@ const pages: DocPage[] = [
 				title: 'Read visibility as state',
 				text: [
 					'createInView follows a target getter and exposes a reactive current boolean. Use it to track viewport entry without an animation binding. Pass a root element for a scroll container, margin to adjust the boundary, and amount to choose the visible fraction.',
-					'Options can be a reactive reader. initial sets the value before the first measurement, including SSR. once disconnects after entry and resets for a replacement target. Component destruction disconnects the observer.'
+					'Options can be a reactive reader. initial sets the value before the first measurement, including SSR. once disconnects after entry and resets for a replacement target. Component destruction disconnects the observer.',
+					'The preview feeds visibility into a createMotion binding on its existing card. See Your components for the native binding contract.'
 				],
-				recipe: 'in-view'
+				example: 'in-view',
+				related: ['components']
 			},
 			{
 				id: 'ownership-and-policy',
@@ -462,7 +511,7 @@ const pages: DocPage[] = [
 					'createAnimate wraps Motion’s documented vanilla animate API. Its scope limits selectors to descendants of one root. A direct reference can also target the root itself.',
 					'A new animation replaces an overlapping sequence as a whole. Disjoint elements can animate concurrently. This prevents stale later segments from taking control after a new interaction.'
 				],
-				recipe: 'timeline'
+				example: 'timeline'
 			},
 			{
 				id: 'controls',
@@ -497,7 +546,8 @@ const pages: DocPage[] = [
 				],
 				code: {
 					label: '+layout.svelte',
-					source: `<script lang="ts">\n  import type { Snippet } from 'svelte';\n  import { MotionConfig } from 'astra-motion';\n  let { children }: { children: Snippet } = $props();\n</script>\n\n<MotionConfig reducedMotion="user" transition={{ duration: 0.24 }}>\n  {@render children()}\n</MotionConfig>`
+					source:
+						'<script lang="ts">\n  import type { Snippet } from \'svelte\';\n  import { MotionConfig } from \'astra-motion\';\n  let { children }: { children: Snippet } = $props();\n</script>\n\n<MotionConfig reducedMotion="user" transition={{ duration: 0.24 }}>\n  {@render children()}\n</MotionConfig>'
 				}
 			},
 			{
@@ -533,7 +583,7 @@ const pages: DocPage[] = [
 				id: 'tag-components',
 				title: 'motion.tag · HTML components',
 				text: [
-					'Import { motion } from astra-motion. Each named component renders one native HTML element and accepts that tag’s attributes and event callbacks, motion options, children where valid, and a typed bind:ref. Supported form bindings are described in Getting started.',
+					'Import { motion } from astra-motion. Each named component renders one native HTML element and accepts that tag’s attributes and event callbacks, motion options, children where valid, and a typed bind:ref. Supported form bindings are described in Your components.',
 					'Nested components inherit variant ancestry during SSR and include global native transitions for enclosing-block exits. Descendants must stay inside their declared parent in the DOM. Generic Motion as remains available with its existing dynamic-tag and binding limitations.'
 				],
 				related: ['getting-started', 'components']
@@ -546,7 +596,8 @@ const pages: DocPage[] = [
 				],
 				code: {
 					label: 'State binding · TypeScript',
-					source: `createMotion(options?: MotionOptions | (() => MotionOptions)): MotionBinding\n\nbinding.props                 // SSR style + Svelte attachment; spread on one element\nbinding.transition            // native Svelte transition function\nbinding.child(options?)       // child binding with explicit variant ancestry\nbinding.animate(target, transition?): Promise<void>\nbinding.stop(): void          // stops state playback at its current pose\nbinding.update(change)        // synchronous update; full entry captures layout\nbinding.reducedMotion         // readonly resolved policy`
+					source:
+						'createMotion(options?: MotionOptions | (() => MotionOptions)): MotionBinding\n\nbinding.props                 // SSR style + Svelte attachment; spread on one element\nbinding.transition            // native Svelte transition function\nbinding.child(options?)       // child binding with explicit variant ancestry\nbinding.animate(target, transition?): Promise<void>\nbinding.stop(): void          // stops state playback at its current pose\nbinding.update(change)        // synchronous update; full entry captures layout\nbinding.reducedMotion         // readonly resolved policy'
 				},
 				points: [
 					'initial: target | variant label(s) | false. false skips the first intro and renders the current animate target on a fresh mount.',
@@ -567,7 +618,8 @@ const pages: DocPage[] = [
 				],
 				code: {
 					label: 'Layout controller · TypeScript',
-					source: `createLayout(options?: LayoutGroupOptions): LayoutController\n\nlayout(options?: LayoutOptions) // returns Attachment<HTMLElement>\nlayout.update(() => change())   // fresh snapshot, synchronous change\nlayout.stats()                 // { participants: number, active: number }\n\n// Group options\n{ id?, automatic?, transition?, reducedMotion? }\n\n// Participant options\n{ id?, mode?, scroll?, root?, style? }`
+					source:
+						'createLayout(options?: LayoutGroupOptions): LayoutController\n\nlayout(options?: LayoutOptions) // returns Attachment<HTMLElement>\nlayout.update(() => change())   // fresh snapshot, synchronous change\nlayout.stats()                 // { participants: number, active: number }\n\n// Group options\n{ id?, automatic?, transition?, reducedMotion? }\n\n// Participant options\n{ id?, mode?, scroll?, root?, style? }'
 				},
 				points: [
 					'automatic defaults to true. Observation coordinates all registered groups while any group requests it.',
@@ -586,7 +638,8 @@ const pages: DocPage[] = [
 				],
 				code: {
 					label: 'Presence tools',
-					source: `<Presence value={current} mode="wait" onExitComplete={done}>\n  {#snippet children(value)}...{/snippet}\n</Presence>\n\ntransition:presence={{ duration: 240 }}\n{@attach popLayout()}`
+					source:
+						'<Presence value={current} mode="wait" onExitComplete={done}>\n  {#snippet children(value)}...{/snippet}\n</Presence>\n\ntransition:presence={{ duration: 240 }}\n{@attach popLayout()}'
 				},
 				points: [
 					'Presence value is branch identity. Wait renders the latest requested value after the outgoing branch finishes; sync renders it immediately.',
@@ -605,7 +658,8 @@ const pages: DocPage[] = [
 				],
 				code: {
 					label: 'Scroll controller · TypeScript',
-					source: `createScroll(options?: ScrollOptions | (() => ScrollOptions))\n\nreading.container            // Attachment<HTMLElement>\nreading.target               // Attachment<HTMLElement>\nreading.progress             // owned MotionValue<number>, selected axis\nreading.reducedMotion        // readonly resolved policy\nreading.animate(keyframes, options?) // Attachment<HTMLElement>\n\n// Common options\n{ axis: 'y', container?, target?, offset?, reducedMotion? }`
+					source:
+						"createScroll(options?: ScrollOptions | (() => ScrollOptions))\n\nreading.container            // Attachment<HTMLElement>\nreading.target               // Attachment<HTMLElement>\nreading.progress             // owned MotionValue<number>, selected axis\nreading.reducedMotion        // readonly resolved policy\nreading.animate(keyframes, options?) // Attachment<HTMLElement>\n\n// Common options\n{ axis: 'y', container?, target?, offset?, reducedMotion? }"
 				},
 				points: [
 					'With no container, follow document scroll. axis supports x or y.',
@@ -622,7 +676,8 @@ const pages: DocPage[] = [
 				],
 				code: {
 					label: 'Viewport visibility · TypeScript',
-					source: `createInView(\n  target: () => Element | null | undefined,\n  options?: InViewOptions | (() => InViewOptions)\n) // { readonly current: boolean }\n\n// Options\n{ initial?: boolean, once?: boolean, root?: Element | Document | null,\n  margin?: string, amount?: 'some' | 'all' | number }`
+					source:
+						"createInView(\n  target: () => Element | null | undefined,\n  options?: InViewOptions | (() => InViewOptions)\n) // { readonly current: boolean }\n\n// Options\n{ initial?: boolean, once?: boolean, root?: Element | Document | null,\n  margin?: string, amount?: 'some' | 'all' | number }"
 				},
 				points: [
 					'initial defaults to false. amount defaults to some; all means fully visible, and numeric amounts must be between 0 and 1.',
@@ -639,7 +694,8 @@ const pages: DocPage[] = [
 				],
 				code: {
 					label: 'Animation scope · TypeScript',
-					source: `createAnimate(policy?: MotionPolicy | (() => MotionPolicy)): AnimateScope\n\nscene.attach                  // Attachment<Element>\nscene.animate(target, keyframes, options?) // ScopedAnimationControls\nscene.sequence(segments, options?)         // ScopedAnimationControls\nscene.stop(): void\nscene.current                 // readonly Element | undefined\nscene.active                  // readonly active playback count\n\n// A segment is a label, a timed label, or:\n[target, keyframes, { at?, duration?, delay?, ... }]\n\ncontrols.play(); controls.pause(); controls.stop();\ncontrols.cancel(); controls.complete();\ncontrols.time = 0.2; controls.speed = 0.5;\nconst outcome = await controls.settled; // finished or cancelled`
+					source:
+						'createAnimate(policy?: MotionPolicy | (() => MotionPolicy)): AnimateScope\n\nscene.attach                  // Attachment<Element>\nscene.animate(target, keyframes, options?) // ScopedAnimationControls\nscene.sequence(segments, options?)         // ScopedAnimationControls\nscene.stop(): void\nscene.current                 // readonly Element | undefined\nscene.active                  // readonly active playback count\n\n// A segment is a label, a timed label, or:\n[target, keyframes, { at?, duration?, delay?, ... }]\n\ncontrols.play(); controls.pause(); controls.stop();\ncontrols.cancel(); controls.complete();\ncontrols.time = 0.2; controls.speed = 0.5;\nconst outcome = await controls.settled; // finished or cancelled'
 				},
 				points: [
 					'target is a selector string, Element or Iterable<Element>. The scope currently supports DOM and SVG sequences.',
@@ -657,7 +713,8 @@ const pages: DocPage[] = [
 				],
 				code: {
 					label: 'Routes and values · TypeScript',
-					source: `// astra-motion/routes\nrouteTransitions(options?: { reducedMotion?, onDiagnostic? }): void\nrouteShared(id: string, options?: { scope?: string }): Attachment<HTMLElement>\n\n// astra-motion/policy\nshouldReduceMotion(policy?: { reducedMotion?: 'user' | 'always' | 'never' }): boolean\n\n// astra-motion/values\nmotionValue; springValue; transformValue; mapValue; stagger;\nmotionStore(value) // Svelte writable bridge; caller keeps value ownership`
+					source:
+						"// astra-motion/routes\nrouteTransitions(options?: { reducedMotion?, onDiagnostic? }): void\nrouteShared(id: string, options?: { scope?: string }): Attachment<HTMLElement>\n\n// astra-motion/policy\nshouldReduceMotion(policy?: { reducedMotion?: 'user' | 'always' | 'never' }): boolean\n\n// astra-motion/values\nmotionValue; springValue; transformValue; mapValue; stagger;\nmotionStore(value) // Svelte writable bridge; caller keeps value ownership"
 				},
 				points: [
 					'MotionConfig is exported from astra-motion. Its props are transition, layoutTransition, automatic and reducedMotion, plus its children snippet.',
@@ -665,6 +722,22 @@ const pages: DocPage[] = [
 					'Import MotionValue helpers from astra-motion or astra-motion/values so they share the packaged engine. Values from a separately installed engine have no promised identity match. motionStore adapts subscriptions and writes without destroying the supplied value.'
 				],
 				related: ['routes', 'accessibility']
+			},
+			{
+				id: 'lite-or-full',
+				title: 'Optimize entries when needed',
+				text: [
+					'Start with the root import. If bundle measurements justify a narrower binding entry, astra-motion/state/lite supports initial, animate, exit, variants and MotionValues without projection or gestures.',
+					'astra-motion/state supports the same binding with layout and interaction targets. Both entries use the same props spread, transition and child authoring contract. The routes entry remains separate because it requires SvelteKit.'
+				]
+			},
+			{
+				id: 'qualified-dependencies',
+				title: 'One packaged Motion engine',
+				text: [
+					'The tarball contains the qualified DOM-only Motion engine. Consumers need no app-wide overrides or separate Motion installation. Strict declaration checking with skipLibCheck: false is part of packed consumer qualification.',
+					'Get MotionValues from astra-motion or astra-motion/values. The packaged adapters and these helpers share one engine; an independently installed Motion package is outside that identity contract.'
+				]
 			}
 		]
 	},

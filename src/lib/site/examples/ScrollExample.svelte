@@ -52,8 +52,8 @@
 		<div class="scroll-travel">
 			<div class="pinned-stage">
 				<div class="stage-caption">
-					<span>0{phase + 1} / {['SCATTER', 'GATHER', 'RELEASE'][phase]}</span><span
-						>↓ SCROLL TO COMPOSE</span
+					<span>0{phase + 1} / {['SCATTER', 'GATHER', 'RELEASE'][phase]}</span><span>
+						SCROLL TO COMPOSE</span
 					>
 				</div>
 				<div class="orbit" aria-hidden="true" {@attach orbit}><span></span></div>
@@ -78,7 +78,9 @@
 				class:active={phase === index}><i>0{index + 1}</i> {chapter}</span
 			>{/each}
 	</div>
-	<p class="hint">Scroll inside the frame, or focus it and use ↓ / ↑. Reverse to unwind.</p>
+	<p class="hint">
+		Scroll inside the frame, or focus it and use the Down and Up arrow keys. Reverse to unwind.
+	</p>
 </div>
 
 <style>

@@ -39,11 +39,11 @@
 	</div>
 	<div class="drag-demo">
 		<div class="drag-heading">
-			<span>TAKE IT FOR A SLIDE</span><span aria-hidden="true">↔</span>
+			<span>TAKE IT FOR A SLIDE</span>
 		</div>
 		<div class="track" aria-hidden="true">
 			<div class="rail"></div>
-			<div class="handle" {...handle.props}><span>↔</span></div>
+			<div class="handle" {...handle.props}><span>Drag</span></div>
 		</div>
 		<label
 			><span>Or move with a slider</span><input

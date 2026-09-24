@@ -5,7 +5,7 @@
 </script>
 
 <details class="source-viewer" bind:open={expanded}>
-	<summary>Read the working source <span aria-hidden="true">↗</span></summary>
+	<summary>Read the working source </summary>
 	{#if expanded}
 		<div class="source-body">
 			<p>
@@ -34,13 +34,7 @@
 		overflow: auto;
 		font-size: 12px;
 	}
-	.source-viewer summary span {
-		display: inline-block;
-		transition: transform 220ms ease;
-	}
-	.source-viewer[open] summary span {
-		transform: rotate(90deg);
-	}
+
 	.source-viewer[open] .source-body {
 		animation: source-reveal 200ms ease-out;
 	}
@@ -55,9 +49,6 @@
 		}
 	}
 	@media (prefers-reduced-motion: reduce) {
-		.source-viewer summary span {
-			transition: none;
-		}
 		.source-viewer[open] .source-body {
 			animation: none;
 		}
@@ -75,10 +66,7 @@
 		font-size: 12px;
 		color: #4b5643;
 	}
-	.source-viewer summary span {
-		float: right;
-		color: #cf4a2a;
-	}
+
 	.source-viewer summary:focus-visible {
 		outline: 2px solid #cf4a2a;
 		outline-offset: 3px;

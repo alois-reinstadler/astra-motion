@@ -1,26 +1,25 @@
 <script lang="ts">
 	import { asset, resolve } from '$app/paths';
 	import { goto } from '$app/navigation';
-	import { untrack } from 'svelte';
+	import { onMount } from 'svelte';
 	import { routeShared } from '$lib/motion/routes.js';
 	let hydrated = $state(false);
-	$effect(() =>
-		untrack(() => {
-			hydrated = true;
-		})
-	);
+	onMount(() => {
+		hydrated = true;
+	});
 </script>
 
 <svelte:head><title>Astra / Objects</title></svelte:head>
 <main>
-	<a href={resolve('/motion-lab')}>← Motion laboratory</a>
+	<a href={resolve('/motion-lab')}> Motion laboratory</a>
 	<p>COLLECTION / 001</p>
 	<h1>Objects in space.</h1>
 	<button
 		data-testid="delayed-detail"
 		disabled={!hydrated}
-		onclick={() => goto(resolve('/motion-lab/product/01?delay=400'))}>Open with async data ↗</button
-	>
+		onclick={() => goto(resolve('/motion-lab/product/01?delay=400'))}
+		>Open with async data
+	</button>
 	<div class="collection">
 		{#each ['01', '02', '03'] as id (id)}<a
 				class="product"
@@ -35,7 +34,7 @@
 					{@attach routeShared(`image-${id}`)}
 				/>
 				<h2 {@attach routeShared(`title-${id}`)}>Object No. {id}</h2>
-				<span>Explore the form ↗</span></a
+				<span>Explore the form </span></a
 			>{/each}
 	</div>
 </main>

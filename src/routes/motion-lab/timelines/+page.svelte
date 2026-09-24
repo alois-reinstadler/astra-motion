@@ -40,7 +40,7 @@
 
 <svelte:head><title>Scoped timelines · Astra motion lab</title></svelte:head>
 <main>
-	<a href={resolve('/motion-lab')}>← Motion lab</a>
+	<a href={resolve('/motion-lab')}> Motion lab</a>
 	<p class="eyebrow">Motion engine / Svelte lifetime</p>
 	<h1>One scope.<br />A whole sequence.</h1>
 	<p class="intro">

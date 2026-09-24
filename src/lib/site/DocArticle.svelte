@@ -26,8 +26,13 @@
 			</details>
 		</header>
 		{#each doc.sections as section (section.id)}
-			{@const example = getExample(section.example ?? section.recipe ?? '')}
+			{@const example = getExample(section.example ?? '')}
 			<section id={section.id}>
+				{#each section.aliases ?? [] as alias (alias)}<span
+						id={alias}
+						class="anchor-alias"
+						aria-hidden="true"
+					></span>{/each}
 				<h2><a href={`#${section.id}`}>{section.title}<span aria-hidden="true">#</span></a></h2>
 				{#each section.text as paragraph (paragraph)}<p>{paragraph}</p>{/each}
 				{#if section.points}<ul>
@@ -48,21 +53,30 @@
 					/>
 					<p class="recipe-note">{recipe.note}</p>
 				{/if}
+				{#if section.links}<nav class="reading-path" aria-label={`${section.title} links`}>
+						{#each section.links as link (link.title)}
+							<a
+								href={link.path
+									? resolve(link.path)
+									: resolve('/docs/[slug]', { slug: link.slug! })}
+								><strong>{link.title}</strong><span>{link.detail}</span></a
+							>
+						{/each}
+					</nav>{/if}
 				{#if section.related}<nav class="related" aria-label={`${section.title} guides`}>
 						{#each section.related as slug (slug)}<a href={resolve('/docs/[slug]', { slug })}
 								>{docs.find((entry) => entry.slug === slug)?.title}
-								<span aria-hidden="true">↗</span></a
-							>{/each}
+							</a>{/each}
 					</nav>{/if}
 			</section>
 		{/each}
 		<nav class="page-navigation" aria-label="Previous and next guide">
 			{#if previous}<a
 					href={previous.slug ? resolve('/docs/[slug]', { slug: previous.slug }) : resolve('/docs')}
-					><span>← Previous</span><strong>{previous.title}</strong></a
+					><span> Previous</span><strong>{previous.title}</strong></a
 				>{:else}<div></div>{/if}
 			{#if next}<a class="next" href={resolve('/docs/[slug]', { slug: next.slug })}
-					><span>Next →</span><strong>{next.title}</strong></a
+					><span>Next </span><strong>{next.title}</strong></a
 				>{/if}
 		</nav>
 	</article>
@@ -80,6 +94,41 @@
 </div>
 
 <style>
+	.anchor-alias {
+		display: block;
+		scroll-margin-top: 30px;
+	}
+	.reading-path {
+		display: grid;
+		border-top: 1px solid var(--site-line);
+		margin-top: 24px;
+	}
+	.reading-path a {
+		display: grid;
+		grid-template-columns: 180px 1fr;
+		gap: 20px;
+		padding: 18px 0;
+		border-bottom: 1px solid var(--site-line);
+		text-decoration: none;
+		font-size: 14px;
+	}
+	.reading-path strong {
+		font-weight: 550;
+	}
+	.reading-path span {
+		color: var(--site-muted);
+		line-height: 1.6;
+	}
+	.reading-path a:hover strong {
+		color: var(--site-accent);
+	}
+	@media (max-width: 600px) {
+		.reading-path a {
+			grid-template-columns: 1fr;
+			gap: 5px;
+		}
+	}
+
 	.compact-contents {
 		display: none;
 		margin-top: 26px;

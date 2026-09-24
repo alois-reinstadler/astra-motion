@@ -24,7 +24,7 @@
 
 <main>
 	<header>
-		<a href={resolve('/motion-lab')}>← Motion lab</a>
+		<a href={resolve('/motion-lab')}> Motion lab</a>
 		<p class="eyebrow">25 / SCROLL</p>
 		<h1>Follow the reading.</h1>
 		<p class="intro">

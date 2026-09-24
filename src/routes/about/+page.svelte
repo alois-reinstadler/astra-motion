@@ -12,9 +12,10 @@
 		<h2>Keep the element.</h2>
 		<div>
 			<p>
-				Start with an ordinary button, section or list item. Attach a binding to it, or use the
-				Motion component to render that same native element. Your CSS still determines its layout.
-				Your Svelte state still determines what appears.
+				Start with an ordinary button, section or list item. Use motion.button, motion.section or
+				motion.li to render that same native element. Add a createMotion binding when existing
+				markup owns it. Your CSS still determines its layout. Your Svelte state still determines
+				what appears.
 			</p>
 			<p>
 				The adapter handles the work between those two things: initial styles during server
@@ -22,8 +23,8 @@
 			</p>
 			<p>
 				<a href={resolve('/docs/[slug]', { slug: 'getting-started' })}
-					>Build your first animation →</a
-				>
+					>Build your first animation
+				</a>
 			</p>
 		</div>
 	</section>
@@ -39,7 +40,7 @@
 				animate together. The same ownership holds when a parent branch disappears.
 			</p>
 			<p>
-				<a href={resolve('/docs/[slug]', { slug: 'presence' })}>See how exits are coordinated →</a>
+				<a href={resolve('/docs/[slug]', { slug: 'presence' })}>See how exits are coordinated </a>
 			</p>
 		</div>
 	</section>
@@ -57,7 +58,7 @@
 				the browser’s View Transitions API.
 			</p>
 			<p>Astra is an independent project, with no official affiliation to Motion or Svelte.</p>
-			<p><a href={resolve('/showcase')}>Try the Fieldwork photo studio →</a></p>
+			<p><a href={resolve('/showcase')}>Try the Fieldwork photo studio </a></p>
 		</div>
 	</section>
 	<section>
@@ -73,7 +74,7 @@
 				The current beta pins Motion because layout projection uses undocumented upstream exports.
 				Check the supported scope and known limits before adopting it.
 			</p>
-			<p><a href={resolve('/status')}>Read the project status →</a></p>
+			<p><a href={resolve('/status')}>Read the project status </a></p>
 		</div>
 	</section>
 </ProjectArticle>

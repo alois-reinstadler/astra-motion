@@ -39,17 +39,19 @@ export const authoringExamples = [
 		note: 'Use ordinary if and keyed each blocks. Motion durations are seconds; Presence is only needed for wait sequencing.',
 		source: `<script lang="ts">
   import { motion } from 'astra-motion';
-  let open = $state(true);
+  let visible = $state(true);
 </script>
 
-<button onclick={() => (open = !open)}>Toggle</button>
-{#if open}
-  <motion.section motion={{
-    initial: { opacity: 0, y: 12 },
-    animate: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -12 },
-    transition: { duration: 0.24 }
-  }}>Still a section.</motion.section>
+<button onclick={() => (visible = !visible)} aria-pressed={visible}>
+  {visible ? 'Dismiss notification' : 'Show notification'}
+</button>
+{#if visible}
+  <motion.div motion={{
+    initial: { opacity: 0, y: 28, scale: 0.92 },
+    animate: { opacity: 1, y: 0, scale: 1 },
+    exit: { opacity: 0, y: -20, scale: 0.96 },
+    transition: { type: 'spring', stiffness: 320, damping: 24 }
+  }}>Your work is saved.</motion.div>
 {/if}`
 	},
 	{

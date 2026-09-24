@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { untrack } from 'svelte';
+	import { onMount } from 'svelte';
 	import { createAnimate } from '$lib/motion/index.js';
 
 	const scene = createAnimate();
@@ -34,15 +34,13 @@
 		} else replay();
 	}
 
-	$effect(() =>
-		untrack(() => {
-			mounted = true;
-			replay();
-			return () => {
-				mounted = false;
-			};
-		})
-	);
+	onMount(() => {
+		mounted = true;
+		replay();
+		return () => {
+			mounted = false;
+		};
+	});
 </script>
 
 <div class="example">
@@ -63,7 +61,7 @@
 			<span aria-hidden="true">{status === 'playing' ? 'Ⅱ' : '▷'}</span>
 			{status === 'playing' ? 'Pause' : 'Play'}
 		</button>
-		<button class="replay" onclick={replay}>Replay <span aria-hidden="true">↺</span></button>
+		<button class="replay" onclick={replay}>Replay </button>
 	</div>
 </div>
 
@@ -151,9 +149,5 @@
 		padding: 0 0 5px;
 		color: #252821;
 		background: transparent;
-	}
-	.replay span {
-		font-size: 18px;
-		line-height: 1;
 	}
 </style>

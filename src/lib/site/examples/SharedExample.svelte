@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Motion, createLayout } from '$lib/motion/index.js';
+	import { motion, createLayout } from '$lib/motion/index.js';
 	const moods = [
 		{
 			name: 'Focus',
@@ -26,7 +26,7 @@
 
 <div class="shared-example">
 	<div class="mood" aria-live="polite">
-		<Motion
+		<motion.div
 			class="orb"
 			motion={{
 				animate: { backgroundColor: moods[selected].color, rotate: selected * 90 },
@@ -34,7 +34,7 @@
 			}}
 		>
 			<span class="orbit"></span><span class="orbit"></span>
-		</Motion>
+		</motion.div>
 		<h3>{moods[selected].title}</h3>
 		<p>{moods[selected].detail}</p>
 	</div>
@@ -42,7 +42,7 @@
 		{#each moods as mood, index (mood.name)}
 			<button type="button" aria-pressed={selected === index} onclick={() => (selected = index)}>
 				{#if selected === index}
-					<Motion
+					<motion.div
 						class="selected"
 						motion={{ layout: { id: 'mood-selection' }, layoutGroup: layout }}
 					/>

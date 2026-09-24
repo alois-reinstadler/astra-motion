@@ -36,7 +36,7 @@
 		<div class="invitation">
 			<span class="number">01 — 02</span>
 			<h3>Good things<br />come into view.</h3>
-			<p>Scroll inside to find yours <span aria-hidden="true">↓</span></p>
+			<p>Scroll inside to find yours</p>
 		</div>
 		<div
 			class="target"
@@ -56,7 +56,7 @@
 				</div>
 			</div>
 		</div>
-		<p class="return">Scroll back up to try again ↑</p>
+		<p class="return">Scroll back up to try again</p>
 	</section>
 </div>
 
@@ -131,10 +131,7 @@
 		font-size: 12px;
 		color: #66695f;
 	}
-	.invitation p span {
-		margin-left: 6px;
-		color: #d34123;
-	}
+
 	.target {
 		margin: 0 18px;
 	}

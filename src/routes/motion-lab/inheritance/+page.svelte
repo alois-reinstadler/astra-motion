@@ -5,7 +5,7 @@
 
 <svelte:head><title>Declared motion parents — Astra Motion</title></svelte:head>
 <main class="mx-auto flex max-w-3xl flex-col gap-6 px-6 py-12">
-	<a href={resolve('/motion-lab')}>← Motion lab</a>
+	<a href={resolve('/motion-lab')}> Motion lab</a>
 	<h1 class="text-3xl font-semibold">Declared motion parents</h1>
 	<p>
 		This child inherits its declared outer parent's variants, even with a different motion binding

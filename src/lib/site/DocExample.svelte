@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getAllContexts, mount, untrack, unmount } from 'svelte';
+	import { getAllContexts, mount, onMount, unmount } from 'svelte';
 	import ExamplePreview from './ExamplePreview.svelte';
 	import DocCode from './DocCode.svelte';
 	import type { LiveExample } from './examples.js';
@@ -16,23 +16,21 @@
 			void unmount(instance, { outro: false });
 		};
 	}
-	$effect(() =>
-		untrack(() => {
-			ready = true;
-		})
-	);
+	onMount(() => {
+		ready = true;
+	});
 </script>
 
 <div class="example" data-example={example.id}>
 	<div class="preview-heading">
-		<span><i aria-hidden="true"></i> Live preview</span>
+		<span><i aria-hidden="true"></i> {example.title}</span>
 		<button
 			data-ui-control
 			onclick={() => revision++}
 			disabled={!ready}
 			aria-label={`Reset ${example.title}`}
 		>
-			{#key revision}<span class:replaying={revision > 0} aria-hidden="true">↺</span>{/key} Reset
+			Reset
 		</button>
 	</div>
 	<fieldset class="preview" aria-label={example.title} disabled={!ready}>
@@ -46,13 +44,16 @@
 			</p>
 		{/if}
 	</fieldset>
+	{#if example.snippet}<div class="concept-code">
+			<DocCode source={example.snippet} label={example.snippetLabel ?? 'Key idea · excerpt'} />
+		</div>{/if}
 	<details
 		{@attach (node) => {
 			sourceOpen = node.open;
 		}}
 		ontoggle={(event) => (sourceOpen = event.currentTarget.open)}
 	>
-		<summary><span>View code</span><span class="filename">{example.filename}</span></summary>
+		<summary><span>Complete source</span><span class="filename">{example.filename}</span></summary>
 		{#if sourceOpen}
 			<DocCode source={example.source} label={example.filename} />
 		{/if}
@@ -66,17 +67,11 @@
 </div>
 
 <style>
-	.replaying {
-		animation: reset-turn 450ms cubic-bezier(0.2, 0.8, 0.2, 1);
+	.concept-code {
+		padding: 0 16px;
+		background: var(--site-bg, #f7f7f0);
 	}
-	@keyframes reset-turn {
-		from {
-			transform: rotate(0);
-		}
-		to {
-			transform: rotate(-360deg);
-		}
-	}
+
 	summary:hover::before {
 		color: var(--site-accent);
 	}
@@ -94,7 +89,6 @@
 		}
 	}
 	@media (prefers-reduced-motion: reduce) {
-		.replaying,
 		details[open] :global(.code-block) {
 			animation: none;
 		}
@@ -150,10 +144,7 @@
 		cursor: default;
 		opacity: 0.5;
 	}
-	button span {
-		font-size: 16px;
-		line-height: 1;
-	}
+
 	.preview {
 		margin: 0;
 		border: 0;

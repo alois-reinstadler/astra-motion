@@ -145,9 +145,10 @@
 			Every example keeps its native HTML element.
 		</p>
 		<nav aria-label="Other experiments">
-			<a href={resolve('/motion-lab')}>Layout experiments ↗</a><a
-				href={resolve('/motion-lab/extended')}>More stress tests ↗</a
-			>
+			<a href={resolve('/motion-lab')}>Layout experiments </a><a
+				href={resolve('/motion-lab/extended')}
+				>More stress tests
+			</a>
 		</nav>
 	</div>
 	<div class="policy">
@@ -198,7 +199,7 @@
 				>
 					<div {...cardContent.props} class="sample-content">
 						<div class="card-top">
-							<span class="eyebrow">FIELD NOTE / 001</span><span aria-hidden="true">↗</span>
+							<span class="eyebrow">FIELD NOTE / 001</span>
 						</div>
 						<div class="orb" aria-hidden="true"><span></span><span></span><span></span></div>
 						<h3>A little room<br />to change.</h3>
@@ -333,8 +334,9 @@ const marker = createMotion({ style: { x } });
 					data-state="pressable"
 					onclick={() => {
 						taps++;
-					}}>Give it a press <span aria-hidden="true">↗</span></button
-				><output aria-live="polite"
+					}}
+					>Give it a press
+				</button><output aria-live="polite"
 					>{taps === 0
 						? 'Ready when you are.'
 						: `${taps} ${taps === 1 ? 'press' : 'presses'}. Try the keyboard, too.`}</output
@@ -402,7 +404,7 @@ const marker = createMotion({ style: { x } });
 			A flash on first load. A jump during reversal. A stretched line of text. A drag that keeps
 			moving after you grab it. These are experiments to put pressure on the runtime.
 		</p>
-		<a href={resolve('/motion-lab')}>Back to the full laboratory ↗</a>
+		<a href={resolve('/motion-lab')}>Back to the full laboratory </a>
 	</footer>
 </main>
 

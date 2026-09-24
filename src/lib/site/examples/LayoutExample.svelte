@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { Motion, createLayout } from '$lib/motion/index.js';
+	import { motion, createLayout } from '$lib/motion/index.js';
 	let expanded = $state(false);
 	const layout = createLayout({ transition: { type: 'spring', stiffness: 300, damping: 30 } });
 </script>
 
 <div class="layout-example">
 	<div class="stage">
-		<Motion class="record" motion={{ layout: true, layoutGroup: layout }}>
+		<motion.div class="record" motion={{ layout: true, layoutGroup: layout }}>
 			<div class="record-heading" {@attach layout({ mode: 'position' })}>
 				<div class="artwork" aria-hidden="true"><span></span></div>
 				<div>
@@ -23,7 +23,7 @@
 					<p>Soft keys. Open windows. Nowhere to rush.</p>
 				</div>
 			{/if}
-		</Motion>
+		</motion.div>
 	</div>
 	<button type="button" onclick={() => (expanded = !expanded)} aria-expanded={expanded}>
 		{expanded ? 'Close player' : 'Open player'}

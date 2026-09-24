@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { untrack } from 'svelte';
+	import { onMount } from 'svelte';
 	import { createLayout } from '$lib/motion/layout.js';
 	import { createMotion } from '$lib/motion/lite.svelte.js';
 	import { photos } from './collection.js';
@@ -18,11 +18,9 @@
 	let subtitle = $state('Notes from a planet in motion.');
 	let accent = $state<'moss' | 'coral'>('moss');
 	let ready = $state(false);
-	$effect(() =>
-		untrack(() => {
-			ready = true;
-		})
-	);
+	onMount(() => {
+		ready = true;
+	});
 </script>
 
 <div class="desk" data-testid="editing-desk">
@@ -79,10 +77,8 @@
 					<img src={photos[0].src} alt={photos[0].alt} />
 				</div>
 				<div class="paper-bottom" {@attach layout()}>
-					<span {@attach layout({ mode: 'position' })}>Look a little closer.</span><span
-						data-testid="desk-arrow"
-						aria-hidden="true"
-						{@attach layout({ mode: 'position' })}>↗</span
+					<span data-testid="desk-footer" {@attach layout({ mode: 'position' })}
+						>Look a little closer.</span
 					>
 				</div>
 			</div>
@@ -99,7 +95,6 @@
 			>
 				<div class="inspector-title">
 					<h3>Story settings</h3>
-					<span>↗</span>
 				</div>
 				<label for="desk-title">Headline</label><input
 					id="desk-title"
@@ -142,15 +137,18 @@
 							onclick={() =>
 								layout.update(() => {
 									dock = 'left';
-								})}>← Left</button
+								})}
+						>
+							Left</button
 						><button
 							disabled={!ready}
 							aria-pressed={dock === 'right'}
 							onclick={() =>
 								layout.update(() => {
 									dock = 'right';
-								})}>Right →</button
-						>
+								})}
+							>Right
+						</button>
 					</div>
 				</fieldset>
 				<div class="inspector-note">
@@ -390,10 +388,7 @@
 		font-weight: 550;
 		margin: 0;
 	}
-	.inspector-title > span {
-		font-size: 18px;
-		color: #8c977d;
-	}
+
 	.inspector label,
 	.inspector legend {
 		font-size: 10px;

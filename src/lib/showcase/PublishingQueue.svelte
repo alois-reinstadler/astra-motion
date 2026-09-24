@@ -219,7 +219,6 @@
 				{/each}
 			</ul>
 			{#if items.length === 0}<div class="empty">
-					<span aria-hidden="true">↗</span>
 					<h4>A clean slate.</h4>
 					<p>Bring a photograph into the sequence to begin again.</p>
 				</div>{/if}
@@ -274,8 +273,9 @@
 				<span><strong>{removed.photo.title}</strong> removed from the issue.</span><button
 					type="button"
 					onclick={() => void undo()}
-					data-testid="queue-undo">Undo <span aria-hidden="true">↶</span></button
-				>
+					data-testid="queue-undo"
+					>Undo
+				</button>
 			</div>{/if}
 	</div>
 	<p class="sr-only" role="status" aria-live="polite" aria-atomic="true">{announcement}</p>
@@ -580,10 +580,7 @@
 		text-underline-offset: 3px;
 		white-space: nowrap;
 	}
-	.undo-notice button span {
-		font-size: 16px;
-		padding-left: 5px;
-	}
+
 	.empty {
 		text-align: center;
 		padding: 46px 15px;

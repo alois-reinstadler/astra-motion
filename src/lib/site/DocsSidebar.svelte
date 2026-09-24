@@ -35,9 +35,7 @@
 								onclick={(event) => {
 									event.currentTarget.closest('details')?.removeAttribute('open');
 									query = '';
-								}}
-								><span>{doc.title}</span>{#if current === doc.slug}<span aria-hidden="true">↗</span
-									>{/if}</a
+								}}><span>{doc.title}</span></a
 							>{/each}
 					</div>{/if}
 			{/each}
@@ -45,9 +43,7 @@
 					No guide matches “{query}”. Try layout, exit or scroll.
 				</p>{/if}
 		</nav>
-		<a class="examples-link" href={resolve('/examples')}
-			>Explore the examples <span aria-hidden="true">↗</span></a
-		>
+		<a class="examples-link" href={resolve('/examples')}>Explore the examples </a>
 	</div>
 {/snippet}
 

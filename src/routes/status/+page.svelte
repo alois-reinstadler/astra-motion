@@ -25,7 +25,7 @@
 					without SvelteKit.
 				</li>
 			</ul>
-			<p><a href={resolve('/examples')}>Explore the interactive examples →</a></p>
+			<p><a href={resolve('/examples')}>Explore the interactive examples </a></p>
 		</div>
 	</section>
 	<section id="evaluation">
@@ -42,8 +42,8 @@
 			</p>
 			<p>
 				<a href={resolve('/docs/[slug]', { slug: 'getting-started' })}
-					>Install from the repository →</a
-				>
+					>Install from the repository
+				</a>
 			</p>
 		</div>
 	</section>
@@ -63,8 +63,8 @@
 			<p>
 				<a
 					href="https://github.com/alois-reinstadler/astra-motion/blob/main/docs/research/production-qualification.md"
-					>Read the qualification record →</a
-				>
+					>Read the qualification record
+				</a>
 			</p>
 		</div>
 	</section>
@@ -99,8 +99,8 @@
 			</ul>
 			<p>
 				<a href={resolve('/docs/[slug]', { slug: 'troubleshooting' })}
-					>Troubleshoot a specific interaction →</a
-				>
+					>Troubleshoot a specific interaction
+				</a>
 			</p>
 		</div>
 	</section>
@@ -117,8 +117,8 @@
 			</p>
 			<p>
 				<a href="https://github.com/alois-reinstadler/astra-motion/issues"
-					>Report an issue on GitHub →</a
-				>
+					>Report an issue on GitHub
+				</a>
 			</p>
 		</div>
 	</section>

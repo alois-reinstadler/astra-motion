@@ -16,7 +16,7 @@ test('highlighting preserves copied source and copy feedback does not move the c
 	await page.goto('/docs/layout');
 	const example = page.locator('[data-example="layout"]');
 	await example.locator('summary').click();
-	const code = example.locator('pre code');
+	const code = example.locator('details pre code');
 	await expect(code).toHaveAttribute('data-language', 'svelte');
 	expect(
 		await code
@@ -29,7 +29,7 @@ test('highlighting preserves copied source and copy feedback does not move the c
 	const height = await example.evaluate((node) => node.getBoundingClientRect().height);
 	await button.click();
 	await expect(button).toHaveClass(/copied/);
-	await expect(example.getByRole('status')).toHaveText('Copied to clipboard');
+	await expect(example.locator('details').getByRole('status')).toHaveText('Copied to clipboard');
 	expect(await page.locator('html').getAttribute('data-copied-source')).toBe(original);
 	expect(await button.evaluate((node) => node.getBoundingClientRect().width)).toBe(width);
 	expect(await example.evaluate((node) => node.getBoundingClientRect().height)).toBe(height);
@@ -58,7 +58,9 @@ test('clipboard failure remains actionable and reduced motion disables feedback 
 	await example.locator('summary').click();
 	const button = example.getByRole('button', { name: 'Copy LayoutExample.svelte' });
 	await button.click();
-	await expect(example.getByRole('status')).toContainText('Clipboard access is unavailable');
+	await expect(example.locator('details').getByRole('status')).toContainText(
+		'Clipboard access is unavailable'
+	);
 	await expect(button).toBeEnabled();
 	await button.click();
 	await expect(button).toHaveClass(/copied/);

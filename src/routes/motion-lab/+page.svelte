@@ -50,20 +50,21 @@
 	</div>
 	<div class="status">
 		<span class="dot"></span> RESEARCH PROTOTYPE <span>Svelte 5.57 · Motion DOM 13.2</span><a
-			href={resolve('/motion-lab/product')}>Route experiment ↗</a
-		>
+			href={resolve('/motion-lab/product')}
+			>Route experiment
+		</a>
 	</div>
 
 	<nav class="more-experiments" aria-label="More motion experiments">
-		<a href={resolve('/motion-lab/guide')}>Start here: complete authoring guide ↗</a>
-		<a href={resolve('/motion-lab/extended')}>Six more experiments + rapid stress ↗</a>
-		<a href={resolve('/motion-lab/updates')}>Compare automatic and explicit updates ↗</a>
-		<a href={resolve('/motion-lab/state')}>State, variants, values and interactions ↗</a>
-		<a href={resolve('/motion-lab/components')}>Try the accordion, dialog and cards ↗</a>
-		<a href={resolve('/motion-lab/presence')}>Coordinated exits and reversal ↗</a>
-		<a href={resolve('/motion-lab/scroll')}>Scroll-linked motion ↗</a>
-		<a href={resolve('/motion-lab/timelines')}>Scoped timelines ↗</a>
-		<a href={resolve('/motion-lab/inheritance')}>Server-rendered child variants ↗</a>
+		<a href={resolve('/motion-lab/guide')}>Authoring fixtures and integration contracts </a>
+		<a href={resolve('/motion-lab/extended')}>Six more experiments + rapid stress </a>
+		<a href={resolve('/motion-lab/updates')}>Compare automatic and explicit updates </a>
+		<a href={resolve('/motion-lab/state')}>State, variants, values and interactions </a>
+		<a href={resolve('/motion-lab/components')}>Try the accordion, dialog and cards </a>
+		<a href={resolve('/motion-lab/presence')}>Coordinated exits and reversal </a>
+		<a href={resolve('/motion-lab/scroll')}>Scroll-linked motion </a>
+		<a href={resolve('/motion-lab/timelines')}>Scoped timelines </a>
+		<a href={resolve('/motion-lab/inheritance')}>Server-rendered child variants </a>
 	</nav>
 
 	<section class="experiment">
@@ -120,7 +121,7 @@
 		</div>
 		<div class="stage layout-stage">
 			<div class="rail" style:justify-content={aligned ? 'flex-end' : 'flex-start'}>
-				<div class="orb" data-testid="orb" {@attach layout()}>↗</div>
+				<div class="orb" data-testid="orb" {@attach layout()}>Move</div>
 			</div>
 			<div class="accordion" data-testid="accordion-box" {@attach layout()}>
 				<strong {@attach layout({ mode: 'position' })}>Made for ordinary markup.</strong
@@ -263,7 +264,7 @@
 	<footer>
 		<strong>ASTRA MOTION</strong>
 		<p>Inspect the behavior. Question the abstraction.</p>
-		<a href={resolve('/motion-lab/product')}>Try route continuity ↗</a>
+		<a href={resolve('/motion-lab/product')}>Try route continuity </a>
 	</footer>
 </main>
 

@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { Motion } from '$lib/motion/index.js';
+	import { motion } from '$lib/motion/index.js';
 	let visible = $state(true);
 </script>
 
 <div class="state-example">
 	<div class="stage" aria-live="polite">
-		<div class="placeholder" aria-hidden="true"><span>↗</span>A little good news.</div>
+		<div class="placeholder" aria-hidden="true">A little good news.</div>
 		{#if visible}
-			<Motion
+			<motion.div
 				class="notification"
 				motion={{
 					initial: { opacity: 0, y: 28, scale: 0.92 },
@@ -22,7 +22,7 @@
 					<h3>Your work is saved.</h3>
 					<p>Go make something wonderful.</p>
 				</div>
-			</Motion>
+			</motion.div>
 		{/if}
 	</div>
 	<button type="button" onclick={() => (visible = !visible)} aria-pressed={visible}>
@@ -51,15 +51,7 @@
 		color: #777b70;
 		font-size: 13px;
 	}
-	.placeholder > span {
-		display: grid;
-		place-items: center;
-		width: 52px;
-		height: 52px;
-		border: 1px dashed #b6b9ac;
-		border-radius: 50%;
-		font-size: 25px;
-	}
+
 	.state-example :global(.notification) {
 		position: absolute;
 		inset: auto 0;

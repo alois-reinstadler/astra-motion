@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { untrack } from 'svelte';
+	import { onMount } from 'svelte';
 	import { resolve } from '$app/paths';
 	import SiteFrame from '$lib/site/SiteFrame.svelte';
 	import MotionConfig from '$lib/motion/MotionConfig.svelte';
@@ -17,11 +17,9 @@
 	import { photos } from '$lib/showcase/collection.js';
 	let reduced = $state(false);
 	let ready = $state(false);
-	$effect(() =>
-		untrack(() => {
-			ready = true;
-		})
-	);
+	onMount(() => {
+		ready = true;
+	});
 	const collectionFile = { name: 'collection.ts', source: collectionSource };
 	const scenes = [
 		{ id: 'contact-sheet', title: 'Collect' },
@@ -35,9 +33,10 @@
 	<main id="site-content" class="fieldwork">
 		<header class="showcase-intro" class:motion-reduced={reduced}>
 			<div class="intro-top">
-				<span>ASTRA IN PRACTICE / 001</span><a
-					href={resolve('/docs/[slug]', { slug: 'getting-started' })}>Build with Astra ↗</a
-				>
+				<span>SHOWCASE / COMPLETE APPLICATION</span><a
+					href={resolve('/docs/[slug]', { slug: 'getting-started' })}
+					>Build with Astra
+				</a>
 			</div>
 			<div class="intro-main">
 				<div class="intro-landscape" aria-hidden="true">
@@ -53,8 +52,8 @@
 				</div>
 				<p class="intro-copy">
 					A little space for<br /><em>big observations.</em><small
-						>Four connected ideas for interfaces that feel alive. Open a photograph. Rearrange your
-						desk. Make something yours.</small
+						>A photo studio built with Astra. Collect images, compose a cover, curate an issue and
+						read it. Each scene connects a working interaction to its guide and complete source.</small
 					>
 				</p>
 			</div>
@@ -86,7 +85,9 @@
 							A contact sheet becomes a closer look. Pick a photograph, change the view, follow what
 							catches your eye.
 						</p>
-						<a href={resolve('/docs/[slug]', { slug: 'shared-layout' })}>Shared layout guide ↗</a>
+						<a href={resolve('/docs/[slug]#identity', { slug: 'shared-layout' })}
+							>Shared layout guide
+						</a>
 					</div>
 				</div>
 				<ContactSheet /><ShowcaseSource
@@ -104,7 +105,7 @@
 							Write a headline. Find the right tone. Move your tools aside and give the page a
 							little breathing room.
 						</p>
-						<a href={resolve('/docs/[slug]', { slug: 'layout' })}>Layout guide ↗</a>
+						<a href={resolve('/docs/[slug]#automatic', { slug: 'layout' })}>Layout guide </a>
 					</div>
 				</div>
 				<EditingDesk /><ShowcaseSource
@@ -122,7 +123,7 @@
 							Build an issue from your favourite frames. Reorder, remove, reconsider. There’s always
 							room to change your mind.
 						</p>
-						<a href={resolve('/docs/[slug]', { slug: 'presence' })}>Presence guide ↗</a>
+						<a href={resolve('/docs/[slug]#pop-layout', { slug: 'presence' })}>Presence guide </a>
 					</div>
 				</div>
 				<PublishingQueue /><ShowcaseSource
@@ -144,7 +145,7 @@
 							A journal to linger in. Follow the landscape as you read, then assemble a world from
 							six fragments.
 						</p>
-						<a href={resolve('/docs/[slug]', { slug: 'scroll' })}>Scroll &amp; sequence guides ↗</a>
+						<a href={resolve('/docs/[slug]', { slug: 'scroll' })}>Scroll &amp; sequence guides </a>
 					</div>
 				</div>
 				<StoryPreview /><ShowcaseSource
@@ -158,8 +159,8 @@
 				<h2>Made to move.<br /><em>Open to explore.</em></h2>
 				<p>Native Svelte elements. Motion’s animation engine.<br />Astra brings them together.</p>
 				<a class="docs-cta" href={resolve('/docs/[slug]', { slug: 'getting-started' })}
-					>Make your first move <span>↗</span></a
-				>
+					>Make your first move
+				</a>
 			</div>
 			<div class="credits">
 				<h3>A NOTE ON FIELDWORK</h3>
@@ -175,7 +176,7 @@
 				<ul>
 					{#each photos as photo (photo.id)}<li>
 							<!-- eslint-disable-next-line svelte/no-navigation-without-resolve --><!-- External NASA record, not an application route. -->
-							<a href={photo.source} target="_blank" rel="noreferrer">{photo.location} ↗</a>
+							<a href={photo.source} target="_blank" rel="noreferrer">{photo.location} </a>
 						</li>{/each}
 				</ul>
 				<p class="fine-print">

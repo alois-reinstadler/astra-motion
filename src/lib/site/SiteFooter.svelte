@@ -8,11 +8,12 @@
 		<p>Motion’s engine. Svelte’s lifecycle.</p>
 	</div>
 	<nav aria-label="Footer navigation">
-		<a href={resolve('/docs')}>Documentation</a><a href={resolve('/showcase')}>Showcase</a><a
-			href={resolve('/examples')}>Examples</a
-		><a href={resolve('/about')}>Why Astra</a><a href={resolve('/status')}>Project status</a><a
-			href="https://github.com/alois-reinstadler/astra-motion">GitHub</a
-		>
+		<a href={resolve('/docs')}>Documentation</a>
+		<a href={resolve('/examples')}>Examples</a>
+		<a href={resolve('/showcase')}>Showcase</a>
+		<a href={resolve('/about')}>Why Astra</a>
+		<a href={resolve('/status')}>Project status</a>
+		<a href="https://github.com/alois-reinstadler/astra-motion">GitHub</a>
 	</nav>
 	<small>Independent project.<br />Powered by Svelte and Motion.</small>
 </footer>

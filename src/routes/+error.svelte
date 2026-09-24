@@ -18,8 +18,8 @@
 	<section>
 		<h2>Keep exploring</h2>
 		<div>
-			<p><a href={resolve('/docs')}>Read the documentation →</a></p>
-			<p><a href={resolve('/')}>Return home →</a></p>
+			<p><a href={resolve('/docs')}>Read the documentation </a></p>
+			<p><a href={resolve('/')}>Return home </a></p>
 		</div>
 	</section>
 </ProjectArticle>

@@ -29,16 +29,17 @@ test('live docs examples keep their interactions, reset, and source on the page'
 }) => {
 	const errors: string[] = [];
 	page.on('pageerror', (error) => errors.push(error.message));
-	await page.goto('/docs/getting-started');
+	await page.goto('/docs/presence#pop-layout');
 	const list = page.locator('[data-example="motion-component"]');
 	await list.getByRole('button', { name: 'Complete: Collect a little inspiration' }).click();
 	await expect(list.locator('li.task')).toHaveCount(2);
 	await list.getByRole('button', { name: 'Start again' }).click();
 	await expect(list.locator('li.task')).toHaveCount(3);
+	await page.goto('/docs/getting-started#first-component');
 	const notification = page.locator('[data-example="state"]');
 	await notification.getByRole('button', { name: 'Dismiss notification' }).click();
 	await expect(notification.locator('.notification')).toHaveCount(0);
-	await notification.getByRole('button', { name: 'Reset A little good news' }).click();
+	await notification.getByRole('button', { name: 'Reset Show and dismiss a notification' }).click();
 	await expect(notification.locator('.notification')).toHaveCount(1);
 	await expect(notification.locator('.notification')).toHaveCSS('opacity', '1');
 	await expect(page.locator('a[href*="motion-lab"]')).toHaveCount(0);
@@ -97,16 +98,16 @@ test('scroll, visibility and timelines stay local and usable with reduced motion
 	});
 	await expect(scroll.locator('progress')).toHaveAttribute('value', '1');
 	const visibility = page.locator('[data-example="in-view"]');
-	await expect(visibility.getByRole('status')).toHaveText('Out of view');
+	await expect(visibility.locator('.status')).toHaveText('Out of view');
 	await visibility.locator('.viewport').evaluate((node) => {
 		node.scrollTop = node.scrollHeight;
 	});
-	await expect(visibility.getByRole('status')).toHaveText('In view');
+	await expect(visibility.locator('.status')).toHaveText('In view');
 	await expect(visibility.locator('.card')).toHaveCSS('opacity', '1');
 	await visibility.locator('.viewport').evaluate((node) => {
 		node.scrollTop = 0;
 	});
-	await expect(visibility.getByRole('status')).toHaveText('Out of view');
+	await expect(visibility.locator('.status')).toHaveText('Out of view');
 	await page.goto('/docs/timelines');
 	const timeline = page.locator('[data-example="timeline"]');
 	await timeline.getByRole('button', { name: 'Replay' }).click();
@@ -144,7 +145,7 @@ test('documentation has connected navigation, topic filtering and complete copya
 	// after Playwright's actionability check. Keep the actual pointer interaction.
 	await settlePointerTarget(copy);
 	await copy.click();
-	await expect(page.getByRole('status')).toHaveText('Copied to clipboard');
+	await expect(example.locator('details').getByRole('status')).toHaveText('Copied to clipboard');
 	expect(await page.locator('html').getAttribute('data-copied-source')).toContain(
 		"from 'astra-motion'"
 	);
@@ -181,9 +182,9 @@ test('mobile documentation opens its contents and navigates without horizontal o
 	await expect(menu).not.toHaveAttribute('open');
 	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Presence & exits');
 	expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-	await page.locator('[data-example="state"] summary').click();
+	await page.locator('[data-example="wait"] summary').click();
 	await expect(
-		page.getByRole('region', { name: 'StateExample.svelte source' }).first()
+		page.getByRole('region', { name: 'PresenceExample.svelte source' }).first()
 	).toHaveAttribute('tabindex', '0');
 });
 
@@ -196,7 +197,7 @@ test('documentation renders without JavaScript and missing guides return 404', a
 	const page = await context.newPage();
 	await page.goto('/docs/getting-started');
 	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Getting started');
-	for (const id of ['motion-component', 'first-component']) {
+	for (const id of ['first-component']) {
 		await page.locator(`#${id} summary`).click();
 		await expect(
 			page.locator(`#${id}`).getByRole('region', { name: /Example.svelte source/ })
@@ -232,10 +233,10 @@ test('client navigation disposes demo exits instead of retaining previous guide 
 	await expect(page.locator('#identity')).toHaveCount(0);
 	await expect(page.locator('[data-example="shared"]')).toHaveCount(0);
 	await expect(page.locator('article > section')).toHaveCount(5);
-	const presence = navigation.getByRole('link', { name: 'Presence & exits', exact: true });
-	await settlePointerTarget(presence);
-	await presence.click();
-	await expect(page).toHaveURL(/\/docs\/presence$/);
+	const gettingStarted = navigation.getByRole('link', { name: 'Getting started', exact: true });
+	await settlePointerTarget(gettingStarted);
+	await gettingStarted.click();
+	await expect(page).toHaveURL(/\/docs\/getting-started$/);
 	await page
 		.locator('[data-example="state"]')
 		.getByRole('button', { name: 'Dismiss notification' })
@@ -246,7 +247,7 @@ test('client navigation disposes demo exits instead of retaining previous guide 
 	await expect(page.locator('[data-example="wait"]')).toHaveCount(0);
 	await expect(page.locator('[data-example="layout"]')).toHaveCount(1);
 	await page.goBack();
-	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Presence & exits');
+	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Getting started');
 	await expect(page.locator('[data-example="state"] .notification')).toHaveCount(1);
 	await expect(page.locator('[data-example="layout"]')).toHaveCount(0);
 	expect(errors).toEqual([]);
@@ -286,6 +287,6 @@ test('the pinned scroll composition assembles, reverses and resets', async ({ pa
 	await reader.evaluate((node) => {
 		node.scrollTop = node.scrollHeight;
 	});
-	await demo.getByRole('button', { name: 'Reset Make it move' }).click();
+	await demo.getByRole('button', { name: 'Reset Compose a scene on scroll' }).click();
 	await expect(demo.locator('progress')).toHaveAttribute('value', '0');
 });
