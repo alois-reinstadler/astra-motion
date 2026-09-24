@@ -121,3 +121,25 @@ The pre-existing working tree was retained. Relative to that starting state, thi
 - This report, the link in `implementation.md`, and `implementation-evidence/followup/`.
 
 No engine files, dependencies or lockfiles were changed by this continuation. No commits, publication or merge were performed.
+
+## Merge verification follow-up — 2026-09-24
+
+The owner subsequently authorized committing, publishing the site and merging to
+`main`. [Source-branch CI](https://github.com/alois-reinstadler/astra-motion/actions/runs/35858455145)
+passed the repository checks and Chromium/Firefox/WebKit component and site E2E
+jobs. This is additional remote execution, separate from the shared-Chrome work
+above; it does not qualify physical devices or the full packed-consumer browser matrix.
+
+The merge at `080d482` restricted Pages to `main` and deployed successfully. Its
+[CI run](https://github.com/alois-reinstadler/astra-motion/actions/runs/36046676516)
+passed all six browser jobs but failed fresh consumer strict declarations:
+`esrap@2.3.10/types/languages/ts/index.d.ts` could not resolve
+`@typescript-eslint/types`. Esrap declares that package as an optional peer, and
+the independent consumer deliberately disables automatic peer installation.
+
+`tests/production/consumer/package.json` now explicitly supplies that type-only
+peer at `8.69.0`, matching the version already present in the repository lockfile.
+The repeated fresh pack/install passed engine identity checks, Svelte checking,
+`tsc --noEmit --skipLibCheck false` and its production build. Its tarball SHA-256 is
+`c7b60fe14901ffb5146ac53ba899d85879e968a4a22be8c6f658964709382899`.
+No Motion pin, runtime code, alias, override or declaration-check setting changed.

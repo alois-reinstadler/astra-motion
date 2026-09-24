@@ -14,6 +14,7 @@
 	},
 	"devDependencies": {
 		"@types/node": "24.13.3",
+		"@typescript-eslint/types": "8.69.0",
 		"svelte": "5.57.0",
 		"@sveltejs/kit": "2.70.3",
 		"@sveltejs/vite-plugin-svelte": "7.3.0",
