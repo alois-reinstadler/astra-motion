@@ -22,6 +22,11 @@ import {
 	type Transition
 } from 'motion-dom';
 import { observeLayout } from './observe.js';
+import {
+	ProjectionBoundary,
+	observeStickyScroll,
+	correctBoundarySnapshot
+} from './projection-boundaries.js';
 import { beforeCommit, layoutBridge, synchronousMutation } from './commit.js';
 import { shouldReduceMotion, type MotionPolicy } from './policy.js';
 import { ensureMotionVisual, hasMotionVisual, hasActiveMotionVisual } from './visual.js';
@@ -95,10 +100,55 @@ const defaultTransition: Transition = { type: 'spring', stiffness: 420, damping:
 const transformTemplate = (_: unknown, generated: string) =>
 	generated.replace(/^translate3d\(([^,]+), ([^,]+), 0px\)/, 'translate($1, $2)');
 
+const boundaries = new Map<HTMLElement, ProjectionBoundary>();
+function linkProjection(node: IProjectionNode, parent: IProjectionNode) {
+	const path = [...parent.path, parent];
+	if (
+		node.parent === parent &&
+		node.path.length === path.length &&
+		node.path.every((ancestor, index) => ancestor === path[index])
+	)
+		return;
+	node.parent?.children.delete(node);
+	node.parent = parent;
+	node.path = path;
+	node.depth = path.length;
+	parent.children.add(node);
+	node.root?.nodes?.remove(node);
+	node.root?.nodes?.add(node);
+}
 function parentProjection(element: HTMLElement): IProjectionNode | undefined {
-	for (let parent = element.parentElement; parent; parent = parent.parentElement) {
-		const participant = participants.get(parent);
-		if (participant) return participant.projection as IProjectionNode;
+	const parent = element.parentElement;
+	if (!parent) return;
+	const ancestor = parentProjection(parent);
+	const participant = participants.get(parent);
+	if (participant) {
+		if (ancestor) linkProjection(participant.projection as IProjectionNode, ancestor);
+		return participant.projection as IProjectionNode;
+	}
+	let boundary = boundaries.get(parent);
+	if (!boundary) {
+		boundary = new ProjectionBoundary(parent, ancestor);
+		boundaries.set(parent, boundary);
+	} else if (ancestor) linkProjection(boundary as IProjectionNode, ancestor);
+	return boundary as IProjectionNode;
+}
+
+function refreshProjectionTree() {
+	for (const { element, projection } of participants.values()) {
+		const parent = parentProjection(element);
+		if (parent) linkProjection(projection as IProjectionNode, parent);
+	}
+	// Reparenting and late registration can leave empty boundary chains.
+	let removed = true;
+	while (removed) {
+		removed = false;
+		for (const [element, boundary] of boundaries) {
+			if (boundary.children.size) continue;
+			boundary.unmount();
+			boundaries.delete(element);
+			removed = true;
+		}
 	}
 }
 
@@ -116,6 +166,7 @@ function reconcile() {
 	// Shared replacements must be registered before the old member leaves its stack.
 	for (const participant of pendingRemovals) participant.dispose();
 	pendingRemovals.clear();
+	refreshProjectionTree();
 	syncObserver();
 }
 
@@ -287,7 +338,11 @@ function scheduleAutomatic(elements: Set<HTMLElement>) {
 		const sharedVisited = new Set<string>();
 		for (const participant of affected) {
 			const projection = participant.projection;
-			for (const relative of [...projection.path, ...projection.children]) {
+			const children = [...projection.children];
+			for (const child of children) {
+				if (child instanceof ProjectionBoundary) children.push(...child.children);
+			}
+			for (const relative of [...projection.path, ...children]) {
 				const connected = byProjection.get(relative);
 				if (connected) affected.add(connected);
 			}
@@ -315,6 +370,7 @@ function scheduleRegistration() {
 
 function snapshot(affected?: Set<Participant>) {
 	reconcile();
+	for (const boundary of boundaries.values()) boundary.captureOffset();
 	for (const capture of beforeCommit) capture();
 	for (const participant of affected ?? participants.values()) {
 		const reduce = shouldReduceMotion(participant.policy);
@@ -372,7 +428,8 @@ export function updateLayout<Result>(
 /**
  * Native-element attachments + automatic postcommit projection. Safe to create during SSR.
  * The element's transform is owned by Motion for the attachment's entire lifetime.
- * Dynamic CSS transforms and transformed unregistered ancestors are unsupported.
+ * Plain 2D transformed and sticky ancestors are included in the measurement tree.
+ * Competing transforms on participants and 3D/perspective projection are unsupported.
  */
 export function createLayout(options: LayoutGroupOptions = {}) {
 	const own = options;
@@ -495,6 +552,7 @@ export function createLayout(options: LayoutGroupOptions = {}) {
 					latestValues,
 					parentProjection(element)
 				);
+				observeStickyScroll(projection as IProjectionNode, element);
 				visual.projection = projection;
 				projection.setOptions({
 					layout: true,
@@ -510,7 +568,10 @@ export function createLayout(options: LayoutGroupOptions = {}) {
 				// Measurement resets the DOM transform. Same-frame commits can hit Motion's
 				// VisualElement timestamp deduplication, so enqueue restoration directly.
 				// Motion's render queue still deduplicates this by callback identity.
-				projection.addEventListener('measure', () => frame.render(visual.render, false, true));
+				projection.addEventListener('measure', () => {
+					correctBoundarySnapshot(projection as IProjectionNode);
+					frame.render(visual.render, false, true);
+				});
 				// Motion 13.2.0 releases a detached shared source before resolving its target.
 				// Normalize the delta into that target's logical scroll space first. Register
 				// before mount: Motion installs its animation-start listener inside mount.

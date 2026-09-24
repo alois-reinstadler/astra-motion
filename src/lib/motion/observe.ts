@@ -9,6 +9,9 @@ export function observeLayout(document: Document, changed: (nodes: Set<HTMLEleme
 	const parser = document.createElement('div').style;
 	const owned = new Set([
 		'transform',
+		'translate',
+		'rotate',
+		'scale',
 		'transform-origin',
 		'opacity',
 		'visibility',
