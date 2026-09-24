@@ -70,29 +70,35 @@ it('retains the new state animation handle when replacing a native effect before
 	}
 });
 
-it('cannot write a queued finished timeline endpoint after its ownership transfers', async () => {
-	const node = document.createElement('div');
-	node.style.opacity = '1';
-	document.body.append(node);
-	const scope = createAnimate({ reducedMotion: 'never' });
-	const detach = scope.attach(node);
-	let release: (() => void) | undefined;
-	try {
-		const controls = scope.animate(node, { opacity: 0.25 }, { duration: 1 });
-		await expect.poll(() => node.getAnimations().length).toBe(1);
-		node.getAnimations()[0].finish();
-		controls.stop();
-		release = claimMotionOwnership(node, 'state', {});
-		node.style.opacity = '0.75';
-		await frame();
-		await frame();
-		expect(Number(getComputedStyle(node).opacity)).toBeCloseTo(0.75, 3);
-	} finally {
-		release?.();
-		detach?.();
-		node.remove();
+it.each(['html', 'svg'] as const)(
+	'cannot write a queued finished %s timeline endpoint after its ownership transfers',
+	async (kind) => {
+		const node =
+			kind === 'svg'
+				? document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+				: document.createElement('div');
+		node.style.opacity = '1';
+		document.body.append(node);
+		const scope = createAnimate({ reducedMotion: 'never' });
+		const detach = scope.attach(node);
+		let release: (() => void) | undefined;
+		try {
+			const controls = scope.animate(node, { opacity: 0.25 }, { duration: 1 });
+			await expect.poll(() => node.getAnimations().length).toBe(1);
+			node.getAnimations()[0].finish();
+			controls.stop();
+			release = claimMotionOwnership(node, 'state', {});
+			node.style.opacity = '0.75';
+			await frame();
+			await frame();
+			expect(Number(getComputedStyle(node).opacity)).toBeCloseTo(0.75, 3);
+		} finally {
+			release?.();
+			detach?.();
+			node.remove();
+		}
 	}
-});
+);
 
 it('keeps the stopped pose for JavaScript-backed scoped playback', async () => {
 	const node = document.createElement('div');
@@ -146,26 +152,32 @@ it.each(['native', 'javascript'] as const)(
 	}
 );
 
-it('flushes naturally completed scoped renders before releasing ownership', async () => {
-	const node = document.createElement('div');
-	node.style.opacity = '1';
-	document.body.append(node);
-	const scope = createAnimate({ reducedMotion: 'never' });
-	const detach = scope.attach(node);
-	let release: (() => void) | undefined;
-	try {
-		await scope.animate(node, { opacity: 0.25 }, { duration: 0.04 });
-		release = claimMotionOwnership(node, 'state', {});
-		node.style.opacity = '0.75';
-		await frame();
-		await frame();
-		expect(Number(getComputedStyle(node).opacity)).toBeCloseTo(0.75, 3);
-	} finally {
-		release?.();
-		detach?.();
-		node.remove();
+it.each(['html', 'svg'] as const)(
+	'flushes naturally completed %s scoped renders before releasing ownership',
+	async (kind) => {
+		const node =
+			kind === 'svg'
+				? document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+				: document.createElement('div');
+		node.style.opacity = '1';
+		document.body.append(node);
+		const scope = createAnimate({ reducedMotion: 'never' });
+		const detach = scope.attach(node);
+		let release: (() => void) | undefined;
+		try {
+			await scope.animate(node, { opacity: 0.25 }, { duration: 0.04 });
+			release = claimMotionOwnership(node, 'state', {});
+			node.style.opacity = '0.75';
+			await frame();
+			await frame();
+			expect(Number(getComputedStyle(node).opacity)).toBeCloseTo(0.75, 3);
+		} finally {
+			release?.();
+			detach?.();
+			node.remove();
+		}
 	}
-});
+);
 
 it('does not force unrelated pending auto-size measurements while taking the presence clock', () => {
 	const nodes = [document.createElement('div'), document.createElement('div')];
@@ -184,11 +196,11 @@ it('does not force unrelated pending auto-size measurements while taking the pre
 		visual.mount(node);
 		return visual;
 	});
-	const original = nodes[1].getBoundingClientRect.bind(nodes[1]);
+	const original = window.getComputedStyle;
 	let reads = 0;
-	nodes[1].getBoundingClientRect = () => {
-		reads++;
-		return original();
+	window.getComputedStyle = (node, pseudo) => {
+		if (node === nodes[1]) reads++;
+		return original.call(window, node, pseudo);
 	};
 	try {
 		animateTarget(visuals[1], { height: 'auto', transition: { duration: 1 } });
@@ -203,6 +215,7 @@ it('does not force unrelated pending auto-size measurements while taking the pre
 		trajectory.cancel();
 		expect(reads).toBe(0);
 	} finally {
+		window.getComputedStyle = original;
 		visuals.forEach((visual) => visual.unmount());
 		nodes.forEach((node) => node.remove());
 	}

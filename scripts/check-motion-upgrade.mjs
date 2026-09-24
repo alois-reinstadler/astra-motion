@@ -78,13 +78,24 @@ assert(
 	metadata('motion-dom', createRequire(framer.entry)).directory === domPackage.directory,
 	'Motion vanilla and the direct adapter resolve different motion-dom installations'
 );
+for (const name of ['framer-motion', 'motion-utils'])
+	assert(
+		metadata(name).directory === packages[name].directory,
+		`Direct and transitive ${name} resolve different installations`
+	);
+assert(
+	metadata('motion-utils', createRequire(framer.entry)).directory === utils.directory,
+	'Framer Motion and motion-dom resolve different motion-utils installations'
+);
 for (const name of [
 	'HTMLVisualElement',
 	'AsyncMotionValueAnimation',
 	'NativeAnimationExtended',
 	'GroupAnimation',
 	'frame',
-	'visualElementStore'
+	'visualElementStore',
+	'styleEffect',
+	'svgEffect'
 ])
 	assert(motion[name] === dom[name], `${name} identity differs between motion and motion-dom`);
 

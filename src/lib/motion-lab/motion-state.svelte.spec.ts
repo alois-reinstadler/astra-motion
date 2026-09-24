@@ -1,7 +1,11 @@
 import { expect, it } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import { flushSync } from 'svelte';
-import { visualElementStore, type AnimationPlaybackControls } from 'motion-dom';
+import {
+	visualElementStore,
+	AsyncMotionValueAnimation,
+	type AnimationPlaybackControls
+} from 'motion-dom';
 import MotionState from './MotionState.svelte';
 const frame = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
 const frames = async () => {
@@ -114,6 +118,8 @@ it('runs inherited children after their parent and preserves Motion stagger orde
 		visual.getValue('x', 0).on('animationStart', () => {
 			const animation = visual.getValue('x')!.animation;
 			if (!animation || controls[index]) return;
+			if (!(animation instanceof AsyncMotionValueAnimation))
+				throw new Error('Expected variant animation to expose full playback controls');
 			controls[index] = animation;
 			parentAtChildStart[index] = Number(parent.getValue('opacity')!.get());
 		})

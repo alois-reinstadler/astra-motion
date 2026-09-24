@@ -7,8 +7,9 @@ browser View Transitions.
 
 **Working beta, version 0.0.1.** This repository has not announced a public registry
 release. Astra is [MIT licensed](LICENSE). Evaluate the local package before
-adopting it. Motion 13.2.0 is pinned because the layout adapter uses undocumented
-upstream exports.
+adopting it. [Motion 13.4 upgrade qualification](docs/research/motion-upgrade-13.4.md)
+records the current engine graph. Motion DOM 13.4.2 is pinned because the layout
+adapter uses undocumented upstream exports.
 
 ## Try it locally
 
@@ -112,7 +113,7 @@ observation stays active while any group requests it; explicit transactions cove
 groups. Text inside resizing surfaces needs a transformable position-projected
 host, as above; images need a defined intrinsic aspect/crop contract.
 
-This remains experimental: `motion-dom@13.2.0` is pinned because projection uses
+This remains experimental: `motion-dom@13.4.2` is pinned because projection uses
 framework-independent but undocumented root exports. A small adapter compatibility
 listener handles detached shared sources in scroll containers; the dependency itself
 is unpatched. See the documented transform and browser limits before adopting it.
@@ -179,7 +180,7 @@ The project-local shadcn components accept `motion={binding}` (and independent
 `overlayMotion={binding}` on dialogs). They import only the binding type, so ordinary
 widgets do not import the animation engine. Nested tag components inherit variant ancestry during SSR. Use `parent.child(options)`
 for the equivalent native-binding contract. Descendants must remain inside their
-declared parent in the DOM. The packaged Motion 13.2.0 DOM APIs power scroll and
+declared parent in the DOM. The packaged Motion 13.4.3 DOM APIs power scroll and
 timelines; React is neither installed nor imported by this runtime.
 
 ## Project scope and release work

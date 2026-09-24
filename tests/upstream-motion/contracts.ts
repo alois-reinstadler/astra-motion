@@ -8,7 +8,9 @@ import {
 	createAnimationState,
 	motionValue,
 	JSAnimation,
-	frame
+	frame,
+	styleEffect,
+	svgEffect
 } from 'motion-dom';
 
 /** Shape checks are upgrade tripwires; the existing Astra suites test behavior. */
@@ -112,6 +114,8 @@ export async function inspectContracts() {
 			['read', 'resolveKeyframes', 'update', 'preRender', 'render', 'postRender'],
 			'frame'
 		);
+		methods(styleEffect, ['get', 'flush'], 'styleEffect');
+		methods(svgEffect, ['get', 'flush'], 'svgEffect');
 		const sampler = new JSAnimation({
 			keyframes: [0, 1],
 			duration: 100,
@@ -128,9 +132,9 @@ export async function inspectContracts() {
 		);
 		value.destroy();
 		animateTarget(visual, { opacity: 0.5, transition: { duration: 10 } });
-		const async = visual.getValue('opacity')!.animation;
-		if (!(async instanceof AsyncMotionValueAnimation))
-			errors.push('value.animation class identity changed');
+		const animation = visual.getValue('opacity')!.animation;
+		const async = animation instanceof AsyncMotionValueAnimation ? animation : undefined;
+		if (!async) errors.push('value.animation class identity changed');
 		for (let i = 0; !node.getAnimations().length && i < 60; i++)
 			await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
 		const materialized: unknown = async && Reflect.get(async, '_animation');
