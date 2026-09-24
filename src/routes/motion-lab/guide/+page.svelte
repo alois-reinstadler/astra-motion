@@ -109,8 +109,9 @@
 					</li>
 				</ul>
 				<p class="note">
-					The lab includes regression coverage for these patterns. Arbitrary transformed ancestors,
-					3D scenes and every browser’s clipping behavior remain outside the current guarantee.
+					The lab covers static 2D transformed wrappers and nested sticky/scroll/clipping
+					boundaries. Animated wrapper transforms, perspective and 3D scenes remain outside the
+					current guarantee.
 				</p>
 			</section>
 		</div>

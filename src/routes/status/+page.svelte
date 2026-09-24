@@ -92,8 +92,9 @@
 					the current surface.
 				</li>
 				<li>
-					Complex transformed ancestors, 3D layouts and every sticky or clipping combination have
-					not been qualified.
+					Static 2D transformed wrappers and nested sticky/scroll/clipping boundaries have
+					regression coverage. Animated wrapper transforms, perspective and 3D layouts remain
+					unqualified.
 				</li>
 			</ul>
 			<p>

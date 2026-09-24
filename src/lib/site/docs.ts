@@ -285,7 +285,7 @@ const pages: DocPage[] = [
 				title: 'Measure the right coordinate space',
 				text: [
 					'Register a scroll container with layout({ scroll: true }) when it is part of the projection tree. Use root for an appropriate fixed layout root. These options inform Motion’s geometry measurements; they do not add scroll-linked animation.',
-					'Arbitrary transformed ancestors, complex sticky layouts and 3D scenes are outside the current qualification. Test the actual clipping and scrolling context in the browser.'
+					'Plain 2D transformed wrappers are measured automatically, including nested rotation, skew, nonuniform scale and custom origins. Nested scroll and sticky boundaries are covered while descendant layout animates. Changing wrapper transforms during projection, perspective and 3D scenes remain outside this contract.'
 				]
 			}
 		]
@@ -708,7 +708,7 @@ const pages: DocPage[] = [
 					'No compiler plugin is required. Bare layout and layoutId attributes are not the shipped API.',
 					'Projection exports are framework-independent but undocumented upstream. A small native-animation handoff helper also reads two private fields to avoid stale completion writes and forced measurements. Keep the tested Motion version pinned and qualify upgrades.',
 					'No full Motion React parity: advanced drag constraints, reorder, arbitrary async exit retention and all framework-specific features are not exposed.',
-					'Complex transformed ancestors, 3D scenes, every sticky/clipping combination and every route/BFCache edge are not fully qualified.',
+					'Static affine transformed wrappers and nested sticky/scroll/clipping boundaries have geometry regressions. Animated wrapper transforms, perspective, 3D scenes and every route/BFCache edge are not fully qualified.',
 					'Runtime source HMR reloads the page. Component HMR and a production-device performance campaign are separate release work.'
 				]
 			}

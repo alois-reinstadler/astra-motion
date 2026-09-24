@@ -258,7 +258,8 @@ flow mutation receives its own batched projection transaction in Motion’s read
 
 The **direct parent must establish positioning**, usually `position: relative`.
 Automatic mode coordinates capture and reflow; manual mode requires a transaction. Portals, table layout,
-writing modes and arbitrary transformed ancestors are not qualified by this prototype.
+writing modes and pop-layout exits through arbitrary transformed ancestors are not qualified
+by this prototype. Descendant layout projection through static 2D wrappers is covered separately below.
 
 ### Shared layout and groups
 
@@ -338,8 +339,15 @@ projection adds a participant and corresponding measurement cost.
 Use numeric application transforms through `layout({ style: { rotate: -8, scale: 0.9 } })`
 so Motion can compose them with projection. Existing arbitrary CSS transforms are
 rejected with a diagnostic and left intact, not overwritten at registration. Do not
-apply competing CSS transform animations to a registered element. Unregistered
-transformed ancestors, CSS 3D matrices and perspective are not qualified. A state
+apply competing CSS transform animations to a registered element. Plain ancestors now
+participate as non-animating measurement boundaries: static 2D rotation, skew,
+nonuniform scale, independent CSS transforms and custom origins are covered, including
+wrappers between registered projection nodes. The adapter temporarily normalizes these
+transforms during measurement and restores authored declarations and priorities. Motion
+still owns interpolation and descendant scale correction. Nested scroll/clipping and
+sticky entry/exit use the browser’s actual sticky displacement, so automatic layout
+retargeting does not replay scrolling. Animated wrapper transforms, changing the affine
+basis during a shared handoff, CSS 3D matrices and perspective remain unqualified. A state
 binding that only animates paint (for example opacity) preserves existing CSS
 transforms. It checks for conflicting ownership if transforms, layout or drag are
 subsequently requested.
@@ -524,8 +532,10 @@ requires current DOM ordering for connected participants.
   images need a defined aspect/crop contract. Unregistered raw text inherits surface
   scaling. See the user-reported [content distortion review](research/review-content.md).
 - **No general CSS-transform coexistence.** The adapter has an explicit ownership
-  contract. Transformed unregistered ancestors, custom transform origins, 3D/sticky
-  edge cases, overflow clipping, shadows and aspect changes need broader qualification.
+  contract. Static affine wrapper transforms and nested sticky/scroll/clipping contexts
+  have geometry regressions, including interruption and cleanup. Changing wrapper transforms,
+  3D/perspective, pop-layout exits through transformed ancestors, shadows and arbitrary aspect
+  changes still need broader qualification.
 - **SSR inheritance needs declared ancestry.** Nested tag components declare it through
   context; native bindings use `parent.child()`. Arbitrary DOM ancestry discovered
   after mounting cannot determine server styles. Children must remain inside their
