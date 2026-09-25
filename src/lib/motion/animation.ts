@@ -5,6 +5,7 @@ import {
 	frame,
 	setTarget,
 	type AnimationDefinition,
+	type TargetAndTransition,
 	type VisualElement,
 	type VisualElementAnimationOptions
 } from 'motion-dom';
@@ -14,6 +15,15 @@ import { prepareMotionHandoff } from './motion-compat.js';
 type Versions = Map<string, number>;
 const versions = new WeakMap<VisualElement, Versions>();
 const epochs = new WeakMap<VisualElement, number>();
+const ownershipGuards = new WeakMap<VisualElement, (target: TargetAndTransition) => void>();
+
+/** The visual owner validates inherited targets before Motion writes their first value. */
+export function setMotionAnimationGuard(
+	visual: VisualElement,
+	guard: (target: TargetAndTransition) => void
+) {
+	ownershipGuards.set(visual, guard);
+}
 type Run = Map<VisualElement, Versions>;
 
 /** Cancel deferred orchestration/transitionEnd, without destroying externally owned values. */
@@ -56,6 +66,7 @@ export function animateMotionDefinition(
 			: (options.transitionOverride ?? target?.transition ?? visual.getDefaultTransition() ?? {});
 		const own = async () => {
 			if (!current() || !target) return;
+			ownershipGuards.get(visual)?.(target);
 			const { transitionEnd, ...values } = target;
 			// Settle already-finished native effects before Motion replaces targets.
 			// Running values remain entirely under Motion's priority/interruption logic.

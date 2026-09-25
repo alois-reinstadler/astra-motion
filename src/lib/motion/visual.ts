@@ -11,7 +11,11 @@ import {
 	type TargetAndTransition,
 	type VisualElement
 } from 'motion-dom';
-import { ensureMotionAnimationState, cancelMotionSequence } from './animation.js';
+import {
+	ensureMotionAnimationState,
+	cancelMotionSequence,
+	setMotionAnimationGuard
+} from './animation.js';
 import { prepareMotionHandoff } from './motion-compat.js';
 import { resolveMotionTarget } from './targets.js';
 
@@ -134,6 +138,9 @@ export function ensureMotionVisual(node: HTMLElement): HTMLVisualElement | undef
 	if (record.props().initial === false) visual.manuallyAnimateOnMount = false;
 	record.visual = visual;
 	visual.mount(node);
+	setMotionAnimationGuard(visual, (target) => {
+		assertMotionTransformOwnership(node, record.props(), target);
+	});
 	return visual;
 }
 

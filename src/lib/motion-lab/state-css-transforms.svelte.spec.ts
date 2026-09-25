@@ -1,4 +1,5 @@
 import { expect, it } from 'vitest';
+import { animateMotionDefinition } from '../motion/animation.js';
 import { ensureMotionVisual, registerMotionVisual } from '../motion/visual.js';
 
 it.each([
@@ -75,6 +76,53 @@ it('accepts CSS individual transforms explicitly reset to none with Motion initi
 	);
 	try {
 		expect(ensureMotionVisual(node)?.getValue('scale', 0.5).get()).toBe(0.5);
+	} finally {
+		unregister();
+		await Promise.resolve();
+		node.remove();
+	}
+});
+
+it('claims inherited transform targets before browser serialization can change their precision', async () => {
+	const node = document.createElement('div');
+	document.body.append(node);
+	const unregister = registerMotionVisual(
+		node,
+		{},
+		() => ({ variants: { moved: { x: 12.123456789 } } }),
+		() => 'never',
+		() => true
+	);
+	try {
+		const visual = ensureMotionVisual(node)!;
+		await animateMotionDefinition(visual, 'moved', { transitionOverride: { duration: 0 } });
+		visual.render();
+		expect(new DOMMatrix(getComputedStyle(node).transform).e).toBeCloseTo(12.123456789, 3);
+		expect(() => ensureMotionVisual(node)).not.toThrow();
+	} finally {
+		unregister();
+		await Promise.resolve();
+		node.remove();
+	}
+});
+
+it('rejects authored CSS before an inherited variant first acquires transform ownership', async () => {
+	const node = document.createElement('div');
+	node.style.transform = 'scale(2)';
+	document.body.append(node);
+	const unregister = registerMotionVisual(
+		node,
+		{},
+		() => ({ variants: { moved: { x: 12.123456789 } } }),
+		() => 'never',
+		() => true
+	);
+	try {
+		const visual = ensureMotionVisual(node)!;
+		await expect(
+			animateMotionDefinition(visual, 'moved', { transitionOverride: { duration: 0 } })
+		).rejects.toThrow('Motion owns');
+		expect(node.style.transform).toBe('scale(2)');
 	} finally {
 		unregister();
 		await Promise.resolve();
