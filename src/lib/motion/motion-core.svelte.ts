@@ -2,6 +2,8 @@ import { flushSync, untrack } from 'svelte';
 import { createAttachmentKey, type Attachment } from 'svelte/attachments';
 import {
 	buildHTMLStyles,
+	isForcedMotionValue,
+	isMotionValue,
 	getVariantContext,
 	camelToDash,
 	resolveMotionValue,
@@ -85,12 +87,25 @@ function targetSnapshot(target: TargetAndTransition): unknown[] {
 	return snapshot;
 }
 
-function initialValues(options: MotionOptions): ResolvedValues {
+// Motion's forced values include transform/origin and projection-corrected CSS.
+// Radius/shadow correctors register on first layout mount; classify them the same during SSR.
+function styleValues(options: MotionOptions, owned: boolean): ResolvedValues {
 	const values: ResolvedValues = {};
 	for (const [key, value] of Object.entries(options.style ?? {})) {
+		if (
+			(isMotionValue(value) ||
+				isForcedMotionValue(key, { layout: Boolean(options.layout) }) ||
+				(Boolean(options.layout) && (key === 'borderRadius' || key === 'boxShadow'))) !== owned
+		)
+			continue;
 		const latest = resolveMotionValue(value);
 		if (typeof latest === 'number' || typeof latest === 'string') values[key] = latest;
 	}
+	return values;
+}
+
+function initialValues(options: MotionOptions): ResolvedValues {
+	const values = styleValues(options, true);
 	const immediate = options.initial === false || options.reducedMotion === 'always';
 	const target = resolved(
 		options,
@@ -245,7 +260,7 @@ function createBinding(
 			);
 	}
 	let initial = initialValues(first);
-	let style = inlineStyle(initial);
+	let style = inlineStyle({ ...styleValues(first, false), ...initial });
 	let element: HTMLElement | undefined;
 	let retainedNode: HTMLElement | undefined;
 	let visual: HTMLVisualElement | undefined;
@@ -255,6 +270,7 @@ function createBinding(
 	let presenceDirection: 'in' | 'out' = 'in';
 	let disposed = false;
 	let preferenceVersion = $state(0);
+	let styleVersion = $state(0);
 	let deferredError = $state.raw<{ error: unknown }>();
 	function withBoundary(action: () => void) {
 		try {
@@ -377,6 +393,17 @@ function createBinding(
 		assertTransformOwnership(config, visual);
 		if (element) assertMotionTransformOwnership(element, props(config));
 		syncLayout(config);
+		const previousStyle = (visual.getProps() as MotionOptions).style ?? {};
+		const nextStyle = config.style ?? {};
+		const styleKeys = new Set([...Object.keys(previousStyle), ...Object.keys(nextStyle)]);
+		const ownedStyleChanged = [...styleKeys].some(
+			(key) =>
+				!Object.is(
+					previousStyle[key as keyof typeof previousStyle],
+					nextStyle[key as keyof typeof nextStyle]
+				) &&
+				(visual!.hasValue(key) || isMotionValue(nextStyle[key as keyof typeof nextStyle]))
+		);
 		visual.update(
 			{
 				...visual.getProps(),
@@ -385,6 +412,12 @@ function createBinding(
 			},
 			null
 		);
+		if (ownedStyleChanged) {
+			// Replacement/removal can change value ownership without scheduling a frame.
+			// Render that handoff, then let Svelte drop declarations Motion no longer owns.
+			visual.render();
+			styleVersion++;
+		}
 		const policyChanged = visual.shouldReduceMotion !== shouldReduceMotion(config);
 		visual.shouldReduceMotion = shouldReduceMotion(config);
 		ensureMotionAnimationState(visual);
@@ -534,9 +567,18 @@ function createBinding(
 		});
 	}
 	$effect(observeStateTargets);
+	// Compare the serialized CSS, so target-only changes do not recompose the
+	// element style while the projection scheduler measures a layout update.
+	const authorStyle = $derived(inlineStyle(styleValues(options(), false)));
 	const bindingProps = {
 		get style() {
-			if (element && visual) return renderedMotionStyle(element, visual);
+			void styleVersion;
+			if (element && visual) {
+				// Ordinary CSS belongs to Svelte. Keeping it out of latestValues lets
+				// object changes/removal and native CSS strings survive later Motion renders.
+				const rendered = renderedMotionStyle(element, visual);
+				return authorStyle ? `${authorStyle};${rendered}` : rendered;
+			}
 			// New mounts resolve current targets; mounted nodes expose their owned
 			// inline styles above only when Svelte recomposes author props.
 			if (!element) {
@@ -544,7 +586,7 @@ function createBinding(
 				assertFeatures(config);
 				assertTransformOwnership(config);
 				initial = initialValues(config);
-				style = inlineStyle(initial);
+				style = inlineStyle({ ...styleValues(config, false), ...initial });
 			}
 			return style;
 		},

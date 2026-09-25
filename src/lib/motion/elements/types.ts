@@ -1,10 +1,11 @@
 import type { HTMLInputTypeAttribute, SvelteHTMLElements } from 'svelte/elements';
-import type { MotionOptions } from '../motion.svelte.js';
+import type { ComponentMotionProps } from '../component-props.js';
 
 /** A compiled HTML element: native attributes/events, a DOM ref and motion options. */
 export type MotionElementProps<Tag extends keyof HTMLElementTagNameMap & keyof SvelteHTMLElements> =
 	Omit<
 		SvelteHTMLElements[Tag],
+		| keyof ComponentMotionProps
 		| `bind:${string}`
 		| (Tag extends
 				| 'area'
@@ -23,10 +24,10 @@ export type MotionElementProps<Tag extends keyof HTMLElementTagNameMap & keyof S
 				| 'wbr'
 				? 'children'
 				: never)
-	> & {
-		motion?: MotionOptions;
-		ref?: HTMLElementTagNameMap[Tag] | null;
-	};
+	> &
+		ComponentMotionProps & {
+			ref?: HTMLElementTagNameMap[Tag] | null;
+		};
 
 /** Native input bindings; checked/indeterminate apply to checkboxes, files to file inputs. */
 export type MotionInputProps<Type extends HTMLInputTypeAttribute | null = 'text'> = Omit<

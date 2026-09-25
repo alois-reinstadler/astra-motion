@@ -1,6 +1,6 @@
 // This file is checked by svelte-check. Negative cases must stay rejected.
 import type { ComponentProps } from 'svelte';
-import { motion, type MotionInputProps } from 'astra-motion';
+import { motion, motionValue, type MotionInputProps, type MotionProps } from 'astra-motion';
 
 export const button: ComponentProps<typeof motion.button> = {
 	type: 'submit',
@@ -31,4 +31,47 @@ export const invalidNumber: MotionInputProps<'number'> = {
 export const invalidGroup: MotionInputProps = {
 	// @ts-expect-error bind:group requires native inputs in one Svelte component.
 	group: []
+};
+
+export const flatAnimation: ComponentProps<typeof motion.div> = {
+	initial: false,
+	animate: { x: 120 },
+	exit: { opacity: 0 },
+	transition: { type: 'spring', stiffness: 300, damping: 30 },
+	style: { x: motionValue(0), color: 'red', '--accent': '#f00' },
+	layout: { mode: 'position' },
+	whileHover: { scale: 1.1 },
+	onTap(event, info) {
+		void event;
+		void info.point.x;
+	},
+	motion: { animate: { x: 20 } }
+};
+export const genericFlat: MotionProps<'button'> = {
+	as: 'button',
+	type: 'submit',
+	disabled: null,
+	animate: { opacity: 1 },
+	style: 'color:red'
+};
+export const invalidFlat: ComponentProps<typeof motion.div> = {
+	// @ts-expect-error Animation definitions do not accept booleans.
+	animate: true
+};
+export const invalidStyle: ComponentProps<typeof motion.div> = {
+	// @ts-expect-error Styles accept native CSS strings or Motion style objects, not numbers.
+	style: 42
+};
+
+export const invalidGenericButton: MotionProps<'button'> = {
+	// @ts-expect-error Generic Motion keeps native attributes specific to its tag.
+	href: '/docs'
+};
+export const genericObjectStyle: MotionProps<'button'> = {
+	as: 'button',
+	style: { x: motionValue(12), color: 'red' },
+	onclick(event) {
+		const button: HTMLButtonElement = event.currentTarget;
+		button.checkValidity();
+	}
 };
