@@ -1,7 +1,7 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import { tick } from 'svelte';
-import { visualElementStore } from 'motion-dom';
+import { visualElementStore, type IProjectionNode } from 'motion-dom';
 import Lab from '../../routes/motion-lab/+page.svelte';
 
 const wait = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
@@ -62,28 +62,46 @@ describe('registered Motion projection and native Svelte presence', () => {
 	it('projects CSS flex movement from the previous box and retargets in flight', async () => {
 		await render(Lab);
 		const node = element('orb');
-		const first = node.getBoundingClientRect().x;
-		element('align').click();
-		await tick();
-		// Automatic projection commits after MutationObserver delivery, beyond Svelte's tick.
-		await frame();
-		const start = node.getBoundingClientRect().x;
-		expect(Math.abs(start - first), debugProjection(node)).toBeLessThan(25);
-		const animation = visualElementStore.get(node)?.projection?.currentAnimation;
-		expect(animation).toBeDefined();
-		// Seek a paused in-flight frame: headless WebKit may defer the first RAF.
-		animation!.pause();
-		animation!.time = 0.1;
-		await frame();
-		const middle = node.getBoundingClientRect().x;
-		expect(middle).toBeGreaterThan(first + 5);
-		element('align').click();
-		await tick();
-		await frame();
-		const reversed = node.getBoundingClientRect().x;
-		expect(Math.abs(reversed - middle)).toBeLessThan(55);
-		await wait(850);
-		expect(node.getBoundingClientRect().x).toBeCloseTo(first, 0);
+		const projection: IProjectionNode = visualElementStore.get(node)!.projection!;
+		const startAnimation = projection.startAnimation.bind(projection);
+		// Keep the real spring and projection pipeline, but start both directions paused.
+		// A delayed RAF must not advance either origin before its geometry is inspected.
+		const controlledStart = vi
+			.spyOn(projection, 'startAnimation')
+			.mockImplementation((options: Parameters<typeof startAnimation>[0]) =>
+				startAnimation({ ...options, autoplay: false })
+			);
+		try {
+			const first = node.getBoundingClientRect().x;
+			element('align').click();
+			await tick();
+			// Automatic projection commits after MutationObserver delivery, beyond Svelte's tick.
+			await expect.poll(() => projection.currentAnimation?.state).toBe('paused');
+			await frame();
+			const start = node.getBoundingClientRect().x;
+			expect(Math.abs(start - first), debugProjection(node)).toBeLessThan(25);
+			const animation = projection.currentAnimation!;
+			expect(animation).toBeDefined();
+			animation.time = 0.1;
+			await frame();
+			await frame();
+			const middle = node.getBoundingClientRect().x;
+			expect(middle).toBeGreaterThan(first + 5);
+			element('align').click();
+			await tick();
+			// Poll a boolean: animation controls are thenable and remain pending while paused.
+			await expect.poll(() => projection.currentAnimation !== animation).toBe(true);
+			await expect.poll(() => projection.currentAnimation?.state).toBe('paused');
+			await frame();
+			const reversed = node.getBoundingClientRect().x;
+			expect(Math.abs(reversed - middle)).toBeLessThan(55);
+			projection.currentAnimation!.play();
+			await expect
+				.poll(() => node.getBoundingClientRect().x, { timeout: 3000 })
+				.toBeCloseTo(first, 0);
+		} finally {
+			controlledStart.mockRestore();
+		}
 	});
 
 	it('pops list exits out of flow before the outro ends and reflows siblings', async () => {
