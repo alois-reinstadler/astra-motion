@@ -3,6 +3,7 @@ import {
 	visualElementStore,
 	buildHTMLStyles,
 	camelToDash,
+	resolveMotionValue,
 	transformProps,
 	isAnimationControls,
 	type MotionNodeOptions,
@@ -81,7 +82,10 @@ export function assertMotionTransformOwnership(
 	buildHTMLStyles(expected, record.initial);
 	const authoredTransform =
 		record.visual?.renderState.style.transform ??
-		(expected.style as { transform?: string }).transform;
+		(expected.style as { transform?: string }).transform ??
+		// Static raw transforms are authored CSS, not forced Motion values.
+		// They still belong to this binding when checking for external CSS conflicts.
+		resolveMotionValue(props.style?.transform);
 	const computed = getComputedStyle(node);
 	if (
 		(computed.transform !== 'none' && node.style.transform !== authoredTransform) ||

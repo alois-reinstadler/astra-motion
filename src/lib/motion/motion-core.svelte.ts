@@ -574,11 +574,14 @@ function createBinding(
 	const bindingProps = {
 		get style() {
 			void styleVersion;
+			// Subscribe on the first render, before the attachment creates the visual.
+			// Ordinary CSS updates don't schedule a Motion frame or change styleVersion.
+			const authored = authorStyle;
 			if (element && visual) {
 				// Ordinary CSS belongs to Svelte. Keeping it out of latestValues lets
 				// object changes/removal and native CSS strings survive later Motion renders.
 				const rendered = renderedMotionStyle(element, visual);
-				return authorStyle ? `${authorStyle};${rendered}` : rendered;
+				return authored ? `${authored};${rendered}` : rendered;
 			}
 			// New mounts resolve current targets; mounted nodes expose their owned
 			// inline styles above only when Svelte recomposes author props.
