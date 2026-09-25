@@ -437,24 +437,25 @@ function createBinding(
 			}
 		}
 		if (visual.shouldReduceMotion) {
+			const target = resolved(
+				config,
+				presenceDirection === 'out'
+					? (config.exit ??
+							getVariantContext(visual.parent)?.exit ??
+							(config.initial === false ? undefined : config.initial))
+					: (config.animate ?? getVariantContext(visual.parent)?.animate),
+				visual
+			);
+			// Inherited labels can introduce transforms absent from this binding's props.
+			// Claim them before the reduced-motion shortcut changes any owned values.
+			if (element) assertMotionTransformOwnership(element, props(config), target);
 			cancelMotionSequence(visual);
 			timeline?.finish();
 			visual.values.forEach((value) => {
 				prepareMotionHandoff(value.animation);
 				value.stop();
 			});
-			setTarget(
-				visual,
-				resolved(
-					config,
-					presenceDirection === 'out'
-						? (config.exit ??
-								getVariantContext(visual.parent)?.exit ??
-								(config.initial === false ? undefined : config.initial))
-						: (config.animate ?? getVariantContext(visual.parent)?.animate),
-					visual
-				)
-			);
+			setTarget(visual, target);
 			visual.projection?.finishAnimation();
 			visual.render();
 		}
