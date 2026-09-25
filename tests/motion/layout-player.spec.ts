@@ -54,7 +54,7 @@ for (const width of [1280, 320]) {
 	});
 }
 
-test('player settles immediately with reduced motion and source mounts on demand', async ({
+test('player settles immediately with reduced motion and complete source mounts on demand', async ({
 	page
 }) => {
 	await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -63,12 +63,18 @@ test('player settles immediately with reduced motion and source mounts on demand
 	await demo.getByRole('button', { name: 'Open player' }).click();
 	await expect(demo.locator('.details')).toHaveCSS('opacity', '1');
 	await expect(demo.locator('.details')).toHaveCSS('animation-name', 'none');
-	await expect(demo.locator('pre')).toHaveCount(0);
-	await demo.locator('summary').click();
-	await expect(demo.locator('pre code')).toHaveAttribute('data-language', 'svelte');
-	await expect(demo.locator('pre')).toContainText('overflow: hidden');
-	await demo.locator('summary').click();
-	await expect(demo.locator('pre')).toHaveCount(0);
-	await demo.locator('summary').click();
-	await expect(demo.getByRole('button', { name: 'Copy LayoutExample.svelte' })).toBeEnabled();
+	const excerpt = demo.locator('.concept-code pre');
+	const source = demo.locator('details');
+	await expect(excerpt).toBeVisible();
+	await expect(excerpt).toContainText('createLayout');
+	await expect(source.locator('pre')).toHaveCount(0);
+	await source.locator('summary').click();
+	await expect(source.locator('pre code')).toHaveAttribute('data-language', 'svelte');
+	await expect(source.locator('pre')).toContainText('overflow: hidden');
+	await expect(excerpt).toBeVisible();
+	await source.locator('summary').click();
+	await expect(source.locator('pre')).toHaveCount(0);
+	await expect(excerpt).toBeVisible();
+	await source.locator('summary').click();
+	await expect(source.getByRole('button', { name: 'Copy LayoutExample.svelte' })).toBeEnabled();
 });
