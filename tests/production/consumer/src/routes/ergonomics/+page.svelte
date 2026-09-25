@@ -1,6 +1,7 @@
 <script lang="ts">
 	import {
 		motion,
+		Motion,
 		MotionConfig,
 		createMotion,
 		createAnimate,
@@ -28,6 +29,13 @@
 </script>
 
 <h1>Packed ergonomics</h1>
+<Motion
+	as="button"
+	type="button"
+	animate={{ opacity: 1 }}
+	style={{ color: 'green' }}
+	onclick={(event) => event.currentTarget.checkValidity()}>Generic flat action</Motion
+>
 <MotionConfig transition={{ duration: 0 }}>
 	<motion.input
 		aria-label="Text"
@@ -42,6 +50,9 @@
 	{#if visible}
 		<motion.button
 			bind:ref
+			initial={false}
+			animate={{ opacity: 1 }}
+			style={{ color: clicks ? 'blue' : 'red' }}
 			type="button"
 			onclick={(event) => {
 				clicks++;
@@ -68,13 +79,18 @@
 			tag: ref?.tagName ?? null
 		})}</output
 	>
-	<motion.div data-nested motion={options}>Nested reactive target</motion.div>
+	<motion.div
+		data-nested
+		initial={options.initial}
+		animate={options.animate}
+		transition={options.transition}>Nested reactive target</motion.div
+	>
 	<div data-nested-direct {...direct.props}>Direct options</div>
 	<div data-nested-getter {...getter.props}>Getter options</div>
 	<button onclick={() => (options.animate.x = 80)}>Change nested target</button>
 	<button onclick={() => (options.animate = { x: 160 })}>Replace nested target</button>
-	<motion.section motion={{ initial: false, animate: 'open', variants: { open: { opacity: 1 } } }}>
-		<motion.div data-inherited motion={{ variants: { open: { opacity: 0.65, x: 24 } } }}
+	<motion.section initial={false} animate="open" variants={{ open: { opacity: 1 } }}>
+		<motion.div data-inherited variants={{ open: { opacity: 0.65, x: 24 } }}
 			>Inherited SSR pose</motion.div
 		>
 	</motion.section>

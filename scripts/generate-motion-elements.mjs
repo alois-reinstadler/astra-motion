@@ -19,10 +19,11 @@ function nativeComponent(
 	{ type = `MotionElementProps<'${tag}'>`, generics = '', props = '', attributes = '' } = {}
 ) {
 	const children = !voidTags.has(tag) && tag !== 'textarea';
-	const markup = `<${tag}\n\t{...attributes}\n\t{...binding.props}\n\tstyle={\`${"${style ?? ''};${binding.props.style}"}\`}\n\ttransition:motionTransition|global\n\t{@attach forwardRef}${attributes ? `\n\t${attributes}` : ''}${voidTags.has(tag) ? '\n/>' : `\n>${children ? '\n\t{@render children?.()}\n' : ''}</${tag}>`}`;
+	const markup = `<${tag}\n\t{...nativeAttributes}\n\t{...binding.props}\n\tstyle={\`${"${typeof style === 'string' ? style : ''};${binding.props.style}"}\`}\n\ttransition:motionTransition|global\n\t{@attach forwardRef}${attributes ? `\n\t${attributes}` : ''}${voidTags.has(tag) ? '\n/>' : `\n>${children ? '\n\t{@render children?.()}\n' : ''}</${tag}>`}`;
 	return `${banner}
 <script lang="ts"${generics ? ` generics="${generics}"` : ''}>
  import { createComponentMotion } from '../component-motion.js';
+ import { componentMotionOptions, nativeComponentProps } from '../component-props.js';
  import type { ${type.split('<')[0]} } from './types.js';
  let {
   motion = {},
@@ -30,7 +31,8 @@ function nativeComponent(
   style,${children ? '\n  children,' : ''}${props}
   ...attributes
  }: ${type} = $props();
- const binding = createComponentMotion(() => motion);
+ const binding = createComponentMotion(() => componentMotionOptions(motion, attributes, style));
+ const nativeAttributes = $derived(nativeComponentProps(attributes));
  const motionTransition = binding.transition;
  function forwardRef(node: HTMLElement) {
   ref = node as HTMLElementTagNameMap['${tag}'];
