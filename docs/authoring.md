@@ -115,17 +115,20 @@ nested option; it is not deeply merged. Spread order follows ordinary Svelte rul
 put an explicit override after `{...options}`.
 
 `style` is the exception: a Motion style object merges its keys over
-`motion.style`, preserving MotionValues. A CSS string remains native CSS alongside
-any nested Motion styles. `null` clears the native style string. Motion owns
-animated properties; do not combine raw `transform` with decomposed `x`, `y`,
-`rotate` or `scale` values.
+`motion.style`, preserving MotionValues. Within that object, an `undefined` value
+clears the matching nested style; removing the key restores its nested fallback.
+A CSS string supplies native declarations alongside nested Motion styles. Omitting
+`style` or setting it to `null` leaves `motion.style` in effect. Motion owns animated
+properties; do not combine raw `transform` with decomposed `x`, `y`, `rotate` or
+`scale` values.
 
 On tags that support it, top-level `disabled` sets the native attribute and disables
-gestures. `false` enables both; `null` removes the attribute and enables gestures.
-The compatibility option `motion.disabled` is gesture-only and never adds a native
-disabled attribute. An undefined top-level `disabled` preserves that nested gesture
-setting. Native handlers such as `onclick` and animation callbacks such as
-`onAnimationComplete` remain separate.
+gestures. `false` or `null` removes that attribute and clears the component's gesture
+gate. Native disabled fieldsets, `inert` and `aria-disabled="true"` ancestors still
+prevent gestures. The compatibility option `motion.disabled` is gesture-only and
+never adds a native disabled attribute. An undefined top-level `disabled` preserves
+that nested gesture setting. Native handlers such as `onclick` and animation
+callbacks such as `onAnimationComplete` remain separate.
 
 `createMotion(options)`, layout/controller options and reusable components accepting
 `motion={binding}` keep their existing contracts. This change does not add Motion
