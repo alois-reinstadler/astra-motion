@@ -25,6 +25,8 @@ test('highlighting preserves copied source and copy feedback does not move the c
 	).toBeGreaterThan(4);
 	const original = await code.textContent();
 	const button = example.getByRole('button', { name: 'Copy LayoutExample.svelte' });
+	// Finish the page's smooth scroll before a native pointer click chooses its coordinates.
+	await button.evaluate((node) => node.scrollIntoView({ behavior: 'instant', block: 'center' }));
 	const width = await button.evaluate((node) => node.getBoundingClientRect().width);
 	const height = await example.evaluate((node) => node.getBoundingClientRect().height);
 	await button.click();
