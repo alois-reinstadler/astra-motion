@@ -18,7 +18,7 @@
 		]);
 	});
 	const source = homeSource.replaceAll("'$lib/motion/index.js'", "'astra-motion'");
-	const snippet = `<motion.div motion={{ layout: true, layoutGroup: layout }}>\n  <strong {@attach layout({ mode: 'position' })}>\n    {piece.name}\n  </strong>\n</motion.div>`;
+	const snippet = `<motion.div layout layoutGroup={layout}>\n  <strong {@attach layout({ mode: 'position' })}>\n    {piece.name}\n  </strong>\n</motion.div>`;
 </script>
 
 <SiteFrame>

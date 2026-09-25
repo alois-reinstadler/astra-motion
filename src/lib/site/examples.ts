@@ -61,7 +61,7 @@ export const liveExamples = {
 		guide: 'layout',
 		anchor: 'automatic',
 		snippet:
-			"const layout = createLayout({\n  transition: { type: 'spring', stiffness: 300, damping: 30 }\n});\n\n<motion.div motion={{ layout: true, layoutGroup: layout }}>\n  <div {@attach layout({ mode: 'position' })}>\n    <!-- Player content -->\n  </div>\n</motion.div>",
+			"const layout = createLayout({\n  transition: { type: 'spring', stiffness: 300, damping: 30 }\n});\n\n<motion.div layout layoutGroup={layout}>\n  <div {@attach layout({ mode: 'position' })}>\n    <!-- Player content -->\n  </div>\n</motion.div>",
 		filename: 'LayoutExample.svelte',
 		component: LayoutExample,
 		source: publicSource(LayoutExampleSource)
@@ -74,7 +74,7 @@ export const liveExamples = {
 		guide: 'shared-layout',
 		anchor: 'identity',
 		snippet:
-			'const layout = createLayout();\n\n{#if selected === index}\n  <motion.div class="selected" motion={{\n    layout: { id: \'mood-selection\' }, layoutGroup: layout\n  }} />\n{/if}',
+			'const layout = createLayout();\n\n{#if selected === index}\n  <motion.div\n    class="selected"\n    layout={{ id: \'mood-selection\' }}\n    layoutGroup={layout}\n  />\n{/if}',
 		filename: 'SharedExample.svelte',
 		component: SharedExample,
 		source: publicSource(SharedExampleSource)
@@ -87,7 +87,7 @@ export const liveExamples = {
 		guide: 'presence',
 		anchor: 'pop-layout',
 		snippet:
-			"const layout = createLayout();\nconst pop = { [createAttachmentKey()]: popLayout() };\n\n<motion.li {...pop} motion={{\n  exit: { opacity: 0, x: 32, scale: 0.96 },\n  layout: { mode: 'position' }, layoutGroup: layout\n}}>\n  <!-- Task content; the list has position: relative -->\n</motion.li>",
+			"const layout = createLayout();\nconst pop = { [createAttachmentKey()]: popLayout() };\n\n<motion.li\n  {...pop}\n  exit={{ opacity: 0, x: 32, scale: 0.96 }}\n  layout={{ mode: 'position' }}\n  layoutGroup={layout}\n>\n  <!-- Task content; the list has position: relative -->\n</motion.li>",
 		filename: 'ListExample.svelte',
 		component: ListExample,
 		source: publicSource(ListExampleSource)
@@ -100,7 +100,7 @@ export const liveExamples = {
 		guide: 'presence',
 		anchor: 'wait',
 		snippet:
-			'<Presence value={chapter} {mode}>\n  {#snippet children(index)}\n    <motion.article motion={{\n      initial: { opacity: 0, y: 24, rotate: 3 },\n      animate: { opacity: 1, y: 0, rotate: 0 },\n      exit: { opacity: 0, y: -24, rotate: -3 }\n    }}>\n      {chapters[index].title}\n    </motion.article>\n  {/snippet}\n</Presence>',
+			'<Presence value={chapter} {mode}>\n  {#snippet children(index)}\n    <motion.article\n      initial={{ opacity: 0, y: 24, rotate: 3 }}\n      animate={{ opacity: 1, y: 0, rotate: 0 }}\n      exit={{ opacity: 0, y: -24, rotate: -3 }}\n    >\n      {chapters[index].title}\n    </motion.article>\n  {/snippet}\n</Presence>',
 		filename: 'PresenceExample.svelte',
 		component: PresenceExample,
 		source: publicSource(PresenceExampleSource)
@@ -113,7 +113,7 @@ export const liveExamples = {
 		guide: 'state',
 		anchor: 'inheritance',
 		snippet:
-			"<motion.div motion={{\n  initial: 'closed', animate: open ? 'open' : 'closed',\n  variants: { open: { opacity: 1 }, closed: { opacity: 1 } },\n  transition: { staggerChildren: 0.12 }\n}}>\n  <motion.div motion={item}>Projects</motion.div>\n  <motion.div motion={item}>Notes</motion.div>\n  <motion.div motion={item}>Collection</motion.div>\n</motion.div>",
+			"<motion.div\n  initial=\"closed\"\n  animate={open ? 'open' : 'closed'}\n  variants={{ open: { opacity: 1 }, closed: { opacity: 1 } }}\n  transition={{ staggerChildren: 0.12 }}\n>\n  <motion.div {...item}>Projects</motion.div>\n  <motion.div {...item}>Notes</motion.div>\n  <motion.div {...item}>Collection</motion.div>\n</motion.div>",
 		filename: 'VariantsExample.svelte',
 		component: VariantsExample,
 		source: publicSource(VariantsExampleSource)

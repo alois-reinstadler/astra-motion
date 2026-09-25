@@ -6,7 +6,7 @@ export const authoringExamples = [
 		lab: '/motion-lab/state',
 		summary:
 			'Each tag component renders its named HTML element and includes its native exit transition.',
-		note: 'A shared layoutGroup connects local layout IDs. Motion options belong in motion; native attributes, event handlers and CSS style stay on the component.',
+		note: 'A shared layoutGroup connects local layout IDs. Pass animation options directly as component props, alongside native attributes and event handlers. style accepts CSS strings or Motion style objects.',
 		source: `<script lang="ts">
   import { motion, MotionConfig, createLayout } from 'astra-motion';
   let items = $state([1, 2, 3]);
@@ -16,13 +16,13 @@ export const authoringExamples = [
 <MotionConfig transition={{ duration: 0.24 }}>
   <ul>
     {#each items as item (item)}
-      <motion.li motion={{
-        initial: { opacity: 0, y: 12 },
-        animate: { opacity: 1, y: 0 },
-        exit: { opacity: 0, y: -12 },
-        layout: true,
-        layoutGroup: group
-      }}>
+      <motion.li
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -12 }}
+        layout
+        layoutGroup={group}
+      >
         <button onclick={() => (items = items.filter((value) => value !== item))}>
           Remove item {item}
         </button>
@@ -46,12 +46,14 @@ export const authoringExamples = [
   {visible ? 'Dismiss notification' : 'Show notification'}
 </button>
 {#if visible}
-  <motion.div motion={{
-    initial: { opacity: 0, y: 28, scale: 0.92 },
-    animate: { opacity: 1, y: 0, scale: 1 },
-    exit: { opacity: 0, y: -20, scale: 0.96 },
-    transition: { type: 'spring', stiffness: 320, damping: 24 }
-  }}>Your work is saved.</motion.div>
+  <motion.div
+    initial={{ opacity: 0, y: 28, scale: 0.92 }}
+    animate={{ opacity: 1, y: 0, scale: 1 }}
+    exit={{ opacity: 0, y: -20, scale: 0.96 }}
+    transition={{ type: 'spring', stiffness: 320, damping: 24 }}
+  >
+    Your work is saved.
+  </motion.div>
 {/if}`
 	},
 	{
@@ -94,12 +96,23 @@ export const authoringExamples = [
 </script>
 
 <label for="motion-name">Name</label>
-<motion.input id="motion-name" name="name" bind:value={name} bind:ref={input}
-  motion={{ whileFocus: { scale: 1.02 } }} />
+<motion.input
+  id="motion-name"
+  name="name"
+  bind:value={name}
+  bind:ref={input}
+  whileFocus={{ scale: 1.02 }}
+/>
 <label for="motion-enabled">Enable notifications</label>
 <motion.input id="motion-enabled" type="checkbox" bind:checked={enabled} />
-<motion.button type="button" disabled={!enabled} onclick={() => input?.focus()}
-  motion={{ whileTap: { scale: 0.98 } }}>Focus name</motion.button>
+<motion.button
+  type="button"
+  disabled={!enabled}
+  onclick={() => input?.focus()}
+  whileTap={{ scale: 0.98 }}
+>
+  Focus name
+</motion.button>
 <p>{name || 'Your name'}: {enabled ? 'enabled' : 'disabled'}</p>`
 	},
 	{

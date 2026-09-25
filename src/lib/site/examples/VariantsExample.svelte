@@ -22,22 +22,20 @@
 		<motion.div
 			class="items"
 			inert={!open}
-			motion={{
-				initial: 'closed',
-				animate: open ? 'open' : 'closed',
-				variants: { open: { opacity: 1 }, closed: { opacity: 1 } },
-				transition: { staggerChildren: 0.12 }
-			}}
+			initial="closed"
+			animate={open ? 'open' : 'closed'}
+			variants={{ open: { opacity: 1 }, closed: { opacity: 1 } }}
+			transition={{ staggerChildren: 0.12 }}
 		>
-			<motion.div class="item" motion={item}>
+			<motion.div class="item" {...item}>
 				<span class="icon projects" aria-hidden="true">▦</span>
 				<div><strong>Projects</strong><span>Give your ideas a home</span></div>
 			</motion.div>
-			<motion.div class="item" motion={item}>
+			<motion.div class="item" {...item}>
 				<span class="icon notes" aria-hidden="true">≋</span>
 				<div><strong>Notes</strong><span>Catch a passing thought</span></div>
 			</motion.div>
-			<motion.div class="item" motion={item}>
+			<motion.div class="item" {...item}>
 				<span class="icon collection" aria-hidden="true">✳</span>
 				<div><strong>Collection</strong><span>A few things worth keeping</span></div>
 			</motion.div>

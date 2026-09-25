@@ -26,7 +26,7 @@ The website follows one path: understand Astra, build one interaction, combine i
 - `src/lib/site/examples.ts` owns each focused example’s title, description, category, guide anchor, short excerpt, live component and complete source. `exampleCatalog` derives its entries from this map.
 - `docs.ts` explicitly assigns each live example once. Recipe IDs never select a different live component implicitly.
 - Excerpts explain the key mechanism and are labelled as excerpts. Complete source comes from the exact running component, with public package imports. The source consumer check compiles and type-checks those files.
-- Prefer `motion.tag` for new markup. Introduce `createMotion` where existing native markup or a lower-level integration needs it. A guide must explain which contract its source uses.
+- Prefer `motion.tag` with top-level animation props for new markup. Keep compatibility syntax and precedence in the API reference’s component-props section. Introduce `createMotion` where existing native markup or a lower-level integration needs it. A guide must explain which contract its source uses.
 - Preserve useful deep links with section aliases when moving content. Canonical catalogue links point to the actual preview; they never require a second search.
 - Reusable examples are mounted in isolated roots. Reset and guide navigation dispose their retained exits immediately.
 - Do not add ornamental Unicode arrows to labels, controls, CSS content or shown source. Directional controls use words; keyboard event names remain unchanged.

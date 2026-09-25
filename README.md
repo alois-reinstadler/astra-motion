@@ -71,16 +71,20 @@ transition, and works directly in keyed lists:
 <button onclick={() => (visible = !visible)}>Toggle</button>
 {#if visible}
 	<motion.section
-		motion={{
-			initial: { opacity: 0, y: 12 },
-			animate: { opacity: 1, y: 0 },
-			exit: { opacity: 0, y: -12 }
-		}}
+		initial={{ opacity: 0, y: 12 }}
+		animate={{ opacity: 1, y: 0 }}
+		exit={{ opacity: 0, y: -12 }}
 	>
 		A native section, including its exit.
 	</motion.section>
 {/if}
 ```
+
+Animation options are top-level props on both `motion.tag` and generic `Motion`.
+`style` accepts a CSS string or a Motion style object, including MotionValues.
+The older `motion={{ ... }}` form remains supported; defined top-level options take
+precedence. See [styles and migration](docs/authoring.md#component-props-styles-and-migration)
+for the full contract.
 
 Tag components accept the corresponding HTML attributes and event callbacks.
 `motion.input` supports value bindings, and `bind:ref` exposes its typed native DOM

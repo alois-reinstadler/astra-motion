@@ -6,7 +6,7 @@
 
 <div class="layout-example">
 	<div class="stage">
-		<motion.div class="record" motion={{ layout: true, layoutGroup: layout }}>
+		<motion.div class="record" layout layoutGroup={layout}>
 			<div class="record-heading" {@attach layout({ mode: 'position' })}>
 				<div class="artwork" aria-hidden="true"><span></span></div>
 				<div>

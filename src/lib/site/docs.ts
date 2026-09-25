@@ -146,7 +146,7 @@ const pages: DocPage[] = [
 				id: 'first-component',
 				title: '2. Animate your first component',
 				text: [
-					'Import the motion namespace. A motion.div renders a real div with the animation options in its motion prop. An ordinary if block controls whether it is present.',
+					'Import the motion namespace. A motion.div renders a real div and accepts initial, animate, exit and transition directly as props. An ordinary if block controls whether it is present.',
 					'initial sets the entrance pose, animate sets the destination, and exit sets the leaving pose. The component keeps the element alive until its exit finishes. Try dismissing the notification, then showing it again.'
 				],
 				aliases: ['motion-component'],
@@ -184,13 +184,13 @@ const pages: DocPage[] = [
 				id: 'targets',
 				title: 'Initial, animate and exit',
 				text: [
-					'initial supplies the first rendered state, animate supplies the current destination, and exit supplies the target for a native outro. Targets can include opacity, transforms and supported styles. initial: false starts at the animate target and skips the first intro.',
-					'Update the motion prop from reactive state to change the destination. A new target interrupts the current animation instead of queuing stale movement. The notification in Getting started demonstrates initial and exit targets; the examples below build on it.'
+					'initial supplies the first rendered state, animate supplies the current destination, and exit supplies the target for a native outro. Targets can include opacity, transforms and supported styles. initial={false} starts at the animate target and skips the first intro.',
+					'Update animate from reactive state to change the destination. A new target interrupts the current animation instead of queuing stale movement. The notification in Getting started demonstrates initial and exit targets; the examples below build on it.'
 				],
 				code: {
 					label: 'Reactive target · excerpt',
 					source:
-						"<motion.div motion={{\n  animate: { x: expanded ? 120 : 0 },\n  transition: { type: 'spring', stiffness: 300, damping: 30 }\n}} />"
+						"<motion.div\n  animate={{ x: expanded ? 120 : 0 }}\n  transition={{ type: 'spring', stiffness: 300, damping: 30 }}\n/>"
 				},
 				related: ['getting-started']
 			},
@@ -277,7 +277,7 @@ const pages: DocPage[] = [
 				id: 'automatic',
 				title: 'Register elements, then write normal UI code',
 				text: [
-					'Add layout: true to an element’s motion options. When its size or position changes, Astra animates from the old rectangle to the new one. Open the player below to see the surface grow while its content keeps its proportions.',
+					'Add the layout prop to a motion element. When its size or position changes, Astra animates from the old rectangle to the new one. Open the player below to see the surface grow while its content keeps its proportions.',
 					'Use createLayout to share a controller between related elements. Position-only attachments on the content compensate for the surface’s changing scale. The complete example shows where those attachments belong.'
 				],
 				example: 'layout'
@@ -583,10 +583,27 @@ const pages: DocPage[] = [
 				id: 'tag-components',
 				title: 'motion.tag · HTML components',
 				text: [
-					'Import { motion } from astra-motion. Each named component renders one native HTML element and accepts that tag’s attributes and event callbacks, motion options, children where valid, and a typed bind:ref. Supported form bindings are described in Your components.',
+					'Import { motion } from astra-motion. Each named component renders one native HTML element. Pass initial, animate, exit, transition, variants, layout, layoutGroup, gesture options and animation callbacks directly as props, alongside native attributes, events, children where valid and a typed bind:ref. Supported form bindings are described in Your components.',
 					'Nested components inherit variant ancestry during SSR and include global native transitions for enclosing-block exits. Descendants must stay inside their declared parent in the DOM. Generic Motion as remains available with its existing dynamic-tag and binding limitations.'
 				],
 				related: ['getting-started', 'components']
+			},
+			{
+				id: 'component-props',
+				title: 'Component props, styles and migration',
+				text: [
+					'Top-level animation props are the primary API for motion.tag and generic Motion components. Existing motion={{ ... }} options remain supported. Move each option to its own prop, or spread a reusable options object with {...options}. createMotion(options), layout attachments and custom components accepting motion={binding} keep their existing contracts.',
+					'When both forms are supplied, each defined top-level animation prop wins over the same nested option. An undefined prop falls back to the nested option; false is an explicit value. Objects such as animate, transition and variants replace that option as a whole, without a deep merge.',
+					'style accepts a native CSS string or a Motion style object. Object keys merge over motion.style keys, preserving MotionValues. A CSS string supplies native declarations alongside nested Motion styles; Motion owns the animated properties. Keep raw transform separate from decomposed x, y, rotate and scale values.',
+					'disabled controls the native disabled attribute where the tag supports it and disables gesture recognition. Set it to false to enable the control and gestures, or null to remove the attribute and enable gestures. The compatibility option motion.disabled only controls gestures; an undefined top-level disabled leaves that nested gesture setting in effect.',
+					'Native events use Svelte names such as onclick; animation callbacks use names such as onAnimationComplete. bind:ref still returns the actual element, and supported form bindings keep their native behavior. Familiar prop syntax does not imply full Motion React API parity.'
+				],
+				code: {
+					label: 'Migrating component props · excerpt',
+					source:
+						'<!-- Existing syntax remains supported. -->\n<motion.div motion={{ animate: { x: 120 }, transition: { duration: 0.3 } }} />\n\n<!-- Preferred syntax. -->\n<motion.div animate={{ x: 120 }} transition={{ duration: 0.3 }} />\n\n<!-- Reuse options; the explicit animate prop overrides options.animate. -->\n<motion.div {...options} animate={{ x: expanded ? 120 : 0 }} />'
+				},
+				related: ['components', 'state']
 			},
 			{
 				id: 'create-motion',

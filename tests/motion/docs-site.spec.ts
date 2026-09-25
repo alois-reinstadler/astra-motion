@@ -203,7 +203,7 @@ test('documentation renders without JavaScript and missing guides return 404', a
 		await page.locator(`#${id} summary`).click();
 		await expect(
 			page.locator(`#${id}`).getByRole('region', { name: /Example.svelte source/ })
-		).toContainText('initial:');
+		).toContainText('initial={{');
 	}
 	await expect(
 		page

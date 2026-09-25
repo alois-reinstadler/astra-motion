@@ -28,10 +28,8 @@
 	<div class="mood" aria-live="polite">
 		<motion.div
 			class="orb"
-			motion={{
-				animate: { backgroundColor: moods[selected].color, rotate: selected * 90 },
-				transition: { duration: 0.4 }
-			}}
+			animate={{ backgroundColor: moods[selected].color, rotate: selected * 90 }}
+			transition={{ duration: 0.4 }}
 		>
 			<span class="orbit"></span><span class="orbit"></span>
 		</motion.div>
@@ -42,10 +40,7 @@
 		{#each moods as mood, index (mood.name)}
 			<button type="button" aria-pressed={selected === index} onclick={() => (selected = index)}>
 				{#if selected === index}
-					<motion.div
-						class="selected"
-						motion={{ layout: { id: 'mood-selection' }, layoutGroup: layout }}
-					/>
+					<motion.div class="selected" layout={{ id: 'mood-selection' }} layoutGroup={layout} />
 				{/if}
 				<span>{mood.name}</span>
 			</button>

@@ -18,14 +18,12 @@
 			<motion.li
 				class="task"
 				{...pop}
-				motion={{
-					initial: { opacity: 0, y: 8 },
-					animate: { opacity: 1, y: 0 },
-					exit: { opacity: 0, x: 32, scale: 0.96 },
-					layout: { mode: 'position' },
-					layoutGroup: layout,
-					transition: { duration: 0.25 }
-				}}
+				initial={{ opacity: 0, y: 8 }}
+				animate={{ opacity: 1, y: 0 }}
+				exit={{ opacity: 0, x: 32, scale: 0.96 }}
+				layout={{ mode: 'position' }}
+				layoutGroup={layout}
+				transition={{ duration: 0.25 }}
 			>
 				<button
 					type="button"

@@ -107,6 +107,10 @@ peer for routes.
 Use `motion.div`, `motion.button`, `motion.input` and the other HTML tag components
 for new markup. They render one real element, forward native attributes/events,
 provide typed `bind:ref`, and include SSR motion styles and a native global transition.
+Animation options are top-level props; `style` accepts CSS strings or Motion style
+objects. The nested `motion` option remains compatible, with defined top-level
+options taking precedence. See the [migration contract](authoring.md#component-props-styles-and-migration)
+for style merging, native disabled behavior and reusable option spreads.
 Input value/checkbox/file, textarea/select value and details open bindings are
 implemented explicitly. `Motion as` remains compatible; its dynamic element does
 not gain those form bindings.

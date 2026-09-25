@@ -29,12 +29,10 @@
 				<motion.article
 					class="chapter"
 					style={`background: ${chapters[index].color}`}
-					motion={{
-						initial: { opacity: 0, y: 24, rotate: 3 },
-						animate: { opacity: 1, y: 0, rotate: 0 },
-						exit: { opacity: 0, y: -24, rotate: -3 },
-						transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1] }
-					}}
+					initial={{ opacity: 0, y: 24, rotate: 3 }}
+					animate={{ opacity: 1, y: 0, rotate: 0 }}
+					exit={{ opacity: 0, y: -24, rotate: -3 }}
+					transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
 				>
 					<span class="chapter-number">A NOTE TO SELF / 0{index + 1}</span>
 					<h3>{chapters[index].title}</h3>

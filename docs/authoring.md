@@ -64,13 +64,11 @@ SSR styles and native transition. A button is a real button; no wrapper is added
 	<ul>
 		{#each items as item (item)}
 			<motion.li
-				motion={{
-					initial: { opacity: 0, y: 12 },
-					animate: { opacity: 1, y: 0 },
-					exit: { opacity: 0, y: -12 },
-					layout: true,
-					layoutGroup: group
-				}}
+				initial={{ opacity: 0, y: 12 }}
+				animate={{ opacity: 1, y: 0 }}
+				exit={{ opacity: 0, y: -12 }}
+				layout
+				layoutGroup={group}
 			>
 				<button onclick={() => (items = items.filter((value) => value !== item))}>
 					Remove item {item}
@@ -81,8 +79,10 @@ SSR styles and native transition. A button is a real button; no wrapper is added
 </MotionConfig>
 ```
 
-Animation targets, transitions, gestures and MotionValue styles belong in `motion`.
-Normal attributes, event callbacks, children and CSS style remain component props.
+Pass animation targets, transitions, gestures and callbacks directly as component
+props. `style` accepts a native CSS string or a Motion style object, including
+MotionValues. Normal attributes, native event callbacks and children stay on the
+same component.
 Nested tag components inherit variant ancestry during SSR as well as after mounting.
 They must remain DOM descendants of that parent; portals need an independently created native binding rather than implicit
 cross-portal variant inheritance.
@@ -91,6 +91,45 @@ cross-portal variant inheritance.
 `as` defaults to `div` and must stay stable while mounted; use `{#key tag}` for
 intentional element replacement. Its dynamic element supports `bind:ref`, but does
 not provide the native value bindings implemented by tag components.
+
+## Component props, styles and migration
+
+Both `motion.tag` and generic `Motion` accept top-level animation props. Move each
+option out of the older nested `motion` object:
+
+```svelte
+<!-- Existing syntax remains supported. -->
+<motion.div motion={{ animate: { x: 120 }, transition: { duration: 0.3 } }} />
+
+<!-- Preferred syntax. -->
+<motion.div animate={{ x: 120 }} transition={{ duration: 0.3 }} />
+
+<!-- Reuse options and override the target. -->
+<motion.div {...options} animate={{ x: expanded ? 120 : 0 }} />
+```
+
+When using both forms, each **defined top-level option wins** over the same nested
+option. `undefined` falls back to the nested option; `false` is an explicit value.
+An object option such as `animate`, `transition` or `variants` replaces that entire
+nested option; it is not deeply merged. Spread order follows ordinary Svelte rules:
+put an explicit override after `{...options}`.
+
+`style` is the exception: a Motion style object merges its keys over
+`motion.style`, preserving MotionValues. A CSS string remains native CSS alongside
+any nested Motion styles. `null` clears the native style string. Motion owns
+animated properties; do not combine raw `transform` with decomposed `x`, `y`,
+`rotate` or `scale` values.
+
+On tags that support it, top-level `disabled` sets the native attribute and disables
+gestures. `false` enables both; `null` removes the attribute and enables gestures.
+The compatibility option `motion.disabled` is gesture-only and never adds a native
+disabled attribute. An undefined top-level `disabled` preserves that nested gesture
+setting. Native handlers such as `onclick` and animation callbacks such as
+`onAnimationComplete` remain separate.
+
+`createMotion(options)`, layout/controller options and reusable components accepting
+`motion={binding}` keep their existing contracts. This change does not add Motion
+React props that Astra does not otherwise support, or new Svelte native bindings.
 
 ## Native bindings and forwarding
 
@@ -108,7 +147,7 @@ not provide the native value bindings implemented by tag components.
 	name="name"
 	bind:value={name}
 	bind:ref={input}
-	motion={{ whileFocus: { scale: 1.02 } }}
+	whileFocus={{ scale: 1.02 }}
 />
 <label for="motion-enabled">Enable notifications</label>
 <motion.input id="motion-enabled" type="checkbox" bind:checked={enabled} />
@@ -116,8 +155,10 @@ not provide the native value bindings implemented by tag components.
 	type="button"
 	disabled={!enabled}
 	onclick={() => input?.focus()}
-	motion={{ whileTap: { scale: 0.98 } }}>Focus name</motion.button
+	whileTap={{ scale: 0.98 }}
 >
+	Focus name
+</motion.button>
 <p>{name || 'Your name'}: {enabled ? 'enabled' : 'disabled'}</p>
 ```
 
@@ -126,7 +167,8 @@ Tag-specific attributes and callback types follow Svelte’s native HTML types.
 `event.currentTarget` has that element’s type. Attribute spreads, `aria-*`, `data-*`
 and forwarded attachments reach the same element. `bind:ref` exposes its typed DOM
 reference and clears on destruction. Children snippets render inside non-void tags.
-The ordinary `style` prop is merged with Motion’s current and initial SSR styles.
+The `style` prop supports CSS strings and Motion style objects; both compose with
+Motion’s current and initial SSR styles as described above.
 
 | Component                              | Supported bindings in addition to `ref`                     |
 | -------------------------------------- | ----------------------------------------------------------- |
@@ -157,13 +199,13 @@ Use an ordinary conditional. The tag component already installs its native exit:
 <button onclick={() => (open = !open)}>Toggle</button>
 {#if open}
 	<motion.section
-		motion={{
-			initial: { opacity: 0, y: 12 },
-			animate: { opacity: 1, y: 0 },
-			exit: { opacity: 0, y: -12 },
-			transition: { duration: 0.24 }
-		}}>Still a section.</motion.section
+		initial={{ opacity: 0, y: 12 }}
+		animate={{ opacity: 1, y: 0 }}
+		exit={{ opacity: 0, y: -12 }}
+		transition={{ duration: 0.24 }}
 	>
+		Still a section.
+	</motion.section>
 {/if}
 ```
 

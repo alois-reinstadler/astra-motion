@@ -15,7 +15,7 @@
 	<div class="playground-bar"><span>LAYOUT IN PRACTICE</span><span>TRY IT</span></div>
 	<div class="playground-stage" class:stack={mode === 'stack'}>
 		{#each ordered as piece (piece.id)}
-			<motion.div class="motion-piece {piece.color}" motion={{ layout: true, layoutGroup: layout }}>
+			<motion.div class="motion-piece {piece.color}" layout layoutGroup={layout}>
 				<span class="piece-symbol" aria-hidden="true" {@attach layout({ mode: 'position' })}
 					>{piece.id}</span
 				>
