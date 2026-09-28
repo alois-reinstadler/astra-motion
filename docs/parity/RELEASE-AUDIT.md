@@ -196,3 +196,33 @@ their corresponding declarations differ from the initial audit archive; no files
 were added or removed. The earlier four runtime fixes are byte-identical. The
 complete unchanged remote matrices qualify the subsequent evidence-only delivery
 commit; their exact links and deployed checks are reported in the delivery response.
+
+## Final pointer-input qualification correction
+
+The next [CI run on d145a54](https://github.com/alois-reinstadler/astra-motion/actions/runs/36389033247)
+passed general checks, all **1,593 source-browser cases**, every installed consumer,
+Chromium production E2E (**70 passed**) and WebKit production E2E (**69 passed**,
+one existing Chromium-only touch skip). The WebKit desk error is now
+**0.014007568359375px**, confirming the aspect correction in CI.
+
+Firefox production E2E found a missed queue drag input (**68 passed**, one existing
+skip, one failure). Its trace records document scroll at **3366** during hover,
+**3252** when the grip was measured, **3178** when the target was measured, and
+**3102** before pointer-down. The mouse reused `(850, 327.6333312988281)` while the
+grip was moving away. The order assertion failed because the intended grip did
+not receive pointer-down; this is a test-input setup defect, not evidence of a
+runtime reorder defect.
+
+The affected test now uses the existing pointer-target settling helper before
+reading drag coordinates, including the second gesture after keyboard reordering.
+Its new `focus: false` option lets the real pointer-down establish focus. An added
+not-focused assertion verifies that setup did not pre-satisfy the existing focus
+assertion. Trusted pointer actions, intermediate/final order, held pose, focus,
+Escape cancellation, assertion tolerances and the entire default CI matrix remain
+intact. Runtime, website and published package bytes are unchanged from the aspect
+candidate. Only this affected drag test is rerun locally; the exact delivering SHA
+must still pass the complete remote matrix.
+
+The corrected drag-input test passes **9/9** locally (three runs each in Chromium,
+Firefox and WebKit), including the new focus precondition and every existing
+assertion. Targeted ESLint, formatting and diff checks pass.

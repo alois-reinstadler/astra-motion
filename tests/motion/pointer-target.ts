@@ -2,9 +2,11 @@ import { expect, type Locator } from '@playwright/test';
 
 // Native scrolling can outlive Playwright's two-frame actionability check in Firefox and WebKit.
 // Wait before the action being tested, without retrying that action or disabling motion.
-export async function settlePointerTarget(target: Locator) {
+export async function settlePointerTarget(target: Locator, options: { focus?: boolean } = {}) {
 	await target.evaluate((node) => node.scrollIntoView({ behavior: 'instant', block: 'center' }));
-	await target.focus();
+	// Drag tests must let pointer-down establish focus so their focus assertion
+	// still verifies the real interaction rather than this setup helper.
+	if (options.focus !== false) await target.focus();
 	await target.hover();
 	const settled = await target.evaluate(async (node) => {
 		let previous = '';

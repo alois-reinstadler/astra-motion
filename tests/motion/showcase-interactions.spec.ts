@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { settlePointerTarget } from './pointer-target';
 
 const pageErrors = new WeakMap<Page, string[]>();
 test.beforeEach(({ page }) => {
@@ -135,7 +136,8 @@ test('queue grips drag rows and preserve keyboard reordering', async ({ page }) 
 	const handle = page.getByRole('button', { name: 'Drag A quiet immensity to reorder' });
 	const row = page.locator('[data-queue-item="namib"]');
 	await expect(row).toHaveCSS('opacity', '1');
-	await handle.hover();
+	await settlePointerTarget(handle, { focus: false });
+	await expect(handle).not.toBeFocused();
 	const rowBox = await row.boundingBox();
 	const start = await handle.boundingBox();
 	const target = await page.locator('[data-queue-item="caicos"]').boundingBox();
@@ -180,6 +182,7 @@ test('queue grips drag rows and preserve keyboard reordering', async ({ page }) 
 	const original = await list
 		.locator('[data-queue-item]')
 		.evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-queue-item')));
+	await settlePointerTarget(handle, { focus: false });
 	const grip = await handle.boundingBox();
 	const first = await list.locator('[data-queue-item]').first().boundingBox();
 	if (!grip || !first) throw new Error('Queue is not visible');
