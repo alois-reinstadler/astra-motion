@@ -432,7 +432,8 @@ export const presenceViewDocs: DocPage[] = [
 				title: 'Name a view and coordinate its update',
 				text: [
 					'AnimateView animates browser snapshots. Wrap a root in its children snippet, attach the supplied view attachment to that root, and change ordinary Svelte state inside startViewTransition. The component adds no wrapper and preserves the element’s native attributes, bindings, and semantics.',
-					'The example replaces one article with another. Both boundaries use the same name, so the browser connects their positions and sizes. The entering boundary supplies shared-transition options. Omit name when the boundary only needs its own enter, exit, or update animation.',
+					'The example replaces a collection with a detail article. Each artwork and title has a separate name, shared by its old and new elements, so the browser connects both independently. Other cards exit and the article body enters. Returning restores focus to the card you opened. Names include the component instance to keep multiple examples independent.',
+					'The entering boundary supplies shared-transition options. Omit name when the boundary only needs its own enter, exit, or update animation.',
 					'Explicit coordination is the Svelte counterpart to React transition scheduling: an arbitrary state assignment outside startViewTransition remains an ordinary immediate update. Choose snapshot transitions for route changes or full-view swaps. Use motion layout animation for continuous interactions that must change direction from their current animated position.'
 				],
 				example: 'animate-view',

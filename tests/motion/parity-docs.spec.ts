@@ -446,24 +446,41 @@ for (const fallback of [false, true]) {
 			});
 		await page.goto('/docs/animate-view');
 		const supported = await page.evaluate(() => typeof document.startViewTransition === 'function');
-		if (fallback) expect(supported).toBe(false);
+		expect(supported).toBe(!fallback);
 		const example = page.locator('[data-example="animate-view"]');
-		await example.getByRole('button', { name: 'Open cover', exact: true }).click();
+		await example
+			.locator('[data-shared-art="coast"]')
+			.evaluate((node) => node.setAttribute('data-original', 'true'));
+		await example.getByRole('button', { name: 'Open Coastal light', exact: true }).click();
 		await expect(
-			example.getByRole('heading', { name: 'A closer look.', exact: true })
+			example.getByRole('heading', { name: 'Coastal light', exact: true })
 		).toBeVisible();
+		await expect(example.locator('[data-view-detail="coast"]')).toHaveCount(1);
+		await expect(example.locator('[data-shared-art="coast"]')).not.toHaveAttribute('data-original');
+		await expect(example.locator('[data-shared-title="coast"]')).toHaveCount(1);
 		await expect(example.locator('.status')).toHaveText(
-			supported ? 'View changed.' : 'View changed. This browser uses the immediate fallback.'
+			supported
+				? 'Viewing Coastal light.'
+				: 'View changed. This browser uses the immediate fallback.'
 		);
-		await example.getByRole('button', { name: 'Back to collection', exact: true }).click();
 		await expect(
-			example.getByRole('heading', { name: 'Small discoveries.', exact: true })
-		).toBeVisible();
-		await expect(example.getByRole('button', { name: 'Open cover', exact: true })).toHaveAttribute(
-			'aria-expanded',
-			'false'
+			example.getByRole('button', { name: '← Back to collection', exact: true })
+		).toBeFocused();
+		await expect(page.locator('[data-astra-view-reset]')).toHaveCount(0);
+		await example.getByRole('button', { name: '← Back to collection', exact: true }).click();
+		await expect(example.locator('.status')).toHaveText(
+			supported
+				? 'Back to the field notes.'
+				: 'View changed. This browser uses the immediate fallback.'
 		);
-		await expect(example.locator('.cover')).toHaveCount(1);
+		await expect(
+			example.getByRole('button', { name: 'Open Coastal light', exact: true })
+		).toBeFocused();
+		await expect(example.locator('[data-view-open]')).toHaveCount(3);
+		await expect(example.locator('[data-shared-art]')).toHaveCount(3);
+		await expect(example.locator('[data-shared-title]')).toHaveCount(3);
+		await expect(example.locator('[data-view-detail]')).toHaveCount(0);
+		await expect(page.locator('[data-astra-view-reset]')).toHaveCount(0);
 		expect(errors).toEqual([]);
 	});
 }

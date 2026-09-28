@@ -60,9 +60,9 @@ export const presenceViewExamples = {
 	},
 	'animate-view': {
 		id: 'animate-view',
-		title: 'Connect two views with a shared cover',
+		title: 'Open a field note with shared artwork and a title',
 		description:
-			'Name a snapshot boundary and coordinate a state update with the native View Transitions API.',
+			'Choose a card: its artwork and title travel into a new detail view, then return to their places in the collection.',
 		category: 'Routes',
 		guide: 'animate-view',
 		anchor: 'usage',

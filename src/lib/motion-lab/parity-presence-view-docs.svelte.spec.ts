@@ -59,13 +59,76 @@ it('retains the same input node and native value in the canonical Activity examp
 	expect(input.checkVisibility()).toBe(true);
 });
 
-it('runs the canonical named view swap and releases transition styles', async () => {
-	render(View);
-	await tick();
-	button('Open cover').click();
-	await expect.poll(() => document.querySelector('h3')?.textContent).toBe('A closer look.');
-	await expect.poll(() => document.querySelector('[data-astra-view-reset]')).toBeNull();
-	button('Back to collection').click();
-	await expect.poll(() => document.querySelector('h3')?.textContent).toBe('Small discoveries.');
-	await expect.poll(() => document.querySelector('[data-astra-view-reset]')).toBeNull();
-});
+it('shares separate artwork and title snapshots across new DOM trees and restores card focus', async () => {
+	expect(typeof document.startViewTransition).toBe('function');
+	const screen = await render(View);
+	// Names are intentionally restored as soon as native capture is ready.
+	// Record the actual leases while capturing, then inspect their snapshot layers.
+	const capturedNames = new Map<Element, string>();
+	const observer = new MutationObserver((records) => {
+		for (const { target } of records) {
+			if (
+				!(target instanceof HTMLElement) ||
+				!target.matches('[data-shared-art], [data-shared-title]')
+			)
+				continue;
+			const name = target.style.getPropertyValue('view-transition-name');
+			if (name) capturedNames.set(target, name);
+		}
+	});
+	observer.observe(document.body, { attributes: true, attributeFilter: ['style'], subtree: true });
+	try {
+		for (const [id, title] of [
+			['coast', 'Coastal light'],
+			['river', 'River paths']
+		]) {
+			const art = () => document.querySelector<HTMLElement>(`[data-shared-art="${id}"]`)!;
+			const heading = () => document.querySelector<HTMLElement>(`[data-shared-title="${id}"]`)!;
+			const oldArt = art();
+			const oldTitle = heading();
+			await screen.getByRole('button', { name: `Open ${title}`, exact: true }).click();
+			await expect
+				.poll(() => document.querySelector('[data-view-detail]')?.getAttribute('data-view-detail'))
+				.toBe(id);
+			expect(art()).not.toBe(oldArt);
+			expect(heading()).not.toBe(oldTitle);
+			await expect
+				.poll(() => {
+					const names = [art(), heading()].map((node) => capturedNames.get(node));
+					const layers = document
+						.getAnimations()
+						.map((animation) => (animation.effect as KeyframeEffect | null)?.pseudoElement);
+					return (
+						new Set(names).size === 2 &&
+						names.every(
+							(name) =>
+								name &&
+								['group', 'old', 'new'].every((layer) =>
+									layers.includes(`::view-transition-${layer}(${name})`)
+								)
+						)
+					);
+				})
+				.toBe(true);
+			expect(capturedNames.get(oldArt)).toBe(capturedNames.get(art()));
+			expect(capturedNames.get(oldTitle)).toBe(capturedNames.get(heading()));
+			await expect
+				.poll(() => document.querySelector('.status')?.textContent)
+				.toBe(`Viewing ${title}.`);
+			expect(document.activeElement).toBe(document.querySelector('[data-view-back]'));
+			expect(document.querySelector('[data-astra-view-reset]')).toBeNull();
+			expect(art().style.getPropertyValue('view-transition-name')).toBe('');
+			expect(heading().style.getPropertyValue('view-transition-name')).toBe('');
+			await screen.getByRole('button', { name: '← Back to collection', exact: true }).click();
+			await expect
+				.poll(() => document.querySelector('.status')?.textContent)
+				.toBe('Back to the field notes.');
+			expect(document.querySelector('[data-view-detail]')).toBeNull();
+			expect(document.querySelectorAll('[data-view-open]')).toHaveLength(3);
+			expect(document.activeElement).toBe(document.querySelector(`[data-view-open="${id}"]`));
+			expect(document.querySelector('[data-astra-view-reset]')).toBeNull();
+		}
+	} finally {
+		observer.disconnect();
+	}
+}, 15000);

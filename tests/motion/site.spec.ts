@@ -50,7 +50,7 @@ test('example discovery filters, searches, and opens a dedicated live example', 
 	await page.getByRole('button', { name: 'Routes', exact: true }).click();
 	await expect(page.locator('.example-grid > .example')).toHaveCount(1);
 	await expect(page.locator('.example-grid > .example')).toContainText(
-		'Connect two views with a shared cover'
+		'Open a field note with shared artwork and a title'
 	);
 	await page.getByRole('searchbox', { name: 'Search examples' }).fill('no-such-example');
 	await expect(page.getByRole('heading', { name: 'No examples found.' })).toBeVisible();
