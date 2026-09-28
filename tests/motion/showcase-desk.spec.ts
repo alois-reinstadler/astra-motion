@@ -1,8 +1,13 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Locator } from '@playwright/test';
+import { settlePointerTarget } from './pointer-target.js';
 
 test('editing desk preserves live edits through dock, format and inspector changes', async ({
 	page
 }) => {
+	const clickSettled = async (target: Locator) => {
+		await settlePointerTarget(target);
+		await target.click();
+	};
 	const errors: string[] = [];
 	page.on('pageerror', (error) => errors.push(error.message));
 	await page.setViewportSize({ width: 1280, height: 900 });
@@ -13,13 +18,25 @@ test('editing desk preserves live edits through dock, format and inspector chang
 	await desk
 		.getByRole('textbox', { name: 'Deck', exact: true })
 		.fill('A new perspective, closer to home.');
-	await desk.getByRole('button', { name: 'Left', exact: false }).click();
-	await desk.getByRole('button', { name: 'Cover', exact: true }).click();
-	await desk.getByRole('button', { name: 'Coral paper' }).click();
-	await desk.getByRole('button', { name: 'Hide inspector' }).click();
+	await clickSettled(desk.getByRole('button', { name: 'Left', exact: false }));
+	await expect(desk.getByRole('button', { name: 'Left', exact: false })).toHaveAttribute(
+		'aria-pressed',
+		'true'
+	);
+	await clickSettled(desk.getByRole('button', { name: 'Cover', exact: true }));
+	await expect(desk.getByRole('button', { name: 'Cover', exact: true })).toHaveAttribute(
+		'aria-pressed',
+		'true'
+	);
+	await clickSettled(desk.getByRole('button', { name: 'Coral paper' }));
+	await expect(desk.getByRole('button', { name: 'Coral paper' })).toHaveAttribute(
+		'aria-pressed',
+		'true'
+	);
+	await clickSettled(desk.getByRole('button', { name: 'Hide inspector' }));
 	await expect(desk.getByRole('textbox', { name: 'Headline' })).toHaveCount(0);
 	await expect(desk.getByRole('heading', { name: 'Something worth noticing' })).toBeVisible();
-	await desk.getByRole('button', { name: 'Show inspector' }).click();
+	await clickSettled(desk.getByRole('button', { name: 'Show inspector' }));
 	await expect(desk.getByRole('textbox', { name: 'Headline' })).toHaveValue(
 		'Something worth noticing'
 	);

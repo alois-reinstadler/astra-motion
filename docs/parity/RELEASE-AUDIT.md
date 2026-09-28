@@ -233,3 +233,23 @@ remaining jobs of that failed candidate were cancelled. The extension correction
 passes the local strict checker with zero errors/warnings, targeted lint and
 formatting; the delivery revision must pass a fresh complete CI/Pages run. This
 was an audit test-authoring error, with no published runtime change.
+
+The next [CI run on 65581bf](https://github.com/alois-reinstadler/astra-motion/actions/runs/36390556321)
+passed nine jobs, including the Firefox drag correction, all 1,593 component cases
+and every packed consumer. WebKit E2E passed the aspect regression
+(**0.03173828125px**) but missed a desk color-selection click. The trace shows
+`scrollY=1720` at the final Coral input snapshot and **1757** immediately after
+click completion: the swatch moved **37px** during the input. Its original
+selection never took effect; the later persistence assertion correctly failed.
+
+The desk interaction test now uses the same existing pointer-target helper for
+its controls and immediately asserts the Left, Cover and Coral selections before
+hiding the inspector. All original post-reveal assertions remain. It performs
+trusted clicks once after settling, with no retries, disabled motion or relaxed
+bounds. The separate interrupted-resize stress test is unchanged. This additional
+test-input correction changes no runtime, website or package code.
+
+The corrected desk interaction passes **9/9** locally (three runs in each engine),
+with all immediate and post-reveal assertions. Strict checking reports zero
+errors/warnings; targeted lint, formatting and diff checks pass. A fresh complete
+remote matrix remains required for the delivering revision.
