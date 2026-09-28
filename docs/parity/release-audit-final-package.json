@@ -1,0 +1,401 @@
+{
+	"date": "2026-09-28T06:55:58.632Z",
+	"archiveSha256": "ca61409d25ccbcf102999187b4b14e4c12a631f78eb6fa4e0ed14d92e8b9a1bb",
+	"source": {
+		"commit": "73f5225a458bcf5c7f7957c07510ee877c369954",
+		"dirty": false
+	},
+	"tools": {
+		"node": "v24.20.0",
+		"pnpm": "11.24.0",
+		"zlib": "1.3.2.1-motley-42c2f19",
+		"brotli": "1.2.0",
+		"svelte": "5.57.0",
+		"vite": "8.2.2",
+		"@sveltejs/vite-plugin-svelte": "7.3.0",
+		"typescript": "6.0.3",
+		"rolldown": "1.2.11"
+	},
+	"engine": {
+		"motion-dom": "13.4.4",
+		"motion-utils": "13.3.0",
+		"framer-motion": "13.4.4"
+	},
+	"accounting": "Independent production applications, minified Vite output. Svelte runtime and fixture bootstrap are included. Each initial shared chunk is counted once per application; gzip/Brotli totals sum separately compressed HTTP assets. Do not add totals from independent applications or interpret them as library-only bytes. Module lists show which chunks also contain Svelte. Small geometry and scale-corrector utilities are allowed before feature loading; projection-node runtime is excluded from deferred initial and basic feature graphs. Basic hover/press retain the small shared isDragActive flag used for gesture arbitration, without the drag/pan implementation.",
+	"entries": {
+		"Eager": {
+			"fixture": "tests/production/plain-consumer/src/fixtures/Eager.svelte",
+			"initial": {
+				"bytes": 201041,
+				"gzip": 68034,
+				"brotli": 60619
+			},
+			"deferred": {
+				"bytes": 0,
+				"gzip": 0,
+				"brotli": 0
+			},
+			"total": {
+				"bytes": 201041,
+				"gzip": 68034,
+				"brotli": 60619
+			},
+			"chunks": [
+				{
+					"file": "assets/index-CNYRm1_u.js",
+					"phase": "initial-entry",
+					"bytes": 201041,
+					"gzip": 68034,
+					"brotli": 60619,
+					"sha256": "b7a2168680d2201e00f6dc54021bc283aef1faa4e43c1e7e1fc73e11a62aed3a",
+					"imports": [],
+					"dynamicImports": [],
+					"svelteModules": 104,
+					"moduleCount": 342
+				}
+			]
+		},
+		"LazyBasic": {
+			"fixture": "tests/production/plain-consumer/src/fixtures/LazyBasic.svelte",
+			"initial": {
+				"bytes": 71826,
+				"gzip": 26462,
+				"brotli": 23928
+			},
+			"deferred": {
+				"bytes": 83742,
+				"gzip": 28926,
+				"brotli": 26333
+			},
+			"total": {
+				"bytes": 155568,
+				"gzip": 55388,
+				"brotli": 50261
+			},
+			"chunks": [
+				{
+					"file": "assets/index-Cu3I0CpH.js",
+					"phase": "initial-entry",
+					"bytes": 71826,
+					"gzip": 26462,
+					"brotli": 23928,
+					"sha256": "1f7d310c1486952081838152f86e4932707adb15307276a38a404b68662a229d",
+					"imports": [],
+					"dynamicImports": ["assets/dom-animation-C1jaH_-L.js"],
+					"svelteModules": 104,
+					"moduleCount": 169
+				},
+				{
+					"file": "assets/dom-animation-C1jaH_-L.js",
+					"phase": "deferred",
+					"bytes": 83742,
+					"gzip": 28926,
+					"brotli": 26333,
+					"sha256": "0f68d0d7e402da829be3900828e7a1737946055d83c5d34e8d4de49d60455ea4",
+					"imports": ["assets/index-Cu3I0CpH.js"],
+					"dynamicImports": [],
+					"svelteModules": 0,
+					"moduleCount": 150
+				}
+			]
+		},
+		"LazyFull": {
+			"fixture": "tests/production/plain-consumer/src/fixtures/LazyFull.svelte",
+			"initial": {
+				"bytes": 71937,
+				"gzip": 26516,
+				"brotli": 23948
+			},
+			"deferred": {
+				"bytes": 141235,
+				"gzip": 46525,
+				"brotli": 41412
+			},
+			"total": {
+				"bytes": 213172,
+				"gzip": 73041,
+				"brotli": 65360
+			},
+			"chunks": [
+				{
+					"file": "assets/index-DdBtDgDW.js",
+					"phase": "initial-entry",
+					"bytes": 71937,
+					"gzip": 26516,
+					"brotli": 23948,
+					"sha256": "3019062a2e58f0ff414f4059a6b51eddca384d5464bf5ac1c8ac9f259ffb1b5d",
+					"imports": [],
+					"dynamicImports": ["assets/dom-max-ClriPwRy.js"],
+					"svelteModules": 104,
+					"moduleCount": 169
+				},
+				{
+					"file": "assets/dom-max-ClriPwRy.js",
+					"phase": "deferred",
+					"bytes": 141235,
+					"gzip": 46525,
+					"brotli": 41412,
+					"sha256": "6503463d5c82f23c99ff72de9bc32f12d6fd4326b08d7076a0757b308d95aa9d",
+					"imports": ["assets/index-DdBtDgDW.js"],
+					"dynamicImports": [],
+					"svelteModules": 0,
+					"moduleCount": 180
+				}
+			]
+		},
+		"LazySync": {
+			"fixture": "tests/production/plain-consumer/src/fixtures/LazySync.svelte",
+			"initial": {
+				"bytes": 147628,
+				"gzip": 51899,
+				"brotli": 46689
+			},
+			"deferred": {
+				"bytes": 0,
+				"gzip": 0,
+				"brotli": 0
+			},
+			"total": {
+				"bytes": 147628,
+				"gzip": 51899,
+				"brotli": 46689
+			},
+			"chunks": [
+				{
+					"file": "assets/index-BOawtPJO.js",
+					"phase": "initial-entry",
+					"bytes": 147628,
+					"gzip": 51899,
+					"brotli": 46689,
+					"sha256": "2a0985d4f8392559108236380ad201b3e357525d5d824d0cd9214056fda7dd61",
+					"imports": [],
+					"dynamicImports": [],
+					"svelteModules": 104,
+					"moduleCount": 313
+				}
+			]
+		},
+		"Hybrid": {
+			"fixture": "tests/production/plain-consumer/src/fixtures/Hybrid.svelte",
+			"initial": {
+				"bytes": 96316,
+				"gzip": 34736,
+				"brotli": 31587
+			},
+			"deferred": {
+				"bytes": 0,
+				"gzip": 0,
+				"brotli": 0
+			},
+			"total": {
+				"bytes": 96316,
+				"gzip": 34736,
+				"brotli": 31587
+			},
+			"chunks": [
+				{
+					"file": "assets/index-BWeL0iut.js",
+					"phase": "initial-entry",
+					"bytes": 96316,
+					"gzip": 34736,
+					"brotli": 31587,
+					"sha256": "62073e23e5d4187eb7e8f81b1fae81e5b56f32ee4e8d81033910d70aa1bf2c59",
+					"imports": [],
+					"dynamicImports": [],
+					"svelteModules": 95,
+					"moduleCount": 257
+				}
+			]
+		},
+		"Mini": {
+			"fixture": "tests/production/plain-consumer/src/fixtures/Mini.svelte",
+			"initial": {
+				"bytes": 42330,
+				"gzip": 16227,
+				"brotli": 14740
+			},
+			"deferred": {
+				"bytes": 0,
+				"gzip": 0,
+				"brotli": 0
+			},
+			"total": {
+				"bytes": 42330,
+				"gzip": 16227,
+				"brotli": 14740
+			},
+			"chunks": [
+				{
+					"file": "assets/index-BYWHTDIv.js",
+					"phase": "initial-entry",
+					"bytes": 42330,
+					"gzip": 16227,
+					"brotli": 14740,
+					"sha256": "561ea69b248dfbe40d8d57a0c0b3c9da3d716ca455860a5d546ac40b68febb7d",
+					"imports": [],
+					"dynamicImports": [],
+					"svelteModules": 95,
+					"moduleCount": 142
+				}
+			]
+		}
+	},
+	"graphEvidence": "Full module lists: CI packed-consumer-<browser>/bundle-results.json; this summary preserves emitted asset hashes, imports, sizes and module counts.",
+	"plainConsumer": {
+		"status": "passed",
+		"date": "2026-09-28T06:56:03.497Z",
+		"archiveSha256": "ca61409d25ccbcf102999187b4b14e4c12a631f78eb6fa4e0ed14d92e8b9a1bb",
+		"source": {
+			"commit": "73f5225a458bcf5c7f7957c07510ee877c369954",
+			"dirty": false
+		},
+		"results": [
+			{
+				"browser": "chromium",
+				"version": "151.0.7922.34",
+				"cases": [
+					{
+						"fixture": "Parity",
+						"assertions": [
+							"SSR/hydration",
+							"MotionValue derivation",
+							"managed presence exits",
+							"activity state/frame pause/reveal and hidden scalar spring targets",
+							"owner animation/frame/subscription cleanup",
+							"async view fallback",
+							"external constrained drag",
+							"controlled Reorder"
+						],
+						"requests": ["/Parity/assets/index-D2gH0tX4.js"]
+					},
+					{
+						"fixture": "Eager",
+						"assertions": ["SSR/hydration initial:false", "reactive target animation"],
+						"requests": ["/Eager/assets/index-CNYRm1_u.js"]
+					},
+					{
+						"fixture": "LazyBasic",
+						"assertions": [
+							"SSR initial:false",
+							"typed hydration state",
+							"DOM/ref identity",
+							"no early feature request",
+							"deferred chunk request",
+							"latest pending target"
+						],
+						"requests": [
+							"/LazyBasic/assets/index-Cu3I0CpH.js",
+							"/LazyBasic/assets/dom-animation-C1jaH_-L.js"
+						]
+					},
+					{
+						"fixture": "LazyFull",
+						"assertions": [
+							"SSR initial:false",
+							"typed hydration state",
+							"DOM/ref identity",
+							"no early feature request",
+							"deferred chunk request",
+							"latest pending target"
+						],
+						"requests": [
+							"/LazyFull/assets/index-DdBtDgDW.js",
+							"/LazyFull/assets/dom-max-ClriPwRy.js"
+						]
+					},
+					{
+						"fixture": "LazySync",
+						"assertions": ["SSR/hydration", "synchronous basic features"],
+						"requests": ["/LazySync/assets/index-BOawtPJO.js"]
+					},
+					{
+						"fixture": "Hybrid",
+						"assertions": ["SSR/hydration", "scoped playback", "completed controls released"],
+						"requests": ["/Hybrid/assets/index-BWeL0iut.js"]
+					},
+					{
+						"fixture": "Mini",
+						"assertions": ["SSR/hydration", "scoped playback", "completed controls released"],
+						"requests": ["/Mini/assets/index-BYWHTDIv.js"]
+					}
+				]
+			}
+		]
+	},
+	"kitConsumer": {
+		"archiveSha256": "ca61409d25ccbcf102999187b4b14e4c12a631f78eb6fa4e0ed14d92e8b9a1bb",
+		"browserCases": [
+			{
+				"engine": "chromium",
+				"case": "all public exports render and hydrate",
+				"passed": true
+			},
+			{
+				"engine": "chromium",
+				"case": "SSR initial=false, retarget, native component identity and focus",
+				"passed": true
+			},
+			{
+				"engine": "chromium",
+				"case": "/state native presence and rapid reversal",
+				"passed": true
+			},
+			{
+				"engine": "chromium",
+				"case": "/state-lite native presence and rapid reversal",
+				"passed": true
+			},
+			{
+				"engine": "chromium",
+				"case": "automatic layout survives production optimization",
+				"passed": true
+			},
+			{
+				"engine": "chromium",
+				"case": "MotionValue store binding",
+				"passed": true
+			},
+			{
+				"engine": "chromium",
+				"case": "inherited variant pose in raw SSR and hydrated HTML",
+				"passed": true
+			},
+			{
+				"engine": "chromium",
+				"case": "nested mutation and replacement without remount, tag/direct/getter",
+				"passed": true
+			},
+			{
+				"engine": "chromium",
+				"case": "native text/number/checkbox bindings, typed refs, events and ref cleanup",
+				"passed": true
+			},
+			{
+				"engine": "chromium",
+				"case": "timeline stop settles cancelled and holds its pose",
+				"passed": true
+			},
+			{
+				"engine": "chromium",
+				"case": "live local reduced-motion policy finishes replay with a fresh settlement",
+				"passed": true
+			},
+			{
+				"engine": "chromium",
+				"case": "shared route handoff while unrelated exit retains a non-inert source",
+				"passed": true,
+				"oldName": "astra_005b00220022002c002200630061007200640022005d"
+			},
+			{
+				"engine": "chromium",
+				"case": "isolated SvelteKit view navigation fallback",
+				"passed": true
+			},
+			{
+				"engine": "chromium",
+				"case": "production SSR without JavaScript",
+				"passed": true
+			}
+		]
+	}
+}

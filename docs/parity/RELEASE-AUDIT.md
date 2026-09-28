@@ -185,3 +185,14 @@ candidate. Shared Chrome production preview preserves the 3:2 image (300x200)
 after format/inspector changes, without console/network errors or overflow;
 screenshot inspected. No showcase CSS, markup, existing E2E assertion or workflow
 was changed to obtain these results.
+
+The revised archive is built cleanly from
+`73f5225a458bcf5c7f7957c07510ee877c369954`, SHA-256
+`ca61409d25ccbcf102999187b4b14e4c12a631f78eb6fa4e0ed14d92e8b9a1bb`.
+[Final local installed-package evidence](release-audit-final-package.json) records
+**7/7 plain fixtures and 14/14 Kit cases** in Chromium, strict declarations/builds,
+and all bundle-isolation checks. Only `layout.js`, `projection-boundaries.js` and
+their corresponding declarations differ from the initial audit archive; no files
+were added or removed. The earlier four runtime fixes are byte-identical. The
+complete unchanged remote matrices qualify the subsequent evidence-only delivery
+commit; their exact links and deployed checks are reported in the delivery response.
