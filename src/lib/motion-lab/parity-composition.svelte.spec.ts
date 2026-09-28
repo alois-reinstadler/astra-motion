@@ -188,7 +188,10 @@ it('pauses a direct path in hidden Activity and resumes the shared playback once
 	await expect.poll(() => component.target().position().x).toBeGreaterThan(10);
 	const playback = component.target().playbacks().x!;
 	if (!(playback instanceof JSAnimation)) throw new Error('Expected an engine arc clock');
-	const updates = vi.spyOn(playback.options, 'onUpdate');
+	const updates = vi.spyOn(
+		Reflect.get(playback, 'options') as { onUpdate(value: number): void },
+		'onUpdate'
+	);
 	const originalPlay: unknown = Reflect.get(playback, 'play');
 	if (typeof originalPlay !== 'function') throw new Error('Expected engine path playback controls');
 	const resumed = vi.fn(() => originalPlay.call(playback));

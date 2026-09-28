@@ -267,11 +267,11 @@ export const guidesDocs: DocPage[] = [
 						'Deferred gzip bytes'
 					],
 					rows: [
-						['Eager motion', '200,521', '67,890', '0'],
-						['Deferred domAnimation', '71,826', '26,462', '28,866'],
-						['Deferred domMax', '71,937', '26,519', '46,377'],
-						['Synchronous domAnimation', '147,398', '51,821', '0'],
-						['Hybrid useAnimate', '96,041', '34,669', '0'],
+						['Eager motion', '200,742', '67,944', '0'],
+						['Deferred domAnimation', '71,826', '26,461', '28,923'],
+						['Deferred domMax', '71,937', '26,518', '46,433'],
+						['Synchronous domAnimation', '147,619', '51,896', '0'],
+						['Hybrid useAnimate', '96,262', '34,721', '0'],
 						['Mini useAnimate', '42,330', '16,227', '0']
 					]
 				}

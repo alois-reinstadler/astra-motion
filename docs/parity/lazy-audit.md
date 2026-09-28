@@ -1,5 +1,11 @@
 # LazyMotion and lightweight component parity
 
+Current integration qualification: [final verification](VERIFICATION.md),
+[installed package](PACKAGE-RESULTS.md), [independent review](ADVERSARIAL-REVIEW.md).
+The dated worker checkpoints below retain their original execution scope; the final
+record closes their source, package and documentation integration gates. Remote
+CI/Pages outcomes qualify the merged delivery revision.
+
 Reference read: 2026-09-27 through 2026-09-28 UTC. Official articles: [LazyMotion](https://motion.dev/docs/react-lazy-motion), [Reduce bundle size](https://motion.dev/docs/react-reduce-bundle-size), and [motion components](https://motion.dev/docs/react-motion-component). Inspected source: `framer-motion@13.4.4`, `motion-dom@13.4.4`, `motion-utils@13.3.0`. The current Astra implementation snapshot belongs to the integration branch; this worker's original baseline is b66e376.
 
 The provider, lightweight component proxy, static `m` elements, custom component factory and DOM feature bundles are implemented on the integration candidate. The evidence below distinguishes verified behavior from remaining integration/consumer checks; this is not a full release-parity claim.

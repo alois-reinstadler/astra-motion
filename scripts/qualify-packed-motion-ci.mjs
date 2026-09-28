@@ -30,7 +30,14 @@ function run(script, args) {
 		);
 	});
 }
-if (consumerKind !== 'kit') await run('qualify-packed-motion-runtime.mjs', [setupFile, output]);
+const focusedFixture = process.argv.find((argument) => argument.startsWith('--fixture='));
+assert(!focusedFixture || consumerKind === 'plain', '--fixture requires --consumer=plain');
+if (consumerKind !== 'kit')
+	await run('qualify-packed-motion-runtime.mjs', [
+		setupFile,
+		output,
+		...(focusedFixture ? [focusedFixture] : [])
+	]);
 if (consumerKind === 'plain') process.exit(0);
 // Test infrastructure selects an available loopback port; no preview allocation or public listener.
 const reservation = createServer();

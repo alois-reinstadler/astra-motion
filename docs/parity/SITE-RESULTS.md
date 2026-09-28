@@ -90,3 +90,15 @@ has opened no manual Chrome pages or preview servers.
 
 The final matrix and production-alias verification will be recorded here before
 this bounded assignment is reported complete.
+
+## Final production qualification
+
+The stable production preview qualified all33 Chromium cases:32 passed in the
+combined run; the catalogue case required a more precise source-disclosure selector
+because the LayoutGroup demo contains its own native summaries. Its focused rerun
+passed all45 destinations and guide anchors. Assertions and tolerances are unchanged.
+All34 documentation pages hydrate without console/network errors. Manual shared-Chrome
+Activity retains the exact input and draft across hidden/reveal, and native View swaps
+work. The Activity desktop screenshot was captured and inspected with no overflow.
+The full three-engine production matrix remains the default CI gate, avoiding a
+redundant local sweep at the user's request. See [final verification](VERIFICATION.md).

@@ -1,5 +1,11 @@
 # Animation, element, configuration and loading contracts
 
+Current integration qualification: [final verification](VERIFICATION.md),
+[installed package](PACKAGE-RESULTS.md), [independent review](ADVERSARIAL-REVIEW.md).
+The dated worker checkpoints below retain their original execution scope; the final
+record closes their source, package and documentation integration gates. Remote
+CI/Pages outcomes qualify the merged delivery revision.
+
 Baseline: official Motion documentation captured on **2026-09-27 UTC**, Motion,
 framer-motion and motion-dom **13.4.4**, motion-utils **13.3.0**. Source commit:
 `636e725fc71315ca91ff196eb09685017e2fe0c8`. See [reference hashes](references.json).

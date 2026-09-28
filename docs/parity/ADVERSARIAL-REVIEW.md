@@ -194,3 +194,7 @@ were opened and no subagents were launched by this reviewer. A pnpm exec format
 attempt refused the linked modules directory before changing dependencies; local
 Prettier was then invoked directly. The reviewer reproduced R1 once and did not
 run broad tests or repeat the integration owner's focused correction checks.
+
+The archived R1 reproduction reads its original candidate via `git show b08875b`
+so it remains reproducible after the correction. The integration owner verified
+that pinned reproduction; it is not a claim of failure on the corrected runtime.

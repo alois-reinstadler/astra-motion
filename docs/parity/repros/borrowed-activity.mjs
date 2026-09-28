@@ -1,11 +1,13 @@
-import fs from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import assert from 'node:assert/strict';
 import ts from 'typescript';
 import { JSAnimation, motionValue } from 'motion-dom';
 
 // Execute the actual production function body with a minimal visual owner.
 // This isolates ownership policy; it is not a mounted Svelte/browser test.
-const source = fs.readFileSync('src/lib/motion/motion-core.svelte.ts', 'utf8');
+const source = execFileSync('git', ['show', 'b08875b:src/lib/motion/motion-core.svelte.ts'], {
+	encoding: 'utf8'
+});
 const start = source.indexOf('\tfunction syncActivity(active: boolean)');
 const end = source.indexOf('\n\tlet preferenceVersion', start);
 const body = ts.transpileModule(source.slice(start, end), {

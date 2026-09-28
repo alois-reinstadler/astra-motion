@@ -1,5 +1,11 @@
 # Presence, activity, and view-transition parity audit
 
+Current integration qualification: [final verification](VERIFICATION.md),
+[installed package](PACKAGE-RESULTS.md), [independent review](ADVERSARIAL-REVIEW.md).
+The dated worker checkpoints below retain their original execution scope; the final
+record closes their source, package and documentation integration gates. Remote
+CI/Pages outcomes qualify the merged delivery revision.
+
 Reference audit: **2026-09-27 UTC**; implementation/evidence update: **2026-09-28 UTC**. Astra starting revision: `b66e376`.
 
 The components, contexts, coordinator, examples and named tests below are now implemented and integrated into the parity worktree. This matrix distinguishes verified cases from implemented options whose additional composition gates remain open. Final packed-consumer qualification, independent review, release-wide browser checks and deployed-site verification belong to the root delivery record; this subsystem audit does not claim those gates have passed.

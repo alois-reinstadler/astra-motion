@@ -198,7 +198,8 @@ test('the first lesson exposes runnable code and every catalog entry opens its p
 			await expect(page.getByRole('heading', { level: 1 })).toHaveText(destination.title);
 			await expect(example).toBeVisible();
 			await expect(example.locator('.preview-heading')).toContainText(destination.title);
-			await expect(example.locator('summary')).toContainText('Complete source');
+			// A live demo can contain its own native disclosures, as LayoutGroup does.
+			await expect(example.locator(':scope > details > summary')).toContainText('Complete source');
 			await expect(example.locator('.preview-root')).toHaveCount(1);
 			const reference = page.getByRole('link', { name: /^Read / });
 			const href = await reference.getAttribute('href');

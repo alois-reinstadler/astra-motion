@@ -15,7 +15,12 @@ mkdirSync(output, { recursive: true });
 const bundle = packedBundleEvidence(setup);
 writeFileSync(join(output, 'bundle-results.json'), JSON.stringify(bundle, null, 2) + '\n');
 verifyPackedConsumer({ ...setup, consumer: setup.plainConsumer });
-const fixtures = ['Parity', ...Object.keys(bundle.entries)];
+const allFixtures = ['Parity', ...Object.keys(bundle.entries)];
+const focusedFixture = process.argv
+	.find((argument) => argument.startsWith('--fixture='))
+	?.slice('--fixture='.length);
+assert(!focusedFixture || allFixtures.includes(focusedFixture), 'Unknown --fixture selection');
+const fixtures = focusedFixture ? [focusedFixture] : allFixtures;
 const renderers = new Map();
 for (const fixture of fixtures) {
 	const serverFile = join(setup.plainConsumer, 'build', fixture, 'server/server.js');
@@ -353,7 +358,10 @@ try {
 	}
 	assert.deepEqual(failures, [], 'Consumer server failures');
 	writeFileSync(
-		join(output, `runtime-results-${selected.join('-')}.json`),
+		join(
+			output,
+			`runtime-results-${selected.join('-')}${focusedFixture ? `-${focusedFixture}` : ''}.json`
+		),
 		JSON.stringify(
 			{
 				status: 'passed',

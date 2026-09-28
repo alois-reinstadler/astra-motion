@@ -130,3 +130,51 @@ final packed qualification still must run. Viewport getter-root replacement is n
 the component effect. Three nonce propagation/cleanup cases pass Chromium. Sequence arcs,
 final package graph/size measurement, independent review/polish, final combined checks and
 merge/deployment remain open. No full-parity or delivery claim is made at this checkpoint.
+
+## Final qualification checkpoint — 28 September 2026
+
+[######----] 60% Runtime, documentation, independent review and polish complete; release qualification active.
+
+Frozen runtime: `8ea3543979870e0ede58797875b30b468e1fba06`. The fresh reviewer
+resolved five findings and subsequently accepted the hidden playback-clock correction.
+The final polish pass changed prose only and recommended retaining the current runtime
+boundaries. See ADVERSARIAL-REVIEW.md and POLISH-RESULTS.md.
+
+The combined source matrix ran 1,563 cases across Chromium, Firefox and WebKit:
+1,562 passed; the sole WebKit failure exposed a real hidden JS clock update. The
+correction commits the held pose synchronously and releases its frame driver without
+making playback terminal. All 18 affected Activity checks pass across the three engines,
+with the exact freeze assertion preserved and a no-hidden-update assertion added.
+No second broad source matrix was started. Server checks pass 203 cases in 44 files;
+canonical guide compilation passes with zero errors/warnings; tooling checks pass4/4.
+The upstream gate qualifies71 Motion DOM and7 Motion runtime symbols at the pinned version.
+
+Both installed consumers passed strict declarations and builds; the first final archive
+passed all7 plain fixtures and14 Kit cases in Chromium and Firefox. The subsequent real
+pause correction requires one corrected archive, refreshed sizes, affected Chromium/Firefox
+Activity checks and the previously unrun complete WebKit consumers. Those are in progress.
+Public package imports stay independent of repository aliases; mini/lazy isolation graphs pass.
+
+To honor the user's request to test less, the complete production-site three-engine
+matrix will run in CI. Local production qualification uses the33 documentation-focused
+Chromium cases and manual shared-Chrome interactions. Only failing or affected local checks
+are repeated. Merge/push, remote CI/Pages, deployed verification and cleanup remain open.
+
+## Local gates closed; remote delivery next
+
+[########--] 80% Local qualification complete; merge and remote verification next.
+
+Corrected runtime8ea3543 has passing strict source, guide compilation, server tests,
+all affected lint checks, installed plain/Kit builds, corrected WebKit7+14 cases and
+corrected Chromium/Firefox composition cases. Prior complete Chromium/Firefox7+14
+results retain their original archive provenance. Final bundle bytes are published
+in the guide and packed-bundle-results.json. Production documentation qualifies33
+Chromium cases, all34 pages and45 destinations. The catalogue selector correction
+keeps the original assertion and selects the frame's source disclosure explicitly.
+Manual production Activity retains exact input/DOM state; native View works with no
+console errors. VERIFICATION.md is the authoritative consolidated local record.
+
+The remaining delivery actions are merging/pushing this candidate, confirming the
+complete default CI matrices and Pages workflow on that exact main revision,
+checking deployed interactions and cleaning owned worktrees/browser resources.
+Workflow run records and the final delivery report record those remote outcomes.
