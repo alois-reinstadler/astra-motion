@@ -72,8 +72,51 @@ asserts the exact endpoint. No timing tolerance, endpoint assertion, default CI
 command or browser scope was weakened. Only affected browser files were run
 locally; complete matrices remain release gates in CI.
 
-Production build, source bundle graphs, independently installed applications,
-manual preview and exact remote delivery evidence are recorded below once run.
+## Production and installed qualification
+
+Runtime/test/documentation commit: `62e114c16a0c434446fbe05eb7560e0f7032a6ec`,
+clean when packed. Archive SHA-256:
+`9225b024814a9633defb12bb0eec9dc4021b5b710f6fd38c1d26aba7c607fdb0`.
+[Durable package evidence](release-audit-package.json) preserves the two consumer
+results, exact archive/source identity, tool versions, byte counts and asset hashes.
+
+- Production site build, 168 generated elements, package generation and strict
+  publint pass. Packaging reports pre-existing declarations it cannot emit for
+  unpublished lab/site files and a Vite environment warning; strict installed
+  public declarations and both independent consumer builds pass with zero errors
+  and warnings. No diagnostic was suppressed.
+- Source bundle graph checks pass. The independently installed plain Svelte app
+  contains no React, Kit dependency or duplicate Motion engine. All lazy/basic/mini
+  graph assertions pass, with one shared MotionValue/scheduler identity.
+- Complete local Chromium installed consumers: **7/7 plain fixtures**, **14/14 Kit
+  cases**, including no-JavaScript SSR, hydration, navigation and cleanup. The
+  plain Activity fixture additionally sets a scalar spring while hidden, asserts
+  no animation/exact held value, then checks the exact target after reveal.
+- Shared headed Chrome 152 production preview: trusted range input reaches 90px,
+  changing spring settings preserves that target and rendered matrix x=90; no
+  horizontal overflow, console warnings/errors or failed requests (50/50 HTTP
+  200). Screenshot captured and inspected; existing design preserved.
+
+Measured independent application initial minified / gzip / Brotli bytes (Svelte
+and bootstrap included, not library-only sizes):
+
+| Fixture   | Minified |  gzip | Brotli | Deferred minified / gzip / Brotli |
+| --------- | -------: | ----: | -----: | --------------------------------- |
+| Eager     |   200751 | 67948 |  60487 | 0 / 0 / 0                         |
+| LazyBasic |    71826 | 26462 |  23928 | 83742 / 28926 / 26333             |
+| LazyFull  |    71937 | 26515 |  23992 | 140946 / 46435 / 41231            |
+| LazySync  |   147628 | 51899 |  46689 | 0 / 0 / 0                         |
+| Hybrid    |    96316 | 34736 |  31587 | 0 / 0 / 0                         |
+| Mini      |    42330 | 16227 |  14740 | 0 / 0 / 0                         |
+
+The earlier baseline's CI and Pages API records were independently confirmed to
+have succeeded for ef77bf8. That did not prevent the four reproduced defects.
+The delivering revision must pass all ten unchanged CI jobs (general checks,
+three complete source-browser suites, three production E2E suites and three
+complete packed-consumer suites) and Pages build/deploy. Exact revision/run links
+and deployed interaction observations belong to the final delivery response;
+this local record does not predeclare remote success.
+
 Prior archive measurements in [package results](PACKAGE-RESULTS.md) remain
 historical evidence, not byte measurements of this corrected runtime.
 
