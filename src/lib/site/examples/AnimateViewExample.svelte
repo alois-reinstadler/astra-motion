@@ -166,14 +166,30 @@
 	</AnimateView>
 {/snippet}
 
+{#snippet arrow(back = false)}
+	<svg
+		class="arrow"
+		width="12"
+		height="12"
+		viewBox="0 0 12 12"
+		fill="none"
+		stroke="currentColor"
+		stroke-width="1.25"
+		aria-hidden="true"
+		focusable="false"
+	>
+		<path d={back ? 'M10.5 6h-9m4-4-4 4 4 4' : 'M3 9 9 3M3 3h6v6'} />
+	</svg>
+{/snippet}
+
 <div class="example" {@attach attachRoot}>
 	<div class="stage">
 		{#if selected}
 			{@const story = selected}
 			<article class="detail" data-view-detail={story.id}>
-				<button class="back" data-view-back onclick={() => changeView(null)}
-					>← Back to collection</button
-				>
+				<button class="back" data-view-back onclick={() => changeView(null)}>
+					{@render arrow(true)}Back to collection
+				</button>
 				{@render artwork(story)}
 				<h3 class="detail-heading">{@render title(story)}</h3>
 				<AnimateView
@@ -209,7 +225,7 @@
 						{@render artwork(story)}
 						<span class="eyebrow">{story.number} / JOURNAL</span>
 						{@render title(story)}
-						<span class="explore">Explore the note <span aria-hidden="true">↗</span></span>
+						<span class="explore">Explore the note {@render arrow()}</span>
 					</button>
 				{/each}
 			</div>
@@ -268,7 +284,7 @@
 		border-radius: 8px;
 		background: var(--paper);
 	}
-	svg {
+	.artwork svg {
 		display: block;
 		width: 100%;
 		height: 100%;
@@ -296,6 +312,7 @@
 	}
 	.explore {
 		display: flex;
+		align-items: center;
 		justify-content: space-between;
 		gap: 8px;
 		color: var(--site-muted, #67695e);
@@ -306,12 +323,19 @@
 		margin: auto;
 	}
 	.back {
-		display: block;
+		display: flex;
+		align-items: center;
+		gap: 7px;
 		margin: 0 0 18px;
 		padding: 6px 0;
 		border: 0;
 		background: transparent;
 		font-size: 12px;
+	}
+	.arrow {
+		flex-shrink: 0;
+		width: 12px;
+		height: 12px;
 	}
 	.detail-heading {
 		margin: 22px 0 16px;

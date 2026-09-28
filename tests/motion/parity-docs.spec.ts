@@ -464,10 +464,10 @@ for (const fallback of [false, true]) {
 				: 'View changed. This browser uses the immediate fallback.'
 		);
 		await expect(
-			example.getByRole('button', { name: '← Back to collection', exact: true })
+			example.getByRole('button', { name: 'Back to collection', exact: true })
 		).toBeFocused();
 		await expect(page.locator('[data-astra-view-reset]')).toHaveCount(0);
-		await example.getByRole('button', { name: '← Back to collection', exact: true }).click();
+		await example.getByRole('button', { name: 'Back to collection', exact: true }).click();
 		await expect(example.locator('.status')).toHaveText(
 			supported
 				? 'Back to the field notes.'

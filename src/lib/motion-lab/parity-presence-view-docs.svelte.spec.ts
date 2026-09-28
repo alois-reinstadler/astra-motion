@@ -62,6 +62,11 @@ it('retains the same input node and native value in the canonical Activity examp
 it('shares separate artwork and title snapshots across new DOM trees and restores card focus', async () => {
 	expect(typeof document.startViewTransition).toBe('function');
 	const screen = await render(View);
+	const expectIconPolicy = () =>
+		expect(document.querySelector('.example')?.textContent).not.toMatch(
+			/[\u2190-\u21ff\u27f0-\u27ff\u2900-\u297f\u2b00-\u2b11]/u
+		);
+	expectIconPolicy();
 	// Names are intentionally restored as soon as native capture is ready.
 	// Record the actual leases while capturing, then inspect their snapshot layers.
 	const capturedNames = new Map<Element, string>();
@@ -92,6 +97,7 @@ it('shares separate artwork and title snapshots across new DOM trees and restore
 				.toBe(id);
 			expect(art()).not.toBe(oldArt);
 			expect(heading()).not.toBe(oldTitle);
+			expectIconPolicy();
 			await expect
 				.poll(() => {
 					const names = [art(), heading()].map((node) => capturedNames.get(node));
@@ -119,7 +125,7 @@ it('shares separate artwork and title snapshots across new DOM trees and restore
 			expect(document.querySelector('[data-astra-view-reset]')).toBeNull();
 			expect(art().style.getPropertyValue('view-transition-name')).toBe('');
 			expect(heading().style.getPropertyValue('view-transition-name')).toBe('');
-			await screen.getByRole('button', { name: '← Back to collection', exact: true }).click();
+			await screen.getByRole('button', { name: 'Back to collection', exact: true }).click();
 			await expect
 				.poll(() => document.querySelector('.status')?.textContent)
 				.toBe('Back to the field notes.');

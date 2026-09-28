@@ -160,3 +160,16 @@ focus, removed reset styles and no horizontal overflow. All three documents
 returned 200 and produced no console warnings/errors; screenshots were inspected.
 The delivery report records the exact merged commit, complete remote CI/Pages
 results, deployed verification and cleanup once those operations finish.
+
+The first remote candidate `34b8c7c` passed general checks and all three complete
+component-browser and installed-package matrices. Its production catalogue case
+failed in all three engines because the new demo used decorative Unicode arrow
+characters forbidden by the site's existing design assertion. The correction
+uses aria-hidden SVG icons and updates button locators to the resulting accessible
+text, `Back to collection`. The full 45-destination check and its assertion remain
+unchanged. A small regression now applies that same policy to both collection
+and detail states; it failed before the correction, then passed along with native
+sharing, outside-focus preservation and disposal checks. The final remote run
+must qualify the complete corrected revision. The unchanged 45-destination
+production case and native/fallback View cases pass locally after correction
+(3/3, 42.5s); source compilation, affected lint and the production build also pass.
