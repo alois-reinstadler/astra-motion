@@ -189,6 +189,8 @@ test('the first lesson exposes runnable code and every catalog entry opens its p
 	);
 	expect(destinations).toHaveLength(45);
 	for (const destination of destinations) {
+		// Keep the pointer off document links between independently loaded destinations.
+		await page.mouse.move(0, 0);
 		await page.goto(destination.href);
 		if (destination.href.includes('/showcase')) {
 			await expect(page.getByRole('heading', { level: 1 })).toContainText('Fieldwork');
@@ -205,10 +207,14 @@ test('the first lesson exposes runnable code and every catalog entry opens its p
 			const href = await reference.getAttribute('href');
 			expect(href).toMatch(/^\/docs\/[^#]+#[^#]+$/);
 			await reference.click();
+			await page.mouse.move(0, 0);
 			await expect(page).toHaveURL(href!);
 			const anchor = new URL(page.url()).hash.slice(1);
 			await expect(page.locator(`[id="${anchor}"]`)).toHaveCount(1);
 		}
+		// Finish hover preloads before destroying this document with the next goto.
+		// Otherwise WebKit can report an unload-cancelled fetch as an access error.
+		await page.waitForLoadState('networkidle');
 		expect(errors, `browser errors at ${destination.href}`).toEqual([]);
 		expect(await page.locator('body').innerText()).not.toMatch(
 			/[\u2190-\u21ff\u27f0-\u27ff\u2900-\u297f\u2b00-\u2b11]/u

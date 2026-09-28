@@ -253,3 +253,26 @@ The corrected desk interaction passes **9/9** locally (three runs in each engine
 with all immediate and post-reveal assertions. Strict checking reports zero
 errors/warnings; targeted lint, formatting and diff checks pass. A fresh complete
 remote matrix remains required for the delivering revision.
+
+The following [CI run on 8e0cc9e](https://github.com/alois-reinstadler/astra-motion/actions/runs/36391607096)
+again passed nine jobs, with both trusted desk and queue interactions passing.
+WebKit's 45-destination catalogue check reported a failed hover preload from the
+previous documentation page while the test hard-navigated to the next example.
+The trace starts `goto('/examples/drag-playground')` at **297510.001ms** and reports
+the `/docs/hover/__data.json` fetch error at **297575.803ms**, during document
+unload. The generated data file exists and returns HTTP **200** locally, including
+the same invalidation query. No failed server response is recorded for that
+preload in the CI network trace.
+
+The catalogue driver now moves the pointer off links after its trusted reference
+click and waits for pending network work before checking errors and replacing the
+document. This completes each independent destination check before starting the
+next; it does not disable preloading, filter console/page errors, remove any of
+the 45 destinations, replace the trusted reference click, or change navigation
+runtime. Rapid application navigation remains covered by the existing View and
+installed Kit cases. Runtime, website source and package bytes remain unchanged.
+
+The corrected complete catalogue case passes once in each engine: **3/3** cases,
+**45 destinations per engine**, with every original assertion and zero recorded
+browser errors. Strict checking reports zero errors/warnings; targeted lint,
+formatting and diff checks pass. No broad local suite was repeated.
