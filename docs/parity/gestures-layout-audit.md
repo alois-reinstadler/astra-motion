@@ -100,9 +100,11 @@ below; it does not mean every possible composition or the final release passed.
    Svelte invalidation and observation transactions coordinate geometry. Group
    `id`/`inherit` define identity for that mount; key the group to replace them.
    Direct layout props remain primary, with supported attachment/controller APIs.
-9. **Coordinate helpers:** `correctParentTransform` handles invertible 2D axes,
-   including independent CSS rotate/scale and computed transform. It is not a
-   general 3D/perspective inverse. `transformViewBoxPoint` uses inverse screen CTM,
+9. **Coordinate helpers:** `correctParentTransform` inverts the HTML parent’s projected plane,
+   including nested CSS transforms, individual transforms, origins, and perspective.
+   It solves the plane homography rather than inventing a point depth. Static
+   planes are qualified; changing 3D cameras, edge-on/singular planes and arbitrary
+   3D scene interpolation are not promised. See [focused evidence](PARITY-NEXT.md). `transformViewBoxPoint` uses inverse screen CTM,
    including viewBox origin, letterboxing and ancestor transforms; unresolved or
    singular matrices return the input point.
 10. **Arc:** current A prose disagrees with its quadratic implementation.

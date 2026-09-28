@@ -130,8 +130,10 @@ historical evidence, not byte measurements of this corrected runtime.
   and root attachments, and the separate Kit navigation entry remain explicit
   renderer/framework adaptations.
 - Layout/drag evidence covers 2D affine, sticky, nested scroll and clip boundaries.
-  Perspective/3D projection is not qualified. Reorder remains a one-dimensional
-  list facility, not a general grid/RTL drag-and-drop system.
+  That release did not qualify perspective/3D projection; the later
+  [focused parity increment](PARITY-NEXT.md) qualifies static transformed planes.
+  Correction to the original audit: Reorder supports x/y/xy detection, wrapped rows,
+  and RTL in its xy branch, as documented and tested in the gesture audit.
 - Pinned engine discrepancies documented in [shared contracts](CONTRACTS.md)
   remain visible. The private pause compatibility boundary requires requalification
   on engine upgrades. Shared upstream scroll scheduling may remain alive for other

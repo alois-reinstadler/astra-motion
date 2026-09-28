@@ -1,5 +1,11 @@
 # Presence, activity, and view-transition parity audit
 
+Follow-up: [Activity, View types and difficult geometry](PARITY-NEXT.md) records
+nested retained exits, automatic Activity pop roots, native View contracts, and
+static 3D/perspective plane qualification. [Independent focused verification](NEXT-FOCUSED-VERIFICATION.md)
+adds enforced CSP and Presence/Activity/View composition evidence. Historical
+checkpoints below retain their original dates and scope.
+
 Release follow-up: [independent audit](RELEASE-AUDIT.md). View capture name restoration is idempotent across delayed skipped native callbacks. Activity scalar spring intent survives suspension without starting hidden clocks. Evidence: `release-audit.svelte.spec.ts`; exact qualification is in the linked report.
 
 Current integration qualification: [final verification](VERIFICATION.md),

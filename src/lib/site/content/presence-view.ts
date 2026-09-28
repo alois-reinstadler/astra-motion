@@ -244,18 +244,50 @@ export const presenceViewDocs: DocPage[] = [
 				text: [
 					'AnimateActivity changes visibility while retaining its children. Set mode to visible or hidden and define entrance and exit targets on motion descendants. A hidden request first runs the coordinated exits; only after they finish does the retained host switch to display: none.',
 					'Type in the input, hide the editor, and reveal it again. The same input node remains mounted, so its native value survives without copying it into parent state. This is useful for editor tabs, settings panels, and other expensive views that should resume where the user left them.',
+					'Wrap an ordinary child component such as <Tab /> exactly as you would a motion element. Its component state, DOM, motion descendants, and nested Activity exits are coordinated without registering the child.',
 					'Keep AnimateActivity mounted while switching its mode. An outer if block that removes the boundary also destroys the retained state. Use AnimatePresence when the content should eventually be removed.'
 				],
 				example: 'animate-activity',
 				related: ['animate-presence', 'motion']
 			},
 			{
+				id: 'component-sequencing',
+				title: 'Sequence an ordinary child component',
+				text: [
+					'Put Tab inside <AnimateActivity mode={visible ? "visible" : "hidden"}><Tab /></AnimateActivity>. The child below needs no Activity-specific registration. Add layoutMode="pop" on the boundary to release its space during the exit.',
+					'Place delayChildren inside the variant transition. The upstream Activity article currently puts it directly on the variant, but Motion 13.4.4 reads orchestration from transition; the complete child below uses that pinned contract.'
+				],
+				code: {
+					label: 'Tab.svelte — complete child component',
+					source: `<script lang="ts">
+  import { motion, stagger } from 'astra-motion';
+  const items = ['Draft', 'Review', 'Publish'];
+  let draft = $state('');
+</script>
+
+<motion.section
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  exit="hidden"
+  variants={{ hidden: { opacity: 0, transition: { when: 'afterChildren' } } }}
+>
+  <label>Draft <input bind:value={draft} /></label>
+  <motion.ul variants={{ hidden: { transition: { delayChildren: stagger(0.1) } } }}>
+    {#each items as item (item)}
+      <motion.li variants={{ hidden: { opacity: 0 } }}>{item}</motion.li>
+    {/each}
+  </motion.ul>
+</motion.section>`
+				}
+			},
+			{
 				id: 'phases',
 				title: 'Understand visibility and exit phases',
 				text: [
 					'A visible panel responds to mode="hidden" by becoming inert and entering its exiting phase. Descendant motion exits and usePresence removal registrations finish together. Astra-owned animation work remains active during this phase so the exit can complete.',
-					'After completion the phase becomes hidden, the host uses display: none, and activity-aware Astra work is suspended. Revealing it makes the retained subtree active and lets its animate targets run again. No initial entrance is replayed merely because the same child is shown again.',
+					'After completion the phase becomes hidden, the host uses display: none, and activity-aware Astra work is suspended. Revealing it makes the retained subtree active and lets its animate targets run again. After a completed hide, motion children with initial targets enter from those targets again; an interrupted exit reverses from its current pose.',
 					'An externally animated MotionValue keeps its original owner. Hiding a component that reads that value stops its rendering without pausing playback used by visible consumers. An animate target or animation-controls command that starts playback on the value owns that playback and pauses it with the component.',
+					'Nested boundaries keep their own requested mode. Hiding a parent waits for visible descendants; revealing it leaves a child with mode=hidden hidden. Managed AnimatePresence removal also waits for the Activity exit before destroying its retained state.',
 					'If the panel is revealed before its exit finishes, it returns to visible immediately and its in-flight removal generation is invalidated. The input and component identities are retained through the reversal. A panel initially rendered hidden does not run an entrance or an exit before becoming hidden.'
 				],
 				table: {
@@ -304,8 +336,8 @@ export const presenceViewDocs: DocPage[] = [
 				id: 'layout',
 				title: 'Choose when the panel releases its space',
 				text: [
-					'layoutMode="preserve" keeps the exiting child roots in layout until their exits finish. layoutMode="pop" takes registered HTML roots out of flow during the exit so other content can move into place immediately. The panel is removed from layout when fully hidden in either mode.',
-					'Motion descendants register roots automatically. Use presenceRoot() on plain or custom child roots when using pop mode. Coordinate surrounding layout animation with LayoutGroup or an existing layout group, and provide a positioned containing block for popped roots.',
+					'layoutMode="preserve" keeps the exiting child roots in layout until their exits finish. layoutMode="pop" takes the rendered HTML roots out of flow during the exit so other content can move into place immediately. The panel is removed from layout when fully hidden in either mode.',
+					'Activity discovers the rendered roots of plain and custom children automatically, including wrappers around motion descendants. No presenceRoot attachment is needed inside Activity. Coordinate surrounding layout animation with LayoutGroup or an existing layout group, and provide a positioned containing block for popped roots.',
 					'AnimateActivity renders a retained HTML host. It uses display: contents while visible or exiting and display: none while hidden. The as prop chooses a semantic tag appropriate for the surrounding markup. Keep as stable: changing the host tag would recreate descendants and throws while the boundary is mounted.'
 				],
 				related: ['layout', 'layout-group', 'animate-presence']
@@ -437,7 +469,7 @@ export const presenceViewDocs: DocPage[] = [
 					'Use CSS keyframes such as opacity, transform, filter, or clipPath. Supplying custom values replaces the old/new crossfade while preserving the group’s size and position animation. Add opacity explicitly when you want a custom effect and a fade together.',
 					'A scalar enter opacity starts at 0; scalar opacity for exit, update, or share starts at 1. Arrays supply explicit endpoints. Custom enter values animate the new snapshot, while exit, update, and share values animate the old snapshot.',
 					'These are CSS snapshot layers rather than motion elements. Use a complete CSS transform string instead of x, y, or scale aliases. transitionEnd is rejected because a snapshot has no persistent application style to update. Commit final element styles in the state update itself.',
-					'For springs, import the spring generator and pass type: spring. AnimateView uses Motion’s native animation path, which samples that generator for the browser. Per-property transitions override defaults; layout timing remains separate from custom opacity or filter timing.'
+					'For springs, import the spring generator and pass type: spring. AnimateView uses Motion’s native animation path, which samples that generator for the browser. Per-property transitions override defaults; layout timing remains separate from custom opacity or filter timing. ViewAnimationTarget and ViewTransition expose the native snapshot contract: CSS keyframes, duration, delay, easing, generators, repeat/reverse, and autoplay. Motion element aliases, persistent transitionEnd, string engine names, and JavaScript animation callbacks are rejected; use the boundary callbacks and returned controls. Shared MotionConfig timing is checked against this same contract at runtime; supply a View transition when the shared configuration contains element-only options.'
 				],
 				code: {
 					label: 'Focused spring configuration excerpt',

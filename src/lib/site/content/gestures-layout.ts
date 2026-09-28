@@ -265,7 +265,7 @@ export const gesturesLayoutPages: DocPage[] = [
 				title: 'Observe the gesture',
 				text: [
 					'onDragStart, onDrag, and onDragEnd receive (event, info). info contains point, delta, offset, and velocity. onDrag sees the updated rendered pose. onDragEnd runs after rendering when the pointer session has ended; onDragTransitionEnd() runs when all release animations settle.',
-					'Page coordinates are corrected through MotionConfig transformPagePoint. correctParentTransform(() => parent) converts movement under a 2D CSS-transformed parent; transformViewBoxPoint(() => svg) maps page points into SVG viewBox coordinates, including its origin and preserveAspectRatio. Pass the helper through configuration for the affected subtree.',
+					'Page coordinates are corrected through MotionConfig transformPagePoint. correctParentTransform(() => parent) converts page points into a transformed HTML parent’s local plane, composing ancestor transforms, perspective, and transform origins; transformViewBoxPoint(() => svg) maps page points into SVG viewBox coordinates, including its origin and preserveAspectRatio. Pass the helper through configuration for the affected subtree.',
 					'Astra compensates scrolling and layout movement while dragging, including a stationary pointer. Keep layout-enabled Reorder items keyed by stable values so insertion and removal can preserve the dragged element’s position.'
 				],
 				code: {
@@ -845,7 +845,7 @@ export const gesturesLayoutPages: DocPage[] = [
 					'If a resize stretches text, give the text wrapper layout="position" or animate a separate surface.',
 					'SVG layout projection is not supported by the upstream layout engine. Animate SVG attributes directly instead.',
 					'Keep shared IDs unique within each intended namespace. Use an explicit LayoutGroup id for reusable controls.',
-					'Three-dimensional perspective projection remains outside the supported 2D boundary model.'
+					'Static 3D and perspective ancestors are supported for descendant layout changes, including nested planes, reversal, and parent scale correction. Changing the camera or 3D orientation during a layout transition, edge-on planes, and general 3D scene interpolation remain outside the qualified contract.'
 				],
 				text: [
 					'This page teaches layout techniques. The motion reference is the primary home for element props, and LayoutGroup documents coordination and namespace inheritance.'

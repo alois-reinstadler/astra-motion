@@ -1,5 +1,11 @@
 # Final parity qualification
 
+Follow-up: [Activity, View types and difficult geometry](PARITY-NEXT.md) records
+nested retained exits, automatic Activity pop roots, native View contracts, and
+static 3D/perspective plane qualification. [Independent focused verification](NEXT-FOCUSED-VERIFICATION.md)
+adds enforced CSP and Presence/Activity/View composition evidence. Historical
+checkpoints below retain their original dates and scope.
+
 Current follow-up: [independent audit of ef77bf8](RELEASE-AUDIT.md). The record
 below describes the earlier release; its archive measurements and review conclusions
 do not qualify the corrected runtime.
@@ -72,6 +78,6 @@ and upstream limitations. Activity's private Motion+ alpha source is unavailable
 Astra qualifies its published behavior and the user-approved retained-state/effect
 contract. Ordinary Svelte effects stay active without useActivityEffect. Explicit
 Presence identity and View transactions replace unavailable renderer interception.
-Layout geometry evidence covers 2D affine, sticky, scroll and clip boundaries;
-perspective/3D geometry is not advertised as qualified. These boundaries are not
+Layout geometry originally covered 2D affine, sticky, scroll and clip boundaries;
+the linked follow-up adds static 3D/perspective planes with precise remaining limits. These boundaries are not
 silent omissions or claims of React's private lifecycle behavior.

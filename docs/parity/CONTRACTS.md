@@ -1,5 +1,11 @@
 # Shared implementation contracts
 
+Follow-up: [Activity, View types and difficult geometry](PARITY-NEXT.md) records
+nested retained exits, automatic Activity pop roots, native View contracts, and
+static 3D/perspective plane qualification. [Independent focused verification](NEXT-FOCUSED-VERIFICATION.md)
+adds enforced CSP and Presence/Activity/View composition evidence. Historical
+checkpoints below retain their original dates and scope.
+
 The [parity matrix](MATRIX.md) records the reference date, engine and Svelte versions,
 normative scope, source discrepancies and qualification gates. This document defines
 the shared implementation boundaries used by the subsystem audits.
