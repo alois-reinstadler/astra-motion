@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { settlePointerTarget } from './pointer-target';
+import { settlePointerTarget } from './pointer-target.js';
 
 const pageErrors = new WeakMap<Page, string[]>();
 test.beforeEach(({ page }) => {

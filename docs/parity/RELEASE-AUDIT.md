@@ -226,3 +226,10 @@ must still pass the complete remote matrix.
 The corrected drag-input test passes **9/9** locally (three runs each in Chromium,
 Firefox and WebKit), including the new focus precondition and every existing
 assertion. Targeted ESLint, formatting and diff checks pass.
+
+The first test-input correction commit (`20233b7`) failed the strict checker
+because its new relative test import omitted the required `.js` extension. The
+remaining jobs of that failed candidate were cancelled. The extension correction
+passes the local strict checker with zero errors/warnings, targeted lint and
+formatting; the delivery revision must pass a fresh complete CI/Pages run. This
+was an audit test-authoring error, with no published runtime change.
