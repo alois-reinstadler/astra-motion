@@ -16,6 +16,7 @@ import {
 } from 'motion-dom';
 import { resolveMotionTarget } from './targets.js';
 import { prepareMotionHandoff } from './motion-compat.js';
+import { startOwnedMotionAnimations } from './animation-ownership.js';
 
 type Versions = Map<string, number>;
 const versions = new WeakMap<VisualElement, Versions>();
@@ -28,6 +29,21 @@ const pathAnimations = new WeakSet<AnimationPlaybackControls>();
 /** Path progress is positional even though the engine's private value has no name. */
 export function isMotionPathAnimation(playback: AnimationPlaybackControls): boolean {
 	return pathAnimations.has(playback);
+}
+
+/** Register one positional driver on both public values without introducing a second renderer. */
+export function ownMotionPathPlayback(
+	visual: VisualElement,
+	playback: AnimationPlaybackControlsWithThen
+): void {
+	pathAnimations.add(playback);
+	for (const key of ['x', 'y']) {
+		const value = visual.getValue(key, visual.latestValues[key] ?? 0);
+		void value.start((complete) => {
+			void playback.finished.then(complete);
+			return playback;
+		});
+	}
 }
 /** Imperative controls inherit the activity of each visual, including external handles. */
 export function setMotionAnimationActivity(visual: VisualElement, reader: () => boolean): void {
@@ -58,14 +74,8 @@ export function animateMotionPath(
 	const owned = animations.slice(first);
 	if (!owned.length) return;
 	const playback = owned.length === 1 ? owned[0] : new GroupAnimationWithThen(owned);
-	pathAnimations.add(playback);
 	for (const animation of owned) pathAnimations.add(animation);
-	for (const value of axes) {
-		void value.start((complete) => {
-			void playback.finished.then(complete);
-			return playback;
-		});
-	}
+	ownMotionPathPlayback(visual, playback);
 }
 
 function ownedPathTransition(transition: Transition | undefined): Transition | undefined {
@@ -158,14 +168,16 @@ export function animateMotionDefinition(
 				prepareMotionHandoff(value.animation, { finishedOnly: !reduceAll })
 			);
 			await Promise.all(
-				animateTarget(
-					visual,
-					pathTransition?.path ? { ...values, transition: pathTransition } : values,
-					reduceAll
-						? { ...options, delay: 0, transitionOverride: { type: false, duration: 0, delay: 0 } }
-						: options.transitionOverride && pathTransition?.path
-							? { ...options, transitionOverride: pathTransition }
-							: options
+				startOwnedMotionAnimations(visual, () =>
+					animateTarget(
+						visual,
+						pathTransition?.path ? { ...values, transition: pathTransition } : values,
+						reduceAll
+							? { ...options, delay: 0, transitionOverride: { type: false, duration: 0, delay: 0 } }
+							: options.transitionOverride && pathTransition?.path
+								? { ...options, transitionOverride: pathTransition }
+								: options
+					)
 				)
 			);
 

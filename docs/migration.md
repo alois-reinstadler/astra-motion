@@ -54,7 +54,8 @@ for changing sources/options. Read `.current` from visibility/preference helpers
 markup or effects; destructuring it once loses reactivity. MotionValues retain `.get`,
 `.set`, `.jump`, subscriptions, velocity and engine identity.
 
-`useAnimate` returns `[scope, animate]`; attach `scope.attach` or bind `scope.current`.
+`useAnimate` returns `[scope, animate]`; attach the root with `{@attach scope.attach}`.
+Read `scope.current` to access that element; it is a read-only getter, not a binding target.
 Selectors are scoped; explicitly supplied subjects use the general engine contract.
 `createAnimate` retains its stricter owned-element scope, collision diagnostics and
 `settled` cancellation result. Do not rename one helper without adapting the contract.

@@ -26,6 +26,7 @@ import { completeMotionPlayback, prepareMotionHandoff } from './motion-compat.js
 import { shouldReduceMotion, type MotionPolicy } from './policy.js';
 import { readMotionGetter, type MotionGetter } from './value-hooks.svelte.js';
 import { animateMotionPath, isMotionPathAnimation } from './animation.js';
+import { animateSequencePaths } from './sequence-path.js';
 
 export type ScopedAnimate = ReturnType<typeof createScopedAnimate>;
 export interface UseAnimateScope<T extends Element = Element> {
@@ -317,6 +318,15 @@ export function useAnimate<T extends Element = HTMLElement>(
 			: { ...configuration.transition, ...options };
 		const invoke = play as (...parameters: unknown[]) => AnimationPlaybackControlsWithThen;
 		const controls =
+			(sequence &&
+				animateSequencePaths(
+					subject,
+					args[optionIndex] as Record<string, unknown>,
+					engineScope,
+					invoke,
+					pathOwner,
+					untrack(reduced)
+				)) ||
 			(!sequence &&
 				animatePathElements(
 					subject,

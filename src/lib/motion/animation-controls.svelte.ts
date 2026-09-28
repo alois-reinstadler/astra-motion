@@ -13,6 +13,7 @@ import {
 	isMotionAnimationActive
 } from './animation.js';
 import { readActivityState } from './activity-scope.js';
+import { ownsMotionAnimation } from './animation-ownership.js';
 
 type StartVisual = (
 	visual: VisualElement,
@@ -175,6 +176,7 @@ export function useAnimationControls(): LegacyAnimationControls {
 					const animation = value.animation;
 					if (
 						animation?.state === 'running' &&
+						ownsMotionAnimation(visual, animation) &&
 						'pause' in animation &&
 						typeof animation.pause === 'function' &&
 						'play' in animation &&

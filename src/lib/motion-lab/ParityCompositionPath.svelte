@@ -27,6 +27,53 @@
 	export function external(element: HTMLElement) {
 		return animate(element, { x: 200, y: 100 }, { path, duration: 1, ease: 'linear' });
 	}
+	export function sequence(onProgress?: (value: number) => void) {
+		return animate([
+			[
+				'[data-composition-hybrid], [data-composition-hybrid-motion]',
+				{ x: [0, 999, 200], y: [0, 999, 100], opacity: [0, 1] },
+				{ path, duration: 0.4, ease: 'linear' }
+			],
+			'first',
+			[
+				'[data-composition-hybrid], [data-composition-hybrid-motion]',
+				{ x: 400, y: 0 },
+				{ path, at: '+0.1', duration: 0.4, ease: 'linear' }
+			],
+			[
+				'[data-composition-hybrid-motion]',
+				{ opacity: [0, 1] },
+				{ at: 'first', duration: 0.2, ease: 'linear' }
+			],
+			[onProgress ?? (() => {}), { at: '<', duration: 0.2, ease: 'linear' }]
+		]);
+	}
+	export function overlapSequence() {
+		return animate([
+			['[data-composition-hybrid]', { x: [0, 100], y: 0 }, { duration: 2, ease: 'linear' }],
+			['[data-composition-hybrid]', { x: 50 }, { at: 1, duration: 0.2, ease: 'linear' }],
+			[
+				'[data-composition-hybrid]',
+				{ x: 200, y: 100 },
+				{ at: 2.2, path, duration: 0.4, ease: 'linear' }
+			]
+		]);
+	}
+	export function overlappingArcs() {
+		const bend = arc({ strength: 1, direction: 'ccw' });
+		return animate([
+			[
+				'[data-composition-hybrid]',
+				{ x: [0, 100], y: [0, 0] },
+				{ path: bend, duration: 2, ease: 'linear' }
+			],
+			[
+				'[data-composition-hybrid]',
+				{ x: 200, y: 0 },
+				{ path: bend, at: 1, duration: 1, ease: 'linear' }
+			]
+		]);
+	}
 </script>
 
 <section {@attach scope.attach}>

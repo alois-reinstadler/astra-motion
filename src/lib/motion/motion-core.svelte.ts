@@ -38,6 +38,7 @@ import { resolveMotionTarget } from './targets.js';
 import { coordinatePresence } from './presence-batch.js';
 import { claimMotionOwnership } from './ownership.js';
 import { prepareMotionHandoff } from './motion-compat.js';
+import { ownsMotionAnimation } from './animation-ownership.js';
 import { renderedMotionStyle } from './rendered-style.js';
 import { snapshotMotionOptions } from './options-snapshot.js';
 import {
@@ -361,6 +362,7 @@ function createBinding(
 				const animation = value.animation;
 				if (
 					animation?.state === 'running' &&
+					ownsMotionAnimation(visual!, animation) &&
 					'pause' in animation &&
 					typeof animation.pause === 'function' &&
 					'play' in animation &&
@@ -601,17 +603,17 @@ function createBinding(
 			// A policy update can leave the animation target unchanged. Finish existing
 			// positional playback directly; the state resolver correctly skips unchanged
 			// targets and must not restart independent paint animations to apply policy.
-			const completed = new Set();
+			const completed: object[] = [];
 			visual.values.forEach((value, key) => {
 				const animation = value.animation;
 				if (
 					positionalKeys.has(key) &&
 					animation &&
-					!completed.has(animation) &&
+					!completed.includes(animation) &&
 					'complete' in animation &&
 					typeof animation.complete === 'function'
 				) {
-					completed.add(animation);
+					completed.push(animation);
 					animation.complete();
 				}
 			});

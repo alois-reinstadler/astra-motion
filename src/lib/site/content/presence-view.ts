@@ -255,6 +255,7 @@ export const presenceViewDocs: DocPage[] = [
 				text: [
 					'A visible panel responds to mode="hidden" by becoming inert and entering its exiting phase. Descendant motion exits and usePresence removal registrations finish together. Astra-owned animation work remains active during this phase so the exit can complete.',
 					'After completion the phase becomes hidden, the host uses display: none, and activity-aware Astra work is suspended. Revealing it makes the retained subtree active and lets its animate targets run again. No initial entrance is replayed merely because the same child is shown again.',
+					'An externally animated MotionValue keeps its original owner. Hiding a component that reads that value stops its rendering without pausing playback used by visible consumers. An animate target or animation-controls command that starts playback on the value owns that playback and pauses it with the component.',
 					'If the panel is revealed before its exit finishes, it returns to visible immediately and its in-flight removal generation is invalidated. The input and component identities are retained through the reversal. A panel initially rendered hidden does not run an entrance or an exit before becoming hidden.'
 				],
 				table: {

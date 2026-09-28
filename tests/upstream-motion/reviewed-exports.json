@@ -50,6 +50,7 @@
 			"createAnimationState",
 			"createBox",
 			"createDelta",
+			"createGeneratorEasing",
 			"frame",
 			"getDefaultTransition",
 			"getFinalKeyframe",
@@ -61,6 +62,7 @@
 			"isDragActive",
 			"isElementTextInput",
 			"isForcedMotionValue",
+			"isGenerator",
 			"isMotionValue",
 			"isPrimaryPointer",
 			"isTransitionDefined",
@@ -112,8 +114,10 @@
 				"spring",
 				"isElementTextInput",
 				"time"
-			]
+			],
+			"sequence path timing": ["createGeneratorEasing", "isGenerator"]
 		},
-		"evidence": "docs/parity/values-audit.md, docs/parity/lazy-audit.md, component/view/gesture parity browser suites; export presence alone is not behavioral qualification"
+		"evidence": "docs/parity/values-audit.md, docs/parity/lazy-audit.md, component/view/gesture parity browser suites; export presence alone is not behavioral qualification",
+		"sequencePathEvidence": "Motion DOM 13.4.4 public index exports animation/generators/utils/{create-generator-easing,is-generator}. createGeneratorEasing returns seconds from the same spring generator; isGenerator identifies the public applyToOptions contract. sequence-path.ts uses these for documented path segments while preserving one engine and source sequence timing. Behavioral path/ownership review belongs to the integration source suites; export existence alone is not evidence."
 	}
 }

@@ -41,7 +41,7 @@ export function completeMotionPlayback(playback: AnimationPlaybackControls): voi
 }
 
 /**
- * Motion cancellation boundary (qualified with motion-dom 13.4.2).
+ * Motion cancellation boundary (qualified with motion-dom 13.4.4).
  * Keep these two private fields isolated here:
  * Async.animation's public getter flushes unrelated pending keyframe measurements;
  * Native.cancel() leaves a queued onfinish able to overwrite a replacement owner.
