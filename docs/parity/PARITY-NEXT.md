@@ -72,6 +72,17 @@ engine checks, production build and strict publint pass. The runtime still impor
 71 Motion DOM and 7 Motion symbols, with no dependency upgrade. Final installed
 package and remote delivery evidence qualify the exact delivering revision.
 
+The [installed-package evidence](parity-next-package.json) records **7/7 plain
+Svelte fixtures and 14/14 SvelteKit cases** in Chromium, strict installed
+declarations, production builds and bundle isolation. The clean source revision
+is `4b2a4b6f98b058c787d81d42f702640a235dbbaf`; archive SHA-256 is
+`2d064554821e139f9c704cd0aaad5bab117ac7efef0817e41554fc559d447d47`.
+The subsequent evidence-only commit does not change the published package.
+Shared Chrome also confirmed retained input identity/value through Activity
+hide/show and a native View forward/back transition with no remaining animations,
+console warnings/errors, asset failures or horizontal overflow. The Activity
+screenshot was inspected. Full remote matrices and Pages must pass for delivery.
+
 Local WebKit uses task-isolated launcher wrappers with the existing extracted
 GTK/GStreamer libraries and Mesa EGL manifest. The dependency-catalogue preflight
 cannot see that injected stack and is bypassed locally; the actual browser and all

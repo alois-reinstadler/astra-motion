@@ -1,0 +1,189 @@
+{
+	"date": "2026-09-28",
+	"archiveSha256": "2d064554821e139f9c704cd0aaad5bab117ac7efef0817e41554fc559d447d47",
+	"source": {
+		"commit": "4b2a4b6f98b058c787d81d42f702640a235dbbaf",
+		"dirty": false
+	},
+	"plain": {
+		"status": "passed",
+		"results": [
+			{
+				"browser": "chromium",
+				"version": "151.0.7922.34",
+				"cases": [
+					{
+						"fixture": "Parity",
+						"assertions": [
+							"SSR/hydration",
+							"MotionValue derivation",
+							"managed presence exits",
+							"activity state/frame pause/reveal and hidden scalar spring targets",
+							"owner animation/frame/subscription cleanup",
+							"async view fallback",
+							"external constrained drag",
+							"controlled Reorder"
+						],
+						"requests": ["/Parity/assets/index-C9MXTMpT.js"]
+					},
+					{
+						"fixture": "Eager",
+						"assertions": ["SSR/hydration initial:false", "reactive target animation"],
+						"requests": ["/Eager/assets/index-CFVfuQKH.js"]
+					},
+					{
+						"fixture": "LazyBasic",
+						"assertions": [
+							"SSR initial:false",
+							"typed hydration state",
+							"DOM/ref identity",
+							"no early feature request",
+							"deferred chunk request",
+							"latest pending target"
+						],
+						"requests": [
+							"/LazyBasic/assets/index-Cu3I0CpH.js",
+							"/LazyBasic/assets/dom-animation-C1jaH_-L.js"
+						]
+					},
+					{
+						"fixture": "LazyFull",
+						"assertions": [
+							"SSR initial:false",
+							"typed hydration state",
+							"DOM/ref identity",
+							"no early feature request",
+							"deferred chunk request",
+							"latest pending target"
+						],
+						"requests": [
+							"/LazyFull/assets/index-DUJhV6Cx.js",
+							"/LazyFull/assets/dom-max-DJptTKMd.js"
+						]
+					},
+					{
+						"fixture": "LazySync",
+						"assertions": ["SSR/hydration", "synchronous basic features"],
+						"requests": ["/LazySync/assets/index-BOawtPJO.js"]
+					},
+					{
+						"fixture": "Hybrid",
+						"assertions": ["SSR/hydration", "scoped playback", "completed controls released"],
+						"requests": ["/Hybrid/assets/index-BWeL0iut.js"]
+					},
+					{
+						"fixture": "Mini",
+						"assertions": ["SSR/hydration", "scoped playback", "completed controls released"],
+						"requests": ["/Mini/assets/index-BYWHTDIv.js"]
+					}
+				]
+			}
+		]
+	},
+	"kit": {
+		"browserCases": [
+			{
+				"engine": "chromium",
+				"case": "all public exports render and hydrate",
+				"passed": true
+			},
+			{
+				"engine": "chromium",
+				"case": "SSR initial=false, retarget, native component identity and focus",
+				"passed": true
+			},
+			{
+				"engine": "chromium",
+				"case": "/state native presence and rapid reversal",
+				"passed": true
+			},
+			{
+				"engine": "chromium",
+				"case": "/state-lite native presence and rapid reversal",
+				"passed": true
+			},
+			{
+				"engine": "chromium",
+				"case": "automatic layout survives production optimization",
+				"passed": true
+			},
+			{
+				"engine": "chromium",
+				"case": "MotionValue store binding",
+				"passed": true
+			},
+			{
+				"engine": "chromium",
+				"case": "inherited variant pose in raw SSR and hydrated HTML",
+				"passed": true
+			},
+			{
+				"engine": "chromium",
+				"case": "nested mutation and replacement without remount, tag/direct/getter",
+				"passed": true
+			},
+			{
+				"engine": "chromium",
+				"case": "native text/number/checkbox bindings, typed refs, events and ref cleanup",
+				"passed": true
+			},
+			{
+				"engine": "chromium",
+				"case": "timeline stop settles cancelled and holds its pose",
+				"passed": true
+			},
+			{
+				"engine": "chromium",
+				"case": "live local reduced-motion policy finishes replay with a fresh settlement",
+				"passed": true
+			},
+			{
+				"engine": "chromium",
+				"case": "shared route handoff while unrelated exit retains a non-inert source",
+				"passed": true,
+				"oldName": "astra_005b00220022002c002200630061007200640022005d"
+			},
+			{
+				"engine": "chromium",
+				"case": "isolated SvelteKit view navigation fallback",
+				"passed": true
+			},
+			{
+				"engine": "chromium",
+				"case": "production SSR without JavaScript",
+				"passed": true
+			}
+		],
+		"provenance": {
+			"buildId": "37cfad806b71ee2037357dbf63cd5df87500bc292431e9497a0b633c8b4a4b1e",
+			"archiveVerified": true,
+			"installedFilesCompared": 1186,
+			"servedIdentityVerified": true,
+			"fetchedAssetHashesVerified": true
+		}
+	},
+	"checks": {
+		"source": "0 errors, 0 warnings",
+		"completeGuideComponents": "0 errors, 0 warnings",
+		"lint": "passed",
+		"serverCases": 203,
+		"toolingCases": 4,
+		"finalAffectedBrowserExecutions": 123,
+		"independentBrowserExecutions": 39,
+		"engines": ["chromium", "firefox", "webkit"],
+		"engineContract": "motion / framer-motion / motion-dom 13.4.4; motion-utils 13.3.0",
+		"productionBuild": "passed",
+		"strictPublint": "passed",
+		"installedDeclarations": "passed",
+		"bundleIsolation": "passed"
+	},
+	"manualChrome": {
+		"activity": "Input node and edited value retained through hidden/display:none/inert and visible phases",
+		"view": "Native API available; trusted forward/back clicks; no remaining animations",
+		"console": "No errors or warnings",
+		"network": "All 49 document/script/stylesheet requests per route returned 200",
+		"layout": "No horizontal overflow; Activity screenshot inspected"
+	},
+	"rawEvidence": "/workspace/astra-motion-parity-next-evidence/",
+	"remainingQualification": "Complete unchanged component, E2E and packed-consumer matrices run in CI for the delivering revision. No mobile hardware qualification."
+}
