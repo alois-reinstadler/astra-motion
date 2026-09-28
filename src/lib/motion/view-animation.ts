@@ -12,6 +12,7 @@ import {
 } from 'motion-dom';
 import { shouldReduceMotion } from './policy.js';
 import type { ViewChange } from './view-registry.js';
+import type { ViewTransition } from './view-types.js';
 
 export interface ViewLayerAnimation {
 	readonly controls: AnimationPlaybackControls;
@@ -58,6 +59,57 @@ export function animateViewChanges(
 		throw new Error(
 			'Astra AnimateView: transitionEnd is not a CSS snapshot animation. Update the real element in the transaction.'
 		);
+	const isProperty = (property: string) =>
+		!['x', 'y', 'z', 'rotate', 'scale', 'cssText', 'transition'].includes(property) &&
+		(property.startsWith('--') ||
+			typeof document.documentElement.style[property as keyof CSSStyleDeclaration] === 'string');
+	for (const [property, value] of Object.entries(values)) {
+		if (value !== undefined && !isProperty(property))
+			throw new Error(
+				`Astra AnimateView: ${property} is not a CSS snapshot property. Use a complete transform string for transforms.`
+			);
+	}
+	const timingKeys = new Set([
+		'duration',
+		'delay',
+		'ease',
+		'times',
+		'stiffness',
+		'damping',
+		'mass',
+		'velocity',
+		'bounce',
+		'visualDuration',
+		'restSpeed',
+		'restDelta',
+		'repeat',
+		'autoplay'
+	]);
+	function validateTiming(timing: ViewTransition | undefined, nested = false) {
+		for (const [key, value] of Object.entries(timing ?? {})) {
+			if (value === undefined) continue;
+			if (key === 'type') {
+				if (typeof value !== 'function')
+					throw new Error(
+						'Astra AnimateView: type must be a generator such as the imported spring function.'
+					);
+			} else if (key === 'repeatType') {
+				if (value !== 'loop' && value !== 'reverse')
+					throw new Error('Astra AnimateView: repeatType must be loop or reverse.');
+			} else if (!timingKeys.has(key)) {
+				if (
+					!nested &&
+					(key === 'layout' || key === 'default' || isProperty(key)) &&
+					typeof value === 'object' &&
+					value !== null
+				)
+					validateTiming(value as ViewTransition, true);
+				else throw new Error(`Astra AnimateView: unsupported snapshot transition option ${key}.`);
+			}
+		}
+	}
+	validateTiming(transition);
+	validateTiming(specific);
 	const custom = Object.keys(values).length > 0;
 	const reduced = shouldReduceMotion(snapshot.options);
 	const animations: AnimationPlaybackControls[] = [];
@@ -95,8 +147,11 @@ export function animateViewChanges(
 				effect.updateTiming({
 					duration: resolved.duration,
 					delay: reduced ? 0 : (options.delay ?? 0) * 1000,
+					iterations: reduced ? 1 : (options.repeat ?? 0) + 1,
+					direction: options.repeatType === 'reverse' ? 'alternate' : 'normal',
 					easing: Array.isArray(easing) ? 'linear' : easing
 				});
+				if (options.autoplay === false && !reduced) animation.pause();
 				animations.push(new NativeAnimationWrapper(animation));
 			}
 			if (custom && matched) {
@@ -112,6 +167,8 @@ export function animateViewChanges(
 					animations.push(
 						new NativeAnimation({
 							...options,
+							repeat: reduced ? 0 : options.repeat,
+							autoplay: reduced ? true : options.autoplay,
 							duration: reduced
 								? 0
 								: options.duration === undefined

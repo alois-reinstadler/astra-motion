@@ -21,6 +21,9 @@ export { default as AnimateView, type AnimateViewProps } from './AnimateView.sve
 export { startViewTransition } from './view-transitions.js';
 export type {
 	ViewAnimationType,
+	ViewAnimationTarget,
+	ViewValueTransition,
+	ViewTransition,
 	ViewAnimationDefinition,
 	ViewAnimationOptions,
 	ViewUpdateContext,

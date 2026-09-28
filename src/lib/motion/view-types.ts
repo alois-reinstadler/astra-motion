@@ -1,12 +1,55 @@
-import type { AnimationPlaybackControls, TargetAndTransition, Transition } from 'motion-dom';
+import type {
+	AnimationPlaybackControls,
+	GeneratorFactory,
+	ValueKeyframesDefinition,
+	ValueTransition
+} from 'motion-dom';
 import type { MotionPolicy } from './policy.js';
 
 export type ViewAnimationType = 'enter' | 'exit' | 'update' | 'share';
+/** Snapshot layers accept native CSS keyframes, not Motion element aliases or SVG attributes. */
+type ViewStyleKey = Exclude<
+	{
+		[K in keyof CSSStyleDeclaration]: CSSStyleDeclaration[K] extends string ? K : never;
+	}[keyof CSSStyleDeclaration],
+	'cssText' | 'transition' | 'x' | 'y' | 'z' | 'rotate' | 'scale'
+>;
+export type ViewValueTransition = Pick<
+	ValueTransition,
+	| 'duration'
+	| 'delay'
+	| 'ease'
+	| 'times'
+	| 'stiffness'
+	| 'damping'
+	| 'mass'
+	| 'velocity'
+	| 'bounce'
+	| 'visualDuration'
+	| 'restSpeed'
+	| 'restDelta'
+	| 'repeat'
+	| 'autoplay'
+> & { type?: GeneratorFactory; repeatType?: 'loop' | 'reverse' };
+export type ViewTransition = ViewValueTransition & {
+	[K in ViewStyleKey | `--${string}` | 'layout' | 'default']?: ViewValueTransition;
+};
+export type ViewAnimationTarget = {
+	[K in ViewStyleKey | `--${string}`]?: ValueKeyframesDefinition;
+} & {
+	transition?: ViewTransition;
+	transitionEnd?: never;
+	x?: never;
+	y?: never;
+	z?: never;
+	scale?: never;
+	rotate?: never;
+};
 export type ViewAnimationDefinition =
-	TargetAndTransition | ((types: string[]) => TargetAndTransition);
+	ViewAnimationTarget | ((types: string[]) => ViewAnimationTarget);
 export interface ViewAnimationOptions extends MotionPolicy {
 	name?: string;
-	transition?: Transition;
+	transition?: ViewTransition;
 	enter?: ViewAnimationDefinition;
 	exit?: ViewAnimationDefinition;
 	update?: ViewAnimationDefinition;
