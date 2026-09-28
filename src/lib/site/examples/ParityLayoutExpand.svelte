@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { motion } from '$lib/motion/index.js';
+	import { AnimatePresence, motion } from '$lib/motion/index.js';
 	let expanded = $state(false);
 </script>
 
@@ -7,7 +7,7 @@
 	<motion.article
 		class="card"
 		layout
-		style={{ width: expanded ? 310 : 230 }}
+		style={{ width: expanded ? 310 : 230, borderRadius: 10 }}
 		transition={{ layout: { type: 'spring', stiffness: 320, damping: 30 } }}
 	>
 		<motion.div layout="position" class="content">
@@ -17,17 +17,18 @@
 				{expanded ? 'Close the note' : 'Read the note'}
 			</button>
 		</motion.div>
-		{#if expanded}
+		<AnimatePresence present={expanded} mode="popLayout">
 			<motion.p
 				class="detail"
 				initial={{ opacity: 0 }}
 				animate={{ opacity: 1 }}
+				exit={{ opacity: 0 }}
 				transition={{ duration: 0.18 }}
 			>
 				Change the real width and content. Layout animation connects the measured sizes while the
 				inner text keeps its proportions.
 			</motion.p>
-		{/if}
+		</AnimatePresence>
 	</motion.article>
 </div>
 
@@ -39,6 +40,7 @@
 		color: #252821;
 	}
 	.demo :global(.card) {
+		position: relative;
 		max-width: 100%;
 		box-sizing: border-box;
 		padding: 23px;

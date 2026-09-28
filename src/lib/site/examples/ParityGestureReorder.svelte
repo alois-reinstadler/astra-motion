@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Reorder, useDragControls } from '$lib/motion/index.js';
+	import { motion, Reorder, useDragControls } from '$lib/motion/index.js';
 	const names = [
 		'Outline',
 		'Research',
@@ -40,27 +40,35 @@
 			style={grid ? 'display:grid;grid-template-columns:1fr 1fr;gap:8px;' : 'display:grid;gap:8px;'}
 		>
 			{#each items as item, index (item)}
-				<Reorder.Item value={item} dragListener={false} dragControls={controls[item]} class="item">
-					<button
-						class="handle"
-						type="button"
-						aria-label={`Drag ${names[item]}`}
-						onpointerdown={(event) => controls[item].start(event)}>{names[item]}</button
-					>
-					<div class="order-actions">
+				<Reorder.Item
+					value={item}
+					dragListener={false}
+					dragControls={controls[item]}
+					class="item"
+					style={{ borderRadius: 6 }}
+				>
+					<motion.div layout="position">
 						<button
+							class="handle"
 							type="button"
-							aria-label={`Move ${names[item]} earlier`}
-							disabled={index === 0}
-							onclick={() => move(item, -1)}>Earlier</button
+							aria-label={`Drag ${names[item]}`}
+							onpointerdown={(event) => controls[item].start(event)}>{names[item]}</button
 						>
-						<button
-							type="button"
-							aria-label={`Move ${names[item]} later`}
-							disabled={index === items.length - 1}
-							onclick={() => move(item, 1)}>Later</button
-						>
-					</div>
+						<div class="order-actions">
+							<button
+								type="button"
+								aria-label={`Move ${names[item]} earlier`}
+								disabled={index === 0}
+								onclick={() => move(item, -1)}>Earlier</button
+							>
+							<button
+								type="button"
+								aria-label={`Move ${names[item]} later`}
+								disabled={index === items.length - 1}
+								onclick={() => move(item, 1)}>Later</button
+							>
+						</div>
+					</motion.div>
 				</Reorder.Item>
 			{/each}
 		</Reorder.Group>
