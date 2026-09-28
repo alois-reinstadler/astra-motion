@@ -1,5 +1,9 @@
 # Motion parity contract and evidence
 
+Latest example qualification: [phone feedback and performance evidence](PHONE-FEEDBACK.md)
+records list/grid content correction, continuous note collapse, and independent
+shared View artwork/title snapshots. Physical iPhone performance remains unqualified.
+
 Follow-up: [Activity, View types and difficult geometry](PARITY-NEXT.md) records
 nested retained exits, automatic Activity pop roots, native View contracts, and
 static 3D/perspective plane qualification. [Independent focused verification](NEXT-FOCUSED-VERIFICATION.md)

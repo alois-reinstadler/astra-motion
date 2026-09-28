@@ -1,5 +1,8 @@
 # Final parity qualification
 
+Latest example qualification: [phone feedback and performance evidence](PHONE-FEEDBACK.md)
+records the unchanged independent regressions and current bundle provenance.
+
 Follow-up: [Activity, View types and difficult geometry](PARITY-NEXT.md) records
 nested retained exits, automatic Activity pop roots, native View contracts, and
 static 3D/perspective plane qualification. [Independent focused verification](NEXT-FOCUSED-VERIFICATION.md)

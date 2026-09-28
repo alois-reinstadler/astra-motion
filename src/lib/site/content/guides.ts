@@ -255,7 +255,7 @@ export const guidesDocs: DocPage[] = [
 				id: 'measurements',
 				title: 'Measure Astra’s output',
 				text: [
-					'These measurements come from independent production applications installed from Astra’s packed package on 28 September 2026, using Svelte 5.57.0, Vite 8.2.2 and Rolldown 1.2.11. They include Svelte and each fixture’s bootstrap code. They describe complete example applications, not library-only sizes.',
+					'These measurements come from independent production applications installed from release 93f06a3’s packed package on 28 September 2026, using Svelte 5.57.0, Vite 8.2.2 and Rolldown 1.2.11. They include Svelte and each fixture’s bootstrap code. They describe complete example applications, not library-only sizes.',
 					'Each application counts its initial shared chunks once. Compressed totals sum separately compressed HTTP assets. Deferred bytes are requested when the feature loader runs; do not add figures from separate applications. The recorded module graphs verify that basic features exclude pan, drag and layout projection, while mini excludes the hybrid sequence engine.',
 					'Use the repository’s bundle and installed-consumer checks to reproduce the measurements. Compare the same bundler, minifier, compression settings and shared dependencies. A docs page containing many live examples naturally imports more features than an isolated component.'
 				],
@@ -267,14 +267,24 @@ export const guidesDocs: DocPage[] = [
 						'Deferred gzip bytes'
 					],
 					rows: [
-						['Eager motion', '200,742', '67,944', '0'],
-						['Deferred domAnimation', '71,826', '26,461', '28,923'],
-						['Deferred domMax', '71,937', '26,518', '46,433'],
-						['Synchronous domAnimation', '147,619', '51,896', '0'],
-						['Hybrid useAnimate', '96,262', '34,721', '0'],
+						['Eager motion', '201,607', '68,259', '0'],
+						['Deferred domAnimation', '71,826', '26,462', '28,926'],
+						['Deferred domMax', '71,937', '26,517', '46,767'],
+						['Synchronous domAnimation', '147,628', '51,899', '0'],
+						['Hybrid useAnimate', '96,316', '34,736', '0'],
 						['Mini useAnimate', '42,330', '16,227', '0']
 					]
 				}
+			},
+			{
+				id: 'runtime-cost',
+				title: 'Budget layout work as well as downloads',
+				text: [
+					'Lazy loading reduces initial download and parsing; it does not make an active layout animation cheaper. Animate transforms and opacity for continuous gestures, give projected text its own layout="position" boundary, and keep the number of simultaneously measured layout elements small.',
+					'The recorded desktop production benchmark found a real large-grid limit: automatic layout with 500 cells had a 33.2 ms p95 frame interval at normal CPU speed and 183.3 ms at 4× slowdown. That historical benchmark used an older archive, Linux Chromium and software rendering; it is not a current iPhone or Safari frame-rate guarantee. Its zero idle reads and settled animations qualify those trials, not every application.',
+					'Profile your production build on the target phone, including interrupted animations, scrolling and reduced motion. For large collections, window the visible items, reduce simultaneous layout changes, or use an explicit layout transaction when you control the update. Preserve readable content and usable controls when motion is reduced.'
+				],
+				related: ['layout', 'accessibility']
 			},
 			{
 				id: 'verify',

@@ -629,6 +629,7 @@ export const gesturesLayoutPages: DocPage[] = [
 				text: [
 					'Use dragListener={false} and a stable useDragControls() controller for a dedicated handle. The demonstration also supplies Earlier/Later buttons so pointer dragging is an enhancement rather than the only way to reorder.',
 					'Automatic axes follow responsive layout changes, including a vertical list becoming a wrapped grid during a drag. One-dimensional lists swap when movement crosses a neighbor’s center in the current direction. Wrapped layouts use row and box geometry, including right-to-left rows.',
+					'When switching between list and grid changes an item’s width, put its text and controls inside a motion element with layout="position". The item can still animate its full size while the inner boundary corrects inherited scale. Set borderRadius through the item’s style prop for corner correction.',
 					'Dragging toward an edge scrolls the nearest scrollable container or the document. Scrolling continues while the pointer rests near that edge and stops on release, cancellation, or removal. The group disables scroll anchoring to avoid the browser fighting reordering. Current Motion references do not define autoScroll, edgeThreshold, maxSpeed, or deadzone props; Astra exposes no invented equivalents.'
 				],
 				related: ['use-drag-controls', 'layout', 'accessibility']
@@ -673,7 +674,8 @@ export const gesturesLayoutPages: DocPage[] = [
 				title: 'Change the layout and let Astra connect it',
 				text: [
 					'Add layout to a motion element, then change its classes, CSS, content, or surrounding layout through ordinary Svelte state. Astra measures the old and new boxes and animates the difference with transforms. You do not need to calculate a pixel animation for each layout rule.',
-					'Put the final width, height, alignment, or other layout property in normal style or CSS. Use animate for values that should be tweened directly. layout="position" on an inner element helps its content retain its proportions as the parent resizes.'
+					'Put the final width, height, alignment, or other layout property in normal style or CSS. Use animate for values that should be tweened directly. layout="position" on an inner element helps its content retain its proportions as the parent resizes.',
+					'The expandable note uses AnimatePresence mode="popLayout" for its fading paragraph. The outgoing text leaves the flow immediately and retains its captured width, so it cannot rewrap and temporarily grow the card as the card narrows. The positioned card then animates directly to its collapsed size.'
 				],
 				example: 'layout-expand',
 				code: {
