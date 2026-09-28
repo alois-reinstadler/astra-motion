@@ -128,19 +128,25 @@ export class ProjectionBoundary extends HTMLProjectionNode {
 		this.mount(element);
 	}
 
+	private restoreProperty(property: string) {
+		const saved = this.saved?.get(property);
+		if (!saved) return;
+		const last = this.written.get(property);
+		if (
+			!last ||
+			(this.element.style.getPropertyValue(property) === last.value &&
+				this.element.style.getPropertyPriority(property) === last.priority)
+		) {
+			if (saved.value) this.element.style.setProperty(property, saved.value, saved.priority);
+			else this.element.style.removeProperty(property);
+		}
+		this.saved!.delete(property);
+		this.written.delete(property);
+	}
+
 	private restore = () => {
 		if (!this.saved) return;
-		for (const [key, { value, priority }] of this.saved) {
-			const last = this.written.get(key);
-			if (
-				last &&
-				(this.element.style.getPropertyValue(key) !== last.value ||
-					this.element.style.getPropertyPriority(key) !== last.priority)
-			)
-				continue;
-			if (value) this.element.style.setProperty(key, value, priority);
-			else this.element.style.removeProperty(key);
-		}
+		for (const property of this.saved.keys()) this.restoreProperty(property);
 		this.saved = undefined;
 		this.written.clear();
 	};
@@ -176,6 +182,9 @@ export class ProjectionBoundary extends HTMLProjectionNode {
 	}
 
 	private renderBoundary = () => {
+		// Perspective is suppressed only while measuring. It must be restored even
+		// while this wrapper keeps a counter-scale transform during parent projection.
+		this.restoreProperty('perspective');
 		let x = 1,
 			y = 1;
 		for (const ancestor of this.path) {
@@ -189,7 +198,7 @@ export class ProjectionBoundary extends HTMLProjectionNode {
 		this.preserve();
 		const { x: ox, y: oy, z: oz } = this.origin;
 		// Motion counter-scales descendants in the unrotated measurement space.
-		// Conjugate the authored affine transform so that the browser applies the
+		// Conjugate the authored transform so that the browser applies the
 		// inherited projection scale in that same space: S E' = E S.
 		const matrix = new DOMMatrix()
 			.translate(-ox, -oy, -oz)

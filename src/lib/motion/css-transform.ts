@@ -70,6 +70,26 @@ function layoutOrigin(element: HTMLElement) {
 	return { x, y };
 }
 
+/** Grouping properties flatten descendants even when computed transform-style says preserve-3d. */
+function flattensChildren(css: CSSStyleDeclaration) {
+	const containsPaint = /(?:^|\s)(paint|strict|content)(?:$|\s)/.test(css.contain);
+	return (
+		css.transformStyle !== 'preserve-3d' ||
+		Number(css.opacity) < 1 ||
+		[css.overflowX, css.overflowY].some((value) => value !== 'visible' && value !== 'clip') ||
+		css.filter !== 'none' ||
+		css.clip !== 'auto' ||
+		css.clipPath !== 'none' ||
+		css.isolation === 'isolate' ||
+		css.mixBlendMode !== 'normal' ||
+		(css.maskImage && css.maskImage !== 'none') ||
+		(css.getPropertyValue('mask-border-source') &&
+			css.getPropertyValue('mask-border-source') !== 'none') ||
+		containsPaint ||
+		css.contentVisibility === 'hidden'
+	);
+}
+
 /** Compose ancestor CSS transforms and child perspective before projecting the z=0 plane. */
 export function readPagePlane(element: HTMLElement) {
 	const chain: HTMLElement[] = [];
@@ -88,7 +108,7 @@ export function readPagePlane(element: HTMLElement) {
 		previous = origin;
 		if (node === element) break;
 		// A flat ancestor composites its children into its own plane before its transform.
-		if (css.transformStyle !== 'preserve-3d') {
+		if (flattensChildren(css)) {
 			const flatten = new DOMMatrix();
 			flatten.m33 = 0;
 			matrix = matrix.multiply(flatten);
