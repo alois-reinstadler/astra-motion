@@ -1,3 +1,5 @@
+import { readPagePlane } from './css-transform.js';
+
 export interface MotionPoint {
 	x: number;
 	y: number;
@@ -22,40 +24,31 @@ export function correctParentTransform(
 		const element = resolveElement(parent);
 		const view = element?.ownerDocument.defaultView;
 		if (!element || !view) return point;
-		const style = view.getComputedStyle(element);
-		let matrix = new DOMMatrix();
-		if (style.rotate && style.rotate !== 'none') {
-			const parts = style.rotate.split(' ');
-			const angle = parts.at(-1)!;
-			const amount = parseFloat(angle);
-			const degrees = angle.endsWith('grad')
-				? amount * 0.9
-				: angle.endsWith('turn')
-					? amount * 360
-					: angle.endsWith('rad')
-						? (amount * 180) / Math.PI
-						: amount;
-			if (parts.length === 1 || parts[0] === 'z') matrix = matrix.rotate(degrees);
+		if (element instanceof view.SVGGraphicsElement) {
+			const matrix = element.getScreenCTM();
+			if (!matrix || Math.abs(matrix.a * matrix.d - matrix.b * matrix.c) < 1e-10) return point;
+			const local = new DOMPoint(point.x - view.scrollX, point.y - view.scrollY).matrixTransform(
+				matrix.inverse()
+			);
+			return Number.isFinite(local.x) && Number.isFinite(local.y)
+				? { x: local.x, y: local.y }
+				: point;
 		}
-		if (style.scale && style.scale !== 'none') {
-			const [x, y = x] = style.scale.split(' ').map(Number);
-			matrix = matrix.scale(x, y);
-		}
-		if (style.transform && style.transform !== 'none')
-			matrix = matrix.multiply(new DOMMatrix(style.transform));
-		const determinant = matrix.a * matrix.d - matrix.b * matrix.c;
-		if (!matrix.is2D || Math.abs(determinant) < 1e-10) return point;
-		const rect = element.getBoundingClientRect();
-		const center = {
-			x: rect.left + view.scrollX + rect.width / 2,
-			y: rect.top + view.scrollY + rect.height / 2
-		};
-		const dx = point.x - center.x;
-		const dy = point.y - center.y;
-		return {
-			x: center.x + (matrix.d * dx - matrix.c * dy) / determinant,
-			y: center.y + (-matrix.b * dx + matrix.a * dy) / determinant
-		};
+		const { matrix: m, origin } = readPagePlane(element as HTMLElement);
+		// Invert the projected plane (a 3x3 homography), not a 4D point with an invented z.
+		const a = m.m11 - point.x * m.m14,
+			b = m.m21 - point.x * m.m24;
+		const c = m.m12 - point.y * m.m14,
+			d = m.m22 - point.y * m.m24;
+		const x = point.x * m.m44 - m.m41,
+			y = point.y * m.m44 - m.m42;
+		const determinant = a * d - b * c;
+		if (Math.abs(determinant) < 1e-10) return point;
+		const localX = (d * x - b * y) / determinant;
+		const localY = (a * y - c * x) / determinant;
+		return Number.isFinite(localX) && Number.isFinite(localY)
+			? { x: origin.x + localX, y: origin.y + localY }
+			: point;
 	};
 }
 

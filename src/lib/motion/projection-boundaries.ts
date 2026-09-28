@@ -1,3 +1,4 @@
+import { readTransformMatrix } from './css-transform.js';
 import {
 	HTMLProjectionNode,
 	createBox,
@@ -99,7 +100,7 @@ export class ProjectionBoundary extends HTMLProjectionNode {
 	private written = new Map<string, { value: string; priority: string }>();
 	private element: HTMLElement;
 	private authored?: DOMMatrix;
-	private origin = { x: 0, y: 0 };
+	private origin = { x: 0, y: 0, z: 0 };
 	previousOffset?: { x: number; y: number };
 	get affine() {
 		return this.authored;
@@ -163,7 +164,7 @@ export class ProjectionBoundary extends HTMLProjectionNode {
 	private preserve() {
 		if (this.saved) return;
 		this.saved = new Map(
-			['transform', 'translate', 'rotate', 'scale'].map((key) => [
+			['transform', 'translate', 'rotate', 'scale', 'perspective'].map((key) => [
 				key,
 				{
 					value: this.element.style.getPropertyValue(key),
@@ -186,18 +187,18 @@ export class ProjectionBoundary extends HTMLProjectionNode {
 			return;
 		}
 		this.preserve();
-		const { x: ox, y: oy } = this.origin;
+		const { x: ox, y: oy, z: oz } = this.origin;
 		// Motion counter-scales descendants in the unrotated measurement space.
 		// Conjugate the authored affine transform so that the browser applies the
 		// inherited projection scale in that same space: S E' = E S.
 		const matrix = new DOMMatrix()
-			.translate(-ox, -oy)
+			.translate(-ox, -oy, -oz)
 			.scale(1 / x, 1 / y)
-			.translate(ox, oy)
+			.translate(ox, oy, oz)
 			.multiply(this.authored)
-			.translate(-ox, -oy)
+			.translate(-ox, -oy, -oz)
 			.scale(x, y)
-			.translate(ox, oy);
+			.translate(ox, oy, oz);
 		for (const property of ['translate', 'rotate', 'scale']) this.write(property, 'none');
 		this.write('transform', matrix.toString());
 	};
@@ -217,33 +218,18 @@ export class ProjectionBoundary extends HTMLProjectionNode {
 		this.authored = undefined;
 		for (const key of Object.keys(this.latestValues)) delete this.latestValues[key];
 		const css = getComputedStyle(this.element);
-		let matrix = new DOMMatrix();
-		if (css.translate !== 'none') {
-			const [x = '0', y = '0', z = '0'] = css.translate.split(' ');
-			if (parseFloat(z)) return;
-			const length = (value: string, size: number) =>
-				parseFloat(value) * (value.endsWith('%') ? size / 100 : 1);
-			matrix = matrix.translate(
-				length(x, this.element.offsetWidth),
-				length(y, this.element.offsetHeight)
-			);
-		}
-		if (css.rotate !== 'none') {
-			const rotation = css.rotate.split(' ');
-			if (rotation.length > 1 && rotation[0] !== 'z') return;
-			matrix = matrix.rotate(parseFloat(rotation.at(-1)!));
-		}
-		if (css.scale !== 'none') {
-			const [x, y = x, z = 1] = css.scale.split(' ').map(Number);
-			if (z !== 1) return;
-			matrix = matrix.scale(x, y);
-		}
-		matrix = matrix.multiply(new DOMMatrix(css.transform === 'none' ? undefined : css.transform));
-		if (!matrix.is2D) return;
-		const scaleX = Math.hypot(matrix.a, matrix.b);
-		const scaleY = scaleX ? Math.abs((matrix.a * matrix.d - matrix.b * matrix.c) / scaleX) : 0;
+		const matrix = readTransformMatrix(this.element, css);
+		// Measure a flat layout plane, then restore the full authored 4x4 transform.
+		// Projected bounding boxes cannot be inverted as axis-aligned 2D boxes.
+		const scaleX = matrix.is2D ? Math.hypot(matrix.a, matrix.b) : 1;
+		const scaleY =
+			matrix.is2D && scaleX ? Math.abs((matrix.a * matrix.d - matrix.b * matrix.c) / scaleX) : 1;
 		if (!scaleX || !scaleY) return;
-		const [originX, originY] = css.transformOrigin.split(' ').map(parseFloat);
+		if (css.perspective !== 'none') {
+			this.preserve();
+			this.write('perspective', 'none');
+		}
+		const [originX, originY, originZ = 0] = css.transformOrigin.split(' ').map(parseFloat);
 		Object.assign(this.latestValues, {
 			x: matrix.e,
 			y: matrix.f,
@@ -259,7 +245,7 @@ export class ProjectionBoundary extends HTMLProjectionNode {
 			css.scale !== 'none'
 		) {
 			this.authored = matrix;
-			this.origin = { x: originX, y: originY };
+			this.origin = { x: originX, y: originY, z: originZ };
 			this.preserve();
 			for (const property of ['translate', 'rotate', 'scale']) this.write(property, 'none');
 			this.write(

@@ -247,6 +247,37 @@ describe('complete drag sessions', () => {
 		expect(moves).toBe(stopped);
 		expect(isDragActive()).toBe(false);
 	});
+	it.each(['preserve-3d', 'flat'])(
+		'inverts nested perspective planes at two actual pointer locations (%s)',
+		(transformStyle) => {
+			const host = document.createElement('div');
+			host.style.cssText =
+				'position:fixed;left:120px;top:95px;width:500px;height:350px;perspective:650px;perspective-origin:47px 160px;transform:rotate(8deg) rotateY(-12deg);transform-style:preserve-3d';
+			host.style.transformStyle = transformStyle;
+			const parent = document.createElement('div');
+			parent.style.cssText =
+				'position:relative;left:30px;top:25px;width:300px;height:220px;transform:rotateY(35deg) rotateX(-18deg);transform-origin:23px 71px 15px';
+			host.append(parent);
+			document.body.append(host);
+			cleanups.push(() => host.remove());
+			const markers = [
+				[40, 35],
+				[130, 95]
+			].map(([x, y]) => {
+				const marker = document.createElement('span');
+				marker.style.cssText = `position:absolute;left:${x}px;top:${y}px;width:0;height:0`;
+				parent.append(marker);
+				return marker;
+			});
+			const correct = correctParentTransform(parent);
+			const points = markers.map((marker) => {
+				const rect = marker.getBoundingClientRect();
+				return correct({ x: rect.left + window.scrollX, y: rect.top + window.scrollY });
+			});
+			expect(points[1].x - points[0].x).toBeCloseTo(90, 1);
+			expect(points[1].y - points[0].y).toBeCloseTo(60, 1);
+		}
+	);
 	it('corrects transformed parent axes and SVG viewBox origin/letterboxing', () => {
 		const parent = document.createElement('div');
 		parent.style.cssText = 'position:fixed;left:100px;top:100px;width:100px;height:100px;scale:2;';

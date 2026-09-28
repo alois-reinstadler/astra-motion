@@ -64,6 +64,8 @@ describe('unregistered projection boundaries', () => {
 		'scale(1.6, .7)',
 		'scale(-1.2, .8)',
 		'rotate(32deg)',
+		'rotateY(35deg) rotateX(-18deg)',
+		'perspective(650px) rotateY(35deg) rotateX(-18deg)',
 		'translate(18px, 11px) rotate(-24deg) skewX(13deg) scale(1.3, .8)'
 	])('keeps transformed geometry continuous through %s', async (transform) => {
 		const f = await fixture(transform);
@@ -86,6 +88,43 @@ describe('unregistered projection boundaries', () => {
 			});
 			await seek(f.node, 0);
 			near(rect(f.node), middle);
+		} finally {
+			await f.dispose();
+		}
+	});
+	it('retains nested 3D planes under CSS perspective and restores individual transforms', async () => {
+		const f = await fixture('rotateY(32deg) rotateX(-15deg)');
+		f.host.style.perspective = '700px';
+		f.host.style.perspectiveOrigin = '31px 170px';
+		f.wrapper.style.transformStyle = 'preserve-3d';
+		f.wrapper.style.transformOrigin = '23px 71px 18px';
+		const inner = document.createElement('div');
+		inner.style.cssText =
+			'width:240px;height:160px;translate:10% 12px 25px!important;rotate:1 2 0 18deg!important;scale:.8 1.3 1.2!important;transform-origin:17px 23px 11px';
+		f.wrapper.append(inner);
+		inner.append(f.node);
+		await frames();
+		const original = inner.getAttribute('style');
+		const perspective = f.host.getAttribute('style');
+		try {
+			const before = rect(f.node);
+			f.layout.update(() => {
+				f.node.style.left = '100px';
+				f.node.style.width = '120px';
+			});
+			await seek(f.node, 0);
+			near(rect(f.node), before);
+			await seek(f.node, 0.4);
+			const middle = rect(f.node);
+			expect(Math.abs(middle.x - before.x)).toBeGreaterThan(10);
+			f.layout.update(() => {
+				f.node.style.left = '20px';
+				f.node.style.width = '90px';
+			});
+			await seek(f.node, 0);
+			near(rect(f.node), middle);
+			expect(inner.getAttribute('style')).toBe(original);
+			expect(f.host.getAttribute('style')).toBe(perspective);
 		} finally {
 			await f.dispose();
 		}
@@ -267,6 +306,58 @@ describe('unregistered projection boundaries', () => {
 			await f.dispose();
 		}
 	});
+	it.each([false, true])(
+		'counter-scales a perspective wrapper while its registered parent and child resize (parent perspective=%s)',
+		async (parentPerspective) => {
+			const f = await fixture(
+				`${parentPerspective ? '' : 'perspective(650px) '}rotateY(32deg) rotateX(-15deg)`
+			);
+			if (parentPerspective) f.host.style.perspective = '650px';
+			const releaseParent = f.layout()(f.host);
+			await frames();
+			const reference = f.host.cloneNode(true) as HTMLElement;
+			const referenceNode = reference.firstElementChild!.firstElementChild as HTMLElement;
+			referenceNode.style.removeProperty('transform');
+			reference.style.visibility = 'hidden';
+			document.body.append(reference);
+			const original = f.wrapper.getAttribute('style');
+			try {
+				const before = rect(f.node);
+				f.layout.update(() => {
+					f.host.style.width = '650px';
+					f.node.style.left = '110px';
+					f.node.style.width = '120px';
+				});
+				await frames();
+				for (const node of [f.host, f.node]) {
+					const animation = visualElementStore.get(node)!.projection!.currentAnimation!;
+					animation.pause();
+					animation.time = 0;
+				}
+				await frames();
+				near(rect(f.node), before);
+				for (const node of [f.host, f.node])
+					visualElementStore.get(node)!.projection!.currentAnimation!.time = 0.4;
+				reference.style.width = '560px';
+				referenceNode.style.left = '44px';
+				referenceNode.style.width = '90px';
+				await frames();
+				near(rect(f.node), rect(referenceNode));
+				for (const node of [f.host, f.node])
+					visualElementStore.get(node)!.projection!.currentAnimation!.complete();
+				reference.style.width = '650px';
+				referenceNode.style.left = '110px';
+				referenceNode.style.width = '120px';
+				await frames();
+				near(rect(f.node), rect(referenceNode));
+				expect(f.wrapper.getAttribute('style')).toBe(original);
+			} finally {
+				reference.remove();
+				releaseParent?.();
+				await f.dispose();
+			}
+		}
+	);
 	it('restores compensated wrapper declarations on teardown and permits reattachment', async () => {
 		const f = await fixture();
 		f.wrapper.style.cssText +=
