@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
+import { settlePointerTarget } from './pointer-target.js';
 
 const groups = [
 	[
@@ -361,7 +362,9 @@ test('canonical component and deferred-loading source stays identical when copie
 			.getByRole('region', { name: `${filename} source`, exact: true })
 			.locator('code');
 		expect(await code.textContent()).toBe(source);
-		await example.getByRole('button', { name: `Copy ${filename}`, exact: true }).click();
+		const copy = example.getByRole('button', { name: `Copy ${filename}`, exact: true });
+		await settlePointerTarget(copy);
+		await copy.click();
 		await expect(example.locator('details').getByRole('status')).toHaveText('Copied to clipboard');
 		expect(await page.locator('html').getAttribute('data-copied-source')).toBe(source);
 		expect(source).not.toContain('$lib');

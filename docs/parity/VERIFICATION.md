@@ -35,6 +35,18 @@ the production checks above then ran against the stable build.
 
 ## Remote delivery gates
 
+The first remote run on `5226008` passed general checks, all three complete
+source-browser suites and all three complete packed-consumer suites. Chromium
+and Firefox production E2E passed. WebKit production E2E found two missed pointer
+actions in the documentation tests: the trace records native scroll positions
+changing from 3182 to 3261 during the Next-link click and from 432 to 468 during
+the source-copy click. Both actions now use the existing pointer-target settling
+helper, extracted into a shared test utility. The actual trusted clicks, exact
+navigation/source/status assertions and all application code are unchanged.
+Both affected WebKit cases pass locally (2/2); the final remote run must qualify
+the complete corrected revision. This correction does not revise runtime or
+bundle evidence.
+
 The existing [CI workflow](https://github.com/alois-reinstadler/astra-motion/actions/workflows/ci.yml)
 runs all required checks, the complete source-browser matrix, the complete production
 E2E matrix and both complete packed consumers in Chromium, Firefox and WebKit on

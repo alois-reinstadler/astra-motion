@@ -178,3 +178,22 @@ The remaining delivery actions are merging/pushing this candidate, confirming th
 complete default CI matrices and Pages workflow on that exact main revision,
 checking deployed interactions and cleaning owned worktrees/browser resources.
 Workflow run records and the final delivery report record those remote outcomes.
+
+## Remote qualification correction
+
+[#########-] 90% Remote runtime/package gates passed; documentation pointer correction qualified locally.
+
+Main5226008 was merged, pushed and deployed. General checks, all three source-browser
+suites and all three packed-consumer suites passed; Chromium and Firefox production
+E2E passed. Two WebKit documentation clicks missed while native scrolling continued
+through pointer input (79px and36px movements visible in the traces). The existing
+pointer settling helper is now shared by those actions. Trusted clicks and exact
+assertions are preserved, with no application/runtime change. The two affected WebKit
+cases pass locally; the corrected final revision requires remote verification.
+
+Deployed homepage, retained Activity draft, native View swap and Reorder controls
+were exercised in shared Chrome: responses200, no console/asset errors, no overflow.
+The Activity screenshot was inspected. Owned browser tab closed; completed worker
+worktrees archived and removed. Root integration preview/worktree remain until the
+final remote gate closes. A fresh-session review-and-fix handoff is prepared at the
+user's request; this does not replace the independent review already completed.
