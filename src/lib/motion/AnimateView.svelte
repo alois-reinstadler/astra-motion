@@ -1,7 +1,7 @@
 <script lang="ts" module>
 	import type { Snippet } from 'svelte';
 	import type { Attachment } from 'svelte/attachments';
-	import type { ViewAnimationOptions } from './view-types.js';
+	import type { ViewAnimationOptions, ViewTransition } from './view-types.js';
 
 	export type AnimateViewProps = ViewAnimationOptions & {
 		children: Snippet<[Attachment<HTMLElement | SVGElement>]>;
@@ -26,6 +26,9 @@
 	const options = (): ViewAnimationOptions => ({
 		reducedMotion: 'never',
 		...config(),
+		// Shared MotionConfig has a wider animation contract. The native View adapter
+		// validates inherited timing exactly like direct JavaScript options.
+		transition: config().transition as ViewTransition | undefined,
 		...Object.fromEntries(Object.entries(props).filter(([, value]) => value !== undefined))
 	});
 	const attach: Attachment<HTMLElement | SVGElement> = (node) => {

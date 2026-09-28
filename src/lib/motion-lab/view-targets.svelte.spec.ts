@@ -32,6 +32,7 @@ it.each([{ type: 'spring' }, { layout: { type: 'spring' } }, { onUpdate: () => {
 	}
 );
 it('animates typed CSS transform keyframes and generator timing on native snapshots', async () => {
+	expect(typeof document.startViewTransition).toBe('function');
 	const node = document.createElement('div');
 	node.style.cssText = 'width:100px;height:50px;background:red';
 	node.textContent = 'Before';
@@ -66,7 +67,7 @@ it('animates typed CSS transform keyframes and generator timing on native snapsh
 	);
 	try {
 		await handle.ready;
-		if (document.startViewTransition) {
+		{
 			const effects = document
 				.getAnimations()
 				.map((animation) => animation.effect as KeyframeEffect);
@@ -94,7 +95,7 @@ it('animates typed CSS transform keyframes and generator timing on native snapsh
 					)
 					.every((animation) => animation.playState === 'paused')
 			).toBe(true);
-		} else expect(await handle.finished).toBe('unsupported');
+		}
 		expect(node.textContent).toBe('After');
 	} finally {
 		handle.cancel();
