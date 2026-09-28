@@ -4,6 +4,8 @@ export const layoutBridge: {
 	update?: (change: () => void) => void;
 	schedule?: (flush: () => void) => void;
 	refreshPolicy?: (element: HTMLElement) => void;
+	presence?: (element: HTMLElement, present: boolean) => void;
+	invalidate?: (roots: Iterable<Element>) => void;
 } = {};
 const mutations = new Set<() => void>();
 let scheduled = false;

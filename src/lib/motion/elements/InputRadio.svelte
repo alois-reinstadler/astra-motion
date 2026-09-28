@@ -2,6 +2,7 @@
 <script lang="ts">
 	import { createComponentMotion } from '../component-motion.js';
 	import { componentMotionOptions, nativeComponentProps } from '../component-props.js';
+
 	import type { NativeInputProps } from './types.js';
 	let {
 		motion = {},

@@ -29,14 +29,24 @@ import {
 } from './projection-boundaries.js';
 import { beforeCommit, layoutBridge, synchronousMutation } from './commit.js';
 import { shouldReduceMotion, type MotionPolicy } from './policy.js';
-import { ensureMotionVisual, hasMotionVisual, hasActiveMotionVisual } from './visual.js';
+import {
+	ensureMotionVisual,
+	hasMotionVisual,
+	hasActiveMotionVisual,
+	getMotionVisualProps
+} from './visual.js';
 import { readMotionConfig, observeMotionPreference, observeMotionConfig } from './config.js';
 
 export interface LayoutOptions {
 	id?: string;
-	mode?: 'both' | 'position' | 'size' | 'preserve-aspect';
+	mode?: 'both' | 'position' | 'size' | 'preserve-aspect' | 'x' | 'y';
 	scroll?: boolean;
 	root?: boolean;
+	anchor?: { x: number; y: number } | false;
+	crossfade?: boolean;
+	dependency?: unknown;
+	/** Measure for drag/scroll contexts without animating this element's layout. */
+	measureOnly?: boolean;
 	/** Values participate in Motion's transform and scale-correction pipeline. */
 	style?: {
 		rotate?: number;
@@ -50,6 +60,8 @@ export interface LayoutOptions {
 	};
 }
 export interface LayoutGroupOptions extends MotionPolicy {
+	/** Shared measurement identity used by nested LayoutGroup components. */
+	cohort?: object;
 	/**
 	 * Request automatic DOM/size observation (default true). Observation coordinates
 	 * registered groups while any group requests it; false is not an isolation boundary.
@@ -75,6 +87,8 @@ interface Participant {
 	visual: HTMLVisualElement;
 	policy: LayoutGroupOptions;
 	automatic: boolean;
+	dependency: unknown;
+	dependencyDirty: boolean;
 	transition: Transition;
 	owner: Set<Participant>;
 	exitingRoots: Set<HTMLElement>;
@@ -213,11 +227,20 @@ function listenForPresence(document: Document) {
 }
 
 function refreshPolicy(participant: Participant) {
-	const reduce = shouldReduceMotion(participant.policy);
+	const props = getMotionVisualProps(participant.element) as
+		(MotionPolicy & { layoutTransition?: Transition; transition?: Transition }) | undefined;
+	const reduce = shouldReduceMotion({
+		reducedMotion: props?.reducedMotion ?? participant.policy.reducedMotion
+	});
 	participant.visual.shouldReduceMotion = reduce;
 	participant.automatic = participant.policy.automatic ?? true;
-	participant.transition = participant.policy.transition ?? defaultTransition;
+	participant.transition =
+		props?.layoutTransition ??
+		props?.transition ??
+		participant.policy.transition ??
+		defaultTransition;
 	participant.projection.setOptions({
+		...participant.projection.options,
 		transition: reduce ? { duration: 0 } : participant.transition
 	});
 	if (reduce) {
@@ -302,8 +325,23 @@ function automaticCommit(affected?: Set<Participant>) {
 	transactionDepth++;
 	try {
 		// Preserve removed shared sources before Svelte's replacement registrations reconcile.
-		seedCachedSnapshots(affected);
-		snapshot(affected);
+		const selected = new Set(
+			[...(affected ?? participants.values())].filter(
+				(participant) =>
+					participant.dependency === undefined ||
+					participant.dependencyDirty ||
+					Boolean(participant.visual.getProps().drag)
+			)
+		);
+		const cohorts = new Set(
+			[...selected].map((participant) => participant.policy.cohort).filter(Boolean)
+		);
+		for (const participant of participants.values())
+			if (participant.policy.cohort && cohorts.has(participant.policy.cohort))
+				selected.add(participant);
+		seedCachedSnapshots(selected);
+		snapshot(selected);
+		for (const participant of selected) participant.dependencyDirty = false;
 	} finally {
 		transactionDepth--;
 		commit(true);
@@ -373,11 +411,7 @@ function snapshot(affected?: Set<Participant>) {
 	for (const boundary of boundaries.values()) boundary.captureOffset();
 	for (const capture of beforeCommit) capture();
 	for (const participant of affected ?? participants.values()) {
-		const reduce = shouldReduceMotion(participant.policy);
-		participant.visual.shouldReduceMotion = reduce;
-		participant.projection.setOptions({
-			transition: reduce ? { duration: 0 } : participant.transition
-		});
+		refreshPolicy(participant);
 		participant.projection.willUpdate();
 	}
 }
@@ -450,6 +484,16 @@ export function createLayout(options: LayoutGroupOptions = {}) {
 		layoutBridge.update = updateLayout;
 		layoutBridge.schedule = (flush) => frame.read(flush, false, true);
 		layoutBridge.refreshPolicy = refreshLayoutPolicy;
+		layoutBridge.presence = setPresence;
+		layoutBridge.invalidate = (roots) => {
+			const elements = new Set<HTMLElement>();
+			for (const root of roots)
+				for (const participant of participants.values()) {
+					if (root === participant.element || root.contains(participant.element))
+						elements.add(participant.element);
+				}
+			if (elements.size) scheduleAutomatic(elements);
+		};
 	}
 	const scope = options.id === undefined ? `instance:${++scopeSequence}` : `named:${options.id}`;
 	const members = new Set<Participant>();
@@ -522,16 +566,22 @@ export function createLayout(options: LayoutGroupOptions = {}) {
 					});
 				const motionVisual = ensureMotionVisual(element);
 				const latestValues: ResolvedValues = motionVisual?.latestValues ?? { ...config.style };
-				const transition = options.transition ?? defaultTransition;
+				const motionPolicy = getMotionVisualProps(element) as
+					(MotionPolicy & { layoutTransition?: Transition; transition?: Transition }) | undefined;
+				const transition =
+					motionPolicy?.layoutTransition ??
+					motionPolicy?.transition ??
+					options.transition ??
+					defaultTransition;
 				const props = {
 					...motionVisual?.getProps(),
-					layout: true,
+					layout: !config.measureOnly,
 					style: {
 						...(motionVisual?.getProps() as { style?: MotionStyle })?.style,
 						...config.style
 					},
-					transition,
-					transformTemplate
+					transition: motionVisual ? motionVisual.getProps().transition : transition,
+					transformTemplate: motionVisual?.getProps().transformTemplate ?? transformTemplate
 				};
 				const visual =
 					motionVisual ??
@@ -547,7 +597,7 @@ export function createLayout(options: LayoutGroupOptions = {}) {
 						},
 						{ allowProjection: true }
 					);
-				if (motionVisual) visual.update(props, null);
+				if (motionVisual) visual.update(props, visual.presenceContext);
 				const projection: DOMProjection = new HTMLProjectionNode(
 					latestValues,
 					parentProjection(element)
@@ -555,14 +605,17 @@ export function createLayout(options: LayoutGroupOptions = {}) {
 				observeProjectionScroll(projection, element);
 				visual.projection = projection;
 				projection.setOptions({
-					layout: true,
+					layout: !config.measureOnly,
 					layoutId: config.id === undefined ? undefined : JSON.stringify([scope, config.id]),
 					animationType: config.mode ?? 'both',
 					visualElement: visual,
-					crossfade: true,
+					crossfade: config.crossfade ?? true,
+					layoutAnchor: config.anchor,
 					layoutScroll: config.scroll,
 					layoutRoot: config.root,
-					transition: shouldReduceMotion(options) ? { duration: 0 } : transition
+					transition: shouldReduceMotion({ ...options, ...motionPolicy })
+						? { duration: 0 }
+						: transition
 				});
 				projection.isPresent = true;
 				// Measurement resets the DOM transform. Same-frame commits can hit Motion's
@@ -604,11 +657,22 @@ export function createLayout(options: LayoutGroupOptions = {}) {
 						pruneStack(projection as IProjectionNode, previousId);
 						projection.resumeFrom = projection.resumingFrom = undefined;
 					}
+					registered.dependencyDirty ||= !Object.is(registered.dependency, next.dependency);
+					registered.dependency = next.dependency;
 					registered.policy = policy;
 					registered.automatic = policy.automatic ?? true;
-					registered.transition = policy.transition ?? defaultTransition;
-					visual.shouldReduceMotion = shouldReduceMotion(policy);
+					const nodePolicy = getMotionVisualProps(element) as
+						(MotionPolicy & { layoutTransition?: Transition; transition?: Transition }) | undefined;
+					registered.transition =
+						nodePolicy?.layoutTransition ??
+						nodePolicy?.transition ??
+						policy.transition ??
+						defaultTransition;
+					visual.shouldReduceMotion = shouldReduceMotion({ ...policy, ...nodePolicy });
 					projection.setOptions({
+						layout: !next.measureOnly,
+						layoutAnchor: next.anchor,
+						crossfade: next.crossfade ?? true,
 						layoutId: id,
 						animationType: next.mode ?? 'both',
 						layoutScroll: next.scroll,
@@ -618,17 +682,17 @@ export function createLayout(options: LayoutGroupOptions = {}) {
 					const nextStyle = next.style ?? {};
 					const nextProps = {
 						...visual.getProps(),
-						layout: true,
+						layout: !next.measureOnly,
 						style: {
 							...(hasMotionVisual(element)
 								? (visual.getProps() as { style?: MotionStyle }).style
 								: {}),
 							...nextStyle
 						},
-						transition: registered.transition,
-						transformTemplate
+						transition: nodePolicy ? nodePolicy.transition : registered.transition,
+						transformTemplate: visual.getProps().transformTemplate ?? transformTemplate
 					};
-					visual.update(nextProps, null);
+					visual.update(nextProps, visual.presenceContext);
 					for (const key of Object.keys(authoredStyle)) {
 						if (key in nextStyle) continue;
 						visual.removeValue(key);
@@ -692,6 +756,8 @@ export function createLayout(options: LayoutGroupOptions = {}) {
 					visual,
 					policy: options,
 					automatic: options.automatic ?? true,
+					dependency: config.dependency,
+					dependencyDirty: true,
 					transition,
 					owner: members,
 					exitingRoots: new Set(),

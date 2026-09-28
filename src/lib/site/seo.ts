@@ -1,4 +1,5 @@
-import { docs } from './docs.js';
+import { docs, docAliases } from './docs.js';
+import { liveExamples } from './examples.js';
 
 export interface PageMetadata {
 	title: string;
@@ -31,6 +32,12 @@ export const publicPages: Record<string, PageMetadata> = {
 		description:
 			'Explore a photo studio built with Astra Motion: shared photo transitions, an editing desk, a queue and a scroll journal, with complete source.'
 	},
+	...Object.fromEntries(
+		Object.values(liveExamples).map((example) => [
+			`/examples/${example.id}`,
+			{ title: `${example.title} — Astra Motion example`, description: example.description }
+		])
+	),
 	...Object.fromEntries(
 		docs.map((doc) => [
 			doc.slug ? `/docs/${doc.slug}` : '/docs',
@@ -69,8 +76,15 @@ export function siteOrigin(value: string | undefined): string | undefined {
 	}
 }
 
+export function canonicalPathname(pathname: string): string {
+	if (pathname === '/docs') return '/docs/getting-started';
+	const alias = pathname.startsWith('/docs/') ? docAliases[pathname.slice(6)] : undefined;
+	return alias ? `/docs/${alias.slug}` : pathname;
+}
+
 export function pageMetadata(pathname: string) {
-	return Object.hasOwn(publicPages, pathname) ? publicPages[pathname] : undefined;
+	const canonical = canonicalPathname(pathname);
+	return Object.hasOwn(publicPages, canonical) ? publicPages[canonical] : undefined;
 }
 
 export function sitemap(origin: string | undefined): string {

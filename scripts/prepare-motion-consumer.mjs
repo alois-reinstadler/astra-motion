@@ -1,15 +1,22 @@
 import { cpSync, mkdtempSync, readFileSync, writeFileSync, renameSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
-import { spawnSync } from 'node:child_process';
+import { spawnSync, execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { verifyConsumerDependencies } from './motion-consumer-dependencies.mjs';
 import { stampConsumer } from './motion-consumer-provenance.mjs';
 
-// The copied app has its own node_modules and Kit output. It never aliases repo source.
+// Both apps have independent node_modules; neither aliases repository source.
 const root = resolve(import.meta.dirname, '..');
+const args = process.argv.slice(2);
+const option = (name, fallback) =>
+	args.find((value) => value.startsWith(`--${name}=`))?.slice(name.length + 3) ?? fallback;
+const selected = option('consumer', 'both');
+if (!['plain', 'kit', 'both'].includes(selected))
+	throw new Error('Expected --consumer=plain|kit|both');
 const directory = mkdtempSync(join(tmpdir(), 'astra-motion-production-'));
 const consumer = join(directory, 'consumer');
+const plainConsumer = join(directory, 'plain-consumer');
 const manifest = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
 function run(args, cwd) {
 	const result = spawnSync('pnpm', args, { cwd, stdio: 'inherit' });
@@ -20,23 +27,39 @@ const archive = join(
 	directory,
 	`${manifest.name.replace(/^@/, '').replaceAll('/', '-')}-${manifest.version}.tgz`
 );
-cpSync(join(root, 'tests/production/consumer'), consumer, { recursive: true });
-renameSync(join(consumer, 'vite.config.ts.fixture'), join(consumer, 'vite.config.ts'));
-cpSync(archive, join(consumer, 'astra-motion.tgz'));
-writeFileSync(join(consumer, '.npmrc'), 'auto-install-peers=false\n');
 const info = {
 	archive,
 	sha256: createHash('sha256').update(readFileSync(archive)).digest('hex'),
-	consumer,
+	...(selected !== 'plain' ? { consumer } : {}),
+	...(selected !== 'kit' ? { plainConsumer } : {}),
+	source: {
+		commit: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(),
+		dirty:
+			execFileSync('git', ['status', '--porcelain'], { cwd: root, encoding: 'utf8' }).trim() !== ''
+	},
 	created: new Date().toISOString()
 };
+const setupPath = option('output', '/tmp/astra-motion-production-current.json');
 writeFileSync(join(directory, 'qualification.json'), JSON.stringify(info, null, 2) + '\n');
-// Keep the path even if a consumer check discovers a real packaging failure.
-writeFileSync('/tmp/astra-motion-production-current.json', JSON.stringify(info, null, 2) + '\n');
-run(['install'], consumer);
-console.log(JSON.stringify({ dependencies: verifyConsumerDependencies(consumer) }, null, 2));
-run(['run', 'check'], consumer);
-run(['run', 'check:declarations'], consumer);
-run(['run', 'build'], consumer);
-stampConsumer(info);
-console.log(JSON.stringify(info, null, 2));
+// Keep provenance even when a check discovers a real packaging failure.
+writeFileSync(setupPath, JSON.stringify(info, null, 2) + '\n');
+for (const [name, target] of [
+	['plain-consumer', info.plainConsumer],
+	['consumer', info.consumer]
+]) {
+	if (!target) continue;
+	cpSync(join(root, 'tests/production', name), target, { recursive: true });
+	if (name === 'consumer')
+		renameSync(join(target, 'vite.config.ts.fixture'), join(target, 'vite.config.ts'));
+	cpSync(archive, join(target, 'astra-motion.tgz'));
+	writeFileSync(join(target, '.npmrc'), 'auto-install-peers=false\n');
+	run(['install'], target);
+	console.log(
+		JSON.stringify({ consumer: name, dependencies: verifyConsumerDependencies(target) }, null, 2)
+	);
+	run(['run', 'check'], target);
+	run(['run', 'check:declarations'], target);
+	run(['run', 'build'], target);
+	if (name === 'consumer') stampConsumer(info);
+}
+console.log(JSON.stringify({ ...info, setupPath }, null, 2));

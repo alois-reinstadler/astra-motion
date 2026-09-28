@@ -21,6 +21,7 @@
 		"src/service-worker.d.ts",
 		"src/service-worker/**/*.d.ts",
 		"tests/production/consumer/**",
+		"tests/production/plain-consumer/**",
 		"tests/upstream-motion/**"
 	]
 }

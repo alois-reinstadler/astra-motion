@@ -1,6 +1,7 @@
 import { expect, it } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import { flushSync } from 'svelte';
+import { ensureMotionVisual } from '../motion/visual.js';
 import StyleOwnership, { type StyleSurface } from './StyleOwnership.svelte';
 
 const surfaces: StyleSurface[] = ['flat', 'generic', 'legacy', 'native'];
@@ -84,13 +85,39 @@ it.each(surfaces)(
 		await frame();
 		await screen.rerender({ animate: { x: 120, opacity: 0.3 } });
 		await expect.poll(() => x(node)).toBeGreaterThan(20);
+		const visual = ensureMotionVisual(node)!;
+		const positionAnimation = visual.getValue('x')!.animation!;
+		const paintAnimation = visual.getValue('opacity')!.animation!;
+		flushSync(() => screen.component.mutate({ color: 'blue' }));
+		expect(visual.getValue('x')!.animation).toBe(positionAnimation);
+		expect(visual.getValue('opacity')!.animation).toBe(paintAnimation);
+		expect(node.style.color).toBe('blue');
+		// A native compositor can advance opacity during the synchronous JS mutation.
+		// Freeze the same in-progress controls before checking sampled style ownership,
+		// then resume them and require both original destinations to be reached.
+		const playback = [positionAnimation, paintAnimation].map((animation) => {
+			if (
+				!('pause' in animation) ||
+				typeof animation.pause !== 'function' ||
+				!('play' in animation) ||
+				typeof animation.play !== 'function'
+			)
+				throw new Error('Expected pausable Motion playback');
+			return { pause: animation.pause.bind(animation), play: animation.play.bind(animation) };
+		});
+		playback.forEach((animation) => animation.pause());
+		await Promise.all(node.getAnimations().map((animation) => animation.ready));
+		await frame();
 		const before = x(node);
 		const opacity = Number(getComputedStyle(node).opacity);
 		expect(before).toBeLessThan(120);
-		flushSync(() => screen.component.mutate({ color: 'blue' }));
+		flushSync(() => screen.component.mutate({ color: 'green' }));
 		expect(x(node)).toBeCloseTo(before, 1);
 		expect(Number(getComputedStyle(node).opacity)).toBeCloseTo(opacity, 2);
-		expect(node.style.color).toBe('blue');
+		expect(node.style.color).toBe('green');
+		expect(visual.getValue('x')!.animation).toBe(positionAnimation);
+		expect(visual.getValue('opacity')!.animation).toBe(paintAnimation);
+		playback.forEach((animation) => animation.play());
 		await expect.poll(() => x(node)).toBeCloseTo(120, 2);
 		await expect.poll(() => Number(getComputedStyle(node).opacity)).toBeCloseTo(0.3, 2);
 	}

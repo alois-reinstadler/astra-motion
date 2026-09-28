@@ -30,7 +30,7 @@ jobs:
       - run: pnpm run check:guide
       - run: node scripts/check-motion-upgrade.mjs
       - run: pnpm run test:server
-      - run: node --test scripts/qualification-origin.test.mjs
+      - run: node --test scripts/qualification-origin.test.mjs scripts/module-specifiers.test.mjs
       - run: pnpm run build
       - run: node scripts/measure-motion-bundles.mjs
       - run: node scripts/prepare-motion-consumer.mjs
@@ -117,4 +117,35 @@ jobs:
             playwright-report/
             test-results/
             artifacts/preview.log
+          if-no-files-found: ignore
+
+  packed-consumers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - uses: pnpm/action-setup@v6
+        with:
+          cache: true
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
+      - name: Pack and build isolated plain Svelte and SvelteKit consumers
+        run: node scripts/prepare-motion-consumer.mjs
+      - name: Verify packed runtime, hydration, navigation and bundle isolation
+        env:
+          MOTION_BROWSER: ${{ matrix.browser }}
+        run: node scripts/qualify-packed-motion-ci.mjs
+      - name: Upload package qualification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: packed-consumer-${{ matrix.browser }}
+          path: artifacts/packed-consumer/
           if-no-files-found: ignore

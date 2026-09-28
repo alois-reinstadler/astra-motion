@@ -4,7 +4,7 @@ import {
 	getValueTransition,
 	isTransitionDefined,
 	resolveTransition,
-	type HTMLVisualElement,
+	type VisualElement,
 	type MotionValue,
 	type ResolvedValues,
 	type TargetAndTransition,
@@ -52,7 +52,7 @@ function resolved(value: unknown, key: string): Value {
  * Call from a deferred native transition for every direction change, with current Motion values.
  */
 export function createPresenceTimeline(
-	visual: HTMLVisualElement,
+	visual: VisualElement,
 	from: ResolvedValues,
 	target: TargetAndTransition,
 	transition: Transition,

@@ -2,6 +2,7 @@
 <script lang="ts">
 	import { createComponentMotion } from '../component-motion.js';
 	import { componentMotionOptions, nativeComponentProps } from '../component-props.js';
+	import MotionChildren from '../MotionChildren.svelte';
 	import type { MotionElementProps } from './types.js';
 	let {
 		motion = {},
@@ -27,5 +28,5 @@
 	style={`${typeof style === 'string' ? style : ''};${binding.props.style}`}
 	transition:motionTransition|global
 	{@attach forwardRef}>
-	{@render children?.()}
+	<MotionChildren {children} />
 </pre>

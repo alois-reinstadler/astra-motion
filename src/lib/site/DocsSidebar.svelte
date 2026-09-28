@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
-	import { docGroups, docs } from './docs.js';
+	import { docGroups, docs, docAliases } from './docs.js';
 	let query = $state('');
 	const filtered = $derived(
 		docs.filter((doc) =>
@@ -10,7 +10,9 @@
 				.includes(query.trim().toLowerCase())
 		)
 	);
-	const current = $derived(page.params.slug ?? '');
+	const current = $derived(
+		docAliases[page.params.slug ?? '']?.slug ?? page.params.slug ?? 'getting-started'
+	);
 </script>
 
 {#snippet navigation(id: string)}

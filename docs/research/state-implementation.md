@@ -1,5 +1,9 @@
 # State expansion and adoption decision
 
+> Historical baseline. The 27 September 2026 [parity contract](../parity/MATRIX.md)
+> supersedes earlier feature exclusions and dependency targets. This record preserves
+> its original observations; use the current contract for supported behavior.
+
 2026-09-05. Recommendation: **adopt the Motion DOM adapter with the documented beta
 boundaries**. Keep the exact engine pin and native-element API. Compiler attributes
 remain optional future authoring work. No additional animation engine or Svelte clone

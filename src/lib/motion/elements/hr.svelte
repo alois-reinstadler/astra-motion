@@ -2,6 +2,7 @@
 <script lang="ts">
 	import { createComponentMotion } from '../component-motion.js';
 	import { componentMotionOptions, nativeComponentProps } from '../component-props.js';
+
 	import type { MotionElementProps } from './types.js';
 	let { motion = {}, ref = $bindable(), style, ...attributes }: MotionElementProps<'hr'> = $props();
 	const binding = createComponentMotion(() => componentMotionOptions(motion, attributes, style));

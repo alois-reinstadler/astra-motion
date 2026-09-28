@@ -93,6 +93,46 @@
 			"types": "./dist/motion/in-view.svelte.d.ts",
 			"svelte": "./dist/motion/in-view.svelte.js",
 			"default": "./dist/motion/in-view.svelte.js"
+		},
+		"./view-navigation": {
+			"types": "./dist/motion/view-navigation.d.ts",
+			"svelte": "./dist/motion/view-navigation.js",
+			"default": "./dist/motion/view-navigation.js"
+		},
+		"./m": {
+			"types": "./dist/motion/m/index.d.ts",
+			"svelte": "./dist/motion/m/index.js",
+			"default": "./dist/motion/m/index.js"
+		},
+		"./features/dom-animation": {
+			"types": "./dist/motion/dom-animation.d.ts",
+			"svelte": "./dist/motion/dom-animation.js",
+			"default": "./dist/motion/dom-animation.js"
+		},
+		"./features/dom-max": {
+			"types": "./dist/motion/dom-max.d.ts",
+			"svelte": "./dist/motion/dom-max.js",
+			"default": "./dist/motion/dom-max.js"
+		},
+		"./lazy": {
+			"types": "./dist/motion/lazy-entry.d.ts",
+			"svelte": "./dist/motion/lazy-entry.js",
+			"default": "./dist/motion/lazy-entry.js"
+		},
+		"./mini": {
+			"types": "./dist/motion/mini-entry.d.ts",
+			"svelte": "./dist/motion/mini-entry.js",
+			"default": "./dist/motion/mini-entry.js"
+		},
+		"./reorder": {
+			"types": "./dist/motion/reorder-entry.d.ts",
+			"svelte": "./dist/motion/reorder-entry.js",
+			"default": "./dist/motion/reorder-entry.js"
+		},
+		"./view": {
+			"types": "./dist/motion/view-entry.d.ts",
+			"svelte": "./dist/motion/view-entry.js",
+			"default": "./dist/motion/view-entry.js"
 		}
 	},
 	"peerDependencies": {
@@ -119,13 +159,13 @@
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.19.0",
 		"formsnap": "^2.0.1",
-		"framer-motion": "13.4.3",
+		"framer-motion": "13.4.4",
 		"globals": "^17.6.0",
 		"layerchart": "^2.3.1",
 		"magic-string": "0.30.21",
 		"mode-watcher": "^1.1.0",
-		"motion": "13.4.3",
-		"motion-dom": "13.4.2",
+		"motion": "13.4.4",
+		"motion-dom": "13.4.4",
 		"motion-utils": "13.3.0",
 		"paneforge": "^1.0.2",
 		"playwright": "^1.60.0",

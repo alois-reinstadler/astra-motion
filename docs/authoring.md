@@ -1,5 +1,10 @@
 # Authoring Astra motion
 
+Current primary API: [34-page documentation](https://alois-reinstadler.github.io/astra-motion/docs),
+[parity matrix](parity/MATRIX.md), and [migration guide](migration.md).
+The native-binding examples below remain supported; their stricter ownership and
+finite-transition rules apply to those compatibility helpers.
+
 For simple enter/exit effects, prefer Svelte's native `transition:fade`, `transition:fly`
 or `transition:slide`. When new markup needs Astra capabilities, start with
 `motion.div`, `motion.button` or another tag component from `astra-motion`.
@@ -186,8 +191,9 @@ These are compiled Svelte components, so native directives do not automatically
 become component props. Use native markup with `createMotion` for `bind:group`,
 media bindings, readonly dimensions, `class:`/`style:` directives or parent-scoped
 CSS element selectors. Radio groups especially need their native inputs in the same
-Svelte component. Supported tags are HTML; SVG, custom tags and arbitrary component
-factories are outside this component API.
+Svelte component. Generated tags now cover HTML and SVG. `motion.create` also supports custom tags and
+Svelte components that forward attachment props to one native root. See the current
+[motion reference](https://alois-reinstadler.github.io/astra-motion/docs/motion).
 
 ## State and presence
 
@@ -683,8 +689,8 @@ contents need an intentional response:
 ## Defaults and reduced motion
 
 Wrap the application’s descendants in `MotionConfig` from `astra-motion` to set
-`transition`, `layoutTransition` and `reducedMotion`. The default reduction policy
-follows the OS; `'always'` and `'never'` provide explicit overrides. Configuration
+`transition`, `layoutTransition` and `reducedMotion`. Low-level native bindings follow the OS by default; primary motion components default
+to never for upstream compatibility. Set `reducedMotion="user"` explicitly to follow the OS; `'always'` and `'never'` provide explicit overrides. Configuration
 is inherited by bindings created in descendant component initialization. A provider
 rendered around markup in the same component cannot retroactively configure bindings
 created in that component’s script. Move it above the component
@@ -704,8 +710,10 @@ through reactive options, `binding.animate()`, or its MotionValues. Give a scope
 timeline or scroll animation a different element. Attachment cleanup releases
 controllers and owned animation styles; user-owned MotionValues remain yours.
 
-Finite presence targets need resolved values: repeated exits, unresolved `auto`
-and CSS variables, and arbitrary async safe-to-remove callbacks are not supported.
+The legacy native-binding finite presence path requires resolved values and finite
+transitions. Primary motion components use engine keyframes and repeats.
+`AnimatePresence` coordinates arbitrary async work through generation-scoped
+`usePresence().safeToRemove`; an infinite exit intentionally never completes.
 For scoped timelines, `await controls.settled` resolves to `{ status: 'finished' }`
 or `{ status: 'cancelled', reason }`. Reasons are `stopped`, `cancelled`, `replaced`
 and `detached`. Capture this promise for the playback cycle you started: replaying

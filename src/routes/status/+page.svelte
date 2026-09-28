@@ -15,14 +15,18 @@
 				<li>
 					Animate reactive targets with initial, animate and exit states, variants and MotionValues.
 				</li>
-				<li>Coordinate native Svelte exits, automatic layout changes and shared elements.</li>
 				<li>
-					Add hover, press, focus and bounded dragging, or connect animation to scroll and
-					timelines.
+					Coordinate conditional and keyed exits, retained Activity panels, automatic layout changes
+					and shared elements.
 				</li>
 				<li>
-					Enhance SvelteKit navigation with browser View Transitions. The other entry points work
-					without SvelteKit.
+					Add hover, tap, focus, pan, constrained dragging and controlled reorder lists or grids.
+					Connect reactive Motion Values to scroll, springs, transforms and timelines.
+				</li>
+				<li>
+					Animate HTML and SVG, share configuration and load animation features on demand.
+					Coordinate state changes with View Transitions, including optional SvelteKit navigation
+					integration.
 				</li>
 			</ul>
 			<p><a href={resolve('/examples')}>Explore the interactive examples </a></p>
@@ -51,19 +55,18 @@
 		<h2>What has been checked</h2>
 		<div>
 			<p>
-				The repository records production builds, installation into an independent SvelteKit app,
-				server rendering and hydration, and browser regression checks. Recent gesture fixes have
-				also been exercised in Chrome.
+				The current parity matrix records each contract, its upstream reference, the Svelte API, and
+				its verification evidence. Checks include Chromium, Firefox and WebKit component tests,
+				production examples, and independent applications installed from the packed package.
 			</p>
 			<p>
-				Those checks are specific to the recorded versions and environments. A complete browser
-				matrix for every new change, physical Safari/iOS testing and a low-end-device performance
-				campaign remain release work.
+				Use the dated qualification records for exact results and remaining work. Automated WebKit
+				coverage does not establish physical Safari/iOS performance, and a low-end-device
+				performance campaign remains separate release work.
 			</p>
 			<p>
-				<a
-					href="https://github.com/alois-reinstadler/astra-motion/blob/main/docs/research/production-qualification.md"
-					>Read the qualification record
+				<a href="https://github.com/alois-reinstadler/astra-motion/blob/main/docs/parity/MATRIX.md"
+					>Read the parity matrix and verification records
 				</a>
 			</p>
 		</div>
@@ -73,10 +76,10 @@
 		<div>
 			<ul>
 				<li>
-					Astra packages one qualified DOM engine: Motion DOM 13.4.2, Framer Motion 13.4.3’s DOM
-					entry and Motion Utils 13.3.0. Consumers need no separate Motion installation or
-					dependency overrides. Layout projection uses undocumented exports; upgrades need
-					compatibility testing.
+					Astra packages one DOM engine: Motion DOM 13.4.4, Framer Motion 13.4.4’s DOM entry and
+					Motion Utils 13.3.0. Consumers need no separate Motion installation or dependency
+					overrides. Layout projection uses undocumented exports; upgrades need compatibility
+					testing.
 				</li>
 				<li>
 					The package removes an unsupported Electron-only <code>HTMLWebViewElement</code>
@@ -88,8 +91,10 @@
 					CPU throttling, even with explicit layout transactions.
 				</li>
 				<li>
-					Advanced drag constraints, drag-based reorder and full Motion React API parity are outside
-					the current surface.
+					AnimatePresence uses explicit keys and snippets. AnimateActivity retains DOM and pauses
+					Astra-owned work; ordinary Svelte effects need the activity-aware helper to pause.
+					AnimateView uses an explicit state-update transaction. These Svelte adaptations are
+					documented on their component pages.
 				</li>
 				<li>
 					Static 2D transformed wrappers and nested sticky/scroll/clipping boundaries have

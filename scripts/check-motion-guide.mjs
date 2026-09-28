@@ -13,6 +13,13 @@ const catalog = ts.transpileModule(
 const { authoringExamples } = await import(
 	`data:text/javascript;base64,${Buffer.from(catalog).toString('base64')}`
 );
+const publicModule = ts.transpileModule(
+	readFileSync('src/lib/site/public-example-source.ts', 'utf8'),
+	{ compilerOptions: { module: ts.ModuleKind.ESNext } }
+).outputText;
+const { publicExampleSource } = await import(
+	`data:text/javascript;base64,${Buffer.from(publicModule).toString('base64')}`
+);
 const directory = mkdtempSync(join(tmpdir(), 'astra-guide-consumer-'));
 try {
 	const manifest = JSON.parse(readFileSync('package.json', 'utf8'));
@@ -33,12 +40,33 @@ try {
 	for (const filename of readdirSync('src/lib/site/examples').filter((name) =>
 		name.endsWith('.svelte')
 	)) {
-		const source = readFileSync(join('src/lib/site/examples', filename), 'utf8').replaceAll(
-			"'$lib/motion/index.js'",
-			"'astra-motion'"
+		const source = publicExampleSource(
+			readFileSync(join('src/lib/site/examples', filename), 'utf8')
 		);
 		writeFileSync(join(directory, filename), source);
 	}
+	// Complete inline components are reference examples too; excerpts stay clearly labelled.
+	for (const filename of readdirSync('src/lib/site/content').filter((name) =>
+		name.endsWith('.ts')
+	)) {
+		const module = ts.transpileModule(
+			readFileSync(join('src/lib/site/content', filename), 'utf8'),
+			{ compilerOptions: { module: ts.ModuleKind.ESNext } }
+		).outputText;
+		const exports = await import(
+			`data:text/javascript;base64,${Buffer.from(module).toString('base64')}`
+		);
+		for (const pages of Object.values(exports))
+			for (const page of pages)
+				for (const section of page.sections) {
+					if (section.code && /complete|\.svelte$/i.test(section.code.label))
+						writeFileSync(
+							join(directory, `${page.slug}-${section.id}.svelte`),
+							section.code.source
+						);
+				}
+	}
+
 	writeFileSync(
 		join(directory, 'tsconfig.json'),
 		JSON.stringify(

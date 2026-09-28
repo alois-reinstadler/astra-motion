@@ -1,5 +1,9 @@
 # Motion 13.4 upgrade qualification
 
+> Historical baseline. The 27 September 2026 [parity contract](../parity/MATRIX.md)
+> supersedes earlier feature exclusions and dependency targets. This record preserves
+> its original observations; use the current contract for supported behavior.
+
 Registry versions were checked on 2026-09-24. The exact build graph is `motion@13.4.3`,
 `framer-motion@13.4.3`, `motion-dom@13.4.2`, and `motion-utils@13.3.0`.
 The packages do not share one release number. All four are now checked as exact

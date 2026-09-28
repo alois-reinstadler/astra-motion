@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, realpathSync } from 'node:fs';
 import { join } from 'node:path';
 import { createRequire } from 'node:module';
-import ts from 'typescript';
+import { moduleSpecifiers } from './module-specifiers.mjs';
 
 export function inspectConsumerDependencies(consumer) {
 	const directory = realpathSync(join(consumer, 'node_modules/astra-motion'));
@@ -17,21 +17,12 @@ export function inspectConsumerDependencies(consumer) {
 	for (const path of readdirSync(join(directory, 'dist'), { recursive: true })) {
 		if (!/\.(?:js|mjs|ts|svelte)$/.test(path)) continue;
 		const code = readFileSync(join(directory, 'dist', path), 'utf8');
-		const scanner = ts.createScanner(
-			ts.ScriptTarget.Latest,
-			true,
-			ts.LanguageVariant.Standard,
-			code
-		);
-		while (scanner.scan() !== ts.SyntaxKind.EndOfFileToken) {
-			if (
-				scanner.getToken() === ts.SyntaxKind.StringLiteral &&
-				/^(?:motion(?:-dom|-utils)?|framer-motion)(?:\/|$)/.test(scanner.getTokenValue())
-			) {
-				leakedImports.push(path);
-				break;
-			}
-		}
+		if (
+			moduleSpecifiers(code, path).some((specifier) =>
+				/^(?:motion(?:-dom|-utils)?|framer-motion|react|react-dom)(?:\/|$)/.test(specifier)
+			)
+		)
+			leakedImports.push(path);
 	}
 	return {
 		versions: provenance.versions,

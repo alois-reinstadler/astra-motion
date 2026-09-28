@@ -1,4 +1,5 @@
 import { untrack } from 'svelte';
+import { readActivityState } from './activity-scope.js';
 
 export interface InViewOptions {
 	/** Value before the target's first measurement. Defaults to false. */
@@ -18,12 +19,14 @@ export function createInView(
 	target: () => Element | null | undefined,
 	input: InViewOptions | (() => InViewOptions) = {}
 ) {
+	const activity = readActivityState();
 	const readOptions = () => (typeof input === 'function' ? input() : input);
 	let current = $state(untrack(() => readOptions().initial ?? false));
 	let previousTarget: Element | null | undefined;
 	let entered = false;
 
-	$effect(() => {
+	function observeIntersection() {
+		if (!activity()) return;
 		const element = target();
 		const { initial = false, once = false, root, margin, amount = 'some' } = readOptions();
 		const threshold = amount === 'all' ? 1 : amount === 'some' ? 0 : amount;
@@ -66,7 +69,8 @@ export function createInView(
 			active = false;
 			observer.disconnect();
 		};
-	});
+	}
+	$effect(observeIntersection);
 
 	return {
 		get current() {

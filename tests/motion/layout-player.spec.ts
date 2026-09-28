@@ -5,7 +5,7 @@ for (const width of [1280, 320]) {
 		page
 	}) => {
 		await page.setViewportSize({ width, height: 900 });
-		await page.goto('/docs/layout');
+		await page.goto('/examples/layout');
 		const demo = page.locator('[data-example="layout"]');
 		await expect(demo.getByRole('button', { name: 'Open player' })).toBeEnabled();
 		await demo.evaluate((node) => node.scrollIntoView({ block: 'center', behavior: 'instant' }));
@@ -58,7 +58,7 @@ test('player settles immediately with reduced motion and complete source mounts 
 	page
 }) => {
 	await page.emulateMedia({ reducedMotion: 'reduce' });
-	await page.goto('/docs/layout');
+	await page.goto('/examples/layout');
 	const demo = page.locator('[data-example="layout"]');
 	await demo.getByRole('button', { name: 'Open player' }).click();
 	await expect(demo.locator('.details')).toHaveCSS('opacity', '1');

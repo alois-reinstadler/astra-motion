@@ -1,0 +1,3 @@
+// Verified against svelte/server in parity-composition.spec.ts; reused verbatim for hydration.
+export const factoryHTML =
+	'<!--[--><!--[0--><!--[0--><!----><input data-composition-input="true" type="email" required="" defaultvalue="example@astra.test" style=";opacity:0.5"><!----><!--]--><!--]--><!----><svg viewBox="0 0 100 100" aria-label="Factory circle"><!--[0--><!--[-1--><!----><circle xmlns="http://www.w3.org/2000/svg" data-composition-circle="true" cx="25" cy="35" r="12" fill="blue" stroke-width="2" style=";"><!--[-1--><!--]--><!----></circle><!----><!--]--><!--]--><!----></svg><!--[-1--><!--[--><button data-composition-button="true" style=";" aria-label="Increment composition count"><!--[1--><!---->10<!--]--><!----></button><!--]--><!--]--><!----><!--]-->';

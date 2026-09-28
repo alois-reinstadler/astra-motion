@@ -73,6 +73,7 @@ it('keeps native disabled/events/bindings and symbol attachments while retaining
 		.poll(() => (visualElementStore.get(button)?.getProps() as MotionOptions)?.disabled)
 		.toBe(false);
 	tap(button);
+	await frame();
 	expect(screen.component.snapshot().taps).toBe(1);
 	flushSync(() => screen.component.gate(undefined));
 	expect(button.disabled).toBe(false);
@@ -80,6 +81,7 @@ it('keeps native disabled/events/bindings and symbol attachments while retaining
 		.poll(() => (visualElementStore.get(button)?.getProps() as MotionOptions)?.disabled)
 		.toBe(true);
 	tap(button);
+	await frame();
 	expect(screen.component.snapshot().taps).toBe(1);
 	flushSync(() => screen.component.gate(null));
 	expect(button.disabled).toBe(false);

@@ -1,5 +1,9 @@
 # Native motion state: authoring and current boundaries
 
+> Historical baseline. The 27 September 2026 [parity contract](../parity/MATRIX.md)
+> supersedes earlier feature exclusions and dependency targets. This record preserves
+> its original observations; use the current contract for supported behavior.
+
 Try `/motion-lab/state`: reversible entry/exit combined with resizing, inherited staggered variants, a MotionValue slider and spring follower, keyboard/pointer feedback, and a bounded draggable card. The page follows the existing lab styling and includes expandable source examples.
 
 ## One binding, one native element

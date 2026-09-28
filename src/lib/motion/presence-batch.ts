@@ -1,8 +1,8 @@
-import { calcChildStagger, type HTMLVisualElement, type Transition } from 'motion-dom';
+import { calcChildStagger, type VisualElement, type Transition } from 'motion-dom';
 import type { PresenceTimeline } from './presence-state.js';
 
 interface Entry {
-	visual: HTMLVisualElement;
+	visual: VisualElement;
 	timeline: PresenceTimeline;
 	transition: Transition;
 	direction: 'in' | 'out';
@@ -10,7 +10,7 @@ interface Entry {
 	offset: number;
 	span: number;
 }
-const pending = new Map<HTMLVisualElement, Entry>();
+const pending = new Map<VisualElement, Entry>();
 
 /** Svelte invokes deferred factories together, probing duration during each factory.
  * A temporary positive probe keeps its clock alive until the batch is scheduled.
@@ -24,8 +24,8 @@ function flush() {
 	const roots: Entry[] = [];
 	for (const entry of batch.values()) {
 		let parent = entry.visual.parent;
-		while (parent && !batch.has(parent as HTMLVisualElement)) parent = parent.parent;
-		const ancestor = parent && batch.get(parent as HTMLVisualElement);
+		while (parent && !batch.has(parent as VisualElement)) parent = parent.parent;
+		const ancestor = parent && batch.get(parent as VisualElement);
 		if (ancestor && ancestor.direction === entry.direction) ancestor.children.push(entry);
 		else roots.push(entry);
 	}
@@ -65,7 +65,7 @@ function flush() {
 }
 
 export function coordinatePresence(
-	visual: HTMLVisualElement,
+	visual: VisualElement,
 	timeline: PresenceTimeline,
 	transition: Transition,
 	direction: 'in' | 'out'

@@ -1,5 +1,9 @@
 # What remains after automatic layout
 
+> Historical baseline. The 27 September 2026 [parity contract](../parity/MATRIX.md)
+> supersedes earlier feature exclusions and dependency targets. This record preserves
+> its original observations; use the current contract for supported behavior.
+
 > Historical planning checkpoint. The subsequent state implementation completed much
 > of the authoring milestone, plus variants, values and bounded gestures. Use the
 > [current implementation report](state-implementation.md) for present capability and

@@ -36,11 +36,14 @@
 				exit animation finishes.
 			</p>
 			<p>
-				For a changing view, Presence can wait for the old content to leave or let both views
-				animate together. The same ownership holds when a parent branch disappears.
+				For a changing view, AnimatePresence can wait for the old content to leave or let both views
+				animate together. AnimateActivity retains a hidden panel’s DOM and state when you want to
+				return to the same content.
 			</p>
 			<p>
-				<a href={resolve('/docs/[slug]', { slug: 'presence' })}>See how exits are coordinated </a>
+				<a href={resolve('/docs/[slug]', { slug: 'animate-presence' })}
+					>See how exits are coordinated
+				</a>
 			</p>
 		</div>
 	</section>

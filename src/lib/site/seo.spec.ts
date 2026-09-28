@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { docs } from './docs.js';
-import { pageMetadata, publicPages, robots, sitemap, siteOrigin } from './seo.js';
+import { docs, docAliases } from './docs.js';
+import { liveExamples } from './examples.js';
+import {
+	pageMetadata,
+	publicPages,
+	robots,
+	sitemap,
+	siteOrigin,
+	canonicalPathname
+} from './seo.js';
 
 describe('public site discovery', () => {
 	it('publishes every guide and public journey with distinct useful metadata', () => {
@@ -10,6 +18,7 @@ describe('public site discovery', () => {
 			'/status',
 			'/examples',
 			'/showcase',
+			...Object.values(liveExamples).map((example) => `/examples/${example.id}`),
 			...docs.map((doc) => (doc.slug ? `/docs/${doc.slug}` : '/docs'))
 		];
 		const xml = sitemap(siteOrigin('https://astra-motion.dev/'));
@@ -30,6 +39,13 @@ describe('public site discovery', () => {
 		]) {
 			expect(pageMetadata(path)).toBeUndefined();
 			expect(xml).not.toContain(`<loc>https://astra-motion.dev${path}</loc>`);
+		}
+	});
+	it('preserves historical alias content with a canonical primary URL', () => {
+		expect(canonicalPathname('/docs')).toBe('/docs/getting-started');
+		for (const [old, alias] of Object.entries(docAliases)) {
+			expect(canonicalPathname(`/docs/${old}`)).toBe(`/docs/${alias.slug}`);
+			expect(pageMetadata(`/docs/${old}`)).toBe(pageMetadata(`/docs/${alias.slug}`));
 		}
 	});
 	it('fails closed without an explicit public HTTPS origin', () => {

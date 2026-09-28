@@ -1,5 +1,9 @@
 # Motion architecture decision — 2026-09-05
 
+> Historical baseline. The 27 September 2026 [parity contract](../parity/MATRIX.md)
+> supersedes earlier feature exclusions and dependency targets. This record preserves
+> its original observations; use the current contract for supported behavior.
+
 > Historical initial decision. The implemented default now uses automatic observation
 > and cached Motion snapshots. See [the follow-up decision](automatic-layout.md) and
 > [current API and recommendation](../motion-system.md). Explicit transactions remain optional.

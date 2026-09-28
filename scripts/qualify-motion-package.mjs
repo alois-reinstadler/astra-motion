@@ -71,7 +71,11 @@ result.package = {
 const ssr = await (await fetch(origin + '/ssr')).text();
 assert.match(ssr, /data-testid="native-card" style="opacity:0\.75;transform:translateX\(40px\)"/);
 
-for (const [engine, launcher] of Object.entries({ chromium, firefox, webkit })) {
+const launchers = { chromium, firefox, webkit };
+const selected = process.env.MOTION_BROWSER ? [process.env.MOTION_BROWSER] : Object.keys(launchers);
+for (const engine of selected) {
+	const launcher = launchers[engine];
+	assert(launcher, `Unknown MOTION_BROWSER ${engine}`);
 	const browser = await launcher.launch({ headless: true });
 	const context = await browser.newContext({ reducedMotion: 'no-preference' });
 	const page = await context.newPage();
@@ -198,6 +202,24 @@ for (const [engine, launcher] of Object.entries({ chromium, firefox, webkit })) 
 			return checkHandoff();
 		});
 		result.browserCases.push({ engine, ...handoff });
+		await page.addInitScript(() =>
+			Object.defineProperty(document, 'startViewTransition', {
+				configurable: true,
+				value: undefined
+			})
+		);
+		await ready('/native-view');
+		await page.getByRole('link', { name: 'Next native view' }).click();
+		await expect(
+			page.getByRole('heading', { name: 'Second packed navigation view' })
+		).toBeVisible();
+		await page.getByRole('link', { name: 'First native view' }).click();
+		await expect(page.getByRole('heading', { name: 'First packed navigation view' })).toBeVisible();
+		result.browserCases.push({
+			engine,
+			case: 'isolated SvelteKit view navigation fallback',
+			passed: true
+		});
 		assert.deepEqual(errors, [], `${engine} browser errors`);
 		const noJS = await browser.newContext({ javaScriptEnabled: false });
 		const serverPage = await noJS.newPage();
@@ -213,7 +235,7 @@ for (const [engine, launcher] of Object.entries({ chromium, firefox, webkit })) 
 
 // Measure the immutable files a fresh page actually requests, including SvelteKit.
 // Compression is calculated per file. This is not a claim about CDN transfer settings.
-const browser = await chromium.launch({ headless: true });
+const browser = await launchers[selected[0]].launch({ headless: true });
 try {
 	for (const path of [
 		'/blank',
@@ -284,7 +306,7 @@ try {
 result.measurement =
 	'Cold production route JS+CSS assets, including SvelteKit; per-file gzip/default Brotli; maps and HTML excluded. Route totals are not additive.';
 result.provenance.fetchedAssetHashesVerified = true;
-const output = resolve('docs/research/production-package-validation.json');
+const output = resolve(process.argv[4] ?? 'docs/research/production-package-validation.json');
 writeFileSync(output, JSON.stringify(result, null, 2) + '\n');
 console.log(
 	JSON.stringify(

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import { docs, getRecipe, type DocPage } from './docs.js';
+	import { docs, type DocPage } from './docs.js';
 	import DocCode from './DocCode.svelte';
 	import DocExample from './DocExample.svelte';
 	import { getExample } from './examples.js';
@@ -38,20 +38,34 @@
 				{#if section.points}<ul>
 						{#each section.points as point (point)}<li>{point}</li>{/each}
 					</ul>{/if}
+				{#if section.table}
+					<!-- svelte-ignore a11y_no_noninteractive_tabindex (The overflow region needs keyboard scrolling.) -->
+					<div
+						class="reference-table"
+						role="region"
+						aria-label={`${section.title} reference`}
+						tabindex="0"
+					>
+						<table>
+							<thead
+								><tr
+									>{#each section.table.columns as column (column)}<th scope="col">{column}</th
+										>{/each}</tr
+								></thead
+							>
+							<tbody
+								>{#each section.table.rows as row, index (index)}<tr
+										>{#each row as cell, columnIndex (columnIndex)}{#if columnIndex === 0}<th
+													scope="row">{cell}</th
+												>{:else}<td>{cell}</td>{/if}{/each}</tr
+									>{/each}</tbody
+							>
+						</table>
+					</div>
+				{/if}
 				{#if section.code}<DocCode source={section.code.source} label={section.code.label} />{/if}
 				{#if example}
 					<DocExample {example} />
-				{:else if section.recipe}
-					{@const recipe = getRecipe(section.recipe)}
-					<DocCode
-						source={recipe.source}
-						label={recipe.id === 'routes'
-							? '+layout.svelte'
-							: recipe.id === 'component'
-								? 'MotionCard.svelte'
-								: 'Example.svelte'}
-					/>
-					<p class="recipe-note">{recipe.note}</p>
 				{/if}
 				{#if section.links}<nav class="reading-path" aria-label={`${section.title} links`}>
 						{#each section.links as link (link.title)}
@@ -94,6 +108,42 @@
 </div>
 
 <style>
+	.reference-table {
+		width: 100%;
+		overflow: auto;
+		margin: 24px 0;
+		border: 1px solid var(--site-line);
+		border-radius: 5px;
+	}
+	table {
+		border-collapse: collapse;
+		width: 100%;
+		min-width: 520px;
+		text-align: left;
+		font-size: 12px;
+		line-height: 1.7;
+	}
+	th,
+	td {
+		padding: 13px 15px;
+		border-bottom: 1px solid var(--site-line);
+		vertical-align: top;
+		overflow-wrap: anywhere;
+	}
+	thead {
+		background: var(--site-panel);
+	}
+	th {
+		font-weight: 550;
+	}
+	td {
+		color: var(--site-muted);
+	}
+	tbody tr:last-child th,
+	tbody tr:last-child td {
+		border-bottom: 0;
+	}
+
 	.anchor-alias {
 		display: block;
 		scroll-margin-top: 30px;
@@ -247,12 +297,6 @@
 	}
 	li::marker {
 		color: var(--site-accent);
-	}
-	section > .recipe-note {
-		font-size: 12px;
-		padding-left: 15px;
-		border-left: 2px solid #c7ccba;
-		margin-top: 18px;
 	}
 	.related {
 		display: flex;

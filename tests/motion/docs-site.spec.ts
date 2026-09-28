@@ -29,8 +29,8 @@ test('live docs examples keep their interactions, reset, and source on the page'
 }) => {
 	const errors: string[] = [];
 	page.on('pageerror', (error) => errors.push(error.message));
-	await page.goto('/docs/presence#pop-layout');
-	const list = page.locator('[data-example="motion-component"]');
+	await page.goto('/examples/list-composition');
+	const list = page.locator('[data-example="list-composition"]');
 	const complete = list.getByRole('button', { name: 'Complete: Collect a little inspiration' });
 	await settlePointerTarget(complete);
 	await complete.click();
@@ -48,28 +48,29 @@ test('live docs examples keep their interactions, reset, and source on the page'
 	expect(errors).toEqual([]);
 });
 
-test('layout, shared selection, gestures and stagger work inside their guides', async ({
+test('preserved layout, shared selection, gestures and stagger work on dedicated example pages', async ({
 	page
 }) => {
 	const errors: string[] = [];
 	page.on('pageerror', (error) => errors.push(error.message));
-	await page.goto('/docs/layout');
+	await page.goto('/examples/layout');
 	const layout = page.locator('[data-example="layout"]');
 	const before = await layout.locator('.record').evaluate((node) => node.clientHeight);
 	await layout.getByRole('button', { name: 'Open player' }).click();
 	await expect
 		.poll(() => layout.locator('.record').evaluate((node) => node.clientHeight))
 		.toBeGreaterThan(before);
-	await page.goto('/docs/shared-layout');
+	await page.goto('/examples/shared');
 	const shared = page.locator('[data-example="shared"]');
 	await shared.getByRole('button', { name: 'Rest', exact: true }).click();
 	await expect(shared.getByRole('heading', { name: 'Take the long way.' })).toBeVisible();
-	await page.goto('/docs/state');
-	const variants = page.locator('[data-example="inheritance"]');
+	await page.goto('/examples/variants');
+	const variants = page.locator('[data-example="variants"]');
 	await variants.getByRole('button', { name: 'Hide menu', exact: false }).click();
 	await expect(variants.locator('.item').last()).toHaveCSS('opacity', '0');
 	await variants.getByRole('button', { name: 'Reveal menu', exact: false }).click();
 	await expect(variants.locator('.item').last()).toHaveCSS('opacity', '1');
+	await page.goto('/examples/gestures');
 	const gestures = page.locator('[data-example="gestures"]');
 	await gestures.getByRole('button', { name: 'Save to collection' }).click();
 	await expect(gestures.getByRole('button', { name: 'Saved to collection' })).toHaveAttribute(
@@ -93,12 +94,13 @@ test('scroll, visibility and timelines stay local and usable with reduced motion
 	const errors: string[] = [];
 	page.on('pageerror', (error) => errors.push(error.message));
 	await page.emulateMedia({ reducedMotion: 'reduce' });
-	await page.goto('/docs/scroll');
-	const scroll = page.locator('[data-example="scroll"]');
+	await page.goto('/examples/scroll-composition');
+	const scroll = page.locator('[data-example="scroll-composition"]');
 	await scroll.locator('.reader').evaluate((node) => {
 		node.scrollTop = node.scrollHeight;
 	});
 	await expect(scroll.locator('progress')).toHaveAttribute('value', '1');
+	await page.goto('/examples/in-view');
 	const visibility = page.locator('[data-example="in-view"]');
 	await expect(visibility.locator('.status')).toHaveText('Out of view');
 	await visibility.locator('.viewport').evaluate((node) => {
@@ -110,7 +112,7 @@ test('scroll, visibility and timelines stay local and usable with reduced motion
 		node.scrollTop = 0;
 	});
 	await expect(visibility.locator('.status')).toHaveText('Out of view');
-	await page.goto('/docs/timelines');
+	await page.goto('/examples/timeline');
 	const timeline = page.locator('[data-example="timeline"]');
 	await timeline.getByRole('button', { name: 'Replay' }).click();
 	await expect(timeline.locator('.disc')).toHaveCSS('opacity', '1');
@@ -134,12 +136,12 @@ test('documentation has connected navigation, topic filtering and complete copya
 		});
 	});
 	await page.goto('/docs/layout');
-	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Automatic layout');
+	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Layout animation');
 	const navigation = page.getByRole('navigation', { name: 'Documentation', exact: true });
-	await expect(navigation.getByRole('link', { name: 'Automatic layout' })).toHaveAttribute(
-		'aria-current',
-		'page'
-	);
+	await expect(
+		navigation.getByRole('link', { name: 'Layout animation', exact: true })
+	).toHaveAttribute('aria-current', 'page');
+	await page.goto('/examples/layout');
 	const example = page.locator('[data-example="layout"]');
 	await example.locator('summary').click();
 	const copy = example.getByRole('button', { name: 'Copy LayoutExample.svelte', exact: true });
@@ -151,19 +153,25 @@ test('documentation has connected navigation, topic filtering and complete copya
 	expect(await page.locator('html').getAttribute('data-copied-source')).toContain(
 		"from 'astra-motion'"
 	);
+	await page.getByRole('link', { name: 'Read Layout animation', exact: true }).click();
+	await expect(page).toHaveURL(/\/docs\/layout#automatic$/);
 	await page.getByRole('searchbox', { name: 'Find a guide' }).fill('scroll');
-	await expect(navigation.getByRole('link', { name: 'Scroll-linked motion' })).toBeVisible();
-	await expect(navigation.getByRole('link', { name: 'Introduction', exact: true })).toHaveCount(0);
-	await navigation.getByRole('link', { name: 'Scroll-linked motion' }).click();
+	await expect(
+		navigation.getByRole('link', { name: 'Scroll animations', exact: true })
+	).toBeVisible();
+	await expect(navigation.getByRole('link', { name: 'Getting started', exact: true })).toHaveCount(
+		0
+	);
+	await navigation.getByRole('link', { name: 'Scroll animations', exact: true }).click();
 	await expect(page).toHaveURL(/\/docs\/scroll$/);
 	await expect(page.getByRole('searchbox', { name: 'Find a guide' })).toHaveValue('');
 	await page
 		.getByRole('navigation', { name: 'Previous and next guide' })
 		.getByRole('link', { name: 'Next' })
 		.click();
-	await expect(page).toHaveURL(/\/docs\/timelines$/);
+	await expect(page).toHaveURL(/\/docs\/svg$/);
 	await page.goBack();
-	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Scroll-linked motion');
+	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Scroll animations');
 	expect(errors).toEqual([]);
 });
 
@@ -178,15 +186,15 @@ test('mobile documentation opens its contents and navigates without horizontal o
 	await expect(menu).toHaveAttribute('open');
 	await page
 		.getByRole('navigation', { name: 'Documentation', exact: true })
-		.getByRole('link', { name: 'Presence & exits', exact: true })
+		.getByRole('link', { name: '<AnimatePresence>', exact: true })
 		.click();
-	await expect(page).toHaveURL(/\/docs\/presence$/);
+	await expect(page).toHaveURL(/\/docs\/animate-presence$/);
 	await expect(menu).not.toHaveAttribute('open');
-	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Presence & exits');
+	await expect(page.getByRole('heading', { level: 1 })).toHaveText('<AnimatePresence>');
 	expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-	await page.locator('[data-example="wait"] summary').click();
+	await page.locator('[data-example="animate-presence"] summary').click();
 	await expect(
-		page.getByRole('region', { name: 'PresenceExample.svelte source' }).first()
+		page.getByRole('region', { name: 'AnimatePresenceExample.svelte source' }).first()
 	).toHaveAttribute('tabindex', '0');
 });
 
@@ -209,13 +217,13 @@ test('documentation renders without JavaScript and missing guides return 404', a
 		page
 			.getByRole('navigation', { name: 'Previous and next guide' })
 			.getByRole('link', { name: 'Next' })
-	).toHaveAttribute('href', /docs\/state$/);
+	).toHaveAttribute('href', /docs\/accessibility$/);
 	await page.setViewportSize({ width: 390, height: 844 });
 	await page.locator('details.mobile-navigation summary').click();
 	await expect(
 		page
 			.getByRole('navigation', { name: 'Documentation', exact: true })
-			.getByRole('link', { name: 'Presence & exits', exact: true })
+			.getByRole('link', { name: '<AnimatePresence>', exact: true })
 	).toBeVisible();
 	await context.close();
 	expect((await request.get('/docs/not-a-guide')).status()).toBe(404);
@@ -226,15 +234,18 @@ test('client navigation disposes demo exits instead of retaining previous guide 
 }) => {
 	const errors: string[] = [];
 	page.on('pageerror', (error) => errors.push(error.message));
-	await page.goto('/docs/shared-layout');
+	await page.goto('/examples/shared');
 	await page.getByRole('button', { name: 'Rest', exact: true }).click();
-	const navigation = page.getByRole('navigation', { name: 'Documentation', exact: true });
-	await navigation.getByRole('link', { name: 'Scroll-linked motion' }).click();
-	await expect(page).toHaveURL(/\/docs\/scroll$/);
-	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Scroll-linked motion');
-	await expect(page.locator('#identity')).toHaveCount(0);
+	await page.getByRole('link', { name: 'Read Layout animation', exact: true }).click();
+	await expect(page).toHaveURL(/\/docs\/layout#shared-elements$/);
 	await expect(page.locator('[data-example="shared"]')).toHaveCount(0);
-	await expect(page.locator('article > section')).toHaveCount(5);
+	const navigation = page.getByRole('navigation', { name: 'Documentation', exact: true });
+	await navigation.getByRole('link', { name: 'Scroll animations', exact: true }).click();
+	await expect(page).toHaveURL(/\/docs\/scroll$/);
+	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Scroll animations');
+	await expect(page.locator('#shared-elements')).toHaveCount(0);
+	await expect(page.locator('[data-example="shared"]')).toHaveCount(0);
+	await expect(page.locator('article > section')).toHaveCount(9);
 	const gettingStarted = navigation.getByRole('link', { name: 'Getting started', exact: true });
 	await settlePointerTarget(gettingStarted);
 	await gettingStarted.click();
@@ -243,21 +254,21 @@ test('client navigation disposes demo exits instead of retaining previous guide 
 		.locator('[data-example="state"]')
 		.getByRole('button', { name: 'Dismiss notification' })
 		.click();
-	await navigation.getByRole('link', { name: 'Automatic layout' }).click();
+	await navigation.getByRole('link', { name: 'Layout animation', exact: true }).click();
 	await expect(page).toHaveURL(/\/docs\/layout$/);
 	await expect(page.locator('[data-example="state"]')).toHaveCount(0);
 	await expect(page.locator('[data-example="wait"]')).toHaveCount(0);
-	await expect(page.locator('[data-example="layout"]')).toHaveCount(1);
+	await expect(page.locator('[data-example="layout-expand"]')).toHaveCount(1);
 	await page.goBack();
 	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Getting started');
 	await expect(page.locator('[data-example="state"] .notification')).toHaveCount(1);
-	await expect(page.locator('[data-example="layout"]')).toHaveCount(0);
+	await expect(page.locator('[data-example="layout-expand"]')).toHaveCount(0);
 	expect(errors).toEqual([]);
 });
 
 test('the pinned scroll composition assembles, reverses and resets', async ({ page }) => {
-	await page.goto('/docs/scroll');
-	const demo = page.locator('[data-example="scroll"]');
+	await page.goto('/examples/scroll-composition');
+	const demo = page.locator('[data-example="scroll-composition"]');
 	const reader = demo.locator('.reader');
 	const paper = demo.locator('.paper').first();
 	await expect(paper).toBeVisible();

@@ -1,5 +1,6 @@
 import {
 	resolveVariantFromProps,
+	isAnimationControls,
 	resolveTransition,
 	getValueTransition,
 	type AnimationDefinition,
@@ -12,11 +13,16 @@ import {
 /** The same last-label-wins target contract is used on the server, in presence and live state. */
 export function resolveMotionTarget(
 	props: MotionNodeOptions,
-	definition: AnimationDefinition | undefined,
+	definition: AnimationDefinition | MotionNodeOptions['animate'],
 	custom?: unknown,
 	visual?: VisualElement
 ): TargetAndTransition {
-	if (definition === undefined) return {};
+	if (
+		definition === undefined ||
+		typeof definition === 'boolean' ||
+		isAnimationControls(definition)
+	)
+		return {};
 	if (!Array.isArray(definition))
 		return resolveVariantFromProps(props, definition, custom, visual) ?? {};
 	const target: TargetAndTransition = {};

@@ -3,8 +3,13 @@ import {
 	calcChildStagger,
 	createAnimationState,
 	frame,
+	GroupAnimationWithThen,
 	setTarget,
+	type AnimationPlaybackControls,
+	type AnimationPlaybackControlsWithThen,
 	type AnimationDefinition,
+	type MotionPath,
+	type Transition,
 	type TargetAndTransition,
 	type VisualElement,
 	type VisualElementAnimationOptions
@@ -16,6 +21,78 @@ type Versions = Map<string, number>;
 const versions = new WeakMap<VisualElement, Versions>();
 const epochs = new WeakMap<VisualElement, number>();
 const ownershipGuards = new WeakMap<VisualElement, (target: TargetAndTransition) => void>();
+const componentVisuals = new WeakSet<VisualElement>();
+const activityReaders = new WeakMap<VisualElement, () => boolean>();
+const pathAnimations = new WeakSet<AnimationPlaybackControls>();
+
+/** Path progress is positional even though the engine's private value has no name. */
+export function isMotionPathAnimation(playback: AnimationPlaybackControls): boolean {
+	return pathAnimations.has(playback);
+}
+/** Imperative controls inherit the activity of each visual, including external handles. */
+export function setMotionAnimationActivity(visual: VisualElement, reader: () => boolean): void {
+	activityReaders.set(visual, reader);
+}
+export function isMotionAnimationActive(visual: VisualElement): boolean {
+	return activityReaders.get(visual)?.() ?? true;
+}
+
+/**
+ * arc() owns a private progress value upstream. Give its returned playback to
+ * the axes it drives, so ordinary value replacement, stop and teardown own it.
+ * Geometry and sampling remain the engine's public MotionPath implementation.
+ */
+export function animateMotionPath(
+	visual: VisualElement,
+	path: MotionPath,
+	target: TargetAndTransition,
+	transition: Transition | undefined,
+	delay: number,
+	animations: AnimationPlaybackControlsWithThen[]
+): void {
+	if (!('x' in target || 'y' in target)) return;
+	const axes = ['x', 'y'].map((key) => visual.getValue(key, visual.latestValues[key] ?? 0));
+	for (const value of axes) value.stop();
+	const first = animations.length;
+	path.animateVisualElement(visual, target, transition, delay, animations);
+	const owned = animations.slice(first);
+	if (!owned.length) return;
+	const playback = owned.length === 1 ? owned[0] : new GroupAnimationWithThen(owned);
+	pathAnimations.add(playback);
+	for (const animation of owned) pathAnimations.add(animation);
+	for (const value of axes) {
+		void value.start((complete) => {
+			void playback.finished.then(complete);
+			return playback;
+		});
+	}
+}
+
+function ownedPathTransition(transition: Transition | undefined): Transition | undefined {
+	const path = transition?.path;
+	if (!path) return transition;
+	return {
+		...transition,
+		path: {
+			...path,
+			animateVisualElement(visual, target, configuration, delay, animations) {
+				// Reduced transforms follow animateTarget's ordinary instant path.
+				if (
+					(configuration as (Transition & { reduceMotion?: boolean }) | undefined)?.reduceMotion ??
+					visual.shouldReduceMotion
+				)
+					return;
+				animateMotionPath(visual, path, target, configuration, delay, animations);
+			}
+		}
+	};
+}
+export function useComponentAnimationPolicy(visual: VisualElement) {
+	componentVisuals.add(visual);
+}
+export function isComponentMotionVisual(visual: VisualElement): boolean {
+	return componentVisuals.has(visual);
+}
 
 /** The visual owner validates inherited targets before Motion writes their first value. */
 export function setMotionAnimationGuard(
@@ -60,28 +137,38 @@ export function animateMotionDefinition(
 	if (!current()) return Promise.resolve();
 	visual.notify('AnimationStart', definition);
 	async function animateResolved() {
-		const target = resolveMotionTarget(visual.getProps(), definition, options.custom, visual);
-		const transition = visual.shouldReduceMotion
+		const target = resolveMotionTarget(
+			visual.getProps(),
+			definition,
+			type === 'exit' ? visual.presenceContext?.custom : options.custom,
+			visual
+		);
+		const reduceAll = visual.shouldReduceMotion && !componentVisuals.has(visual);
+		const transition = reduceAll
 			? {}
 			: (options.transitionOverride ?? target?.transition ?? visual.getDefaultTransition() ?? {});
 		const own = async () => {
 			if (!current() || !target) return;
 			ownershipGuards.get(visual)?.(target);
 			const { transitionEnd, ...values } = target;
+			const pathTransition = ownedPathTransition(transition);
 			// Settle already-finished native effects before Motion replaces targets.
 			// Running values remain entirely under Motion's priority/interruption logic.
 			visual.values.forEach((value) =>
-				prepareMotionHandoff(value.animation, { finishedOnly: !visual.shouldReduceMotion })
+				prepareMotionHandoff(value.animation, { finishedOnly: !reduceAll })
 			);
 			await Promise.all(
 				animateTarget(
 					visual,
-					values,
-					visual.shouldReduceMotion
+					pathTransition?.path ? { ...values, transition: pathTransition } : values,
+					reduceAll
 						? { ...options, delay: 0, transitionOverride: { type: false, duration: 0, delay: 0 } }
-						: options
+						: options.transitionOverride && pathTransition?.path
+							? { ...options, transitionOverride: pathTransition }
+							: options
 				)
 			);
+
 			if (transitionEnd && current())
 				await new Promise<void>((resolve) =>
 					frame.update(() => {

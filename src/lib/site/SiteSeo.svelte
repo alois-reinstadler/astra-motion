@@ -6,7 +6,9 @@
 			: undefined
 	);
 	const canonical = $derived(
-		metadata && page.data.seo?.origin ? `${page.data.seo.origin}${page.url.pathname}` : undefined
+		metadata && page.data.seo?.origin
+			? `${page.data.seo.origin}${page.data.seo.canonicalPathname}`
+			: undefined
 	);
 </script>
 

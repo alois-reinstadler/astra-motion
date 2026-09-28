@@ -69,18 +69,21 @@ function pointer(target: EventTarget, type: string, x = 0, id = 1) {
 	);
 }
 
-it('keeps Enter working after reattachment while focus stays on the same button', () => {
+it('keeps Enter working after reattachment while focus stays on the same button', async () => {
 	let taps = 0;
 	const f = fixture({ onTap: () => taps++ });
 	f.node.focus();
 	key(f.node);
+	expect(taps).toBe(0);
+	await nextFrame();
 	f.rebind();
 	expect(document.activeElement).toBe(f.node);
 	key(f.node);
+	await nextFrame();
 	expect(taps).toBe(2);
 });
 
-it('does not retain disposed focus callbacks or accumulate keyboard handlers per press', () => {
+it('does not retain disposed focus callbacks or accumulate keyboard handlers per press', async () => {
 	let taps = 0;
 	const f = fixture({ onTap: () => taps++ });
 	const add = vi.spyOn(f.node, 'addEventListener');
@@ -88,6 +91,8 @@ it('does not retain disposed focus callbacks or accumulate keyboard handlers per
 	const afterRebind = add.mock.calls.length;
 	f.node.focus();
 	for (let i = 0; i < 30; i++) key(f.node);
+	expect(taps).toBe(0);
+	await nextFrame();
 	expect(taps).toBe(30);
 	expect(add.mock.calls).toHaveLength(afterRebind);
 	f.stop();
@@ -95,11 +100,12 @@ it('does not retain disposed focus callbacks or accumulate keyboard handlers per
 	f.node.blur();
 	f.node.focus();
 	key(f.node);
+	await nextFrame();
 	expect(add.mock.calls).toHaveLength(afterStop);
 	expect(taps).toBe(30);
 });
 
-it('keeps Space feedback separate from native click and ignores other pointers', () => {
+it('keeps Space feedback separate from native click and ignores other pointers', async () => {
 	let taps = 0;
 	let clicks = 0;
 	const f = fixture({ whileTap: { scale: 0.9 }, onTap: () => taps++ });
@@ -115,6 +121,8 @@ it('keeps Space feedback separate from native click and ignores other pointers',
 	pointer(f.node, 'pointerup', 0, 6);
 	expect(f.states.get('whileTap')).toBe(true);
 	pointer(f.node, 'pointerup', 0, 5);
+	expect(taps).toBe(0);
+	await nextFrame();
 	expect(taps).toBe(1);
 	expect(f.states.get('whileTap')).toBe(false);
 	f.node.click();
@@ -158,7 +166,7 @@ it('cancels invalid mid-drag bounds without a poisoned pose, drag lock or moment
 	expect(isDragActive()).toBe(false);
 });
 
-it('revalidates constraints changed by drag callbacks before pose and momentum writes', () => {
+it('revalidates drag-start constraints before pose writes and stops inertia after invalid drag-end changes', async () => {
 	const f = fixture({ drag: 'x', dragConstraints: { left: 0, right: 100 } });
 	f.options.onDragStart = () => {
 		f.options.dragConstraints = { left: NaN };
@@ -167,6 +175,7 @@ it('revalidates constraints changed by drag callbacks before pose and momentum w
 	pointer(window, 'pointerup', 30);
 	expect(f.visual.getValue('x', 0).get()).toBe(0);
 	expect(isDragActive()).toBe(false);
+	await nextFrame();
 	f.options.onDragStart = undefined;
 	f.options.dragConstraints = { left: 0, right: 100 };
 	f.options.onDragEnd = () => {
@@ -175,11 +184,12 @@ it('revalidates constraints changed by drag callbacks before pose and momentum w
 	pointer(f.node, 'pointerdown');
 	pointer(window, 'pointerup', 30);
 	expect(f.visual.getValue('x', 0).get()).toBe(30);
+	await nextFrame();
 	expect(f.visual.getValue('x', 0).isAnimating()).toBe(false);
 	expect(isDragActive()).toBe(false);
 });
 
-it('cancels pointer feedback on window blur and accepts the next press', () => {
+it('cancels pointer feedback on window blur and accepts the next press', async () => {
 	let taps = 0;
 	let cancellations = 0;
 	const f = fixture({
@@ -194,12 +204,16 @@ it('cancels pointer feedback on window blur and accepts the next press', () => {
 	expect(f.states.get('whileTap')).toBe(true);
 	window.dispatchEvent(new Event('blur'));
 	expect(f.states.get('whileTap')).toBe(false);
+	expect(cancellations).toBe(0);
+	await nextFrame();
 	expect(cancellations).toBe(1);
 	pointer(f.node, 'pointerdown');
 	pointer(f.node, 'pointerup');
+	await nextFrame();
 	expect(taps).toBe(1);
 	f.stop();
 	window.dispatchEvent(new Event('blur'));
+	await nextFrame();
 	expect(cancellations).toBe(1);
 });
 
@@ -222,13 +236,14 @@ it('restores projection and stops writing when onDragStart disposes the binding'
 	f.visual.projection = undefined;
 });
 
-it('does not call drag end or start inertia after onPanEnd disposes the binding', () => {
+it('does not call drag end or retain inertia after onPanEnd disposes the binding', async () => {
 	const f = fixture({ drag: 'x' });
 	let dragEnds = 0;
 	f.options.onPanEnd = () => f.stop();
 	f.options.onDragEnd = () => dragEnds++;
 	pointer(f.node, 'pointerdown');
 	pointer(window, 'pointerup', 30);
+	await nextFrame();
 	expect(dragEnds).toBe(0);
 	expect(isDragActive()).toBe(false);
 	expect(f.visual.getValue('x', 0).isAnimating()).toBe(false);

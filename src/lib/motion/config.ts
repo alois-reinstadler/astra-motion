@@ -1,14 +1,16 @@
 import { getContext, setContext, untrack } from 'svelte';
-import type { Transition } from 'motion-dom';
+import { resolveTransition, type Point2D, type Transition } from 'motion-dom';
 import type { MotionPolicy } from './policy.js';
 
 export interface MotionConfigOptions extends MotionPolicy {
 	transition?: Transition;
 	layoutTransition?: Transition;
 	automatic?: boolean;
+	transformPagePoint?: (point: Point2D) => Point2D;
+	nonce?: string;
 }
 const key = Symbol('astra-motion-config');
-type ConfigReader = () => MotionConfigOptions;
+export type ConfigReader = () => MotionConfigOptions;
 const empty: ConfigReader = () => ({});
 interface ConfigScope {
 	parent?: ConfigReader;
@@ -55,7 +57,15 @@ export function readMotionConfig(): ConfigReader {
 
 export function provideMotionConfig(config: ConfigReader): () => void {
 	const parent = readMotionConfig();
-	const reader = () => ({ ...parent(), ...config() });
+	const reader = () => {
+		const inherited = parent();
+		const own = config();
+		return {
+			...inherited,
+			...own,
+			transition: resolveTransition(own.transition, inherited.transition)
+		};
+	};
 	scopes.set(reader, {
 		// The empty fallback is not a provider shared by otherwise unrelated trees.
 		parent: parent === empty ? undefined : parent,
@@ -63,7 +73,13 @@ export function provideMotionConfig(config: ConfigReader): () => void {
 	});
 	setContext<ConfigReader>(key, reader);
 	return () => {
-		Object.values(config());
+		const seen = new WeakSet<object>();
+		const track = (value: unknown) => {
+			if (!value || typeof value !== 'object' || seen.has(value)) return;
+			seen.add(value);
+			Object.values(value).forEach(track);
+		};
+		track(config());
 		untrack(() => notifyMotionConfig(reader));
 	};
 }

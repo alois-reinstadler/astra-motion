@@ -14,10 +14,10 @@ it('renders compiled native elements with bindings and semantic attributes durin
 	expect(body).not.toMatch(/<div\b/);
 });
 
-it('exports static tag components without a runtime factory or proxy', () => {
+it('exports compiled tag components and an explicit custom component factory', () => {
 	expect(motion.button).toBeTypeOf('function');
 	expect(motion.input).toBeTypeOf('function');
 	expect(motion.var).toBeTypeOf('function');
-	expect('svg' in motion).toBe(false);
-	expect('create' in motion).toBe(false);
+	expect(motion.svg).toBeTypeOf('function');
+	expect(motion.create).toBeTypeOf('function');
 });

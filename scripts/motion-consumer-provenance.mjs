@@ -1,6 +1,14 @@
 import { verifyConsumerDependencies } from './motion-consumer-dependencies.mjs';
 import assert from 'node:assert/strict';
-import { readFileSync, readdirSync, writeFileSync, realpathSync } from 'node:fs';
+import {
+	readFileSync,
+	readdirSync,
+	writeFileSync,
+	realpathSync,
+	mkdtempSync,
+	rmSync
+} from 'node:fs';
+import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
@@ -35,12 +43,19 @@ export function verifyPackedConsumer(setup) {
 		installed.startsWith(realpathSync(setup.consumer) + '/'),
 		'Installed package resolves outside isolated consumer'
 	);
-	for (const file of files) {
-		const packed = execFileSync('tar', ['-xOzf', setup.archive, file]);
-		assert(
-			packed.equals(readFileSync(join(installed, file.slice('package/'.length)))),
-			`Installed package differs: ${file}`
-		);
+	const extracted = mkdtempSync(join(tmpdir(), 'astra-packed-identity-'));
+	try {
+		execFileSync('tar', ['-xzf', setup.archive, '--no-same-owner', '-C', extracted]);
+		for (const file of files) {
+			assert(
+				readFileSync(join(extracted, file)).equals(
+					readFileSync(join(installed, file.slice('package/'.length)))
+				),
+				`Installed package differs: ${file}`
+			);
+		}
+	} finally {
+		rmSync(extracted, { recursive: true, force: true });
 	}
 	const packed = JSON.parse(readFileSync(join(installed, 'package.json'), 'utf8'));
 	return { files, packed, bytes: bytes.length };

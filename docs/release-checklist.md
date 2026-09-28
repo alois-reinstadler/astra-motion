@@ -37,8 +37,8 @@ CI owns its production preview process explicitly. Local configs use an existing
 
 ## Dependency boundary
 
-The distributable includes one DOM-only engine: motion-dom 13.4.2, the framer-motion
-13.4.3 DOM entry, and motion-utils 13.3.0. These are exact build dependencies, not ranges for
+The distributable includes one DOM-only engine: motion-dom 13.4.4, the framer-motion
+13.4.4 DOM entry, and motion-utils 13.3.0. These are exact build dependencies, not ranges for
 consumer package managers to resolve. The qualification app has no Motion overrides
 or direct Motion dependencies. Svelte is the required peer; Kit is optional unless
 the routes entry is used.
@@ -69,3 +69,13 @@ that workaround, then pass browser qualification using the same packed archive.
 ## Publish the candidate
 
 Only after the owner approves publication and the release gates above are resolved: pack the final commit, compare its contents with the qualified archive, publish that exact artifact and verify a fresh registry installation. Record the published version and hash in the release notes. Do not substitute an untested repack after qualification.
+
+## Comprehensive surface delivery
+
+- [ ] Every row in the parity matrix has implementation, tests and matching documentation.
+- [ ] Installed plain Svelte and SvelteKit consumers pass strict types, SSR/hydration and runtime checks.
+- [ ] Three-browser component and website suites pass; actual lazy/mini production graphs are recorded.
+- [ ] Fresh adversarial review and final polish findings are resolved and verified.
+- [ ] Main is merged/pushed, CI and Pages are green, and deployed interactions are verified.
+
+The dated [delivery record](parity/PROGRESS.md) records completion evidence.

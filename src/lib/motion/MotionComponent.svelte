@@ -5,23 +5,28 @@
 		nativeComponentProps,
 		type ComponentMotionProps
 	} from './component-props.js';
+	import type { MotionChildren as Children } from './motion-children.js';
 
 	export type MotionTag = keyof HTMLElementTagNameMap & keyof SvelteHTMLElements;
 	type NativeProps<Tag extends MotionTag> = {
 		[
-			Key in keyof SvelteHTMLElements[Tag] as Key extends keyof ComponentMotionProps ? never : Key
+			Key in keyof SvelteHTMLElements[Tag] as Key extends keyof ComponentMotionProps | 'children'
+				? never
+				: Key
 		]: SvelteHTMLElements[Tag][Key];
 	};
 	export type MotionProps<Tag extends MotionTag = 'div'> = NativeProps<Tag> &
 		ComponentMotionProps & {
 			as?: Tag;
 			ref?: HTMLElement | null;
+			children?: Children;
 		};
 </script>
 
 <script lang="ts" generics="Tag extends MotionTag = 'div'">
 	import { untrack } from 'svelte';
 	import { createComponentMotion } from './component-motion.js';
+	import MotionChildren from './MotionChildren.svelte';
 	let {
 		as = 'div' as Tag,
 		motion = {},
@@ -81,6 +86,6 @@
 		style={`${typeof style === 'string' ? style : ''};${binding.props.style}`}
 		transition:motionTransition|global
 	>
-		{@render children?.()}
+		<MotionChildren {children} />
 	</svelte:element>
 {/if}

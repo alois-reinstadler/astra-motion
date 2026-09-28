@@ -55,8 +55,8 @@ export const genericFlat: MotionProps<'button'> = {
 	style: 'color:red'
 };
 export const invalidFlat: ComponentProps<typeof motion.div> = {
-	// @ts-expect-error Animation definitions do not accept booleans.
-	animate: true
+	// @ts-expect-error Animation definitions do not accept numbers.
+	animate: 42
 };
 export const invalidStyle: ComponentProps<typeof motion.div> = {
 	// @ts-expect-error Styles accept native CSS strings or Motion style objects, not numbers.
@@ -75,3 +75,5 @@ export const genericObjectStyle: MotionProps<'button'> = {
 		button.checkValidity();
 	}
 };
+
+export const disabledAnimation: ComponentProps<typeof motion.div> = { animate: false };

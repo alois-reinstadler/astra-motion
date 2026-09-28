@@ -367,3 +367,4 @@ export function createAnimate(policy: MotionPolicy | (() => MotionPolicy) = {}):
 		}
 	};
 }
+export { useAnimate, type ScopedAnimate, type UseAnimateScope } from './use-animate.svelte.js';

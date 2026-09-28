@@ -1,55 +1,85 @@
 import { isDragActive, isPrimaryPointer } from 'motion-dom';
 
 type PressEnd = (event: PointerEvent, info: { success: boolean }) => void;
-type PressStart = (node: HTMLElement, event: PointerEvent) => PressEnd | void;
-const nativeKeyboardElements = new Set(['BUTTON', 'INPUT', 'SELECT', 'TEXTAREA', 'A']);
+type PressStart = (node: HTMLElement | SVGElement, event: PointerEvent) => PressEnd | void;
+const nativeKeyboardElements = new Set(['BUTTON', 'INPUT', 'SELECT', 'TEXTAREA']);
+const claimedEvents = new WeakSet<Event>();
+const activePresses = new Set<(event: PointerEvent) => void>();
+
+/** A drag claims a pointer after the threshold, and cancels its nested tap feedback. */
+export function cancelPointerPresses(event: PointerEvent): void {
+	for (const cancel of [...activePresses]) cancel(event);
+}
 
 /** Lifetime-owned equivalent of Motion's pointer/Enter press helper. Click stays native. */
-export function attachPress(node: HTMLElement, onStart: PressStart): () => void {
+export function attachPress(
+	node: HTMLElement | SVGElement,
+	onStart: PressStart,
+	config: { globalTapTarget?: boolean; propagate?: { tap?: boolean } } = {}
+): () => void {
+	const view = node.ownerDocument.defaultView!;
 	const lifetime = new AbortController();
 	const options = { signal: lifetime.signal };
 	let session: AbortController | undefined;
 	let keyboardDown = false;
 	let disposed = false;
+	let cancelPress: ((event: PointerEvent) => void) | undefined;
 
 	const dispatchKeyboardPointer = (type: 'down' | 'up' | 'cancel') => {
 		node.dispatchEvent(new PointerEvent(`pointer${type}`, { isPrimary: true, bubbles: true }));
 	};
 	const cancelSession = () => {
+		if (cancelPress) activePresses.delete(cancelPress);
+		cancelPress = undefined;
 		session?.abort();
 		session = undefined;
 		keyboardDown = false;
 	};
 
-	node.addEventListener(
+	(config.globalTapTarget ? view : node).addEventListener(
 		'pointerdown',
 		(event) => {
-			if (disposed || session || !isPrimaryPointer(event) || isDragActive()) return;
+			const pointerEvent = event as PointerEvent;
+			if (
+				disposed ||
+				session ||
+				!isPrimaryPointer(pointerEvent) ||
+				isDragActive() ||
+				claimedEvents.has(event)
+			)
+				return;
+			if (config.propagate?.tap === false) claimedEvents.add(event);
 			const active = new AbortController();
 			session = active;
 			let onEnd: PressEnd | void;
 			try {
-				onEnd = onStart(node, event);
+				onEnd = onStart(node, pointerEvent);
 			} catch (error) {
 				cancelSession();
 				throw error;
 			}
 			if (disposed || session !== active) return;
 			const finish = (end: PointerEvent, success: boolean) => {
-				if (end.pointerId !== event.pointerId) return;
+				if (end.pointerId !== pointerEvent.pointerId) return;
 				cancelSession();
-				if (isPrimaryPointer(end) && !isDragActive()) onEnd?.(end, { success });
+				if (isPrimaryPointer(end)) onEnd?.(end, { success: success && !isDragActive() });
 			};
+			cancelPress = (end) => finish(end, false);
+			activePresses.add(cancelPress);
 			const endOptions = { signal: active.signal, capture: true };
-			window.addEventListener(
+			view.addEventListener(
 				'pointerup',
-				(end) => finish(end, end.target instanceof Node && node.contains(end.target)),
+				(end) =>
+					finish(
+						end,
+						!!config.globalTapTarget || (end.target instanceof Node && node.contains(end.target))
+					),
 				endOptions
 			);
-			window.addEventListener('pointercancel', (end) => finish(end, false), endOptions);
-			window.addEventListener(
+			view.addEventListener('pointercancel', (end) => finish(end, false), endOptions);
+			view.addEventListener(
 				'blur',
-				() => finish(new PointerEvent('pointercancel', event), false),
+				() => finish(new PointerEvent('pointercancel', pointerEvent), false),
 				{ signal: active.signal }
 			);
 		},
@@ -61,7 +91,8 @@ export function attachPress(node: HTMLElement, onStart: PressStart): () => void 
 	node.addEventListener(
 		'keydown',
 		(event) => {
-			if (event.target !== node || event.key !== 'Enter' || event.repeat || session) return;
+			const keyboard = event as KeyboardEvent;
+			if (event.target !== node || keyboard.key !== 'Enter' || keyboard.repeat || session) return;
 			keyboardDown = true;
 			dispatchKeyboardPointer('down');
 		},
@@ -70,7 +101,7 @@ export function attachPress(node: HTMLElement, onStart: PressStart): () => void 
 	node.addEventListener(
 		'keyup',
 		(event) => {
-			if (event.target === node && event.key === 'Enter' && keyboardDown)
+			if (event.target === node && (event as KeyboardEvent).key === 'Enter' && keyboardDown)
 				dispatchKeyboardPointer('up');
 		},
 		options
@@ -84,7 +115,8 @@ export function attachPress(node: HTMLElement, onStart: PressStart): () => void 
 	);
 	if (
 		!nativeKeyboardElements.has(node.tagName) &&
-		!node.isContentEditable &&
+		!(node.tagName.toLowerCase() === 'a' && node.hasAttribute('href')) &&
+		!('isContentEditable' in node && node.isContentEditable) &&
 		!node.hasAttribute('tabindex')
 	)
 		node.tabIndex = 0;

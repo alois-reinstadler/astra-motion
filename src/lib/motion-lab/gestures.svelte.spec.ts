@@ -127,7 +127,7 @@ it('preserves a spring follower through native handoff checks and retargeting', 
 	}
 });
 
-it('filters touch hover, supports pointer tap cancellation, and clears states on cleanup', () => {
+it('filters touch hover, supports pointer tap cancellation, and clears states on cleanup', async () => {
 	let taps = 0;
 	let cancels = 0;
 	const f = fixture({
@@ -144,9 +144,13 @@ it('filters touch hover, supports pointer tap cancellation, and clears states on
 	expect(f.states.get('whileTap')).toBe(true);
 	pointer(f.node, 'pointercancel');
 	expect(f.states.get('whileTap')).toBe(false);
+	expect(cancels).toBe(0);
+	await nextFrame();
 	expect(cancels).toBe(1);
 	pointer(f.node, 'pointerdown');
 	pointer(f.node, 'pointerup');
+	expect(taps).toBe(0);
+	await nextFrame();
 	expect(taps).toBe(1);
 	f.stop();
 	expect(f.states.get('whileHover')).toBe(false);
@@ -154,7 +158,7 @@ it('filters touch hover, supports pointer tap cancellation, and clears states on
 	expect(f.states.get('whileTap')).toBe(false);
 });
 
-it('supports keyboard press, restores generated tabindex, and suppresses disabled interaction', () => {
+it('supports keyboard press, restores generated tabindex, and suppresses disabled interaction', async () => {
 	let taps = 0;
 	const f = fixture({ whileTap: { scale: 0.9 }, onTap: () => taps++ }, 'div');
 	expect(f.node.tabIndex).toBe(0);
@@ -163,10 +167,13 @@ it('supports keyboard press, restores generated tabindex, and suppresses disable
 	expect(f.states.get('whileTap')).toBe(true);
 	f.node.dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter' }));
 	expect(f.states.get('whileTap')).toBe(false);
+	expect(taps).toBe(0);
+	await nextFrame();
 	expect(taps).toBe(1);
 	f.node.setAttribute('aria-disabled', 'true');
 	pointer(f.node, 'pointerdown');
 	pointer(f.node, 'pointerup');
+	await nextFrame();
 	expect(taps).toBe(1);
 	f.stop();
 	expect(f.node.hasAttribute('tabindex')).toBe(false);
@@ -197,6 +204,7 @@ it('drags through the existing VisualElement, clamps numeric bounds, ignores oth
 	const f = fixture({
 		drag: 'x',
 		dragConstraints: { left: -20, right: 60 },
+		dragElastic: false,
 		dragMomentum: false,
 		onDragStart: () => starts++,
 		onDragEnd: () => ends++
@@ -214,6 +222,8 @@ it('drags through the existing VisualElement, clamps numeric bounds, ignores oth
 	expect(isDragActive()).toBe(true);
 	pointer(window, 'pointerup', 100, 20);
 	expect(starts).toBe(1);
+	expect(ends).toBe(0);
+	await nextFrame();
 	expect(ends).toBe(1);
 	expect(isDragActive()).toBe(false);
 	expect(f.states.get('whileDrag')).toBe(false);
@@ -288,6 +298,8 @@ it('provides pan callbacks without changing element transforms', async () => {
 	expect(f.visual.getValue('x', 0).get()).toBe(0);
 	expect(isDragActive()).toBe(false);
 	pointer(window, 'pointerup', 50, 10);
+	expect(ends).toBe(0);
+	await nextFrame();
 	expect(ends).toBe(1);
 });
 
@@ -322,6 +334,7 @@ it('keeps release inertia within numeric bounds', async () => {
 	const f = fixture({
 		drag: 'x',
 		dragConstraints: { left: 0, right: 60 },
+		dragElastic: false,
 		dragTransition: { timeConstant: 70 }
 	});
 	pointer(f.node, 'pointerdown');
@@ -384,6 +397,7 @@ it('captures a real browser pointer throughout dragging and releases it at the e
 	cleanups.push(() => destination.remove());
 	await userEvent.dragAndDrop(f.node, destination);
 	expect(captured).toBe(true);
+	await nextFrame();
 	expect(ended).toBe(true);
 	expect(Number(f.visual.getValue('x', 0).get())).toBeGreaterThan(100);
 	expect(isDragActive()).toBe(false);

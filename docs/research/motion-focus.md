@@ -1,5 +1,9 @@
 # Motion integration scope
 
+> Historical baseline. The 27 September 2026 [parity contract](../parity/MATRIX.md)
+> supersedes earlier feature exclusions and dependency targets. This record preserves
+> its original observations; use the current contract for supported behavior.
+
 This is the historical September 21 decision and verification record. For the
 current engine pins, bundled consumer declarations and layout qualification, see
 the [Motion 13.4 migration](motion-upgrade-13.4.md),

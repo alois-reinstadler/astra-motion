@@ -30,8 +30,8 @@
 			<p class="eyebrow">EXAMPLES</p>
 			<h1>Find the interaction<br /><em>you want to build.</em></h1>
 			<p>
-				Each example opens at its explanation and live preview. Try the interaction, read the key
-				idea, then copy its complete source.
+				Each example has a live preview, complete source, and a link to its reference. Try a focused
+				interaction or explore a larger composition.
 			</p>
 		</header>
 
@@ -65,7 +65,7 @@
 					class="example"
 					href={example.slug === 'showcase'
 						? resolve('/showcase')
-						: resolve(`/docs/[slug]#${example.anchor}`, { slug: example.slug })}
+						: resolve('/examples/[slug]', { slug: example.example! })}
 					><div class="example-art" aria-hidden="true">
 						<span class="art-index">{String(examples.indexOf(example) + 1).padStart(2, '0')}</span>
 						<span class="art-tag">{example.category}</span>

@@ -2,6 +2,7 @@
 <script lang="ts">
 	import { createComponentMotion } from '../component-motion.js';
 	import { componentMotionOptions, nativeComponentProps } from '../component-props.js';
+	import MotionChildren from '../MotionChildren.svelte';
 	import type { MotionDetailsProps } from './types.js';
 	let {
 		motion = {},
@@ -30,5 +31,5 @@
 	{@attach forwardRef}
 	bind:open
 >
-	{@render children?.()}
+	<MotionChildren {children} />
 </details>

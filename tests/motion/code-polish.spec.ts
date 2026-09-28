@@ -13,7 +13,7 @@ test('highlighting preserves copied source and copy feedback does not move the c
 			}
 		});
 	});
-	await page.goto('/docs/layout');
+	await page.goto('/examples/layout');
 	const example = page.locator('[data-example="layout"]');
 	await example.locator('summary').click();
 	const code = example.locator('details pre code');
@@ -55,7 +55,7 @@ test('clipboard failure remains actionable and reduced motion disables feedback 
 			}
 		});
 	});
-	await page.goto('/docs/layout');
+	await page.goto('/examples/layout');
 	const example = page.locator('[data-example="layout"]');
 	await example.locator('summary').click();
 	const button = example.getByRole('button', { name: 'Copy LayoutExample.svelte' });

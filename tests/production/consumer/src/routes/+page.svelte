@@ -10,6 +10,14 @@
 	import * as entry8 from 'astra-motion/scroll';
 	import * as entry9 from 'astra-motion/state/lite';
 	import * as entry10 from 'astra-motion/in-view';
+	import * as entry11 from 'astra-motion/m';
+	import * as entry12 from 'astra-motion/features/dom-animation';
+	import * as entry13 from 'astra-motion/features/dom-max';
+	import * as entry14 from 'astra-motion/lazy';
+	import * as entry15 from 'astra-motion/mini';
+	import * as entry16 from 'astra-motion/reorder';
+	import * as entry17 from 'astra-motion/view';
+	import * as entry18 from 'astra-motion/view-navigation';
 	const entries = [
 		{ name: '.', exports: Object.keys(entry0).sort() },
 		{ name: './layout', exports: Object.keys(entry1).sort() },
@@ -21,7 +29,15 @@
 		{ name: './animate', exports: Object.keys(entry7).sort() },
 		{ name: './scroll', exports: Object.keys(entry8).sort() },
 		{ name: './state/lite', exports: Object.keys(entry9).sort() },
-		{ name: './in-view', exports: Object.keys(entry10).sort() }
+		{ name: './in-view', exports: Object.keys(entry10).sort() },
+		{ name: './m', exports: Object.keys(entry11).sort() },
+		{ name: './features/dom-animation', exports: Object.keys(entry12).sort() },
+		{ name: './features/dom-max', exports: Object.keys(entry13).sort() },
+		{ name: './lazy', exports: Object.keys(entry14).sort() },
+		{ name: './mini', exports: Object.keys(entry15).sort() },
+		{ name: './reorder', exports: Object.keys(entry16).sort() },
+		{ name: './view', exports: Object.keys(entry17).sort() },
+		{ name: './view-navigation', exports: Object.keys(entry18).sort() }
 	];
 </script>
 

@@ -1,16 +1,24 @@
 {
 	"pins": {
-		"motion": "13.4.3",
-		"motion-dom": "13.4.2",
-		"framer-motion": "13.4.3",
+		"motion": "13.4.4",
+		"motion-dom": "13.4.4",
+		"framer-motion": "13.4.4",
 		"motion-utils": "13.3.0"
 	},
 	"resolved": {
-		"framer-motion": "13.4.3",
+		"framer-motion": "13.4.4",
 		"motion-utils": "13.3.0"
 	},
 	"exports": {
-		"motion": ["animate", "cancelFrame", "scroll", "transformProps", "visualElementStore"],
+		"motion": [
+			"animate",
+			"animateMini",
+			"cancelFrame",
+			"createScopedAnimate",
+			"scroll",
+			"transformProps",
+			"visualElementStore"
+		],
 		"motion-dom": [
 			"AsyncMotionValueAnimation",
 			"GroupAnimation",
@@ -19,15 +27,23 @@
 			"JSAnimation",
 			"NativeAnimation",
 			"NativeAnimationExtended",
+			"NativeAnimationWrapper",
+			"SVGVisualElement",
 			"addScaleCorrector",
 			"animateMotionValue",
 			"animateTarget",
 			"applyBoxDelta",
+			"applyGeneratorOptions",
+			"arc",
+			"attachSpring",
 			"buildHTMLStyles",
+			"buildSVGAttrs",
 			"calcBoxDelta",
 			"calcChildStagger",
+			"camelCaseAttributes",
 			"camelToDash",
 			"cancelFrame",
+			"collectMotionValues",
 			"copyBoxInto",
 			"correctBorderRadius",
 			"correctBoxShadow",
@@ -39,27 +55,65 @@
 			"getFinalKeyframe",
 			"getValueTransition",
 			"getVariantContext",
+			"getViewAnimationLayerInfo",
 			"hover",
 			"isAnimationControls",
 			"isDragActive",
+			"isElementTextInput",
 			"isForcedMotionValue",
 			"isMotionValue",
 			"isPrimaryPointer",
 			"isTransitionDefined",
+			"mapEasingToNativeEasing",
 			"mapValue",
 			"motionValue",
+			"positionalKeys",
+			"press",
+			"resolveElements",
 			"resolveMotionValue",
 			"resolveTransition",
 			"resolveVariantFromProps",
 			"setDragLock",
 			"setTarget",
+			"spring",
 			"springValue",
 			"stagger",
 			"styleEffect",
 			"svgEffect",
+			"svgSubjectEffect",
+			"time",
+			"transform",
 			"transformProps",
 			"transformValue",
 			"visualElementStore"
 		]
+	},
+	"parityReview": {
+		"date": "2026-09-28",
+		"groups": {
+			"HTML/SVG rendering": ["SVGVisualElement", "buildSVGAttrs", "camelCaseAttributes"],
+			"managed values": ["attachSpring", "collectMotionValues", "transform"],
+			"scoped playback and compatibility": [
+				"animateMini",
+				"createScopedAnimate",
+				"positionalKeys",
+				"resolveElements",
+				"svgSubjectEffect"
+			],
+			"view transitions": [
+				"NativeAnimationWrapper",
+				"applyGeneratorOptions",
+				"getViewAnimationLayerInfo",
+				"mapEasingToNativeEasing"
+			],
+			"documented primitives and gesture integration": [
+				"arc",
+				"press",
+				"spring",
+				"isElementTextInput",
+				"time"
+			]
+		},
+		"evidence": "docs/parity/values-audit.md, docs/parity/lazy-audit.md, component/view/gesture parity browser suites; export presence alone is not behavioral qualification"
 	}
 }
