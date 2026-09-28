@@ -5,6 +5,9 @@ declare module '@fixture' {
 declare interface Window {
 	__astra?: {
 		readTime(): number;
+		springSet(value: number): void;
+		springRead(): number;
+		springAnimating(): boolean;
 		frames(): number;
 		set(value: number): void;
 		read(): number;

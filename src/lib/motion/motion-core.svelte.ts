@@ -608,6 +608,7 @@ function createBinding(
 				if (
 					positionalKeys.has(key) &&
 					animation &&
+					ownsMotionAnimation(visual!, animation) &&
 					!completed.includes(animation) &&
 					'complete' in animation &&
 					typeof animation.complete === 'function'

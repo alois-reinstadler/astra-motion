@@ -1,5 +1,9 @@
 # Final parity qualification
 
+Current follow-up: [independent audit of ef77bf8](RELEASE-AUDIT.md). The record
+below describes the earlier release; its archive measurements and review conclusions
+do not qualify the corrected runtime.
+
 Date: **2026-09-28 UTC**. Runtime candidate:
 `8ea3543979870e0ede58797875b30b468e1fba06`; subsequent changes are documentation,
 qualification tooling and test typing/selector corrections. Motion/framer-motion/

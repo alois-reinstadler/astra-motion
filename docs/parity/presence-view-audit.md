@@ -1,5 +1,7 @@
 # Presence, activity, and view-transition parity audit
 
+Release follow-up: [independent audit](RELEASE-AUDIT.md). View capture name restoration is idempotent across delayed skipped native callbacks. Activity scalar spring intent survives suspension without starting hidden clocks. Evidence: `release-audit.svelte.spec.ts`; exact qualification is in the linked report.
+
 Current integration qualification: [final verification](VERIFICATION.md),
 [installed package](PACKAGE-RESULTS.md), [independent review](ADVERSARIAL-REVIEW.md).
 The dated worker checkpoints below retain their original execution scope; the final

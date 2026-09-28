@@ -140,7 +140,12 @@ export function applyViewNames(snapshots: ReadonlyMap<string, ViewSnapshot>): ()
 		node.style.setProperty('view-transition-name', name, 'important');
 		return { node, name, value, priority, hadStyle };
 	});
+	let restored = false;
 	return () => {
+		// A skipped native callback can arrive after a replacement capture has
+		// installed the same names. This lease must release its writes only once.
+		if (restored) return;
+		restored = true;
 		for (const { node, name, value, priority, hadStyle } of saved) {
 			if (
 				node.style.getPropertyValue('view-transition-name') !== name ||

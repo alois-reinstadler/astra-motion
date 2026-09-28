@@ -1,5 +1,7 @@
 # Animation, element, configuration and loading contracts
 
+Release follow-up: [independent audit](RELEASE-AUDIT.md). Live reduced-motion settlement now checks playback ownership. A consumer cannot complete externally owned playback merely because it renders a borrowed MotionValue. Evidence: `release-audit.svelte.spec.ts`; exact qualification is in the linked report.
+
 Current integration qualification: [final verification](VERIFICATION.md),
 [installed package](PACKAGE-RESULTS.md), [independent review](ADVERSARIAL-REVIEW.md).
 The dated worker checkpoints below retain their original execution scope; the final

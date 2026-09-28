@@ -1,5 +1,9 @@
 # Installed package qualification
 
+Current follow-up: [independent audit of ef77bf8](RELEASE-AUDIT.md). The record
+below describes the earlier release; its archive measurements and review conclusions
+do not qualify the corrected runtime.
+
 Status: **bounded installed-package qualification passed**, 2026-09-28 UTC. Both installed consumers pass strict declarations and production builds. Full Chromium/Firefox results and focused reruns are recorded against their actual archives below; they are not presented as one identical-candidate run. The default CI job runs both complete consumers in every browser.
 
 ## Source and archive identity

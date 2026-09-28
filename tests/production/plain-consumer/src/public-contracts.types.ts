@@ -355,3 +355,23 @@ export function customSVGContracts(
 	const missing: ComponentProps<typeof Deferred> = { animate: { opacity: 1 } };
 	return { Eager, Deferred, eager, deferred, invalid, missing };
 }
+
+// Managed scalar springs retain the ordinary shared-engine MotionValue methods.
+export function scalarSpringContract() {
+	const x: MotionValue<number> = useSpring(0, () => ({ duration: 0.2, bounce: 0 }));
+	const unit: MotionValue<string> = useSpring('0px');
+	x.set(100);
+	x.jump(50);
+	x.stop();
+	unit.set('100px');
+	unit.jump('50px');
+	unit.stop();
+	// @ts-expect-error Numeric spring methods do not accept unit strings.
+	x.set('100px');
+	// @ts-expect-error String spring methods do not accept numbers.
+	unit.jump(50);
+	const [, animate] = useAnimate();
+	animate('div', { x: 100 }, { reduceMotion: false });
+	animate([['div', { x: 100 }]], { reduceMotion: false });
+	return { x, unit };
+}

@@ -1,0 +1,218 @@
+{
+	"date": "2026-09-28T06:22:15.309677+00:00",
+	"baseline": "ef77bf8d2036f5aac21b7b3cf156f7a39be46b99",
+	"upstreamGitHead": "636e725fc71315ca91ff196eb09685017e2fe0c8",
+	"extraction": "HTML article text, block newlines, HTMLParser; separate from the original reference extraction. Hashes are not directly comparable.",
+	"sources": [
+		{
+			"url": "https://motion.dev/docs/react-animation",
+			"slug": "react-animation",
+			"sha256": "bf19cfb35f596c3f9d2694921d65c974b9668cef69e02757a562c1d0196c2e4f",
+			"characters": 17087
+		},
+		{
+			"url": "https://motion.dev/docs/react-layout-animations",
+			"slug": "react-layout-animations",
+			"sha256": "d23d564d213e373885d18a69ec57af6351fea9eabfc9d9f491c2ef3f6219ecee",
+			"characters": 15020
+		},
+		{
+			"url": "https://motion.dev/docs/react-scroll-animations",
+			"slug": "react-scroll-animations",
+			"sha256": "fe47d8af307c48fe8b71d1ac27271c0869daf19c1430e0db93f42675d7bccc54",
+			"characters": 9688
+		},
+		{
+			"url": "https://motion.dev/docs/react-svg-animation",
+			"slug": "react-svg-animation",
+			"sha256": "dfe7c72bf37d84b42a6c1219787bf166c94b8bae26d72ec6d4b3bf1c1ddec3f5",
+			"characters": 5127
+		},
+		{
+			"url": "https://motion.dev/docs/react-transitions",
+			"slug": "react-transitions",
+			"sha256": "1e2385dc8dd46368ad8dd55f09b323683a38e22ff07c01746a2c74bc282711d5",
+			"characters": 12463
+		},
+		{
+			"url": "https://motion.dev/docs/react-gestures",
+			"slug": "react-gestures",
+			"sha256": "97ec1803d4b2afbaffde659e08695fdac34adbec0e283f24a1f6b3bafbfa82a5",
+			"characters": 4717
+		},
+		{
+			"url": "https://motion.dev/docs/react-drag",
+			"slug": "react-drag",
+			"sha256": "828f3943c2c3730b4f50a4c5285aa02484cce01f9c1fbc22e8e1587b9064388f",
+			"characters": 7894
+		},
+		{
+			"url": "https://motion.dev/docs/react-hover-animation",
+			"slug": "react-hover-animation",
+			"sha256": "cdc3f97ff8d5c3dcefaa33d7c32af5210824abdf209e7914fa84e17746388c9c",
+			"characters": 2776
+		},
+		{
+			"url": "https://motion.dev/docs/react-motion-component",
+			"slug": "react-motion-component",
+			"sha256": "cd49c0491c9fb30e7ff422fe5faa1f49b7e311b3a1cb1e7d4b404fef599b2f68",
+			"characters": 21999
+		},
+		{
+			"url": "https://motion.dev/docs/react-animate-activity",
+			"slug": "react-animate-activity",
+			"sha256": "baa67c91ed9dc571d6bfcfda5b121609b0d7e6864e6b35d7c0adf9d87f777088",
+			"characters": 2771
+		},
+		{
+			"url": "https://motion.dev/docs/react-animate-presence",
+			"slug": "react-animate-presence",
+			"sha256": "7191c868b9c0cd15bb0d687501e449d9f319635a4914d99cc9182108ce2405d4",
+			"characters": 10752
+		},
+		{
+			"url": "https://motion.dev/docs/react-animate-view",
+			"slug": "react-animate-view",
+			"sha256": "cd10f5456e54e50dfc0495930c95b1f9624b10882d34a09499721699a043ed51",
+			"characters": 11018
+		},
+		{
+			"url": "https://motion.dev/docs/react-layout-group",
+			"slug": "react-layout-group",
+			"sha256": "90e089accb2e41f9ccaf2298da508ef891a40cbf8b505d9282cccee1093ea10b",
+			"characters": 2001
+		},
+		{
+			"url": "https://motion.dev/docs/react-lazy-motion",
+			"slug": "react-lazy-motion",
+			"sha256": "7d6e8f50a66c3e5ad8d88396a6ebe9969d24c251fd384b7c620ac24c1c0cad07",
+			"characters": 2160
+		},
+		{
+			"url": "https://motion.dev/docs/react-motion-config",
+			"slug": "react-motion-config",
+			"sha256": "8bece403f528dc11593a995f02ade775ff0528f41eba2175e79233d497e6bd74",
+			"characters": 3311
+		},
+		{
+			"url": "https://motion.dev/docs/react-reorder",
+			"slug": "react-reorder",
+			"sha256": "fe1739552f6ec986f128a4e3467ade71636fd284fb262673acb619385e7579f2",
+			"characters": 4974
+		},
+		{
+			"url": "https://motion.dev/docs/react-motion-value",
+			"slug": "react-motion-value",
+			"sha256": "564767f3577afabc78bee30021bcf90c3dccd148f2bdd7591da1c2a564564e74",
+			"characters": 4800
+		},
+		{
+			"url": "https://motion.dev/docs/react-use-motion-template",
+			"slug": "react-use-motion-template",
+			"sha256": "38252ec5c9d23d45d700f91480091fa67853a348508046ed0de0d35829a63bc9",
+			"characters": 1256
+		},
+		{
+			"url": "https://motion.dev/docs/react-use-motion-value-event",
+			"slug": "react-use-motion-value-event",
+			"sha256": "b6daffda4a48a036b8c6b38d6cbb72f011f9309db60fa0e6c4fcf2d93aeb2309",
+			"characters": 1550
+		},
+		{
+			"url": "https://motion.dev/docs/react-use-scroll",
+			"slug": "react-use-scroll",
+			"sha256": "4b762dacb73e9ba478d3f4f9058aa7895ebc942313a7721883a1b05455929e99",
+			"characters": 7006
+		},
+		{
+			"url": "https://motion.dev/docs/react-use-spring",
+			"slug": "react-use-spring",
+			"sha256": "720b63a1e337768a958d4761897df54034d0c962c08e29c9c5b0cb308e23a5d4",
+			"characters": 2207
+		},
+		{
+			"url": "https://motion.dev/docs/react-use-time",
+			"slug": "react-use-time",
+			"sha256": "6b497452bd29efbb2668883ba7d037105bc56b3a57665a53d300868a5c81add4",
+			"characters": 844
+		},
+		{
+			"url": "https://motion.dev/docs/react-use-transform",
+			"slug": "react-use-transform",
+			"sha256": "c110b3538cfc20f6718bbb8617267a02b09b4b70d038aa3e15614509897fd2b9",
+			"characters": 4434
+		},
+		{
+			"url": "https://motion.dev/docs/react-use-velocity",
+			"slug": "react-use-velocity",
+			"sha256": "f705d896f44179ce889465d8b8d1a802908b73fd58fa10c7e0cecd128d019cda",
+			"characters": 1096
+		},
+		{
+			"url": "https://motion.dev/docs/react-use-animate",
+			"slug": "react-use-animate",
+			"sha256": "b496f1d72cc85b29cf1090199930df4a7e49a099c2e8b97347450f1fc8264677",
+			"characters": 3276
+		},
+		{
+			"url": "https://motion.dev/docs/react-use-animation-frame",
+			"slug": "react-use-animation-frame",
+			"sha256": "db49b85e3691ccc78165eed534abcf45c84f3e4ed9266b2d4c9bbd56b48202ab",
+			"characters": 652
+		},
+		{
+			"url": "https://motion.dev/docs/react-use-drag-controls",
+			"slug": "react-use-drag-controls",
+			"sha256": "faf31d63c705069a1948b5d245f306ebe62f05a900ed3c7f38cf451776b7c910",
+			"characters": 2449
+		},
+		{
+			"url": "https://motion.dev/docs/react-use-in-view",
+			"slug": "react-use-in-view",
+			"sha256": "ea7dca2f2cfd3bace0b7bee0a437fa398ec0da3ea30f1bf040ba696fceb27c0c",
+			"characters": 2812
+		},
+		{
+			"url": "https://motion.dev/docs/react-use-page-in-view",
+			"slug": "react-use-page-in-view",
+			"sha256": "ffb0e2521a3b329766cf91adfacd8157c44c32f520b063adf59f9d299a231b72",
+			"characters": 1153
+		},
+		{
+			"url": "https://motion.dev/docs/react-use-reduced-motion",
+			"slug": "react-use-reduced-motion",
+			"sha256": "fe39456c0615872268be5a629fdb9fe2ebe3a67f0355e0339c9529a27b474b0d",
+			"characters": 1136
+		},
+		{
+			"url": "https://motion.dev/docs/react",
+			"slug": "react",
+			"sha256": "c4af416e82cf61d7c37703a11a76755e5c8a0faaa0f510245c6a10f97b97a9e7",
+			"characters": 7672
+		},
+		{
+			"url": "https://motion.dev/docs/react-accessibility",
+			"slug": "react-accessibility",
+			"sha256": "75ad637ee0f21a4895339e14dc6842c309ee730beb065296d14614fb5461f091",
+			"characters": 4483
+		},
+		{
+			"url": "https://motion.dev/docs/react-reduce-bundle-size",
+			"slug": "react-reduce-bundle-size",
+			"sha256": "3a4a738c8a03fc1a2b5347e994a35dba6549ea5d854bc8eace257892162e4eeb",
+			"characters": 5023
+		},
+		{
+			"url": "https://motion.dev/docs/text-animation",
+			"slug": "text-animation",
+			"sha256": "6999e1f701376c44ec5fbd9b0891000ae4e6e9ca996a6a3fb576bc7a12075bdc",
+			"characters": 13661
+		},
+		{
+			"url": "https://motion.dev/docs/arc",
+			"slug": "arc",
+			"sha256": "403a6038d62820dfafa6eb56543a7ad13cf2904c75724256ea25a511e5bad4a1",
+			"characters": 3843
+		}
+	]
+}

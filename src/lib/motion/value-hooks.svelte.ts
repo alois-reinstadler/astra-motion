@@ -193,6 +193,7 @@ export interface UseSpringOptions extends SpringOptions {
 	skipInitialAnimation?: boolean;
 }
 
+/** Retains the latest set target across settings changes and hidden Activity. */
 export function useSpring(
 	input: MotionGetter<number | MotionValue<number>>,
 	options?: MotionGetter<UseSpringOptions>
@@ -208,6 +209,29 @@ export function useSpring<T extends number | string>(
 	const active = readActivityState();
 	const initial = untrack(() => readMotionGetter(input));
 	const value = useMotionValue<T>(isMotionValue(initial) ? initial.get() : initial);
+	let target = value.get();
+	let previousSource = initial;
+	let alive = true;
+	const setValue = value.set.bind(value);
+	const jumpValue = value.jump.bind(value);
+	const stopValue = value.stop.bind(value);
+	// These methods belong to this owned value only. The borrowed source and
+	// engine prototypes are untouched. Hidden sets retain intent without clocks.
+	value.set = (latest) => {
+		target = latest;
+		if (alive && untrack(active)) setValue(latest);
+	};
+	value.jump = (latest, endAnimation) => {
+		target = latest;
+		jumpValue(latest, endAnimation);
+	};
+	value.stop = () => {
+		stopValue();
+		target = value.get();
+	};
+	onDestroy(() => {
+		alive = false;
+	});
 	function followSource() {
 		if (!active()) return;
 		const source = readMotionGetter(input);
@@ -230,13 +254,15 @@ export function useSpring<T extends number | string>(
 				value.jump(latest);
 			} else value.set(latest);
 		};
-		const latest = isMotionValue(source) ? source.get() : source;
-		if (latest !== untrack(() => value.get())) set(latest);
+		if (typeof source === 'object') target = source.get();
+		else if (!Object.is(source, previousSource)) target = source;
+		previousSource = source;
+		if (target !== untrack(() => value.get())) set(target);
 		const stop = isMotionValue(source) ? source.on('change', set) : undefined;
 		return () => {
 			stop?.();
 			detach();
-			value.stop();
+			stopValue();
 		};
 	}
 	$effect.pre(followSource);

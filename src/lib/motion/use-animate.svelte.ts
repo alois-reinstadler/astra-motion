@@ -221,6 +221,7 @@ export function useAnimate<T extends Element = HTMLElement>(
 	let activeCount = $state(0);
 	type Run = {
 		controls: AnimationPlaybackControlsWithThen;
+		reduceMotion?: boolean;
 		stop(cancel?: boolean): void;
 		activityChanged(visible: boolean): void;
 	};
@@ -242,7 +243,8 @@ export function useAnimate<T extends Element = HTMLElement>(
 		const settle = () => {
 			if (reduced())
 				untrack(() => {
-					for (const { controls } of owned) finishReduced(controls);
+					for (const { controls, reduceMotion } of owned)
+						if (reduceMotion !== false) finishReduced(controls);
 				});
 		};
 		$effect(settle);
@@ -361,6 +363,7 @@ export function useAnimate<T extends Element = HTMLElement>(
 		};
 		const run: Run = {
 			controls,
+			reduceMotion: (args[optionIndex] as { reduceMotion?: boolean }).reduceMotion,
 			activityChanged(visible) {
 				if (stopped) return;
 				if (visible) {

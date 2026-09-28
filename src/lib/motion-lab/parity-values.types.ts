@@ -16,8 +16,16 @@ export function checkValueInference() {
 	const text: MotionValue<string> = useMotionValue('a');
 	const spring: MotionValue<number> = useSpring(0);
 	spring.set(100);
+	spring.jump(50);
+	spring.stop();
+	// @ts-expect-error A numeric spring retains numeric target methods.
+	spring.set('100px');
 	const units: MotionValue<string> = useSpring('0px');
 	units.set('100px');
+	units.jump('50px');
+	units.stop();
+	// @ts-expect-error A string spring retains string target methods.
+	units.jump(50);
 	const output: MotionValue<string> = useTransform(
 		[x, text] as const,
 		([number, string]) => `${number.toFixed(0)}${string.toUpperCase()}`

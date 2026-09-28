@@ -352,13 +352,13 @@ export const valuesHelpersDocs: DocPage[] = [
 		sections: [
 			example(
 				'use-spring',
-				'useSpring(initial, options) returns a MotionValue whose set method animates toward a new target. Supply another MotionValue instead of an initial scalar to follow it automatically. The example follows a target and changes physical settings through a reactive options getter.',
+				'useSpring(initial, options) returns a MotionValue whose set method animates toward a new target. Supply another MotionValue instead of an initial scalar to follow it automatically. The example sets a scalar spring target and changes physical settings through a reactive options getter without resetting that target.',
 				'Numbers and numeric unit strings such as 20px or 50% are supported. Keep units compatible throughout a spring. jump applies a value immediately, bypasses the spring for that update, and resets its velocity.'
 			),
 			section(
 				'reactive',
 				'Retarget and replace sources',
-				'A new set steers an active physical spring from its current value and velocity. A source getter can select a different MotionValue without replacing the returned object, and an options getter can update stiffness or damping reactively. Previous source subscriptions are removed.',
+				'A new set steers an active physical spring from its current value and velocity. A source getter can select a different MotionValue without replacing the returned object, and an options getter can update stiffness or damping reactively. Previous source subscriptions are removed. Scalar springs retain their latest set target when options change; a changed scalar getter explicitly supplies a new target.',
 				'skipInitialAnimation applies the first observed source update immediately. It is useful when useScroll first measures a restored page position. Later updates spring normally. Reconnecting a changed source or settings starts a new following subscription.'
 			),
 			api([
@@ -422,7 +422,7 @@ export const valuesHelpersDocs: DocPage[] = [
 			section(
 				'lifecycle',
 				'Lifecycle, SSR, and accessibility',
-				'The initial value is available during SSR. Browser following starts after mount, pauses when its Activity is hidden, and disconnects on owner destruction. The borrowed source is not destroyed.',
+				'The initial value is available during SSR. Browser following starts after mount and disconnects on owner destruction. Hidden Activity stops the spring clock and retains its target; set calls while hidden update that target without starting work. Reveal follows the latest target or borrowed source. jump remains immediate, and stop cancels pending movement. The borrowed source is not destroyed.',
 				'A raw spring represents numbers rather than an accessibility policy. For movement driven by manual values, use useReducedMotion to jump to targets or replace movement with another effect. If a unit appears twice, keep it in the value or a template only once; managed following preserves unit strings on its initial jump.'
 			),
 			related('motion-values', 'use-scroll', 'use-reduced-motion', 'transitions')
@@ -661,7 +661,7 @@ export const valuesHelpersDocs: DocPage[] = [
 				[
 					'per-call reduceMotion',
 					'Inherited policy result',
-					'Boolean engine option overriding positional reduction for that animation. The helper’s initialization policy instead uses the reducedMotion string setting.'
+					'Boolean engine option overriding positional reduction for that animation, including later policy changes. false preserves that run’s playback. The helper’s initialization policy instead uses the reducedMotion string setting.'
 				],
 				['sequence skipAnimations', 'false', 'Immediately apply sequence targets when true.'],
 				[
@@ -739,7 +739,7 @@ export const valuesHelpersDocs: DocPage[] = [
 				'lifecycle',
 				'Lifecycle, SSR, and errors',
 				'Initializing the helper during SSR is safe, but starting playback before a browser owner mounts throws. Selector animation before the scope attaches also throws. Calling controls after their scope detaches, after owner destruction, or after terminal stop/cancel produces a clear lifecycle error.',
-				'Hybrid playback inherits default transitions and live reduced-motion policy from MotionConfig. Reducing motion finishes positional animation while allowing suitable opacity and color animation to continue.',
+				'Hybrid playback inherits default transitions and live reduced-motion policy from MotionConfig. Reducing motion finishes owned positional animation while allowing suitable opacity and color animation to continue. An explicit per-call reduceMotion: false keeps its precedence during live policy changes.',
 				'Hidden Activity pauses running owned playback and disconnects external timeline observers. Reveal resumes runs that were playing, while preserving explicit pauses. A new animate call while hidden throws; play on existing owned controls can defer until reveal.'
 			),
 			section(

@@ -24,7 +24,7 @@ export interface ViewUpdateContext {
 export type ViewUpdate = (context: ViewUpdateContext) => void | Promise<void>;
 export interface ViewTransitionOptions extends MotionPolicy {
 	types?: readonly string[];
-	/** Queue coalesces pending updates without dropping callbacks; replace skips an older capture. */
+	/** Queue coalesces pending updates without dropping callbacks; replace releases the older capture before the next one owns its names. */
 	policy?: 'queue' | 'replace';
 	document?: Document;
 	/** Supplies CSP authorization when the first entering view has no previous boundary. */

@@ -1,8 +1,8 @@
 {
-	"date": "2026-09-24T22:20:57.438Z",
+	"date": "2026-09-28T06:29:59.647Z",
 	"methodology": "Rolldown in-memory ESM minify. All feature exports retained. Svelte and SvelteKit external/shared with host. No app build. Full=local runtime+wait+routes. PresenceFromRoot verifies unused projection tree-shakes.",
-	"motion": "13.4.3",
-	"motionDom": "13.4.2",
+	"motion": "13.4.4",
+	"motionDom": "13.4.4",
 	"results": {
 		"policy": {
 			"minifiedBytes": 189,
@@ -19,9 +19,9 @@
 			"containsReact": false
 		},
 		"waitPresence": {
-			"minifiedBytes": 3154,
-			"gzipBytes": 1492,
-			"brotliBytes": 1327,
+			"minifiedBytes": 12322,
+			"gzipBytes": 4579,
+			"brotliBytes": 4075,
 			"containsMotion": false,
 			"containsReact": false
 		},
@@ -33,51 +33,51 @@
 			"containsReact": false
 		},
 		"layout": {
-			"minifiedBytes": 104271,
-			"gzipBytes": 33635,
-			"brotliBytes": 30107,
+			"minifiedBytes": 108394,
+			"gzipBytes": 35037,
+			"brotliBytes": 31410,
 			"containsMotion": true,
 			"containsReact": false
 		},
 		"state": {
-			"minifiedBytes": 134847,
-			"gzipBytes": 43906,
-			"brotliBytes": 39153,
+			"minifiedBytes": 153048,
+			"gzipBytes": 50261,
+			"brotliBytes": 44591,
 			"containsMotion": true,
 			"containsReact": false
 		},
 		"liteState": {
-			"minifiedBytes": 80005,
-			"gzipBytes": 27471,
-			"brotliBytes": 24983,
+			"minifiedBytes": 91062,
+			"gzipBytes": 30979,
+			"brotliBytes": 28261,
 			"containsMotion": true,
 			"containsReact": false
 		},
 		"values": {
-			"minifiedBytes": 21684,
-			"gzipBytes": 8359,
-			"brotliBytes": 7706,
+			"minifiedBytes": 21864,
+			"gzipBytes": 8425,
+			"brotliBytes": 7765,
 			"containsMotion": true,
 			"containsReact": false
 		},
 		"animate": {
-			"minifiedBytes": 59703,
-			"gzipBytes": 21219,
-			"brotliBytes": 19448,
+			"minifiedBytes": 71518,
+			"gzipBytes": 24839,
+			"brotliBytes": 22709,
 			"containsMotion": true,
 			"containsReact": false
 		},
 		"scroll": {
-			"minifiedBytes": 64186,
+			"minifiedBytes": 63999,
 			"gzipBytes": 22944,
-			"brotliBytes": 20946,
+			"brotliBytes": 20974,
 			"containsMotion": true,
 			"containsReact": false
 		},
 		"localFull": {
-			"minifiedBytes": 227409,
-			"gzipBytes": 60515,
-			"brotliBytes": 52555,
+			"minifiedBytes": 417616,
+			"gzipBytes": 94499,
+			"brotliBytes": 77957,
 			"containsMotion": true,
 			"containsReact": false
 		},
@@ -89,9 +89,9 @@
 			"containsReact": false
 		},
 		"full": {
-			"minifiedBytes": 231014,
-			"gzipBytes": 61800,
-			"brotliBytes": 53586,
+			"minifiedBytes": 421224,
+			"gzipBytes": 96088,
+			"brotliBytes": 78743,
 			"containsMotion": true,
 			"containsReact": false
 		}

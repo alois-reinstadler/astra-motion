@@ -204,7 +204,18 @@ try {
 								window.__astra.readTime(),
 								window.__astra.frames()
 							]);
+							await page.evaluate(() => window.__astra.springSet(80));
 							await frameGap(page, 6);
+							assert.equal(
+								await page.evaluate(() => window.__astra.springAnimating()),
+								false,
+								'Hidden scalar spring does not start playback'
+							);
+							assert.equal(
+								await page.evaluate(() => window.__astra.springRead()),
+								0,
+								'Hidden scalar spring holds its value'
+							);
 							assert.deepEqual(
 								await page.evaluate(() => [window.__astra.readTime(), window.__astra.frames()]),
 								hidden,
@@ -212,6 +223,7 @@ try {
 							);
 							await page.getByRole('button', { name: 'Toggle activity' }).click();
 							await expect(page.getByLabel('Retained input')).toHaveValue('keep my state');
+							await expect.poll(() => page.evaluate(() => window.__astra.springRead())).toBe(80);
 							await expect
 								.poll(() => page.evaluate(() => window.__astra.frames()))
 								.toBeGreaterThan(hidden[1]);
@@ -287,7 +299,7 @@ try {
 									'SSR/hydration',
 									'MotionValue derivation',
 									'managed presence exits',
-									'activity state/frame pause/reveal',
+									'activity state/frame pause/reveal and hidden scalar spring targets',
 									'owner animation/frame/subscription cleanup',
 									'async view fallback',
 									'external constrained drag',

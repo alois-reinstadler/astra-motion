@@ -5,12 +5,14 @@
 		useAnimate,
 		useAnimationFrame,
 		useMotionValue,
+		useSpring,
 		useTime,
 		useTransform
 	} from 'astra-motion';
 	const source = useMotionValue(2);
 	const doubled = useTransform(() => source.get() * 2);
 	const time = useTime();
+	const spring = useSpring(0, { duration: 0.2, bounce: 0 });
 	const [scope, animate] = useAnimate();
 	let frames = 0;
 	let destroyed = 0;
@@ -19,6 +21,9 @@
 	onMount(() => {
 		window.__astra = {
 			readTime: () => time.get(),
+			springSet: (value) => spring.set(value),
+			springRead: () => spring.get(),
+			springAnimating: () => spring.isAnimating(),
 			frames: () => frames,
 			set: (value) => source.set(value),
 			read: () => doubled.get(),

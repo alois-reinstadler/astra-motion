@@ -62,9 +62,19 @@ alpha; versioned source availability must be recorded separately from stable Mot
 
 Playback ownership follows the animation instance, not a MotionValue read by a
 consumer. A borrowed value's external playback continues while a hidden consumer
-holds its rendering. Declarative targets or controls that start new playback claim
+holds its rendering. A reduced-motion consumer likewise must not complete external
+playback. Manual scalar spring targets survive configuration changes and suspension;
+hidden sets retain the target without starting clocks, while jump is immediate and
+stop cancels retained intent. Declarative targets or controls that start new playback claim
 that playback for their visual. The [Activity reference](https://alois-reinstadler.github.io/astra-motion/docs/animate-activity)
 is the primary authoring guide for phases, effects and retained host behavior.
+
+View capture name leases restore at most once, including when a skipped native
+update callback runs after its replacement has acquired the same name. See the
+[release audit regressions](RELEASE-AUDIT.md).
+
+Hybrid useAnimate observes live policy but preserves each run's explicit
+`reduceMotion: false`, including sequences and path animations.
 
 ## Gestures/layout
 

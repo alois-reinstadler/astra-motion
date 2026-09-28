@@ -1,5 +1,7 @@
 # Motion Values and helper parity audit
 
+Release follow-up: [independent audit](RELEASE-AUDIT.md). Manual scalar spring targets now survive option replacement and Activity suspension; hidden sets defer playback. Per-run useAnimate reduceMotion:false survives live inherited-policy changes, including arcs/sequences. Evidence: `release-audit.svelte.spec.ts`; exact qualification is in the linked report.
+
 Current integration qualification: [final verification](VERIFICATION.md),
 [installed package](PACKAGE-RESULTS.md), [independent review](ADVERSARIAL-REVIEW.md).
 The dated worker checkpoints below retain their original execution scope; the final

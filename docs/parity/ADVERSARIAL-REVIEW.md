@@ -1,5 +1,9 @@
 # Independent adversarial review
 
+Current follow-up: [independent audit of ef77bf8](RELEASE-AUDIT.md). The record
+below describes the earlier release; its archive measurements and review conclusions
+do not qualify the corrected runtime.
+
 Date: 2026-09-28 UTC. Initial candidate: `b08875b`. This reviewer did not implement
 the candidate. Scope is the requested Motion surface and its approved Svelte
 adaptations, not equivalence with React's private renderer lifecycle.

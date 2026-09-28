@@ -1,18 +1,13 @@
 <script lang="ts">
-	import {
-		motion,
-		motionStore,
-		useMotionValue,
-		useSpring,
-		useReducedMotion
-	} from '$lib/motion/index.js';
-	const target = useMotionValue(0);
+	import { motion, motionStore, useSpring, useReducedMotion } from '$lib/motion/index.js';
+	let target = $state(0);
 	let gentle = $state(false);
-	const x = useSpring(target, () => ({ stiffness: gentle ? 100 : 300, damping: gentle ? 18 : 26 }));
+	const x = useSpring(0, () => ({ stiffness: gentle ? 100 : 300, damping: gentle ? 18 : 26 }));
 	const value = motionStore(x);
 	const reduced = useReducedMotion();
 	function move(next: number) {
-		target.set(next);
+		target = next;
+		x.set(next);
 		if (reduced.current !== false) x.jump(next);
 	}
 </script>
@@ -31,7 +26,7 @@
 	<div class="stage"><motion.div class="dot" style={{ x }} /></div>
 	<div class="controls">
 		<label><input type="checkbox" bind:checked={gentle} /> Gentle spring</label><button
-			onclick={() => x.jump(target.get())}>Jump to target</button
+			onclick={() => x.jump(target)}>Jump to target</button
 		>
 	</div>
 	<output>{Math.round($value)}px</output>
