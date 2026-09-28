@@ -22,7 +22,11 @@ import {
 } from 'motion-dom';
 import { readActivityState } from './activity-scope.js';
 import { observeMotionConfig, observeMotionPreference, readMotionConfig } from './config.js';
-import { completeMotionPlayback, prepareMotionHandoff } from './motion-compat.js';
+import {
+	completeMotionPlayback,
+	pauseMotionPlayback,
+	prepareMotionHandoff
+} from './motion-compat.js';
 import { shouldReduceMotion, type MotionPolicy } from './policy.js';
 import { readMotionGetter, type MotionGetter } from './value-hooks.svelte.js';
 import { animateMotionPath, isMotionPathAnimation } from './animation.js';
@@ -372,7 +376,7 @@ export function useAnimate<T extends Element = HTMLElement>(
 					visitPlayback(controls, (child) => {
 						if (child.state !== 'running') return;
 						resumeOnReveal.push(child);
-						child.pause();
+						pauseMotionPlayback(child);
 					});
 				}
 			},

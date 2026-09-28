@@ -53,7 +53,7 @@ export function createPresenceScope(
 	const pending = new SvelteSet<symbol>();
 	const subscribers = new SvelteSet<(snapshot: PresenceSnapshot) => void>();
 	const nodes = new SvelteSet<HTMLElement | SVGElement>();
-	const nodeOwners = new Map<HTMLElement | SVGElement, number>();
+	let nodeOwners = new WeakMap<HTMLElement | SVGElement, number>();
 	let alive = true;
 	let completed = -1;
 	let queued = -1;
@@ -146,7 +146,7 @@ export function createPresenceScope(
 			pending.clear();
 			subscribers.clear();
 			nodes.clear();
-			nodeOwners.clear();
+			nodeOwners = new WeakMap();
 		}
 	};
 }

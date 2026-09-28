@@ -14,6 +14,7 @@ import {
 } from './animation.js';
 import { readActivityState } from './activity-scope.js';
 import { ownsMotionAnimation } from './animation-ownership.js';
+import { pauseMotionPlayback } from './motion-compat.js';
 
 type StartVisual = (
 	visual: VisualElement,
@@ -182,7 +183,7 @@ export function useAnimationControls(): LegacyAnimationControls {
 						'play' in animation &&
 						typeof animation.play === 'function'
 					) {
-						animation.pause();
+						pauseMotionPlayback(animation);
 						const play = animation.play.bind(animation);
 						held.set(animation, { paused: () => animation.state === 'paused', resume: play });
 					}

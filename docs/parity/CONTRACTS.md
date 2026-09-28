@@ -1,10 +1,8 @@
 # Shared implementation contracts
 
-Reference date: 2026-09-27 UTC. Normative scope is the user's requested Motion
-surface, superseding earlier exclusions. Current official Motion pages were read
-alongside npm Motion/framer-motion/motion-dom 13.4.4 (git
-636e725fc71315ca91ff196eb09685017e2fe0c8) and motion-utils 13.3.0. Current Svelte
-baseline is 5.57.0, SvelteKit 2.70.3. Engine upgrade remains under qualification.
+The [parity matrix](MATRIX.md) records the reference date, engine and Svelte versions,
+normative scope, source discrepancies and qualification gates. This document defines
+the shared implementation boundaries used by the subsystem audits.
 
 ## Svelte authoring
 
@@ -56,18 +54,24 @@ Native conditional removal within a still-present boundary keeps native outros.
 
 The user approved retained child/DOM state, coordinated exit/visibility, automatic
 suspension of Astra-owned work while hidden, and an activity-aware application-effect
-helper. Ordinary Svelte `$effect`s stay active unless using that helper. React
+helper, `useActivityEffect`. Ordinary Svelte `$effect`s stay active unless using that helper. React
 Activity's arbitrary subtree effect suspension and background scheduling have no
 public Svelte equivalent. This is an explicit documented adaptation, not an assertion
 that Svelte has React's Activity lifecycle. Motion's component reference is Motion+
 alpha; versioned source availability must be recorded separately from stable Motion.
 
+Playback ownership follows the animation instance, not a MotionValue read by a
+consumer. A borrowed value's external playback continues while a hidden consumer
+holds its rendering. Declarative targets or controls that start new playback claim
+that playback for their visual. The [Activity reference](https://alois-reinstadler.github.io/astra-motion/docs/animate-activity)
+is the primary authoring guide for phases, effects and retained host behavior.
+
 ## Gestures/layout
 
 Gesture adapters support HTMLElement and SVGElement, page-space pointer info,
 reactive transformPagePoint, getter/ref constraints and independent controls.
-Configuration/root owns transformPagePoint and nonce; gesture worker owns coordinate
-correction helpers and controls. Root owns core rebind dependencies and prop filtering.
+Configuration supplies transformPagePoint and nonce; gesture adapters apply coordinate
+corrections and controls. The motion core owns rebind dependencies and prop filtering.
 Layout direct props map to the existing projection coordinator, preserving transformed
 external ancestor and nested sticky/scroll regression coverage.
 

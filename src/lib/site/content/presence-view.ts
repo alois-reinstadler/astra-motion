@@ -295,8 +295,8 @@ export const presenceViewDocs: DocPage[] = [
 				id: 'svelte-lifecycle',
 				title: 'The Svelte lifecycle contract',
 				text: [
-					'Svelte 5 does not provide a public primitive for disconnecting and recreating every effect in a mounted component subtree. Astra therefore retains DOM and component state, suspends Astra-owned activity-aware work, and offers useActivityEffect for application work. Ordinary Svelte $effects and onMount resources remain active while the panel is hidden.',
-					'This is an explicit Svelte adaptation of React Activity. It does not change Svelte’s scheduler priority, background rendering, or the lifecycle of arbitrary third-party resources. Use the activity-aware helper whenever your application needs cleanup on hiding; returning to visible restarts that helper with the retained state.',
+					'Ordinary Svelte $effects and onMount resources remain active while the panel is hidden. Svelte 5 does not provide a public primitive for disconnecting and recreating every effect in a mounted component subtree. Use useActivityEffect for application work that needs cleanup on hiding.',
+					'This approved Svelte adaptation retains DOM and component state without changing Svelte’s scheduler priority, background rendering, or the lifecycle of arbitrary third-party resources.',
 					'The upstream AnimateActivity reference was still a Motion+ alpha on 27 September 2026, requiring Motion 12.23.24 or later and React 19.2 or later. Astra’s documented contract is the Svelte behavior described here; no React dependency or Motion+ token is required.'
 				]
 			},

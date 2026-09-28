@@ -1,12 +1,36 @@
 import {
 	AsyncMotionValueAnimation,
 	GroupAnimation,
+	JSAnimation,
 	NativeAnimationExtended,
 	NativeAnimation,
 	getFinalKeyframe,
 	type AnimationPlaybackControls,
 	type MotionValueAnimation
 } from 'motion-dom';
+
+/** Suspend an owned Activity clock at a synchronously committed pose. */
+export function pauseMotionPlayback(
+	playback: AnimationPlaybackControls | MotionValueAnimation
+): void {
+	if (playback instanceof GroupAnimation) {
+		for (const animation of playback.animations) pauseMotionPlayback(animation);
+		return;
+	}
+	if (playback instanceof AsyncMotionValueAnimation) {
+		pauseMotionPlayback(playback.animation);
+		return;
+	}
+	if (!('pause' in playback) || typeof playback.pause !== 'function') return;
+	playback.pause();
+	if (playback instanceof JSAnimation) {
+		// 13.4.4 pause() updates holdTime but leaves its keep-alive driver running.
+		// Commit that held pose now, then release the driver without stop()'s
+		// irreversible isStopped flag. play() recreates it from the held time.
+		playback.sample(playback.time * 1000);
+		(playback as unknown as { stopDriver(): void }).stopDriver();
+	}
+}
 
 /** Complete the original playback, including WAAPI loops and playback frozen at speed zero. */
 export function completeMotionPlayback(playback: AnimationPlaybackControls): void {
@@ -42,9 +66,11 @@ export function completeMotionPlayback(playback: AnimationPlaybackControls): voi
 
 /**
  * Motion cancellation boundary (qualified with motion-dom 13.4.4).
- * Keep these two private fields isolated here:
+ * Keep cancellation's two private fields isolated here:
  * Async.animation's public getter flushes unrelated pending keyframe measurements;
  * Native.cancel() leaves a queued onfinish able to overwrite a replacement owner.
+ * Activity suspension above also qualifies JSAnimation.stopDriver so hidden
+ * playback releases frame work without becoming permanently stopped.
  * Regression/upgrade gates cover unresolved values, endpoint direction, late events
  * and ownership transfer. No deep imports or dependency/prototype patches.
  */

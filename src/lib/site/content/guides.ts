@@ -255,10 +255,26 @@ export const guidesDocs: DocPage[] = [
 				id: 'measurements',
 				title: 'Measure Astra’s output',
 				text: [
-					'The parity qualification records exact minified, gzip and Brotli bytes from production fixtures. Shared Svelte code is accounted for separately so changing an entry does not accidentally change the baseline. Deferred entries report initial, shared and feature chunks rather than quoting only the smallest file.',
-					'Initial source qualification with Svelte external measured the lightweight entry at 18,040 minified / 6,860 gzip bytes, hybrid useAnimate at 59,183 / 21,069, and mini at 12,596 / 4,921. These are Astra source-fixture measurements, not upstream advertised sizes or the total size of a Svelte application. Installed-package production measurements are the release qualification record.',
+					'These measurements come from independent production applications installed from Astra’s packed package on 28 September 2026, using Svelte 5.57.0, Vite 8.2.2 and Rolldown 1.2.11. They include Svelte and each fixture’s bootstrap code. They describe complete example applications, not library-only sizes.',
+					'Each application counts its initial shared chunks once. Compressed totals sum separately compressed HTTP assets. Deferred bytes are requested when the feature loader runs; do not add figures from separate applications. The recorded module graphs verify that basic features exclude pan, drag and layout projection, while mini excludes the hybrid sequence engine.',
 					'Use the repository’s bundle and installed-consumer checks to reproduce the measurements. Compare the same bundler, minifier, compression settings and shared dependencies. A docs page containing many live examples naturally imports more features than an isolated component.'
-				]
+				],
+				table: {
+					columns: [
+						'Application',
+						'Initial minified bytes',
+						'Initial gzip bytes',
+						'Deferred gzip bytes'
+					],
+					rows: [
+						['Eager motion', '200,521', '67,890', '0'],
+						['Deferred domAnimation', '71,826', '26,462', '28,866'],
+						['Deferred domMax', '71,937', '26,519', '46,377'],
+						['Synchronous domAnimation', '147,398', '51,821', '0'],
+						['Hybrid useAnimate', '96,041', '34,669', '0'],
+						['Mini useAnimate', '42,330', '16,227', '0']
+					]
+				}
 			},
 			{
 				id: 'verify',

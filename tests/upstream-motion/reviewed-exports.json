@@ -22,6 +22,7 @@
 		"motion-dom": [
 			"AsyncMotionValueAnimation",
 			"GroupAnimation",
+			"GroupAnimationWithThen",
 			"HTMLProjectionNode",
 			"HTMLVisualElement",
 			"JSAnimation",
@@ -30,6 +31,7 @@
 			"NativeAnimationWrapper",
 			"SVGVisualElement",
 			"addScaleCorrector",
+			"addStyleValue",
 			"animateMotionValue",
 			"animateTarget",
 			"applyBoxDelta",
@@ -81,6 +83,7 @@
 			"springValue",
 			"stagger",
 			"styleEffect",
+			"styleSubjectEffect",
 			"svgEffect",
 			"svgSubjectEffect",
 			"time",
@@ -115,9 +118,17 @@
 				"isElementTextInput",
 				"time"
 			],
-			"sequence path timing": ["createGeneratorEasing", "isGenerator"]
+			"sequence path timing": ["createGeneratorEasing", "isGenerator"],
+			"arc playback ownership": ["GroupAnimationWithThen", "addStyleValue", "styleSubjectEffect"]
 		},
 		"evidence": "docs/parity/values-audit.md, docs/parity/lazy-audit.md, component/view/gesture parity browser suites; export presence alone is not behavioral qualification",
-		"sequencePathEvidence": "Motion DOM 13.4.4 public index exports animation/generators/utils/{create-generator-easing,is-generator}. createGeneratorEasing returns seconds from the same spring generator; isGenerator identifies the public applyToOptions contract. sequence-path.ts uses these for documented path segments while preserving one engine and source sequence timing. Behavioral path/ownership review belongs to the integration source suites; export existence alone is not evidence."
+		"sequencePathEvidence": "Motion DOM 13.4.4 public index exports animation/generators/utils/{create-generator-easing,is-generator}. createGeneratorEasing returns seconds from the same spring generator; isGenerator identifies the public applyToOptions contract. sequence-path.ts uses these for documented path segments while preserving one engine and source sequence timing. Behavioral path/ownership review belongs to the integration source suites; export existence alone is not evidence.",
+		"arcOwnershipEvidence": "Motion DOM 13.4.4 exports GroupAnimationWithThen for awaitable grouped playback and the existing addStyleValue/styleSubjectEffect store. The scoped arc adapter borrows those public effect values and serializes pathRotation through the existing renderer; no duplicate engine, global table mutation or dependency patch.",
+		"privateActivityContract": {
+			"version": "motion-dom 13.4.4",
+			"member": "JSAnimation.stopDriver()",
+			"reason": "Public pause() retains its keep-alive driver and defers committing the held pose. Activity uses public sample(time) to commit it synchronously, then stopDriver() to release frame callbacks without stop() setting the irreversible isStopped flag. Public play() recreates the driver from holdTime.",
+			"evidence": "parity-composition.svelte.spec.ts: pauses a direct path in hidden Activity and resumes the shared playback once; exact held x/y, no hidden onUpdate calls, same playback resumes once to endpoint. Targeted Activity/borrowed-playback checks: 18 passed across Chromium, Firefox and WebKit. Requalify this private method on every engine upgrade."
+		}
 	}
 }

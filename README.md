@@ -82,8 +82,9 @@ observable behavior, evidence and precise differences. The
   legacy `Presence` keeps its `wait` default.
 - `AnimateActivity` retains component and DOM state, coordinates exits and visibility,
   and pauses Astra-owned work while hidden. `useActivityEffect` opts application effects
-  into cleanup/restart. Ordinary Svelte effects remain active. This is the explicitly
-  agreed equivalent to React Activity’s unavailable subtree effect suspension.
+  into cleanup/restart. Ordinary Svelte effects remain active. See the
+  [Activity lifecycle contract](https://alois-reinstadler.github.io/astra-motion/docs/animate-activity#svelte-lifecycle)
+  for this approved Svelte adaptation.
 - `AnimateView` registers snapshot boundaries. `startViewTransition` coordinates normal
   state changes, including async updates; `viewTransitionsForNavigation` integrates
   SvelteKit navigation through a separate entry. Unsupported browsers still apply state.

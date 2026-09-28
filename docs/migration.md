@@ -1,7 +1,7 @@
 # Motion parity migration
 
 Reference: 27 September 2026; Motion, Framer Motion and Motion DOM 13.4.4,
-Motion Utils13.3.0; Svelte5.57.0. The requested surface supersedes earlier scope
+Motion Utils 13.3.0; Svelte 5.57.0. The requested surface supersedes earlier scope
 exclusions. Current contracts and evidence live in [the parity matrix](parity/MATRIX.md).
 
 ## Keep existing integrations working
@@ -46,6 +46,10 @@ Astra-owned work pauses only after exits complete and the phase becomes hidden.
 Ordinary Svelte effects remain active. Replace an effect that should stop while hidden
 with `useActivityEffect(() => { ...; return cleanup; })`. This approved adaptation does
 not claim to suspend third-party effects or change Svelte scheduler priorities.
+Borrowed MotionValues retain their external playback owner; reading one inside a
+hidden panel does not pause playback used elsewhere. See the
+[Activity reference](https://alois-reinstadler.github.io/astra-motion/docs/animate-activity)
+for visibility phases and ownership details.
 
 ## Helpers and values
 

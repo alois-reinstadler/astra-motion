@@ -11,7 +11,6 @@ import {
 	positionalKeys,
 	type MotionNodeOptions,
 	type MotionStyle,
-	type ResolvedValues,
 	type TargetAndTransition,
 	type VariantLabels,
 	type Variants,
@@ -37,7 +36,7 @@ import type { attachMotionGestures, GestureOptions } from './gestures.js';
 import { resolveMotionTarget } from './targets.js';
 import { coordinatePresence } from './presence-batch.js';
 import { claimMotionOwnership } from './ownership.js';
-import { prepareMotionHandoff } from './motion-compat.js';
+import { pauseMotionPlayback, prepareMotionHandoff } from './motion-compat.js';
 import { ownsMotionAnimation } from './animation-ownership.js';
 import { renderedMotionStyle } from './rendered-style.js';
 import { snapshotMotionOptions } from './options-snapshot.js';
@@ -369,7 +368,7 @@ function createBinding(
 					typeof animation.play === 'function'
 				) {
 					const play = animation.play.bind(animation);
-					animation.pause();
+					pauseMotionPlayback(animation);
 					pausedAnimations.push({ isPaused: () => animation.state === 'paused', resume: play });
 				}
 			});

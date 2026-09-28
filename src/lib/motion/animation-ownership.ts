@@ -1,18 +1,15 @@
-import type { AnimationPlaybackControls, VisualElement } from 'motion-dom';
+import type { VisualElement } from 'motion-dom';
 
-const owners = new WeakMap<AnimationPlaybackControls, VisualElement>();
+const owners = new WeakMap<object, VisualElement>();
 
 /** Borrowing a style value does not borrow its external playback's lifecycle. */
-export function ownsMotionAnimation(
-	visual: VisualElement,
-	playback: AnimationPlaybackControls
-): boolean {
+export function ownsMotionAnimation(visual: VisualElement, playback: object): boolean {
 	return owners.get(playback) === visual;
 }
 
 /** Claim only playback started by this visual's declarative/controls command. */
 export function startOwnedMotionAnimations<T>(visual: VisualElement, start: () => T): T {
-	const previous = new Set<AnimationPlaybackControls>();
+	const previous = new Set<object>();
 	visual.values.forEach((value) => {
 		if (value.animation) previous.add(value.animation);
 	});

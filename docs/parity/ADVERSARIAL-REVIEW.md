@@ -151,6 +151,41 @@ of every possible option combination, nor turn those pending gates into passes.
 
 ## Reviewer deliverables
 
+### Final Activity pause correction recheck
+
+After the first review, root's combined source matrix reported 1562 passing cases
+and one WebKit failure: a paused direct arc committed another held pose after its
+Activity became hidden. Root supplied a bounded correction on integration HEAD
+`a349d503133de7078452fcfb5ed91138d96557e6` plus uncommitted changes.
+
+Rechecked `pauseMotionPlayback` in motion-compat.ts against the installed Motion
+DOM 13.4.4 JSAnimation source. Public pause retains holdTime while leaving its
+keep-alive driver running. Public sample synchronously commits that held pose;
+private stopDriver removes frame work without setting the irreversible isStopped
+flag. Public play then recreates the driver from holdTime. Group/async traversal
+and the three owned Activity call sites preserve ownership filtering; borrowed
+external playback and native mini playback are not newly claimed.
+
+Reviewed the strengthened exact-position/no-hidden-onUpdate/resume-once assertion
+and `/tmp/astra-final-activity-pause.log`: **18 passed**, six files across Chromium,
+Firefox and WebKit, with 45 unrelated cases skipped. Root executed this focused
+run; this reviewer did not start another test or reproduce it independently.
+
+**Accepted.** No new substantiated runtime defect remains in this delta. Also
+rechecked `tests/upstream-motion/reviewed-exports.json` privateActivityContract:
+it names `JSAnimation.stopDriver()`, pins motion-dom 13.4.4, records the reason and
+behavioral evidence, and requires requalification on every engine upgrade. The
+compatibility source comment now distinguishes the existing cancellation fields
+from this additional private method. The qualified-to-proceed opinion remains;
+this targeted correction does not itself close unrelated delivery gates.
+
+The same bounded follow-up also removes an unused type import and replaces the
+nonreactive presence node reference-count Map with a WeakMap reset on destroy.
+Source recheck confirms only get/set/delete are used and enumerable nodes remain
+in the existing SvelteSet; this preserves registration and cleanup semantics.
+
+### File manifest
+
 - `docs/parity/ADVERSARIAL-REVIEW.md` — this report.
 - `docs/parity/repros/borrowed-activity.mjs` — original-candidate source-level repro.
 

@@ -187,6 +187,8 @@ it('pauses a direct path in hidden Activity and resumes the shared playback once
 	flushSync(() => component.target().move());
 	await expect.poll(() => component.target().position().x).toBeGreaterThan(10);
 	const playback = component.target().playbacks().x!;
+	if (!(playback instanceof JSAnimation)) throw new Error('Expected an engine arc clock');
+	const updates = vi.spyOn(playback.options, 'onUpdate');
 	const originalPlay: unknown = Reflect.get(playback, 'play');
 	if (typeof originalPlay !== 'function') throw new Error('Expected engine path playback controls');
 	const resumed = vi.fn(() => originalPlay.call(playback));
@@ -195,8 +197,10 @@ it('pauses a direct path in hidden Activity and resumes the shared playback once
 	await expect.poll(() => node('path-host').dataset.astraActivity).toBe('hidden');
 	const held = component.target().position();
 	expect(playback.state).toBe('paused');
+	const heldUpdates = updates.mock.calls.length;
 	await frames(5);
 	expect(component.target().position()).toEqual(held);
+	expect(updates).toHaveBeenCalledTimes(heldUpdates);
 	flushSync(() => component.show());
 	await expect.poll(() => component.target().position()).toEqual({ x: 200, y: 100 });
 	expect(resumed).toHaveBeenCalledTimes(1);
