@@ -38,6 +38,11 @@
 	let status = $state('Choose a field note to explore.');
 	let root: HTMLDivElement | undefined;
 	let generation = 0;
+	let destroyed = false;
+	const pending: {
+		transition: ReturnType<typeof startViewTransition>;
+		stopWatchingFocus: () => void;
+	}[] = [];
 	function attachRoot(node: HTMLDivElement) {
 		root = node;
 		return () => {
@@ -48,16 +53,38 @@
 	function changeView(next: Story | null) {
 		const current = ++generation;
 		const returnId = selected?.id;
+		const initialFocus = document.activeElement;
+		let focusMoved = false;
+		const watchFocus = (event: FocusEvent) => {
+			if (
+				event.target !== initialFocus &&
+				event.target !== document.body &&
+				event.target !== document.documentElement
+			)
+				focusMoved = true;
+		};
+		document.addEventListener('focusin', watchFocus);
 		const transition = startViewTransition(
 			() => {
-				selected = next;
+				if (!destroyed) selected = next;
 			},
 			{
 				types: [next ? 'open' : 'back']
 			}
 		);
+		const request = {
+			transition,
+			stopWatchingFocus: () => document.removeEventListener('focusin', watchFocus)
+		};
+		pending.push(request);
+		const release = () => {
+			request.stopWatchingFocus();
+			const index = pending.indexOf(request);
+			if (index !== -1) pending.splice(index, 1);
+		};
 		void transition.finished.then(
 			(outcome) => {
+				release();
 				if (current !== generation) return;
 				status =
 					outcome === 'unsupported'
@@ -66,15 +93,23 @@
 							? `Viewing ${next.title}.`
 							: 'Back to the field notes.';
 				const target = next ? '[data-view-back]' : `[data-view-open="${returnId}"]`;
-				root?.querySelector<HTMLButtonElement>(target)?.focus({ preventScroll: true });
+				if (!focusMoved)
+					root?.querySelector<HTMLButtonElement>(target)?.focus({ preventScroll: true });
 			},
 			() => {
+				release();
 				if (current === generation) status = 'The update could not finish.';
 			}
 		);
 	}
 	onDestroy(() => {
+		destroyed = true;
 		generation++;
+		for (const { transition, stopWatchingFocus } of pending) {
+			stopWatchingFocus();
+			transition.cancel();
+		}
+		pending.length = 0;
 	});
 </script>
 
