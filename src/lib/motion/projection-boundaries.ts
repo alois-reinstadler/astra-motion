@@ -6,6 +6,23 @@ import {
 	type IProjectionNode
 } from 'motion-dom';
 
+/** Keep aspect measurements intact when WebKit rounds opposite box edges differently. */
+export function preserveAspectMeasurements(node: InstanceType<typeof HTMLProjectionNode>) {
+	const measure = node.measure.bind(node);
+	node.measure = (removeTransform = true) => {
+		const measured = measure(removeTransform);
+		if (node.options.animationType !== 'preserve-aspect') return measured;
+		let exact = node.removeElementScroll(measured.measuredBox);
+		if (removeTransform) exact = node.removeTransform(exact);
+		// Retain Motion's rounded origin to avoid Safari position jitter, but do
+		// not turn a 200.00002px extent into 201px by rounding both endpoints.
+		for (const axis of ['x', 'y'] as const)
+			measured.layoutBox[axis].max =
+				measured.layoutBox[axis].min + exact[axis].max - exact[axis].min;
+		return measured;
+	};
+}
+
 /** Account only for the scroll that actually moves a sticky box, including its end constraint. */
 export function correctStickyScroll(node: IProjectionNode, element: HTMLElement) {
 	if (!node.scroll || getComputedStyle(element).position !== 'sticky') return;

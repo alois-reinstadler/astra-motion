@@ -696,7 +696,10 @@ export const gesturesLayoutPages: DocPage[] = [
 						['true', 'Animate both size and position.'],
 						['"position"', 'Animate position while using the destination size.'],
 						['"size"', 'Animate size while using the destination position.'],
-						['"preserve-aspect"', 'Avoid stretching when the aspect ratio changes substantially.'],
+						[
+							'"preserve-aspect"',
+							'Avoid stretching when the aspect ratio changes substantially. Fractional measured dimensions are retained so WebKit edge rounding does not distort the ratio.'
+						],
 						['"x" / "y"', 'Project changes on the selected axis.']
 					]
 				},

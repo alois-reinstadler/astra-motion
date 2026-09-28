@@ -1,5 +1,5 @@
 {
-	"date": "2026-09-28T06:29:59.647Z",
+	"date": "2026-09-28T06:53:04.188Z",
 	"methodology": "Rolldown in-memory ESM minify. All feature exports retained. Svelte and SvelteKit external/shared with host. No app build. Full=local runtime+wait+routes. PresenceFromRoot verifies unused projection tree-shakes.",
 	"motion": "13.4.4",
 	"motionDom": "13.4.4",
@@ -33,16 +33,16 @@
 			"containsReact": false
 		},
 		"layout": {
-			"minifiedBytes": 108394,
-			"gzipBytes": 35037,
-			"brotliBytes": 31410,
+			"minifiedBytes": 108686,
+			"gzipBytes": 35119,
+			"brotliBytes": 31515,
 			"containsMotion": true,
 			"containsReact": false
 		},
 		"state": {
-			"minifiedBytes": 153048,
-			"gzipBytes": 50261,
-			"brotliBytes": 44591,
+			"minifiedBytes": 153338,
+			"gzipBytes": 50348,
+			"brotliBytes": 44714,
 			"containsMotion": true,
 			"containsReact": false
 		},
@@ -75,9 +75,9 @@
 			"containsReact": false
 		},
 		"localFull": {
-			"minifiedBytes": 417616,
-			"gzipBytes": 94499,
-			"brotliBytes": 77957,
+			"minifiedBytes": 417906,
+			"gzipBytes": 94599,
+			"brotliBytes": 77914,
 			"containsMotion": true,
 			"containsReact": false
 		},
@@ -89,9 +89,9 @@
 			"containsReact": false
 		},
 		"full": {
-			"minifiedBytes": 421224,
-			"gzipBytes": 96088,
-			"brotliBytes": 78743,
+			"minifiedBytes": 421514,
+			"gzipBytes": 96182,
+			"brotliBytes": 78969,
 			"containsMotion": true,
 			"containsReact": false
 		}

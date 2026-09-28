@@ -9,7 +9,8 @@ article URL and its captured content hash. Current scope supersedes earlier
 repository exclusions; historical audits do not define this release's scope.
 
 The [independent release audit](RELEASE-AUDIT.md) found and corrected four
-composition defects in ef77bf8. Its qualification supersedes the earlier
+composition defects in ef77bf8; complete CI exposed an additional WebKit aspect
+distortion, documented with its correction in the same report. Its qualification supersedes the earlier
 no-open-defect claim; [fresh official reference captures](release-audit-references.json)
 record the follow-up source retrieval.
 

@@ -1,5 +1,7 @@
 # Gesture, drag, reorder, and layout parity matrix
 
+Release follow-up: [WebKit aspect measurement correction](RELEASE-AUDIT.md#follow-up-from-the-complete-delivery-matrix). The preserve-aspect adapter retains fractional dimensions across edge rounding; other modes and existing geometry assertions are unchanged.
+
 Current integration qualification: [final verification](VERIFICATION.md),
 [installed package](PACKAGE-RESULTS.md), [independent review](ADVERSARIAL-REVIEW.md).
 The dated worker checkpoints below retain their original execution scope; the final

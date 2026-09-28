@@ -141,3 +141,47 @@ The requested surface is implemented with these boundaries. The baseline's blank
 completion wording was too strong: the new regressions demonstrate that prior
 passing suites missed real compositions. Qualification means the specified
 contracts and tested cases pass, not that further adversarial defects are impossible.
+
+## Follow-up from the complete delivery matrix
+
+The first delivery candidate `10757734fd2dc9eacef30a58e8b07f4625826371`
+passed nine CI jobs, including all **1,590 component-browser cases** and all
+three complete packed consumers. Its archive was byte-identical to the local
+archive above. Pages deployed and the live Spring, Activity, View, Reorder and
+homepage checks passed. Nevertheless, [WebKit production E2E](https://github.com/alois-reinstadler/astra-motion/actions/runs/36387080386)
+found an additional **P2 aspect distortion** during interrupted editing-desk
+resizes: `pixelError=1.473968505859375` exceeded the unchanged **1.25px** bound.
+Chromium E2E passed 70, Firefox passed 69 with the existing Chromium-only touch
+emulation skip, and WebKit passed 68 with that same skip and one actual failure.
+This candidate is not reported as a successful release gate.
+
+Pinned `create-projection-node.mjs:measure` rounds both logical box edges in
+WebKit. Transform inversion can place nearly integral extents across a rounding
+boundary: the new deterministic regression measures **201** instead of
+**200.00002**. The correction retains the exact measured extent specifically for
+`preserve-aspect`, preserving Motion's rounded origin and all other modes. It
+reuses the existing scroll/transform inversion and leaves engine prototypes and
+dependencies unchanged. This explicitly corrects pinned upstream behavior rather
+than claiming identical implementation. The new compatibility contract is in
+`tests/upstream-motion/reviewed-exports.json`.
+
+Local WebKit was made usable with existing extracted system libraries and an
+isolated copy of its launcher that retains LD_LIBRARY_PATH, plus Mesa's extracted
+EGL vendor manifest. The host-library catalogue preflight was bypassed for those
+local commands because it cannot detect the supplied GLES library; browser
+launch, rendering and all test assertions still run. No system packages or shared
+browser files were changed. CI continues installing/validating its own dependencies.
+The deterministic regression failed before the fix and passes afterward; an
+unmodified local run of the 80-frame desk test happened to pass, demonstrating why
+that timing-sensitive run alone would not disprove the CI failure.
+
+Revised local qualification: **81/81** affected layout cases across all three
+engines. The unchanged 80-frame production resize test passes **9/9** (three runs
+per engine); WebKit maximum pixel errors are **0.03973388671875**, **0.02557373046875**
+and **0.031646728515625** against the original 1.25px bound. Source and guide checks
+again report zero errors/warnings; lint, 203 server cases, four tooling cases,
+engine/export checks, build, publint and source bundle checks pass for this revised
+candidate. Shared Chrome production preview preserves the 3:2 image (300x200)
+after format/inspector changes, without console/network errors or overflow;
+screenshot inspected. No showcase CSS, markup, existing E2E assertion or workflow
+was changed to obtain these results.

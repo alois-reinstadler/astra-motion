@@ -25,6 +25,7 @@ import { observeLayout } from './observe.js';
 import {
 	ProjectionBoundary,
 	observeProjectionScroll,
+	preserveAspectMeasurements,
 	correctBoundarySnapshot
 } from './projection-boundaries.js';
 import { beforeCommit, layoutBridge, synchronousMutation } from './commit.js';
@@ -39,6 +40,7 @@ import { readMotionConfig, observeMotionPreference, observeMotionConfig } from '
 
 export interface LayoutOptions {
 	id?: string;
+	/** preserve-aspect retains fractional measured dimensions while keeping engine position rounding. */
 	mode?: 'both' | 'position' | 'size' | 'preserve-aspect' | 'x' | 'y';
 	scroll?: boolean;
 	root?: boolean;
@@ -603,6 +605,7 @@ export function createLayout(options: LayoutGroupOptions = {}) {
 					parentProjection(element)
 				);
 				observeProjectionScroll(projection, element);
+				preserveAspectMeasurements(projection);
 				visual.projection = projection;
 				projection.setOptions({
 					layout: !config.measureOnly,

@@ -129,6 +129,16 @@
 			"member": "JSAnimation.stopDriver()",
 			"reason": "Public pause() retains its keep-alive driver and defers committing the held pose. Activity uses public sample(time) to commit it synchronously, then stopDriver() to release frame callbacks without stop() setting the irreversible isStopped flag. Public play() recreates the driver from holdTime.",
 			"evidence": "parity-composition.svelte.spec.ts: pauses a direct path in hidden Activity and resumes the shared playback once; exact held x/y, no hidden onUpdate calls, same playback resumes once to endpoint. Targeted Activity/borrowed-playback checks: 18 passed across Chromium, Firefox and WebKit. Requalify this private method on every engine upgrade."
+		},
+		"projectionAspectContract": {
+			"version": "motion-dom 13.4.4",
+			"members": [
+				"HTMLProjectionNode.measure(removeTransform)",
+				"removeElementScroll(box)",
+				"removeTransform(box)"
+			],
+			"reason": "The pinned measure implementation rounds both layout-box endpoints on WebKit. For preserve-aspect only, reconstruct the unrounded extent from measuredBox in the same logical scroll/transform space while retaining the engine-rounded origin. Do not change other animation modes or global engine prototypes.",
+			"evidence": "parity-layout.svelte.spec.ts: fractional endpoints across a rounding boundary preserve exact width/height for both measure paths; original implementation returns 201 instead of 200.00002. Existing interrupted showcase resize assertions remain unchanged. Requalify measurement and projection behavior on engine upgrades."
 		}
 	}
 }

@@ -73,3 +73,35 @@ it('still measures draggable geometry when its layout dependency is unchanged', 
 	await frame();
 	await expect.poll(() => projection.layout?.layoutBox.x.min).toBe(previous + 50);
 });
+
+it('preserves measured aspect dimensions when fractional edges straddle WebKit rounding', async () => {
+	await ready();
+	const projection = visual('configured').projection!;
+	const measurePageBox = projection.measurePageBox;
+	const animationType = projection.options.animationType;
+	// Transform inversion can put opposite edges on either side of a half pixel,
+	// despite an effectively integer height. Rounding each edge changes its size.
+	const box = {
+		x: { min: 10.25, max: 310.25 },
+		y: { min: 20.49999, max: 220.50001 }
+	};
+	projection.measurePageBox = () => structuredClone(box);
+	try {
+		projection.setOptions({ animationType: 'both' });
+		const ordinary = projection.measure(false);
+		projection.setOptions({ animationType: 'preserve-aspect' });
+		for (const removeTransform of [false, true]) {
+			const measured = projection.measure(removeTransform);
+			for (const axis of ['x', 'y'] as const) {
+				expect(measured.layoutBox[axis].min).toBe(ordinary.layoutBox[axis].min);
+				expect(measured.layoutBox[axis].max - measured.layoutBox[axis].min).toBeCloseTo(
+					box[axis].max - box[axis].min,
+					7
+				);
+			}
+		}
+	} finally {
+		projection.measurePageBox = measurePageBox;
+		projection.setOptions({ animationType });
+	}
+});
