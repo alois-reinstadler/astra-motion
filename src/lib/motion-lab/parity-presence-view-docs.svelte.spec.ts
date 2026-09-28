@@ -1,5 +1,5 @@
 import { tick } from 'svelte';
-import { expect, it } from 'vitest';
+import { expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import Presence from '../site/examples/AnimatePresenceExample.svelte';
 import Sequence from '../site/examples/AnimatePresenceSequenceExample.svelte';
@@ -132,3 +132,112 @@ it('shares separate artwork and title snapshots across new DOM trees and restore
 		observer.disconnect();
 	}
 }, 15000);
+
+it('preserves intentional outside focus when a native View transition completes', async () => {
+	expect(typeof document.startViewTransition).toBe('function');
+	const screen = await render(View);
+	const outside = document.createElement('button');
+	outside.textContent = 'Continue elsewhere';
+	document.body.appendChild(outside);
+	const layers = () =>
+		document
+			.getAnimations()
+			.filter((animation) =>
+				(animation.effect as KeyframeEffect | null)?.pseudoElement?.startsWith('::view-transition-')
+			);
+	try {
+		await screen.getByRole('button', { name: 'Open Coastal light', exact: true }).click();
+		await expect.poll(() => layers().length).toBeGreaterThan(0);
+		const active = layers();
+		for (const animation of active) animation.pause();
+		expect(document.querySelector('[data-view-back]')).not.toBeNull();
+		outside.focus();
+		expect(document.activeElement).toBe(outside);
+		// Complete real snapshot layers after the user's later focus choice.
+		for (const animation of active) animation.finish();
+		await expect
+			.poll(() => document.querySelector('.status')?.textContent)
+			.toBe('Viewing Coastal light.');
+		expect(document.activeElement).toBe(outside);
+		expect(document.querySelector('[data-astra-view-reset]')).toBeNull();
+	} finally {
+		for (const animation of layers()) animation.finish();
+		await screen.unmount();
+		outside.remove();
+	}
+});
+
+it('cancels a native View capture promptly when the whole example is disposed', async () => {
+	expect(typeof document.startViewTransition).toBe('function');
+	const screen = await render(View);
+	const root = document.querySelector<HTMLElement>('.example')!;
+	const status = root.querySelector('.status')!;
+	const nodes = [...root.querySelectorAll<HTMLElement>('[data-shared-art], [data-shared-title]')];
+	const start = document.startViewTransition.bind(document);
+	let release!: () => void;
+	const gate = new Promise<void>((resolve) => (release = resolve));
+	let captured = false;
+	let native: ViewTransition | undefined;
+	let skips = 0;
+	let restoreSkip = () => {};
+	const spy = vi.spyOn(document, 'startViewTransition').mockImplementation((update) => {
+		// Hold the real browser callback before the application's pending mutation.
+		// Cancellation must release ownership without waiting for this gate.
+		native = start(async () => {
+			captured = true;
+			await gate;
+			if (typeof update === 'function') await update();
+			else await update?.update?.();
+		});
+		const skip = native.skipTransition.bind(native);
+		const skipSpy = vi.spyOn(native, 'skipTransition').mockImplementation(() => {
+			skips++;
+			skip();
+		});
+		restoreSkip = () => skipSpy.mockRestore();
+		void native.ready.catch(() => {});
+		return native;
+	});
+	const lateWrites: MutationRecord[] = [];
+	const observer = new MutationObserver((records) => lateWrites.push(...records));
+	let unmounted = false;
+	try {
+		await screen.getByRole('button', { name: 'Open Coastal light', exact: true }).click();
+		await expect.poll(() => captured).toBe(true);
+		expect(nodes).toHaveLength(6);
+		expect(nodes.every((node) => node.style.viewTransitionName.startsWith('astra_view_'))).toBe(
+			true
+		);
+		expect(document.querySelector('[data-astra-view-reset]')).not.toBeNull();
+		expect(root.querySelector('[data-view-detail]')).toBeNull();
+		await screen.unmount();
+		unmounted = true;
+		await tick();
+		expect
+			.soft({
+				skips,
+				namedNodes: nodes.filter((node) => node.style.viewTransitionName).length,
+				styles: document.querySelectorAll('[data-astra-view-reset]').length
+			})
+			.toEqual({ skips: 1, namedNodes: 0, styles: 0 });
+		observer.observe(root, { childList: true, subtree: true, characterData: true });
+		release();
+		await native!.updateCallbackDone;
+		await native!.finished;
+		await tick();
+		expect(lateWrites).toEqual([]);
+		expect(status.textContent).toBe('Choose a field note to explore.');
+		expect(root.isConnected).toBe(false);
+		expect(document.querySelector('[data-view-detail]')).toBeNull();
+		expect(document.querySelector('[data-astra-view-reset]')).toBeNull();
+		expect(nodes.every((node) => !node.style.viewTransitionName)).toBe(true);
+	} finally {
+		release();
+		native?.skipTransition();
+		if (native) await Promise.allSettled([native.updateCallbackDone, native.finished]);
+		observer.disconnect();
+		if (!unmounted) await screen.unmount();
+		restoreSkip();
+		spy.mockRestore();
+	}
+});
