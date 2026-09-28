@@ -63,11 +63,14 @@ pop/reversal/focus, Presence/Activity/named View composition and a live policy
 change during gated native capture. Dedicated View tests require native API
 support and cannot pass through fallback.
 
-The initial affected geometry/pointer/View matrix passed **123/123 executions**
-(41 cases in each engine). After the native repeat/autoplay change, its affected
-View cases are requalified separately. Exact final source/package gates, archive
-provenance and remote delivery evidence are recorded with the qualified candidate;
-a focused pass alone is not a release qualification.
+The final affected geometry/pointer/View matrix passes **123/123 executions**
+(41 cases in each engine), including the native repeat/autoplay change. The
+independent cases pass **39/39 executions** (13 cases in each engine). Source
+checking and every complete documentation component report zero errors/warnings;
+**203 server cases**, **4 qualification-tooling cases**, generated elements, pinned
+engine checks, production build and strict publint pass. The runtime still imports
+71 Motion DOM and 7 Motion symbols, with no dependency upgrade. Final installed
+package and remote delivery evidence qualify the exact delivering revision.
 
 Local WebKit uses task-isolated launcher wrappers with the existing extracted
 GTK/GStreamer libraries and Mesa EGL manifest. The dependency-catalogue preflight
