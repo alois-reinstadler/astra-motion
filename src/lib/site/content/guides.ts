@@ -281,7 +281,7 @@ export const guidesDocs: DocPage[] = [
 				title: 'Budget layout work as well as downloads',
 				text: [
 					'Lazy loading reduces initial download and parsing; it does not make an active layout animation cheaper. Animate transforms and opacity for continuous gestures, give projected text its own layout="position" boundary, and keep the number of simultaneously measured layout elements small.',
-					'The recorded desktop production benchmark found a real large-grid limit: automatic layout with 500 cells had a 33.2 ms p95 frame interval at normal CPU speed and 183.3 ms at 4× slowdown. That historical benchmark used an older archive, Linux Chromium and software rendering; it is not a current iPhone or Safari frame-rate guarantee. Its zero idle reads and settled animations qualify those trials, not every application.',
+					'The current package’s desktop production benchmark found a real large-grid limit. Across three trials per configuration at normal CPU speed, automatic layout had a median p95 frame interval of 16.7 ms for 100 cells and 100 ms for 500 cells; explicit layout measured 49.9 ms for 500 cells. This used Linux Chromium on a Xeon E3-1275 v5 with software rendering. It is not an iPhone or Safari frame-rate guarantee. All 18 trials settled correctly with zero geometry/style reads in the measured idle windows.',
 					'Profile your production build on the target phone, including interrupted animations, scrolling and reduced motion. For large collections, window the visible items, reduce simultaneous layout changes, or use an explicit layout transaction when you control the update. Preserve readable content and usable controls when motion is reduced.'
 				],
 				related: ['layout', 'accessibility']

@@ -43,6 +43,22 @@ name leases, and checks distinct group/old/new layers for artwork and title. It
 opens two different cards and checks restored focus and removed transition styles.
 Production E2E retains separate native and explicitly unavailable-API cases.
 
+Independent review of the new example reproduced two additional lifecycle cases
+before release. Completion reclaimed focus after the user moved to an outside
+button. Removing the entire example during gated native capture left six detached
+nodes with owned names and one reset stylesheet until normal completion. This was
+delayed cleanup, not a persistent leak. Fix `494db53` tracks later focus intent,
+cancels pending handles on disposal, removes focus listeners and guards the pending
+state update against destruction.
+
+Regression commit `caebe22` (integrated as `fb0bd55`) failed both cases before the
+fix. Its unchanged test blob `7f67b4c07c87eeec929a5828f287dbb122cf5e61` passes all
+three View cases in Chromium, Firefox and WebKit: **9/9 executions**. Disposal
+calls native cancellation once and clears all six names and the stylesheet before
+the gated callback resumes. No late DOM/status writes occur. The private signal
+inside a destroyed Svelte component is not observable; the report does not claim
+to have measured writes to that signal.
+
 ## Bundle size
 
 [Measured sizes and provenance](phone-bundle-sizes.json) come from the clean
@@ -70,6 +86,36 @@ verified against installed archives, rather than inferred from export names.
 
 ## Performance boundaries
 
+The [current installed-package run](../research/phone-feedback-performance.json)
+uses the exact archive hash above on an Intel Xeon E3-1275 v5, Linux Chromium
+151.0.7922.34, SwiftShader software rendering, 1280 × 1040 viewport and normal CPU
+speed. It ran the existing production harness once: 100/500 cells ×
+automatic/explicit/instant × three repeats, with standard warmups, 18 changes per
+trial, 80ms requested spacing and a 1400ms settlement window. It is deliberately
+a desktop baseline; the throttled matrix and device tests were not rerun.
+
+| Cells | Mode      | Median trial p95 RAF interval | Worst RAF interval |
+| ----: | --------- | ----------------------------: | -----------------: |
+|   100 | automatic |                        16.7ms |             50.0ms |
+|   100 | explicit  |                        16.8ms |             33.4ms |
+|   100 | instant   |                        16.7ms |             16.8ms |
+|   500 | automatic |                       100.0ms |            133.3ms |
+|   500 | explicit  |                        49.9ms |             83.3ms |
+|   500 | instant   |                        16.8ms |             50.0ms |
+
+**18/18 trials** retained correct DOM order, visibility, count, final transforms
+and cleanup, with zero active/native animations at settlement and no browser
+errors. Every measured mounted idle window had zero geometry/style reads and
+zero active/native animations. Each mode also completed 30 mount/destroy cycles
+at 500 cells: zero final participants, active/native animations, detached roots
+and retained node IDs, and zero reads after disposal. These observations qualify
+the recorded windows; they do not prove the absence of every possible leak.
+The five current Chromium observer/read-cost regressions also pass.
+
+The 500-cell results are a substantial animation performance limit. Even explicit
+updates exceed a 60Hz frame budget here. The machine and runtime differ from the
+historical benchmark, so the two runs do not establish a before/after regression.
+
 The [production benchmark](../research/production-performance.md) is historical:
 its package SHA-256 starts `10db8579`, not the current archive. It used Linux
 Chromium on an AMD 7800X3D with SwiftShader software rendering. Its 54 trials
@@ -87,6 +133,30 @@ successful interactions provide useful device feedback but do not replace that
 performance coverage. Large animated grids remain a profiling and optimization
 area; window visible items and limit simultaneous layout changes.
 
-Final source, production, package and delivery gate evidence is added after the
-candidate finishes qualification. Existing remote browser/package matrices and
-device coverage limitations remain unchanged.
+## Release gates
+
+Source checking and complete canonical documentation compilation report zero
+errors/warnings. Whole-tree formatting/lint, 203 server tests in 44 files, four
+qualification-tooling tests, generated elements, pinned engine checks, production
+build, strict publint, source bundle measurement and both installed Svelte/Kit
+consumers pass. After the additional View lifecycle correction, the affected
+source/guide checks, lint and production build were refreshed; unrelated broad
+local suites were not repeated. Svelte autofixer reports no issues/suggestions.
+
+The locally rebuilt package is byte-identical to clean release `93f06a3`. Its
+pack manifest correctly records a dirty source tree while the unpublished demo
+lifecycle correction was being edited; archive identity, not that working-tree
+label, establishes the runtime used by the performance run. The remote gates
+qualify the final clean revision; existing matrices remain unchanged.
+
+Three focused production Chromium E2E cases pass: native View round trip,
+explicit unavailable-API fallback round trip, and example discovery. Manual
+shared Chrome at 393 × 852 also exercised the built dedicated pages. Reorder
+text measured 41.296867–41.296883px while its item traversed 148.5–305px, including
+a reversal. The closing note moved from 227.5625px to 176px high without the old
+intermediate growth (minimum 175.5922px from its existing spring overshoot),
+with unchanged page scroll. The third View card opened and returned with correct
+focus, removed reset styles and no horizontal overflow. All three documents
+returned 200 and produced no console warnings/errors; screenshots were inspected.
+The delivery report records the exact merged commit, complete remote CI/Pages
+results, deployed verification and cleanup once those operations finish.

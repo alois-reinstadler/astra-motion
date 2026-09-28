@@ -1,0 +1,3509 @@
+{
+	"date": "2026-09-28T23:29:26.838Z",
+	"status": "complete",
+	"command": [
+		"--url",
+		"http://127.0.0.1:4097",
+		"--counts",
+		"100,500",
+		"--rates",
+		"1",
+		"--repeats",
+		"3",
+		"--output",
+		"/workspace/astra-motion-phone-evidence/performance.json",
+		"--package-tarball",
+		"/tmp/astra-motion-production-FftVuK/astra-motion-0.0.1.tgz"
+	],
+	"environment": {
+		"platform": "linux",
+		"kernel": "6.8.0-137-generic",
+		"node": "v24.20.0",
+		"cpu": "Intel(R) Xeon(R) CPU E3-1275 v5 @ 3.60GHz",
+		"logicalCpus": 8,
+		"memoryBytes": 67191828480,
+		"loadAtStart": [2.08, 2.46, 1.92],
+		"loadAtEnd": [1.29, 2, 1.82]
+	},
+	"method": {
+		"productionRequired": true,
+		"viewport": {
+			"width": 1280,
+			"height": 1040
+		},
+		"rates": [1],
+		"counts": [100, 500],
+		"modes": ["automatic", "explicit", "instant"],
+		"repeats": 3,
+		"steps": 18,
+		"requestedGapMs": 80,
+		"settleWindowMs": 1400,
+		"readInstrumentation": true,
+		"warmup": "two six-operation cycles per fresh browser/configuration",
+		"cpu": "CDP relative slowdown, not calibrated hardware or a physical mobile device",
+		"frames": "RAF intervals; missed-refresh estimate is not a measurement of compositor dropped frames",
+		"memory": "separate 1x mount/destroy run; forced GC checkpoints; no strong node arrays retained by fixture",
+		"traces": "separate diagnostic runs; not pooled with primary timing samples"
+	},
+	"rows": [
+		{
+			"count": 100,
+			"mode": "automatic",
+			"rate": 1,
+			"iteration": 0,
+			"transactions": [
+				{
+					"kind": "reverse",
+					"transactionMs": 3.6000003814697266,
+					"offsetMs": 0,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.09999942779541016,
+					"offsetMs": 79.80000019073486,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 0.8999996185302734,
+					"offsetMs": 160,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 0.7999992370605469,
+					"offsetMs": 240.10000038146973,
+					"scheduleLagMs": 0.10000038146972656
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 0.8999996185302734,
+					"offsetMs": 320,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.20000076293945312,
+					"offsetMs": 401.8999996185303,
+					"scheduleLagMs": 1.8999996185302734
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 3.1000003814697266,
+					"offsetMs": 479.19999980926514,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0,
+					"offsetMs": 559.5,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 0.6999998092651367,
+					"offsetMs": 639.6999998092651,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 0.9000005722045898,
+					"offsetMs": 719.6999998092651,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 0.39999961853027344,
+					"offsetMs": 799.8000001907349,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000038146972656,
+					"offsetMs": 879.3999996185303,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 1.8000001907348633,
+					"offsetMs": 959.6999998092651,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0,
+					"offsetMs": 1039.6999998092651,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 0.5,
+					"offsetMs": 1120,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 2.3999996185302734,
+					"offsetMs": 1204.5,
+					"scheduleLagMs": 4.5
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 1.4000005722045898,
+					"offsetMs": 1280.1999998092651,
+					"scheduleLagMs": 0.19999980926513672
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0,
+					"offsetMs": 1359.8999996185303,
+					"scheduleLagMs": 0
+				}
+			],
+			"interactionMs": 1440.1999998092651,
+			"LayoutCount": 102,
+			"RecalcStyleCount": 199,
+			"LayoutDuration": 0.07019199999999999,
+			"RecalcStyleDuration": 0.216026,
+			"ScriptDuration": 0.44229500000000005,
+			"TaskDuration": 0.921234,
+			"durationMs": 2864.4000005722046,
+			"bcr": 3753,
+			"computedStyles": 29499,
+			"frameCount": 170,
+			"medianFrameMs": 16.69999999999891,
+			"p95FrameMs": 16.700000000000728,
+			"maximumFrameMs": 33.399999999999636,
+			"framesOver25ms": 2,
+			"estimatedMissed60HzRafs": 2,
+			"longAnimationFrames": 0,
+			"longTasks": 0,
+			"forcedStyleLayoutMsInLongFrames": 0,
+			"activeAtDeadline": 0,
+			"nativeAtDeadline": 0,
+			"correctness": {
+				"expectedCount": 100,
+				"domCount": 100,
+				"uniqueCount": 100,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 100,
+				"participants": 100,
+				"active": 0,
+				"minimumOpacity": 1,
+				"outOfFlow": 0,
+				"inert": 0
+			},
+			"maxTransactionMs": 3.6000003814697266,
+			"medianTransactionMs": 0.7999992370605469,
+			"maxScheduleLagMs": 4.5,
+			"idleMounted": {
+				"durationMs": 704.8999996185303,
+				"bcr": 0,
+				"computedStyles": 0,
+				"frames": 42,
+				"active": 0,
+				"native": 0
+			},
+			"initial": {
+				"expectedCount": 100,
+				"domCount": 100,
+				"uniqueCount": 100,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 100,
+				"participants": 100,
+				"active": 0
+			},
+			"errors": []
+		},
+		{
+			"count": 100,
+			"mode": "automatic",
+			"rate": 1,
+			"iteration": 1,
+			"transactions": [
+				{
+					"kind": "reverse",
+					"transactionMs": 6.40000057220459,
+					"offsetMs": 0,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0,
+					"offsetMs": 80.40000057220459,
+					"scheduleLagMs": 0.40000057220458984
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 0.5,
+					"offsetMs": 159.70000076293945,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 2.8000001907348633,
+					"offsetMs": 239.4000005722046,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 0.3000001907348633,
+					"offsetMs": 319.30000019073486,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.19999980926513672,
+					"offsetMs": 403.9000005722046,
+					"scheduleLagMs": 3.90000057220459
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 1.2999992370605469,
+					"offsetMs": 481.20000076293945,
+					"scheduleLagMs": 1.2000007629394531
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000038146972656,
+					"offsetMs": 559.8000001907349,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 0.39999961853027344,
+					"offsetMs": 640,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 0.7999992370605469,
+					"offsetMs": 719.7000007629395,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 1.4000005722045898,
+					"offsetMs": 802.3000001907349,
+					"scheduleLagMs": 2.3000001907348633
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000038146972656,
+					"offsetMs": 888.2000007629395,
+					"scheduleLagMs": 8.200000762939453
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 1.5,
+					"offsetMs": 959.6000003814697,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000038146972656,
+					"offsetMs": 1039.3000001907349,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 1.9000005722045898,
+					"offsetMs": 1123,
+					"scheduleLagMs": 3
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 1.8999996185302734,
+					"offsetMs": 1200.1000003814697,
+					"scheduleLagMs": 0.10000038146972656
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 0.9000005722045898,
+					"offsetMs": 1282.8000001907349,
+					"scheduleLagMs": 2.8000001907348633
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000038146972656,
+					"offsetMs": 1359.8000001907349,
+					"scheduleLagMs": 0
+				}
+			],
+			"interactionMs": 1440,
+			"LayoutCount": 103,
+			"RecalcStyleCount": 197,
+			"LayoutDuration": 0.088588,
+			"RecalcStyleDuration": 0.24071400000000004,
+			"ScriptDuration": 0.48687500000000006,
+			"TaskDuration": 0.9934159999999999,
+			"durationMs": 2868,
+			"bcr": 3753,
+			"computedStyles": 29499,
+			"frameCount": 167,
+			"medianFrameMs": 16.69999999999891,
+			"p95FrameMs": 16.799999999999272,
+			"maximumFrameMs": 50,
+			"framesOver25ms": 4,
+			"estimatedMissed60HzRafs": 5,
+			"longAnimationFrames": 4,
+			"longTasks": 0,
+			"forcedStyleLayoutMsInLongFrames": 51.39999999999999,
+			"activeAtDeadline": 0,
+			"nativeAtDeadline": 0,
+			"correctness": {
+				"expectedCount": 100,
+				"domCount": 100,
+				"uniqueCount": 100,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 100,
+				"participants": 100,
+				"active": 0,
+				"minimumOpacity": 1,
+				"outOfFlow": 0,
+				"inert": 0
+			},
+			"maxTransactionMs": 6.40000057220459,
+			"medianTransactionMs": 0.7999992370605469,
+			"maxScheduleLagMs": 8.200000762939453,
+			"idleMounted": {
+				"durationMs": 704.8999996185303,
+				"bcr": 0,
+				"computedStyles": 0,
+				"frames": 42,
+				"active": 0,
+				"native": 0
+			},
+			"initial": {
+				"expectedCount": 100,
+				"domCount": 100,
+				"uniqueCount": 100,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 100,
+				"participants": 100,
+				"active": 0
+			},
+			"errors": []
+		},
+		{
+			"count": 100,
+			"mode": "automatic",
+			"rate": 1,
+			"iteration": 2,
+			"transactions": [
+				{
+					"kind": "reverse",
+					"transactionMs": 3.8000001907348633,
+					"offsetMs": 0,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.09999942779541016,
+					"offsetMs": 86.70000076293945,
+					"scheduleLagMs": 6.700000762939453
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 0.39999961853027344,
+					"offsetMs": 160.10000038146973,
+					"scheduleLagMs": 0.10000038146972656
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 1,
+					"offsetMs": 239.60000038146973,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 0.2999992370605469,
+					"offsetMs": 319.70000076293945,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.09999942779541016,
+					"offsetMs": 402.9000005722046,
+					"scheduleLagMs": 2.90000057220459
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 4.09999942779541,
+					"offsetMs": 487.4000005722046,
+					"scheduleLagMs": 7.40000057220459
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0,
+					"offsetMs": 559.8000001907349,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 0.40000057220458984,
+					"offsetMs": 639.9000005722046,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 1,
+					"offsetMs": 719.6000003814697,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 0.5,
+					"offsetMs": 799.8000001907349,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000038146972656,
+					"offsetMs": 887.6000003814697,
+					"scheduleLagMs": 7.600000381469727
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 1.1999998092651367,
+					"offsetMs": 959.9000005722046,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0,
+					"offsetMs": 1039.3000001907349,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 0.40000057220458984,
+					"offsetMs": 1119.5,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 2.8000001907348633,
+					"offsetMs": 1202.3000001907349,
+					"scheduleLagMs": 2.3000001907348633
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 0.5,
+					"offsetMs": 1279.5,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.09999942779541016,
+					"offsetMs": 1359.2000007629395,
+					"scheduleLagMs": 0
+				}
+			],
+			"interactionMs": 1439.4000005722046,
+			"LayoutCount": 104,
+			"RecalcStyleCount": 200,
+			"LayoutDuration": 0.07549000000000003,
+			"RecalcStyleDuration": 0.22443999999999997,
+			"ScriptDuration": 0.4529139999999998,
+			"TaskDuration": 0.9211710000000002,
+			"durationMs": 2861.8999996185303,
+			"bcr": 3753,
+			"computedStyles": 29499,
+			"frameCount": 169,
+			"medianFrameMs": 16.69999999999891,
+			"p95FrameMs": 16.700000000000728,
+			"maximumFrameMs": 33.39999999999782,
+			"framesOver25ms": 2,
+			"estimatedMissed60HzRafs": 2,
+			"longAnimationFrames": 0,
+			"longTasks": 0,
+			"forcedStyleLayoutMsInLongFrames": 0,
+			"activeAtDeadline": 0,
+			"nativeAtDeadline": 0,
+			"correctness": {
+				"expectedCount": 100,
+				"domCount": 100,
+				"uniqueCount": 100,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 100,
+				"participants": 100,
+				"active": 0,
+				"minimumOpacity": 1,
+				"outOfFlow": 0,
+				"inert": 0
+			},
+			"maxTransactionMs": 4.09999942779541,
+			"medianTransactionMs": 0.40000057220458984,
+			"maxScheduleLagMs": 7.600000381469727,
+			"idleMounted": {
+				"durationMs": 704.8999996185303,
+				"bcr": 0,
+				"computedStyles": 0,
+				"frames": 42,
+				"active": 0,
+				"native": 0
+			},
+			"initial": {
+				"expectedCount": 100,
+				"domCount": 100,
+				"uniqueCount": 100,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 100,
+				"participants": 100,
+				"active": 0
+			},
+			"errors": []
+		},
+		{
+			"count": 100,
+			"mode": "explicit",
+			"rate": 1,
+			"iteration": 0,
+			"transactions": [
+				{
+					"kind": "reverse",
+					"transactionMs": 13.5,
+					"offsetMs": 0,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 1.7999992370605469,
+					"offsetMs": 79.60000038146973,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 10.300000190734863,
+					"offsetMs": 159.69999980926514,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 17.199999809265137,
+					"offsetMs": 240.19999980926514,
+					"scheduleLagMs": 0.19999980926513672
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 2.90000057220459,
+					"offsetMs": 319.6000003814697,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 6.800000190734863,
+					"offsetMs": 401.30000019073486,
+					"scheduleLagMs": 1.3000001907348633
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 6.59999942779541,
+					"offsetMs": 480.80000019073486,
+					"scheduleLagMs": 0.8000001907348633
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 7.899999618530273,
+					"offsetMs": 559.8000001907349,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 3.5,
+					"offsetMs": 640,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 13.40000057220459,
+					"offsetMs": 719.6999998092651,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 8.699999809265137,
+					"offsetMs": 800.1000003814697,
+					"scheduleLagMs": 0.10000038146972656
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 2.40000057220459,
+					"offsetMs": 879.8999996185303,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 19.299999237060547,
+					"offsetMs": 959.6000003814697,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 2.799999237060547,
+					"offsetMs": 1040.1000003814697,
+					"scheduleLagMs": 0.10000038146972656
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 3.8000001907348633,
+					"offsetMs": 1120,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 16.199999809265137,
+					"offsetMs": 1200,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 5.399999618530273,
+					"offsetMs": 1283.3000001907349,
+					"scheduleLagMs": 3.3000001907348633
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 3.700000762939453,
+					"offsetMs": 1359.8999996185303,
+					"scheduleLagMs": 0
+				}
+			],
+			"interactionMs": 1439.8999996185303,
+			"LayoutCount": 48,
+			"RecalcStyleCount": 145,
+			"LayoutDuration": 0.053031999999999996,
+			"RecalcStyleDuration": 0.234622,
+			"ScriptDuration": 0.242902,
+			"TaskDuration": 0.8279559999999999,
+			"durationMs": 2870,
+			"bcr": 3606,
+			"computedStyles": 14430,
+			"frameCount": 171,
+			"medianFrameMs": 16.699999999999818,
+			"p95FrameMs": 16.800000000000182,
+			"maximumFrameMs": 33.400000000000546,
+			"framesOver25ms": 1,
+			"estimatedMissed60HzRafs": 1,
+			"longAnimationFrames": 1,
+			"longTasks": 0,
+			"forcedStyleLayoutMsInLongFrames": 8.8,
+			"activeAtDeadline": 0,
+			"nativeAtDeadline": 0,
+			"correctness": {
+				"expectedCount": 100,
+				"domCount": 100,
+				"uniqueCount": 100,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 100,
+				"participants": 100,
+				"active": 0,
+				"minimumOpacity": 1,
+				"outOfFlow": 0,
+				"inert": 0
+			},
+			"maxTransactionMs": 19.299999237060547,
+			"medianTransactionMs": 6.800000190734863,
+			"maxScheduleLagMs": 3.3000001907348633,
+			"idleMounted": {
+				"durationMs": 702.4000005722046,
+				"bcr": 0,
+				"computedStyles": 0,
+				"frames": 41,
+				"active": 0,
+				"native": 0
+			},
+			"initial": {
+				"expectedCount": 100,
+				"domCount": 100,
+				"uniqueCount": 100,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 100,
+				"participants": 100,
+				"active": 0
+			},
+			"errors": []
+		},
+		{
+			"count": 100,
+			"mode": "explicit",
+			"rate": 1,
+			"iteration": 1,
+			"transactions": [
+				{
+					"kind": "reverse",
+					"transactionMs": 10,
+					"offsetMs": 0,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 2.1000003814697266,
+					"offsetMs": 80,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 8.899999618530273,
+					"offsetMs": 159.4000005722046,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 6.200000762939453,
+					"offsetMs": 239.5,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 2.8999996185302734,
+					"offsetMs": 319.70000076293945,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 7.199999809265137,
+					"offsetMs": 401.30000019073486,
+					"scheduleLagMs": 1.3000001907348633
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 2.799999237060547,
+					"offsetMs": 479.70000076293945,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 6.699999809265137,
+					"offsetMs": 559.7000007629395,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 8.399999618530273,
+					"offsetMs": 639.7000007629395,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 5.5,
+					"offsetMs": 719.3000001907349,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 6.800000190734863,
+					"offsetMs": 800,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 1.8000001907348633,
+					"offsetMs": 879.9000005722046,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 5.90000057220459,
+					"offsetMs": 959.8000001907349,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 1.9000005722045898,
+					"offsetMs": 1039.8000001907349,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 8.800000190734863,
+					"offsetMs": 1119.9000005722046,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 3.90000057220459,
+					"offsetMs": 1199.8000001907349,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 8.800000190734863,
+					"offsetMs": 1283.9000005722046,
+					"scheduleLagMs": 3.90000057220459
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 7.40000057220459,
+					"offsetMs": 1359.8000001907349,
+					"scheduleLagMs": 0
+				}
+			],
+			"interactionMs": 1439.3000001907349,
+			"LayoutCount": 46,
+			"RecalcStyleCount": 146,
+			"LayoutDuration": 0.050293000000000004,
+			"RecalcStyleDuration": 0.23690799999999995,
+			"ScriptDuration": 0.24072500000000008,
+			"TaskDuration": 0.7888599999999999,
+			"durationMs": 2871.0999994277954,
+			"bcr": 3606,
+			"computedStyles": 14430,
+			"frameCount": 172,
+			"medianFrameMs": 16.69999999999891,
+			"p95FrameMs": 16.799999999999272,
+			"maximumFrameMs": 16.80000000000109,
+			"framesOver25ms": 0,
+			"estimatedMissed60HzRafs": 0,
+			"longAnimationFrames": 0,
+			"longTasks": 0,
+			"forcedStyleLayoutMsInLongFrames": 0,
+			"activeAtDeadline": 0,
+			"nativeAtDeadline": 0,
+			"correctness": {
+				"expectedCount": 100,
+				"domCount": 100,
+				"uniqueCount": 100,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 100,
+				"participants": 100,
+				"active": 0,
+				"minimumOpacity": 1,
+				"outOfFlow": 0,
+				"inert": 0
+			},
+			"maxTransactionMs": 10,
+			"medianTransactionMs": 6.699999809265137,
+			"maxScheduleLagMs": 3.90000057220459,
+			"idleMounted": {
+				"durationMs": 702.4000005722046,
+				"bcr": 0,
+				"computedStyles": 0,
+				"frames": 41,
+				"active": 0,
+				"native": 0
+			},
+			"initial": {
+				"expectedCount": 100,
+				"domCount": 100,
+				"uniqueCount": 100,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 100,
+				"participants": 100,
+				"active": 0
+			},
+			"errors": []
+		},
+		{
+			"count": 100,
+			"mode": "explicit",
+			"rate": 1,
+			"iteration": 2,
+			"transactions": [
+				{
+					"kind": "reverse",
+					"transactionMs": 2.8999996185302734,
+					"offsetMs": 0,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 3.90000057220459,
+					"offsetMs": 80.09999942779541,
+					"scheduleLagMs": 0.09999942779541016
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 4.300000190734863,
+					"offsetMs": 160.0999994277954,
+					"scheduleLagMs": 0.09999942779541016
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 6.100000381469727,
+					"offsetMs": 239.5999994277954,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 3.5,
+					"offsetMs": 319.8999996185303,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 2.799999237060547,
+					"offsetMs": 400,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 7.899999618530273,
+					"offsetMs": 480,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 2.5,
+					"offsetMs": 560.0999994277954,
+					"scheduleLagMs": 0.09999942779541016
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 7.300000190734863,
+					"offsetMs": 639.7999992370605,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 5,
+					"offsetMs": 719.0999994277954,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 6.5,
+					"offsetMs": 803.7999992370605,
+					"scheduleLagMs": 3.799999237060547
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 4.09999942779541,
+					"offsetMs": 879.5,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 4.899999618530273,
+					"offsetMs": 959.6999998092651,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 1.9000005722045898,
+					"offsetMs": 1039.5999994277954,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 3,
+					"offsetMs": 1119.5999994277954,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 6.40000057220459,
+					"offsetMs": 1201.7999992370605,
+					"scheduleLagMs": 1.7999992370605469
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 2.1000003814697266,
+					"offsetMs": 1279.3999996185303,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 3,
+					"offsetMs": 1359.5,
+					"scheduleLagMs": 0
+				}
+			],
+			"interactionMs": 1439.7999992370605,
+			"LayoutCount": 45,
+			"RecalcStyleCount": 145,
+			"LayoutDuration": 0.040208999999999995,
+			"RecalcStyleDuration": 0.17659800000000003,
+			"ScriptDuration": 0.18640899999999994,
+			"TaskDuration": 0.6057139999999999,
+			"durationMs": 2860.3999996185303,
+			"bcr": 3606,
+			"computedStyles": 14430,
+			"frameCount": 172,
+			"medianFrameMs": 16.700000000000728,
+			"p95FrameMs": 16.799999999999272,
+			"maximumFrameMs": 16.80000000000291,
+			"framesOver25ms": 0,
+			"estimatedMissed60HzRafs": 0,
+			"longAnimationFrames": 0,
+			"longTasks": 0,
+			"forcedStyleLayoutMsInLongFrames": 0,
+			"activeAtDeadline": 0,
+			"nativeAtDeadline": 0,
+			"correctness": {
+				"expectedCount": 100,
+				"domCount": 100,
+				"uniqueCount": 100,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 100,
+				"participants": 100,
+				"active": 0,
+				"minimumOpacity": 1,
+				"outOfFlow": 0,
+				"inert": 0
+			},
+			"maxTransactionMs": 7.899999618530273,
+			"medianTransactionMs": 4.09999942779541,
+			"maxScheduleLagMs": 3.799999237060547,
+			"idleMounted": {
+				"durationMs": 702.4000005722046,
+				"bcr": 0,
+				"computedStyles": 0,
+				"frames": 41,
+				"active": 0,
+				"native": 0
+			},
+			"initial": {
+				"expectedCount": 100,
+				"domCount": 100,
+				"uniqueCount": 100,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 100,
+				"participants": 100,
+				"active": 0
+			},
+			"errors": []
+		},
+		{
+			"count": 100,
+			"mode": "instant",
+			"rate": 1,
+			"iteration": 0,
+			"transactions": [
+				{
+					"kind": "reverse",
+					"transactionMs": 5,
+					"offsetMs": 0,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.09999942779541016,
+					"offsetMs": 80.19999980926514,
+					"scheduleLagMs": 0.19999980926513672
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 0.5,
+					"offsetMs": 159.29999923706055,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 2.1999998092651367,
+					"offsetMs": 240,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 0.39999961853027344,
+					"offsetMs": 319.5,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.19999980926513672,
+					"offsetMs": 400.19999980926514,
+					"scheduleLagMs": 0.19999980926513672
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 6.40000057220459,
+					"offsetMs": 479.5999994277954,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.19999980926513672,
+					"offsetMs": 560.0999994277954,
+					"scheduleLagMs": 0.09999942779541016
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 0.5999994277954102,
+					"offsetMs": 639.5,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 2.700000762939453,
+					"offsetMs": 719.2999992370605,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 1.0999994277954102,
+					"offsetMs": 800.1999998092651,
+					"scheduleLagMs": 0.19999980926513672
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.39999961853027344,
+					"offsetMs": 879.5,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 10,
+					"offsetMs": 960.0999994277954,
+					"scheduleLagMs": 0.09999942779541016
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.19999980926513672,
+					"offsetMs": 1039.3999996185303,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 1.8999996185302734,
+					"offsetMs": 1119.8999996185303,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 2.6999998092651367,
+					"offsetMs": 1200,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 0.8999996185302734,
+					"offsetMs": 1280.1999998092651,
+					"scheduleLagMs": 0.19999980926513672
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.19999980926513672,
+					"offsetMs": 1359.2999992370605,
+					"scheduleLagMs": 0
+				}
+			],
+			"interactionMs": 1439.6999998092651,
+			"LayoutCount": 18,
+			"RecalcStyleCount": 18,
+			"LayoutDuration": 0.044852,
+			"RecalcStyleDuration": 0.011168,
+			"ScriptDuration": 0.006514000000000001,
+			"TaskDuration": 0.182269,
+			"durationMs": 2865.5,
+			"bcr": 0,
+			"computedStyles": 0,
+			"frameCount": 172,
+			"medianFrameMs": 16.699999999999818,
+			"p95FrameMs": 16.700000000000728,
+			"maximumFrameMs": 16.80000000000109,
+			"framesOver25ms": 0,
+			"estimatedMissed60HzRafs": 0,
+			"longAnimationFrames": 0,
+			"longTasks": 0,
+			"forcedStyleLayoutMsInLongFrames": 0,
+			"activeAtDeadline": 0,
+			"nativeAtDeadline": 0,
+			"correctness": {
+				"expectedCount": 100,
+				"domCount": 100,
+				"uniqueCount": 100,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 100,
+				"participants": 0,
+				"active": 0,
+				"minimumOpacity": 1,
+				"outOfFlow": 0,
+				"inert": 0
+			},
+			"maxTransactionMs": 10,
+			"medianTransactionMs": 0.8999996185302734,
+			"maxScheduleLagMs": 0.19999980926513672,
+			"idleMounted": {
+				"durationMs": 705.2000007629395,
+				"bcr": 0,
+				"computedStyles": 0,
+				"frames": 42,
+				"active": 0,
+				"native": 0
+			},
+			"initial": {
+				"expectedCount": 100,
+				"domCount": 100,
+				"uniqueCount": 100,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 100,
+				"participants": 0,
+				"active": 0
+			},
+			"errors": []
+		},
+		{
+			"count": 100,
+			"mode": "instant",
+			"rate": 1,
+			"iteration": 1,
+			"transactions": [
+				{
+					"kind": "reverse",
+					"transactionMs": 0.9000005722045898,
+					"offsetMs": 0,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000038146972656,
+					"offsetMs": 80.19999980926514,
+					"scheduleLagMs": 0.19999980926513672
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 1.0999994277954102,
+					"offsetMs": 159.60000038146973,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 2.5,
+					"offsetMs": 239.9000005722046,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 0.8999996185302734,
+					"offsetMs": 319.6000003814697,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0,
+					"offsetMs": 399.69999980926514,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 1.5,
+					"offsetMs": 479.9000005722046,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000038146972656,
+					"offsetMs": 559.6999998092651,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 1,
+					"offsetMs": 640.1000003814697,
+					"scheduleLagMs": 0.10000038146972656
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 2.5,
+					"offsetMs": 719.5,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 1,
+					"offsetMs": 799.1999998092651,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.19999980926513672,
+					"offsetMs": 879.4000005722046,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 3.700000762939453,
+					"offsetMs": 959.6999998092651,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000038146972656,
+					"offsetMs": 1039.5,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 0.40000057220458984,
+					"offsetMs": 1119.6999998092651,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 0.8000001907348633,
+					"offsetMs": 1199.1999998092651,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 0.3000001907348633,
+					"offsetMs": 1280.1000003814697,
+					"scheduleLagMs": 0.10000038146972656
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0,
+					"offsetMs": 1359.6000003814697,
+					"scheduleLagMs": 0
+				}
+			],
+			"interactionMs": 1439.8000001907349,
+			"LayoutCount": 18,
+			"RecalcStyleCount": 18,
+			"LayoutDuration": 0.03281100000000001,
+			"RecalcStyleDuration": 0.008797,
+			"ScriptDuration": 0.004759000000000001,
+			"TaskDuration": 0.135465,
+			"durationMs": 2861.800000190735,
+			"bcr": 0,
+			"computedStyles": 0,
+			"frameCount": 171,
+			"medianFrameMs": 16.69999999999891,
+			"p95FrameMs": 16.700000000000728,
+			"maximumFrameMs": 16.80000000000109,
+			"framesOver25ms": 0,
+			"estimatedMissed60HzRafs": 0,
+			"longAnimationFrames": 0,
+			"longTasks": 0,
+			"forcedStyleLayoutMsInLongFrames": 0,
+			"activeAtDeadline": 0,
+			"nativeAtDeadline": 0,
+			"correctness": {
+				"expectedCount": 100,
+				"domCount": 100,
+				"uniqueCount": 100,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 100,
+				"participants": 0,
+				"active": 0,
+				"minimumOpacity": 1,
+				"outOfFlow": 0,
+				"inert": 0
+			},
+			"maxTransactionMs": 3.700000762939453,
+			"medianTransactionMs": 0.8999996185302734,
+			"maxScheduleLagMs": 0.19999980926513672,
+			"idleMounted": {
+				"durationMs": 705.2000007629395,
+				"bcr": 0,
+				"computedStyles": 0,
+				"frames": 42,
+				"active": 0,
+				"native": 0
+			},
+			"initial": {
+				"expectedCount": 100,
+				"domCount": 100,
+				"uniqueCount": 100,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 100,
+				"participants": 0,
+				"active": 0
+			},
+			"errors": []
+		},
+		{
+			"count": 100,
+			"mode": "instant",
+			"rate": 1,
+			"iteration": 2,
+			"transactions": [
+				{
+					"kind": "reverse",
+					"transactionMs": 2,
+					"offsetMs": 0,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.20000076293945312,
+					"offsetMs": 79.29999923706055,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 1.5,
+					"offsetMs": 159.79999923706055,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 1.7999992370605469,
+					"offsetMs": 239.5,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 0.2999992370605469,
+					"offsetMs": 319.5,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000038146972656,
+					"offsetMs": 400.0999994277954,
+					"scheduleLagMs": 0.09999942779541016
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 1.8000001907348633,
+					"offsetMs": 479.29999923706055,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.20000076293945312,
+					"offsetMs": 559.2999992370605,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 0.5,
+					"offsetMs": 639.5,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 1.6000003814697266,
+					"offsetMs": 720.0999994277954,
+					"scheduleLagMs": 0.09999942779541016
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 0.19999980926513672,
+					"offsetMs": 799.8999996185303,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000038146972656,
+					"offsetMs": 879.3999996185303,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 3.40000057220459,
+					"offsetMs": 959.7999992370605,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.2999992370605469,
+					"offsetMs": 1039.5,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 0.3000001907348633,
+					"offsetMs": 1119.8999996185303,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 2,
+					"offsetMs": 1199.5999994277954,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 0.8000001907348633,
+					"offsetMs": 1279.7999992370605,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0,
+					"offsetMs": 1359.8999996185303,
+					"scheduleLagMs": 0
+				}
+			],
+			"interactionMs": 1440.0999994277954,
+			"LayoutCount": 18,
+			"RecalcStyleCount": 18,
+			"LayoutDuration": 0.025566000000000005,
+			"RecalcStyleDuration": 0.007511000000000004,
+			"ScriptDuration": 0.005382,
+			"TaskDuration": 0.14156500000000005,
+			"durationMs": 2869.6000003814697,
+			"bcr": 0,
+			"computedStyles": 0,
+			"frameCount": 172,
+			"medianFrameMs": 16.700000000000728,
+			"p95FrameMs": 16.799999999999272,
+			"maximumFrameMs": 16.80000000000291,
+			"framesOver25ms": 0,
+			"estimatedMissed60HzRafs": 0,
+			"longAnimationFrames": 0,
+			"longTasks": 0,
+			"forcedStyleLayoutMsInLongFrames": 0,
+			"activeAtDeadline": 0,
+			"nativeAtDeadline": 0,
+			"correctness": {
+				"expectedCount": 100,
+				"domCount": 100,
+				"uniqueCount": 100,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 100,
+				"participants": 0,
+				"active": 0,
+				"minimumOpacity": 1,
+				"outOfFlow": 0,
+				"inert": 0
+			},
+			"maxTransactionMs": 3.40000057220459,
+			"medianTransactionMs": 0.5,
+			"maxScheduleLagMs": 0.09999942779541016,
+			"idleMounted": {
+				"durationMs": 705.2000007629395,
+				"bcr": 0,
+				"computedStyles": 0,
+				"frames": 42,
+				"active": 0,
+				"native": 0
+			},
+			"initial": {
+				"expectedCount": 100,
+				"domCount": 100,
+				"uniqueCount": 100,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 100,
+				"participants": 0,
+				"active": 0
+			},
+			"errors": []
+		},
+		{
+			"count": 500,
+			"mode": "explicit",
+			"rate": 1,
+			"iteration": 0,
+			"transactions": [
+				{
+					"kind": "reverse",
+					"transactionMs": 59.79999923706055,
+					"offsetMs": 0,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 9.300000190734863,
+					"offsetMs": 100.39999961853027,
+					"scheduleLagMs": 20.399999618530273
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 13,
+					"offsetMs": 164,
+					"scheduleLagMs": 4
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 20.899999618530273,
+					"offsetMs": 242.39999961853027,
+					"scheduleLagMs": 2.3999996185302734
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 10,
+					"offsetMs": 325.5,
+					"scheduleLagMs": 5.5
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 10.799999237060547,
+					"offsetMs": 406.5,
+					"scheduleLagMs": 6.5
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 27.5,
+					"offsetMs": 503.0999994277954,
+					"scheduleLagMs": 23.09999942779541
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 12.09999942779541,
+					"offsetMs": 584.1999998092651,
+					"scheduleLagMs": 24.199999809265137
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 20.799999237060547,
+					"offsetMs": 649,
+					"scheduleLagMs": 9
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 17.199999809265137,
+					"offsetMs": 723.0999994277954,
+					"scheduleLagMs": 3.09999942779541
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 9,
+					"offsetMs": 805.5,
+					"scheduleLagMs": 5.5
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 7.90000057220459,
+					"offsetMs": 888.0999994277954,
+					"scheduleLagMs": 8.09999942779541
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 17.199999809265137,
+					"offsetMs": 960.3999996185303,
+					"scheduleLagMs": 0.39999961853027344
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 7.199999809265137,
+					"offsetMs": 1039.5999994277954,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 10.899999618530273,
+					"offsetMs": 1122.3999996185303,
+					"scheduleLagMs": 2.3999996185302734
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 16,
+					"offsetMs": 1204.1999998092651,
+					"scheduleLagMs": 4.199999809265137
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 11,
+					"offsetMs": 1286.0999994277954,
+					"scheduleLagMs": 6.09999942779541
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 8.399999618530273,
+					"offsetMs": 1359.1999998092651,
+					"scheduleLagMs": 0
+				}
+			],
+			"interactionMs": 1441.3999996185303,
+			"LayoutCount": 43,
+			"RecalcStyleCount": 109,
+			"LayoutDuration": 0.12819599999999998,
+			"RecalcStyleDuration": 0.510939,
+			"ScriptDuration": 0.48721,
+			"TaskDuration": 1.6234369999999998,
+			"durationMs": 2863.0999994277954,
+			"bcr": 17526,
+			"computedStyles": 70350,
+			"frameCount": 135,
+			"medianFrameMs": 16.69999999999891,
+			"p95FrameMs": 50.099999999999454,
+			"maximumFrameMs": 83.30000000000018,
+			"framesOver25ms": 18,
+			"estimatedMissed60HzRafs": 37,
+			"longAnimationFrames": 10,
+			"longTasks": 2,
+			"forcedStyleLayoutMsInLongFrames": 93.39999999999999,
+			"activeAtDeadline": 0,
+			"nativeAtDeadline": 0,
+			"correctness": {
+				"expectedCount": 500,
+				"domCount": 500,
+				"uniqueCount": 500,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 500,
+				"participants": 500,
+				"active": 0,
+				"minimumOpacity": 1,
+				"outOfFlow": 0,
+				"inert": 0
+			},
+			"maxTransactionMs": 59.79999923706055,
+			"medianTransactionMs": 12.09999942779541,
+			"maxScheduleLagMs": 24.199999809265137,
+			"idleMounted": {
+				"durationMs": 703.8999996185303,
+				"bcr": 0,
+				"computedStyles": 0,
+				"frames": 41,
+				"active": 0,
+				"native": 0
+			},
+			"initial": {
+				"expectedCount": 500,
+				"domCount": 500,
+				"uniqueCount": 500,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 500,
+				"participants": 500,
+				"active": 0
+			},
+			"errors": []
+		},
+		{
+			"count": 500,
+			"mode": "explicit",
+			"rate": 1,
+			"iteration": 1,
+			"transactions": [
+				{
+					"kind": "reverse",
+					"transactionMs": 47.90000057220459,
+					"offsetMs": 0,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 7.699999809265137,
+					"offsetMs": 87.30000019073486,
+					"scheduleLagMs": 7.300000190734863
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 15.800000190734863,
+					"offsetMs": 160,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 18.199999809265137,
+					"offsetMs": 260.1000003814697,
+					"scheduleLagMs": 20.100000381469727
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 8.300000190734863,
+					"offsetMs": 324.1000003814697,
+					"scheduleLagMs": 4.100000381469727
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 7.5,
+					"offsetMs": 402.5,
+					"scheduleLagMs": 2.5
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 17.09999942779541,
+					"offsetMs": 487.1000003814697,
+					"scheduleLagMs": 7.100000381469727
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 11.300000190734863,
+					"offsetMs": 581.6000003814697,
+					"scheduleLagMs": 21.600000381469727
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 9.600000381469727,
+					"offsetMs": 642.8000001907349,
+					"scheduleLagMs": 2.8000001907348633
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 15.700000762939453,
+					"offsetMs": 720.6999998092651,
+					"scheduleLagMs": 0.6999998092651367
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 11.199999809265137,
+					"offsetMs": 808,
+					"scheduleLagMs": 8
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 7.90000057220459,
+					"offsetMs": 885.5,
+					"scheduleLagMs": 5.5
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 17.299999237060547,
+					"offsetMs": 959.4000005722046,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 7.600000381469727,
+					"offsetMs": 1042,
+					"scheduleLagMs": 2
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 9.300000190734863,
+					"offsetMs": 1119.6999998092651,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 19.300000190734863,
+					"offsetMs": 1207.8000001907349,
+					"scheduleLagMs": 7.800000190734863
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 11.800000190734863,
+					"offsetMs": 1286.6999998092651,
+					"scheduleLagMs": 6.699999809265137
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 8.300000190734863,
+					"offsetMs": 1371.6000003814697,
+					"scheduleLagMs": 11.600000381469727
+				}
+			],
+			"interactionMs": 1440.1999998092651,
+			"LayoutCount": 45,
+			"RecalcStyleCount": 120,
+			"LayoutDuration": 0.11465599999999998,
+			"RecalcStyleDuration": 0.5300340000000001,
+			"ScriptDuration": 0.507784,
+			"TaskDuration": 1.6125349999999998,
+			"durationMs": 2871.3999996185303,
+			"bcr": 17526,
+			"computedStyles": 70350,
+			"frameCount": 145,
+			"medianFrameMs": 16.69999999999891,
+			"p95FrameMs": 49.899999999999636,
+			"maximumFrameMs": 66.69999999999891,
+			"framesOver25ms": 17,
+			"estimatedMissed60HzRafs": 27,
+			"longAnimationFrames": 5,
+			"longTasks": 1,
+			"forcedStyleLayoutMsInLongFrames": 40.9,
+			"activeAtDeadline": 0,
+			"nativeAtDeadline": 0,
+			"correctness": {
+				"expectedCount": 500,
+				"domCount": 500,
+				"uniqueCount": 500,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 500,
+				"participants": 500,
+				"active": 0,
+				"minimumOpacity": 1,
+				"outOfFlow": 0,
+				"inert": 0
+			},
+			"maxTransactionMs": 47.90000057220459,
+			"medianTransactionMs": 11.300000190734863,
+			"maxScheduleLagMs": 21.600000381469727,
+			"idleMounted": {
+				"durationMs": 703.8999996185303,
+				"bcr": 0,
+				"computedStyles": 0,
+				"frames": 41,
+				"active": 0,
+				"native": 0
+			},
+			"initial": {
+				"expectedCount": 500,
+				"domCount": 500,
+				"uniqueCount": 500,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 500,
+				"participants": 500,
+				"active": 0
+			},
+			"errors": []
+		},
+		{
+			"count": 500,
+			"mode": "explicit",
+			"rate": 1,
+			"iteration": 2,
+			"transactions": [
+				{
+					"kind": "reverse",
+					"transactionMs": 26.299999237060547,
+					"offsetMs": 0,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 7.799999237060547,
+					"offsetMs": 96,
+					"scheduleLagMs": 16
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 14.800000190734863,
+					"offsetMs": 160.69999980926514,
+					"scheduleLagMs": 0.6999998092651367
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 19.90000057220459,
+					"offsetMs": 239.79999923706055,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 7.800000190734863,
+					"offsetMs": 322.29999923706055,
+					"scheduleLagMs": 2.299999237060547
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 8.300000190734863,
+					"offsetMs": 407.3999996185303,
+					"scheduleLagMs": 7.399999618530273
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 17.5,
+					"offsetMs": 479.8999996185303,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 15.199999809265137,
+					"offsetMs": 561.1999998092651,
+					"scheduleLagMs": 1.1999998092651367
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 9.5,
+					"offsetMs": 646.1999998092651,
+					"scheduleLagMs": 6.199999809265137
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 17.300000190734863,
+					"offsetMs": 727.7999992370605,
+					"scheduleLagMs": 7.799999237060547
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 9.09999942779541,
+					"offsetMs": 805.1999998092651,
+					"scheduleLagMs": 5.199999809265137
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 7.899999618530273,
+					"offsetMs": 879.5,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 16.90000057220459,
+					"offsetMs": 959.5999994277954,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 10.299999237060547,
+					"offsetMs": 1045,
+					"scheduleLagMs": 5
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 9.800000190734863,
+					"offsetMs": 1126.6999998092651,
+					"scheduleLagMs": 6.699999809265137
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 15.399999618530273,
+					"offsetMs": 1205.3999996185303,
+					"scheduleLagMs": 5.399999618530273
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 15.399999618530273,
+					"offsetMs": 1282.3999996185303,
+					"scheduleLagMs": 2.3999996185302734
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 7.40000057220459,
+					"offsetMs": 1360.0999994277954,
+					"scheduleLagMs": 0.09999942779541016
+				}
+			],
+			"interactionMs": 1440.1999998092651,
+			"LayoutCount": 43,
+			"RecalcStyleCount": 119,
+			"LayoutDuration": 0.11880199999999996,
+			"RecalcStyleDuration": 0.5229519999999999,
+			"ScriptDuration": 0.485128,
+			"TaskDuration": 1.594423,
+			"durationMs": 2849.800000190735,
+			"bcr": 17526,
+			"computedStyles": 70350,
+			"frameCount": 144,
+			"medianFrameMs": 16.700000000000728,
+			"p95FrameMs": 49.89999999999782,
+			"maximumFrameMs": 66.60000000000036,
+			"framesOver25ms": 18,
+			"estimatedMissed60HzRafs": 27,
+			"longAnimationFrames": 8,
+			"longTasks": 1,
+			"forcedStyleLayoutMsInLongFrames": 73.9,
+			"activeAtDeadline": 0,
+			"nativeAtDeadline": 0,
+			"correctness": {
+				"expectedCount": 500,
+				"domCount": 500,
+				"uniqueCount": 500,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 500,
+				"participants": 500,
+				"active": 0,
+				"minimumOpacity": 1,
+				"outOfFlow": 0,
+				"inert": 0
+			},
+			"maxTransactionMs": 26.299999237060547,
+			"medianTransactionMs": 14.800000190734863,
+			"maxScheduleLagMs": 16,
+			"idleMounted": {
+				"durationMs": 703.8999996185303,
+				"bcr": 0,
+				"computedStyles": 0,
+				"frames": 41,
+				"active": 0,
+				"native": 0
+			},
+			"initial": {
+				"expectedCount": 500,
+				"domCount": 500,
+				"uniqueCount": 500,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 500,
+				"participants": 500,
+				"active": 0
+			},
+			"errors": []
+		},
+		{
+			"count": 500,
+			"mode": "instant",
+			"rate": 1,
+			"iteration": 0,
+			"transactions": [
+				{
+					"kind": "reverse",
+					"transactionMs": 15.40000057220459,
+					"offsetMs": 0,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0,
+					"offsetMs": 79.5,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 1.4000005722045898,
+					"offsetMs": 159.69999980926514,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 3.3000001907348633,
+					"offsetMs": 239.19999980926514,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 0.7000007629394531,
+					"offsetMs": 319.69999980926514,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000038146972656,
+					"offsetMs": 399.5,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 13.5,
+					"offsetMs": 479.69999980926514,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.09999942779541016,
+					"offsetMs": 559.4000005722046,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 1,
+					"offsetMs": 639.6000003814697,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 4.100000381469727,
+					"offsetMs": 720.6999998092651,
+					"scheduleLagMs": 0.6999998092651367
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 1.1999998092651367,
+					"offsetMs": 800,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.19999980926513672,
+					"offsetMs": 879.4000005722046,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 14.800000190734863,
+					"offsetMs": 959.6000003814697,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.19999980926513672,
+					"offsetMs": 1039.6000003814697,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 4.199999809265137,
+					"offsetMs": 1119.9000005722046,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 7.300000190734863,
+					"offsetMs": 1199.1000003814697,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 0.7000007629394531,
+					"offsetMs": 1279.6999998092651,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000038146972656,
+					"offsetMs": 1359.5,
+					"scheduleLagMs": 0
+				}
+			],
+			"interactionMs": 1439.6999998092651,
+			"LayoutCount": 18,
+			"RecalcStyleCount": 18,
+			"LayoutDuration": 0.060351,
+			"RecalcStyleDuration": 0.018215,
+			"ScriptDuration": 0.004343,
+			"TaskDuration": 0.28529399999999994,
+			"durationMs": 2852.4000005722046,
+			"bcr": 0,
+			"computedStyles": 0,
+			"frameCount": 171,
+			"medianFrameMs": 16.699999999999818,
+			"p95FrameMs": 16.700000000000728,
+			"maximumFrameMs": 16.80000000000109,
+			"framesOver25ms": 0,
+			"estimatedMissed60HzRafs": 0,
+			"longAnimationFrames": 0,
+			"longTasks": 0,
+			"forcedStyleLayoutMsInLongFrames": 0,
+			"activeAtDeadline": 0,
+			"nativeAtDeadline": 0,
+			"correctness": {
+				"expectedCount": 500,
+				"domCount": 500,
+				"uniqueCount": 500,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 500,
+				"participants": 0,
+				"active": 0,
+				"minimumOpacity": 1,
+				"outOfFlow": 0,
+				"inert": 0
+			},
+			"maxTransactionMs": 15.40000057220459,
+			"medianTransactionMs": 1.1999998092651367,
+			"maxScheduleLagMs": 0.6999998092651367,
+			"idleMounted": {
+				"durationMs": 704.1000003814697,
+				"bcr": 0,
+				"computedStyles": 0,
+				"frames": 42,
+				"active": 0,
+				"native": 0
+			},
+			"initial": {
+				"expectedCount": 500,
+				"domCount": 500,
+				"uniqueCount": 500,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 500,
+				"participants": 0,
+				"active": 0
+			},
+			"errors": []
+		},
+		{
+			"count": 500,
+			"mode": "instant",
+			"rate": 1,
+			"iteration": 1,
+			"transactions": [
+				{
+					"kind": "reverse",
+					"transactionMs": 41.69999980926514,
+					"offsetMs": 0,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000038146972656,
+					"offsetMs": 79.89999961853027,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 4.09999942779541,
+					"offsetMs": 160.19999980926514,
+					"scheduleLagMs": 0.19999980926513672
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 4.199999809265137,
+					"offsetMs": 239.39999961853027,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 0.6999998092651367,
+					"offsetMs": 319.69999980926514,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000038146972656,
+					"offsetMs": 399.5999994277954,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 11.300000190734863,
+					"offsetMs": 479.79999923706055,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000038146972656,
+					"offsetMs": 559.2999992370605,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 3.5,
+					"offsetMs": 639.6999998092651,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 8.199999809265137,
+					"offsetMs": 719.5,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 2.09999942779541,
+					"offsetMs": 800,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000038146972656,
+					"offsetMs": 879.2999992370605,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 36.5,
+					"offsetMs": 959.6999998092651,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000038146972656,
+					"offsetMs": 1039.2999992370605,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 3.6999998092651367,
+					"offsetMs": 1119.6999998092651,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 6,
+					"offsetMs": 1199.5999994277954,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 2.8999996185302734,
+					"offsetMs": 1279.8999996185303,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.19999980926513672,
+					"offsetMs": 1360.0999994277954,
+					"scheduleLagMs": 0.09999942779541016
+				}
+			],
+			"interactionMs": 1439.5,
+			"LayoutCount": 18,
+			"RecalcStyleCount": 18,
+			"LayoutDuration": 0.08659900000000001,
+			"RecalcStyleDuration": 0.028712,
+			"ScriptDuration": 0.0061530000000000005,
+			"TaskDuration": 0.4566950000000001,
+			"durationMs": 2865.8999996185303,
+			"bcr": 0,
+			"computedStyles": 0,
+			"frameCount": 169,
+			"medianFrameMs": 16.69999999999891,
+			"p95FrameMs": 16.799999999999272,
+			"maximumFrameMs": 50,
+			"framesOver25ms": 2,
+			"estimatedMissed60HzRafs": 3,
+			"longAnimationFrames": 2,
+			"longTasks": 0,
+			"forcedStyleLayoutMsInLongFrames": 0,
+			"activeAtDeadline": 0,
+			"nativeAtDeadline": 0,
+			"correctness": {
+				"expectedCount": 500,
+				"domCount": 500,
+				"uniqueCount": 500,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 500,
+				"participants": 0,
+				"active": 0,
+				"minimumOpacity": 1,
+				"outOfFlow": 0,
+				"inert": 0
+			},
+			"maxTransactionMs": 41.69999980926514,
+			"medianTransactionMs": 3.5,
+			"maxScheduleLagMs": 0.19999980926513672,
+			"idleMounted": {
+				"durationMs": 704.1000003814697,
+				"bcr": 0,
+				"computedStyles": 0,
+				"frames": 42,
+				"active": 0,
+				"native": 0
+			},
+			"initial": {
+				"expectedCount": 500,
+				"domCount": 500,
+				"uniqueCount": 500,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 500,
+				"participants": 0,
+				"active": 0
+			},
+			"errors": []
+		},
+		{
+			"count": 500,
+			"mode": "instant",
+			"rate": 1,
+			"iteration": 2,
+			"transactions": [
+				{
+					"kind": "reverse",
+					"transactionMs": 35.80000019073486,
+					"offsetMs": 0,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.09999942779541016,
+					"offsetMs": 79.89999961853027,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 1,
+					"offsetMs": 159.30000019073486,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 12.800000190734863,
+					"offsetMs": 239.5,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 2.3000001907348633,
+					"offsetMs": 319.69999980926514,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.19999980926513672,
+					"offsetMs": 400.19999980926514,
+					"scheduleLagMs": 0.19999980926513672
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 39.89999961853027,
+					"offsetMs": 479.69999980926514,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000038146972656,
+					"offsetMs": 559.8999996185303,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 4.300000190734863,
+					"offsetMs": 640.1999998092651,
+					"scheduleLagMs": 0.19999980926513672
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 6.59999942779541,
+					"offsetMs": 719.8000001907349,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 2.40000057220459,
+					"offsetMs": 799.5999994277954,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000038146972656,
+					"offsetMs": 880.0999994277954,
+					"scheduleLagMs": 0.09999942779541016
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 29.800000190734863,
+					"offsetMs": 959.3999996185303,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.19999980926513672,
+					"offsetMs": 1039.3999996185303,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 3.40000057220459,
+					"offsetMs": 1119.8000001907349,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 10.5,
+					"offsetMs": 1199.5,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 0.6000003814697266,
+					"offsetMs": 1280.0999994277954,
+					"scheduleLagMs": 0.09999942779541016
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000038146972656,
+					"offsetMs": 1360.0999994277954,
+					"scheduleLagMs": 0.09999942779541016
+				}
+			],
+			"interactionMs": 1439.3999996185303,
+			"LayoutCount": 18,
+			"RecalcStyleCount": 18,
+			"LayoutDuration": 0.090508,
+			"RecalcStyleDuration": 0.03130599999999999,
+			"ScriptDuration": 0.006274999999999999,
+			"TaskDuration": 0.48121100000000006,
+			"durationMs": 2860.5,
+			"bcr": 0,
+			"computedStyles": 0,
+			"frameCount": 169,
+			"medianFrameMs": 16.700000000000728,
+			"p95FrameMs": 16.799999999999272,
+			"maximumFrameMs": 33.30000000000109,
+			"framesOver25ms": 3,
+			"estimatedMissed60HzRafs": 3,
+			"longAnimationFrames": 0,
+			"longTasks": 0,
+			"forcedStyleLayoutMsInLongFrames": 0,
+			"activeAtDeadline": 0,
+			"nativeAtDeadline": 0,
+			"correctness": {
+				"expectedCount": 500,
+				"domCount": 500,
+				"uniqueCount": 500,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 500,
+				"participants": 0,
+				"active": 0,
+				"minimumOpacity": 1,
+				"outOfFlow": 0,
+				"inert": 0
+			},
+			"maxTransactionMs": 39.89999961853027,
+			"medianTransactionMs": 2.40000057220459,
+			"maxScheduleLagMs": 0.19999980926513672,
+			"idleMounted": {
+				"durationMs": 704.1000003814697,
+				"bcr": 0,
+				"computedStyles": 0,
+				"frames": 42,
+				"active": 0,
+				"native": 0
+			},
+			"initial": {
+				"expectedCount": 500,
+				"domCount": 500,
+				"uniqueCount": 500,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 500,
+				"participants": 0,
+				"active": 0
+			},
+			"errors": []
+		},
+		{
+			"count": 500,
+			"mode": "automatic",
+			"rate": 1,
+			"iteration": 0,
+			"transactions": [
+				{
+					"kind": "reverse",
+					"transactionMs": 16.5,
+					"offsetMs": 0,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.09999942779541016,
+					"offsetMs": 99,
+					"scheduleLagMs": 19
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 5.600000381469727,
+					"offsetMs": 203.19999980926514,
+					"scheduleLagMs": 43.19999980926514
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 3.3000001907348633,
+					"offsetMs": 305.69999980926514,
+					"scheduleLagMs": 65.69999980926514
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 0.8000001907348633,
+					"offsetMs": 424.3999996185303,
+					"scheduleLagMs": 104.39999961853027
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0,
+					"offsetMs": 485.0999994277954,
+					"scheduleLagMs": 85.09999942779541
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 11.5,
+					"offsetMs": 584.8000001907349,
+					"scheduleLagMs": 104.80000019073486
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000038146972656,
+					"offsetMs": 694.8999996185303,
+					"scheduleLagMs": 134.89999961853027
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 1.9000005722045898,
+					"offsetMs": 779.5999994277954,
+					"scheduleLagMs": 139.5999994277954
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 3,
+					"offsetMs": 889.3000001907349,
+					"scheduleLagMs": 169.30000019073486
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 0.7000007629394531,
+					"offsetMs": 1019.0999994277954,
+					"scheduleLagMs": 219.0999994277954
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000038146972656,
+					"offsetMs": 1074.6999998092651,
+					"scheduleLagMs": 194.69999980926514
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 12.100000381469727,
+					"offsetMs": 1159.6999998092651,
+					"scheduleLagMs": 199.69999980926514
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.09999942779541016,
+					"offsetMs": 1252,
+					"scheduleLagMs": 212
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 2.1999998092651367,
+					"offsetMs": 1356.3000001907349,
+					"scheduleLagMs": 236.30000019073486
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 3,
+					"offsetMs": 1451.5999994277954,
+					"scheduleLagMs": 251.5999994277954
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 1,
+					"offsetMs": 1561.1999998092651,
+					"scheduleLagMs": 281.19999980926514
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000038146972656,
+					"offsetMs": 1613.1999998092651,
+					"scheduleLagMs": 253.19999980926514
+				}
+			],
+			"interactionMs": 1708.5999994277954,
+			"LayoutCount": 98,
+			"RecalcStyleCount": 133,
+			"LayoutDuration": 0.250316,
+			"RecalcStyleDuration": 0.557996,
+			"ScriptDuration": 1.001175,
+			"TaskDuration": 2.075844,
+			"durationMs": 3127.800000190735,
+			"bcr": 17673,
+			"computedStyles": 141579,
+			"frameCount": 104,
+			"medianFrameMs": 16.69999999999891,
+			"p95FrameMs": 100,
+			"maximumFrameMs": 133.3000000000011,
+			"framesOver25ms": 19,
+			"estimatedMissed60HzRafs": 84,
+			"longAnimationFrames": 17,
+			"longTasks": 17,
+			"forcedStyleLayoutMsInLongFrames": 331.69999999999993,
+			"activeAtDeadline": 0,
+			"nativeAtDeadline": 0,
+			"correctness": {
+				"expectedCount": 500,
+				"domCount": 500,
+				"uniqueCount": 500,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 500,
+				"participants": 500,
+				"active": 0,
+				"minimumOpacity": 1,
+				"outOfFlow": 0,
+				"inert": 0
+			},
+			"maxTransactionMs": 16.5,
+			"medianTransactionMs": 1.9000005722045898,
+			"maxScheduleLagMs": 281.19999980926514,
+			"idleMounted": {
+				"durationMs": 702.4000005722046,
+				"bcr": 0,
+				"computedStyles": 0,
+				"frames": 41,
+				"active": 0,
+				"native": 0
+			},
+			"initial": {
+				"expectedCount": 500,
+				"domCount": 500,
+				"uniqueCount": 500,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 500,
+				"participants": 500,
+				"active": 0
+			},
+			"errors": []
+		},
+		{
+			"count": 500,
+			"mode": "automatic",
+			"rate": 1,
+			"iteration": 1,
+			"transactions": [
+				{
+					"kind": "reverse",
+					"transactionMs": 35.60000038146973,
+					"offsetMs": 0,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0,
+					"offsetMs": 131.10000038146973,
+					"scheduleLagMs": 51.10000038146973
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 2.3999996185302734,
+					"offsetMs": 224.4000005722046,
+					"scheduleLagMs": 64.40000057220459
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 3.299999237060547,
+					"offsetMs": 323.9000005722046,
+					"scheduleLagMs": 83.90000057220459
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 0.7000007629394531,
+					"offsetMs": 435.69999980926514,
+					"scheduleLagMs": 115.69999980926514
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.09999942779541016,
+					"offsetMs": 489.9000005722046,
+					"scheduleLagMs": 89.90000057220459
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 10.90000057220459,
+					"offsetMs": 589,
+					"scheduleLagMs": 109
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0,
+					"offsetMs": 680.6000003814697,
+					"scheduleLagMs": 120.60000038146973
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 2.1999998092651367,
+					"offsetMs": 768.5,
+					"scheduleLagMs": 128.5
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 2.8000001907348633,
+					"offsetMs": 863.1000003814697,
+					"scheduleLagMs": 143.10000038146973
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 0.8999996185302734,
+					"offsetMs": 988.1000003814697,
+					"scheduleLagMs": 188.10000038146973
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.09999942779541016,
+					"offsetMs": 1041.9000005722046,
+					"scheduleLagMs": 161.9000005722046
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 10.200000762939453,
+					"offsetMs": 1130.6999998092651,
+					"scheduleLagMs": 170.69999980926514
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000038146972656,
+					"offsetMs": 1217.1999998092651,
+					"scheduleLagMs": 177.19999980926514
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 1.6000003814697266,
+					"offsetMs": 1323,
+					"scheduleLagMs": 203
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 3.40000057220459,
+					"offsetMs": 1424.6999998092651,
+					"scheduleLagMs": 224.69999980926514
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 0.6999998092651367,
+					"offsetMs": 1539,
+					"scheduleLagMs": 259
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0,
+					"offsetMs": 1609.3000001907349,
+					"scheduleLagMs": 249.30000019073486
+				}
+			],
+			"interactionMs": 1724.3000001907349,
+			"LayoutCount": 102,
+			"RecalcStyleCount": 134,
+			"LayoutDuration": 0.24921100000000007,
+			"RecalcStyleDuration": 0.5553049999999999,
+			"ScriptDuration": 0.9495269999999998,
+			"TaskDuration": 2.039058,
+			"durationMs": 3159.3999996185303,
+			"bcr": 17673,
+			"computedStyles": 141579,
+			"frameCount": 106,
+			"medianFrameMs": 16.700000000000728,
+			"p95FrameMs": 100,
+			"maximumFrameMs": 116.70000000000073,
+			"framesOver25ms": 18,
+			"estimatedMissed60HzRafs": 83,
+			"longAnimationFrames": 18,
+			"longTasks": 13,
+			"forcedStyleLayoutMsInLongFrames": 351.00000000000006,
+			"activeAtDeadline": 0,
+			"nativeAtDeadline": 0,
+			"correctness": {
+				"expectedCount": 500,
+				"domCount": 500,
+				"uniqueCount": 500,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 500,
+				"participants": 500,
+				"active": 0,
+				"minimumOpacity": 1,
+				"outOfFlow": 0,
+				"inert": 0
+			},
+			"maxTransactionMs": 35.60000038146973,
+			"medianTransactionMs": 1.6000003814697266,
+			"maxScheduleLagMs": 259,
+			"idleMounted": {
+				"durationMs": 702.4000005722046,
+				"bcr": 0,
+				"computedStyles": 0,
+				"frames": 41,
+				"active": 0,
+				"native": 0
+			},
+			"initial": {
+				"expectedCount": 500,
+				"domCount": 500,
+				"uniqueCount": 500,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 500,
+				"participants": 500,
+				"active": 0
+			},
+			"errors": []
+		},
+		{
+			"count": 500,
+			"mode": "automatic",
+			"rate": 1,
+			"iteration": 2,
+			"transactions": [
+				{
+					"kind": "reverse",
+					"transactionMs": 33.70000076293945,
+					"offsetMs": 0,
+					"scheduleLagMs": 0
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.09999942779541016,
+					"offsetMs": 108.20000076293945,
+					"scheduleLagMs": 28.200000762939453
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 1.6999998092651367,
+					"offsetMs": 192.20000076293945,
+					"scheduleLagMs": 32.20000076293945
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 4,
+					"offsetMs": 294.9000005722046,
+					"scheduleLagMs": 54.90000057220459
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 0.6000003814697266,
+					"offsetMs": 409.80000019073486,
+					"scheduleLagMs": 89.80000019073486
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000038146972656,
+					"offsetMs": 459.80000019073486,
+					"scheduleLagMs": 59.80000019073486
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 15.199999809265137,
+					"offsetMs": 547.7000007629395,
+					"scheduleLagMs": 67.70000076293945
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.10000038146972656,
+					"offsetMs": 657.3000001907349,
+					"scheduleLagMs": 97.30000019073486
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 1.5,
+					"offsetMs": 744.7000007629395,
+					"scheduleLagMs": 104.70000076293945
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 2.3999996185302734,
+					"offsetMs": 838.4000005722046,
+					"scheduleLagMs": 118.40000057220459
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 1.1000003814697266,
+					"offsetMs": 961,
+					"scheduleLagMs": 161
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.09999942779541016,
+					"offsetMs": 1014.4000005722046,
+					"scheduleLagMs": 134.4000005722046
+				},
+				{
+					"kind": "reverse",
+					"transactionMs": 12.199999809265137,
+					"offsetMs": 1114.2000007629395,
+					"scheduleLagMs": 154.20000076293945
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.09999942779541016,
+					"offsetMs": 1206.7000007629395,
+					"scheduleLagMs": 166.70000076293945
+				},
+				{
+					"kind": "remove",
+					"transactionMs": 1.5,
+					"offsetMs": 1305.2000007629395,
+					"scheduleLagMs": 185.20000076293945
+				},
+				{
+					"kind": "undo",
+					"transactionMs": 2.3999996185302734,
+					"offsetMs": 1402.6000003814697,
+					"scheduleLagMs": 202.60000038146973
+				},
+				{
+					"kind": "rotate",
+					"transactionMs": 0.6999998092651367,
+					"offsetMs": 1510.8000001907349,
+					"scheduleLagMs": 230.80000019073486
+				},
+				{
+					"kind": "resize",
+					"transactionMs": 0.09999942779541016,
+					"offsetMs": 1561.7000007629395,
+					"scheduleLagMs": 201.70000076293945
+				}
+			],
+			"interactionMs": 1659.1000003814697,
+			"LayoutCount": 99,
+			"RecalcStyleCount": 133,
+			"LayoutDuration": 0.240549,
+			"RecalcStyleDuration": 0.53955,
+			"ScriptDuration": 0.8911579999999999,
+			"TaskDuration": 1.9464119999999996,
+			"durationMs": 3086.1000003814697,
+			"bcr": 17673,
+			"computedStyles": 141579,
+			"frameCount": 104,
+			"medianFrameMs": 16.700000000000728,
+			"p95FrameMs": 100,
+			"maximumFrameMs": 133.29999999999927,
+			"framesOver25ms": 19,
+			"estimatedMissed60HzRafs": 81,
+			"longAnimationFrames": 16,
+			"longTasks": 14,
+			"forcedStyleLayoutMsInLongFrames": 320,
+			"activeAtDeadline": 0,
+			"nativeAtDeadline": 0,
+			"correctness": {
+				"expectedCount": 500,
+				"domCount": 500,
+				"uniqueCount": 500,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 500,
+				"participants": 500,
+				"active": 0,
+				"minimumOpacity": 1,
+				"outOfFlow": 0,
+				"inert": 0
+			},
+			"maxTransactionMs": 33.70000076293945,
+			"medianTransactionMs": 1.5,
+			"maxScheduleLagMs": 230.80000019073486,
+			"idleMounted": {
+				"durationMs": 702.4000005722046,
+				"bcr": 0,
+				"computedStyles": 0,
+				"frames": 41,
+				"active": 0,
+				"native": 0
+			},
+			"initial": {
+				"expectedCount": 500,
+				"domCount": 500,
+				"uniqueCount": 500,
+				"orderMatches": true,
+				"maximumResidualTransform": 0,
+				"visible": 500,
+				"participants": 500,
+				"active": 0
+			},
+			"errors": []
+		}
+	],
+	"memory": [
+		{
+			"count": 500,
+			"mode": "automatic",
+			"rate": 1,
+			"warmupCycles": 3,
+			"measuredCycles": 30,
+			"checkpoints": [
+				{
+					"iteration": 0,
+					"heap": {
+						"usedSize": 3102192,
+						"totalSize": 3465216,
+						"embedderHeapUsedSize": 778224,
+						"backingStorageSize": 244853
+					},
+					"dom": {
+						"documents": 2,
+						"nodes": 120,
+						"jsEventListeners": 26
+					}
+				},
+				{
+					"iteration": 10,
+					"heap": {
+						"usedSize": 3251440,
+						"totalSize": 3465216,
+						"embedderHeapUsedSize": 811376,
+						"backingStorageSize": 244853
+					},
+					"dom": {
+						"documents": 2,
+						"nodes": 120,
+						"jsEventListeners": 26
+					}
+				},
+				{
+					"iteration": 20,
+					"heap": {
+						"usedSize": 3273032,
+						"totalSize": 3465216,
+						"embedderHeapUsedSize": 844104,
+						"backingStorageSize": 244853
+					},
+					"dom": {
+						"documents": 2,
+						"nodes": 120,
+						"jsEventListeners": 26
+					}
+				},
+				{
+					"iteration": 30,
+					"heap": {
+						"usedSize": 3285512,
+						"totalSize": 3465216,
+						"embedderHeapUsedSize": 828928,
+						"backingStorageSize": 244853
+					},
+					"dom": {
+						"documents": 2,
+						"nodes": 120,
+						"jsEventListeners": 26
+					}
+				}
+			],
+			"cleanup": {
+				"domCount": 0,
+				"mounted": false,
+				"lastDisposedStats": {
+					"participants": 0,
+					"active": 0
+				},
+				"native": 0
+			},
+			"detached": {
+				"roots": 0,
+				"retainedNodeIds": 0
+			},
+			"idleAfterDestroy": {
+				"durationMs": 702.7000007629395,
+				"bcr": 0,
+				"computedStyles": 0,
+				"frames": 42,
+				"active": 0,
+				"native": 0
+			},
+			"errors": []
+		},
+		{
+			"count": 500,
+			"mode": "explicit",
+			"rate": 1,
+			"warmupCycles": 3,
+			"measuredCycles": 30,
+			"checkpoints": [
+				{
+					"iteration": 0,
+					"heap": {
+						"usedSize": 3022064,
+						"totalSize": 3465216,
+						"embedderHeapUsedSize": 770648,
+						"backingStorageSize": 244856
+					},
+					"dom": {
+						"documents": 2,
+						"nodes": 120,
+						"jsEventListeners": 26
+					}
+				},
+				{
+					"iteration": 10,
+					"heap": {
+						"usedSize": 3158928,
+						"totalSize": 3465216,
+						"embedderHeapUsedSize": 785648,
+						"backingStorageSize": 244856
+					},
+					"dom": {
+						"documents": 2,
+						"nodes": 120,
+						"jsEventListeners": 26
+					}
+				},
+				{
+					"iteration": 20,
+					"heap": {
+						"usedSize": 3207868,
+						"totalSize": 3465216,
+						"embedderHeapUsedSize": 898176,
+						"backingStorageSize": 244856
+					},
+					"dom": {
+						"documents": 2,
+						"nodes": 120,
+						"jsEventListeners": 26
+					}
+				},
+				{
+					"iteration": 30,
+					"heap": {
+						"usedSize": 3207912,
+						"totalSize": 3465216,
+						"embedderHeapUsedSize": 817792,
+						"backingStorageSize": 244856
+					},
+					"dom": {
+						"documents": 2,
+						"nodes": 120,
+						"jsEventListeners": 26
+					}
+				}
+			],
+			"cleanup": {
+				"domCount": 0,
+				"mounted": false,
+				"lastDisposedStats": {
+					"participants": 0,
+					"active": 0
+				},
+				"native": 0
+			},
+			"detached": {
+				"roots": 0,
+				"retainedNodeIds": 0
+			},
+			"idleAfterDestroy": {
+				"durationMs": 703.8999996185303,
+				"bcr": 0,
+				"computedStyles": 0,
+				"frames": 42,
+				"active": 0,
+				"native": 0
+			},
+			"errors": []
+		},
+		{
+			"count": 500,
+			"mode": "instant",
+			"rate": 1,
+			"warmupCycles": 3,
+			"measuredCycles": 30,
+			"checkpoints": [
+				{
+					"iteration": 0,
+					"heap": {
+						"usedSize": 2298476,
+						"totalSize": 2678784,
+						"embedderHeapUsedSize": 760216,
+						"backingStorageSize": 244492
+					},
+					"dom": {
+						"documents": 2,
+						"nodes": 120,
+						"jsEventListeners": 25
+					}
+				},
+				{
+					"iteration": 10,
+					"heap": {
+						"usedSize": 2397816,
+						"totalSize": 3203072,
+						"embedderHeapUsedSize": 802792,
+						"backingStorageSize": 244492
+					},
+					"dom": {
+						"documents": 2,
+						"nodes": 120,
+						"jsEventListeners": 25
+					}
+				},
+				{
+					"iteration": 20,
+					"heap": {
+						"usedSize": 2410524,
+						"totalSize": 3203072,
+						"embedderHeapUsedSize": 756072,
+						"backingStorageSize": 244492
+					},
+					"dom": {
+						"documents": 2,
+						"nodes": 120,
+						"jsEventListeners": 25
+					}
+				},
+				{
+					"iteration": 30,
+					"heap": {
+						"usedSize": 2406420,
+						"totalSize": 2940928,
+						"embedderHeapUsedSize": 815920,
+						"backingStorageSize": 244492
+					},
+					"dom": {
+						"documents": 2,
+						"nodes": 120,
+						"jsEventListeners": 25
+					}
+				}
+			],
+			"cleanup": {
+				"domCount": 0,
+				"mounted": false,
+				"lastDisposedStats": {
+					"participants": 0,
+					"active": 0
+				},
+				"native": 0
+			},
+			"detached": {
+				"roots": 0,
+				"retainedNodeIds": 0
+			},
+			"idleAfterDestroy": {
+				"durationMs": 703.8000001907349,
+				"bcr": 0,
+				"computedStyles": 0,
+				"frames": 42,
+				"active": 0,
+				"native": 0
+			},
+			"errors": []
+		}
+	],
+	"traces": [],
+	"package": {
+		"path": "/tmp/astra-motion-production-FftVuK/astra-motion-0.0.1.tgz",
+		"bytes": 383010,
+		"sha256": "2d064554821e139f9c704cd0aaad5bab117ac7efef0817e41554fc559d447d47"
+	},
+	"browser": {
+		"version": "151.0.7922.34",
+		"userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.7922.34 Safari/537.36",
+		"resources": [
+			"http://127.0.0.1:4097/_app/immutable/assets/0.CTlMR9Zm.css",
+			"http://127.0.0.1:4097/_app/immutable/assets/20.Z6cFBafg.css",
+			"http://127.0.0.1:4097/_app/immutable/entry/start.FpqO47j_.js",
+			"http://127.0.0.1:4097/_app/immutable/chunks/BSzNALPT.js",
+			"http://127.0.0.1:4097/_app/immutable/chunks/Cc5NS-rI.js",
+			"http://127.0.0.1:4097/_app/immutable/entry/app.D3fUlQ2n.js",
+			"http://127.0.0.1:4097/_app/immutable/chunks/BGEM6nkb.js",
+			"http://127.0.0.1:4097/_app/immutable/chunks/xihTtKlq.js",
+			"http://127.0.0.1:4097/_app/immutable/nodes/0.X1IqNdkA.js",
+			"http://127.0.0.1:4097/_app/immutable/nodes/20.C4UFad6z.js",
+			"http://127.0.0.1:4097/_app/immutable/chunks/CR-RKjq0.js",
+			"http://127.0.0.1:4097/_app/immutable/chunks/B6zLKIaj.js",
+			"http://127.0.0.1:4097/_app/immutable/chunks/TlE2M2G9.js",
+			"http://127.0.0.1:4097/_app/immutable/chunks/DqLXFkkY.js",
+			"http://127.0.0.1:4097/_app/immutable/chunks/DmUFNjZw.js",
+			"http://127.0.0.1:4097/_app/immutable/chunks/BANEiMKK.js",
+			"http://127.0.0.1:4097/_app/immutable/chunks/D_TjP0W7.js",
+			"http://127.0.0.1:4097/_app/immutable/chunks/Ci_Q08Qk.js",
+			"http://127.0.0.1:4097/_app/immutable/chunks/3yovZXfy.js",
+			"http://127.0.0.1:4097/_app/immutable/chunks/BBj07AaA.js",
+			"http://127.0.0.1:4097/_app/immutable/chunks/D023nQGm.js",
+			"http://127.0.0.1:4097/_app/immutable/chunks/DA7zszko.js",
+			"http://127.0.0.1:4097/_app/immutable/nodes/1.DeiD2g9w.js"
+		],
+		"gpu": {
+			"devices": [
+				{
+					"vendorId": 65535,
+					"deviceId": 65535,
+					"vendorString": "Google Inc. (Google)",
+					"deviceString": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver-5.0.0)",
+					"driverVendor": "SwANGLE",
+					"driverVersion": "5.0.0"
+				}
+			],
+			"auxAttributes": {
+				"amdSwitchable": false,
+				"canSupportThreadedTextureMailbox": false,
+				"directRenderingVersion": "",
+				"displayType": "ANGLE_SWIFTSHADER",
+				"glExtensions": "GL_AMD_performance_monitor GL_ANGLE_base_vertex_base_instance_shader_builtin GL_ANGLE_blob_cache GL_ANGLE_client_arrays GL_ANGLE_clip_cull_distance GL_ANGLE_compressed_texture_etc GL_ANGLE_copy_texture_3d GL_ANGLE_depth_texture GL_ANGLE_framebuffer_blit GL_ANGLE_framebuffer_multisample GL_ANGLE_get_image GL_ANGLE_get_serialized_context_string GL_ANGLE_get_tex_level_parameter GL_ANGLE_instanced_arrays GL_ANGLE_memory_object_flags GL_ANGLE_memory_size GL_ANGLE_multi_draw GL_ANGLE_pack_reverse_row_order GL_ANGLE_polygon_mode GL_ANGLE_program_binary_readiness_query GL_ANGLE_program_cache_control GL_ANGLE_read_only_depth_stencil_feedback_loops GL_ANGLE_relaxed_vertex_attribute_type GL_ANGLE_renderability_validation GL_ANGLE_request_extension GL_ANGLE_rgbx_internal_format GL_ANGLE_robust_client_memory GL_ANGLE_robust_fragment_shader_output GL_ANGLE_robust_resource_initialization GL_ANGLE_shader_pixel_local_storage GL_ANGLE_shader_pixel_local_storage_coherent GL_ANGLE_stencil_texturing GL_ANGLE_texture_compression_dxt3 GL_ANGLE_texture_compression_dxt5 GL_ANGLE_texture_multisample GL_ANGLE_texture_usage GL_ANGLE_translated_shader_source GL_ANGLE_vulkan_image GL_ANGLE_yuv_internal_format GL_APPLE_clip_distance GL_ARM_rgba8 GL_ARM_shader_framebuffer_fetch GL_ARM_shader_framebuffer_fetch_depth_stencil GL_CHROMIUM_bind_generates_resource GL_CHROMIUM_bind_uniform_location GL_CHROMIUM_copy_compressed_texture GL_CHROMIUM_copy_texture GL_CHROMIUM_lose_context GL_EXT_EGL_image_array GL_EXT_EGL_image_external_wrap_modes GL_EXT_EGL_image_storage GL_EXT_base_instance GL_EXT_blend_minmax GL_EXT_buffer_storage GL_EXT_clear_texture GL_EXT_clip_control GL_EXT_clip_cull_distance GL_EXT_color_buffer_float GL_EXT_color_buffer_half_float GL_EXT_compressed_ETC1_RGB8_sub_texture GL_EXT_conservative_depth GL_EXT_copy_image GL_EXT_debug_label GL_EXT_debug_marker GL_EXT_depth_clamp GL_EXT_discard_framebuffer GL_EXT_disjoint_timer_query GL_EXT_draw_buffers GL_EXT_draw_buffers_indexed GL_EXT_draw_elements_base_vertex GL_EXT_float_blend GL_EXT_frag_depth GL_EXT_instanced_arrays GL_EXT_map_buffer_range GL_EXT_memory_object GL_EXT_memory_object_fd GL_EXT_occlusion_query_boolean GL_EXT_polygon_offset_clamp GL_EXT_read_format_bgra GL_EXT_robustness GL_EXT_sRGB GL_EXT_sRGB_write_control GL_EXT_semaphore GL_EXT_semaphore_fd GL_EXT_separate_shader_objects GL_EXT_shader_framebuffer_fetch GL_EXT_shader_framebuffer_fetch_non_coherent GL_EXT_shader_non_constant_global_initializers GL_EXT_shader_texture_lod GL_EXT_shadow_samplers GL_EXT_texture_border_clamp GL_EXT_texture_compression_bptc GL_EXT_texture_compression_dxt1 GL_EXT_texture_compression_rgtc GL_EXT_texture_compression_s3tc_srgb GL_EXT_texture_cube_map_array GL_EXT_texture_filter_anisotropic GL_EXT_texture_format_BGRA8888 GL_EXT_texture_lod_bias GL_EXT_texture_mirror_clamp_to_edge GL_EXT_texture_rg GL_EXT_texture_sRGB_R8 GL_EXT_texture_sRGB_RG8 GL_EXT_texture_sRGB_decode GL_EXT_texture_shadow_lod GL_EXT_texture_storage GL_EXT_texture_type_2_10_10_10_REV GL_EXT_unpack_subimage GL_KHR_blend_equation_advanced GL_KHR_debug GL_KHR_robust_buffer_access_behavior GL_KHR_robustness GL_KHR_texture_compression_astc_ldr GL_NV_fence GL_NV_framebuffer_blit GL_NV_pack_subimage GL_NV_pixel_buffer_object GL_NV_polygon_mode GL_NV_read_depth GL_NV_read_depth_stencil GL_NV_read_stencil GL_NV_shader_noperspective_interpolation GL_OES_EGL_image GL_OES_EGL_image_external GL_OES_EGL_image_external_essl3 GL_OES_EGL_sync GL_OES_compressed_EAC_R11_signed_texture GL_OES_compressed_EAC_R11_unsigned_texture GL_OES_compressed_EAC_RG11_signed_texture GL_OES_compressed_EAC_RG11_unsigned_texture GL_OES_compressed_ETC1_RGB8_texture GL_OES_compressed_ETC2_RGB8_texture GL_OES_compressed_ETC2_RGBA8_texture GL_OES_compressed_ETC2_punchthroughA_RGBA8_texture GL_OES_compressed_ETC2_punchthroughA_sRGB8_alpha_texture GL_OES_compressed_ETC2_sRGB8_alpha8_texture GL_OES_compressed_ETC2_sRGB8_texture GL_OES_compressed_paletted_texture GL_OES_copy_image GL_OES_depth24 GL_OES_depth32 GL_OES_depth_texture GL_OES_depth_texture_cube_map GL_OES_draw_buffers_indexed GL_OES_draw_elements_base_vertex GL_OES_element_index_uint GL_OES_fbo_render_mipmap GL_OES_get_program_binary GL_OES_mapbuffer GL_OES_packed_depth_stencil GL_OES_required_internalformat GL_OES_rgb8_rgba8 GL_OES_sample_shading GL_OES_sample_variables GL_OES_shader_multisample_interpolation GL_OES_standard_derivatives GL_OES_surfaceless_context GL_OES_texture_3D GL_OES_texture_border_clamp GL_OES_texture_cube_map_array GL_OES_texture_float GL_OES_texture_float_linear GL_OES_texture_half_float GL_OES_texture_half_float_linear GL_OES_texture_npot GL_OES_texture_stencil8 GL_OES_texture_storage_multisample_2d_array GL_OES_vertex_array_object GL_OES_vertex_half_float GL_OES_vertex_type_10_10_10_2 GL_OVR_multiview GL_OVR_multiview2 GL_QCOM_texture_lod_bias ",
+				"glImplementationParts": "(gl=egl-angle,angle=swiftshader)",
+				"glRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver-5.0.0)",
+				"glResetNotificationStrategy": 33362,
+				"glVendor": "Google Inc. (Google)",
+				"glVersion": "OpenGL ES 3.0 (ANGLE 2.1.28222 git hash: 6dab7c7e742b)",
+				"glWsExtensions": "EGL_EXT_create_context_robustness EGL_ANGLE_surface_orientation EGL_KHR_create_context EGL_KHR_image EGL_KHR_image_base EGL_EXT_image_gl_colorspace EGL_KHR_gl_colorspace EGL_KHR_gl_texture_2D_image EGL_KHR_gl_texture_cubemap_image EGL_KHR_gl_renderbuffer_image EGL_KHR_get_all_proc_addresses EGL_KHR_fence_sync EGL_KHR_wait_sync EGL_ANGLE_create_context_webgl_compatibility EGL_CHROMIUM_create_context_bind_generates_resource EGL_KHR_swap_buffers_with_damage EGL_EXT_pixel_format_float EGL_KHR_surfaceless_context EGL_ANGLE_display_texture_share_group EGL_ANGLE_display_semaphore_share_group EGL_ANGLE_create_context_client_arrays EGL_ANGLE_program_cache_control EGL_ANGLE_robust_resource_initialization EGL_ANGLE_create_context_extensions_enabled EGL_ANDROID_blob_cache EGL_ANDROID_recordable EGL_ANGLE_create_context_backwards_compatible EGL_KHR_no_config_context EGL_IMG_context_priority EGL_KHR_create_context_no_error EGL_KHR_reusable_sync EGL_EXT_buffer_age EGL_ANGLE_create_surface_swap_interval EGL_ANGLE_vulkan_image EGL_KHR_partial_update EGL_ANGLE_global_fence_sync EGL_ANGLE_memory_usage_report ",
+				"glWsVendor": "Google Inc. (Google)",
+				"glWsVersion": "1.5 (ANGLE 2.1.28222 git hash: 6dab7c7e742b)",
+				"hardwareSupportsVulkan": false,
+				"inProcessGpu": false,
+				"initializationTime": 0.017047,
+				"isAsan": false,
+				"isClangCoverage": false,
+				"jpegDecodeAcceleratorSupported": false,
+				"maxMsaaSamples": "4",
+				"optimus": false,
+				"passthroughCmdDecoder": true,
+				"pixelShaderVersion": "3.00",
+				"processCrashCount": 0,
+				"sandboxed": false,
+				"skiaBackendType": "None",
+				"subpixelFontRendering": true,
+				"targetCpuBits": 64,
+				"vertexShaderVersion": "3.00",
+				"visibilityCallbackCallCount": 0
+			},
+			"featureStatus": {
+				"2d_canvas": "unavailable_software",
+				"direct_rendering_display_compositor": "disabled_off_ok",
+				"gpu_compositing": "disabled_software",
+				"multiple_raster_threads": "enabled_on",
+				"opengl": "disabled_off",
+				"rasterization": "disabled_software",
+				"raw_draw": "disabled_off_ok",
+				"skia_graphite": "disabled_off",
+				"trees_in_viz": "disabled_off",
+				"video_decode": "disabled_software",
+				"video_encode": "disabled_software",
+				"vulkan": "disabled_off",
+				"webgl": "unavailable_software",
+				"webgpu": "unavailable_software",
+				"webgpu_on_vk_via_gl_interop": "disabled_off",
+				"webnn": "unavailable_software"
+			},
+			"driverBugWorkarounds": [],
+			"videoDecoding": [],
+			"videoEncoding": []
+		}
+	}
+}
