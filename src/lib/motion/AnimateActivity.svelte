@@ -36,7 +36,11 @@
 
 <script lang="ts">
 	import { onDestroy, onMount, untrack } from 'svelte';
-	import { createPresenceScope, providePresenceScope } from './presence-context.svelte.js';
+	import {
+		createPresenceScope,
+		providePresenceScope,
+		readPresenceScope
+	} from './presence-context.svelte.js';
 	import { provideActivityContext, type ActivityPhase } from './activity-context.svelte.js';
 	import { provideActivityState, readActivityState } from './activity-scope.js';
 	import { popPresenceNodes } from './presence-pop.js';
@@ -66,7 +70,14 @@
 			);
 		return as;
 	});
-	let phase = $state<ActivityPhase>(untrack(() => (mode === 'hidden' ? 'hidden' : 'visible')));
+	const parentPresence = readPresenceScope();
+	const parentRegistration = parentPresence?.register();
+	const present = $derived(mode === 'visible' && (parentPresence?.snapshot.isPresent ?? true));
+	let phase = $state<ActivityPhase>(untrack(() => (present ? 'visible' : 'hidden')));
+	function completeParent() {
+		if (parentPresence && !parentPresence.snapshot.isPresent)
+			parentRegistration?.complete(parentPresence.snapshot.generation);
+	}
 	let alive = true;
 	let restorePop: (() => void) | undefined;
 	const config = readMotionConfig();
@@ -86,8 +97,8 @@
 	});
 	const scope = createPresenceScope(
 		untrack(() => ({
-			isPresent: mode === 'visible',
-			initial: !initial || mode === 'hidden' ? false : undefined,
+			isPresent: present,
+			initial: !initial || !present ? false : undefined,
 			custom
 		})),
 		(generation) => {
@@ -96,6 +107,7 @@
 			phase = 'hidden';
 			restorePop?.();
 			restorePop = undefined;
+			completeParent();
 			if (completedExit) onExitComplete?.();
 		}
 	);
@@ -104,10 +116,13 @@
 	// can enter, including those introduced while this retained boundary is hidden.
 	onMount(() => {
 		queueMicrotask(() => scope.releaseInitial());
+		return ref ? parentPresence?.registerNode(ref) : undefined;
 	});
 	// The retained phase changes after async exit completion, not solely with mode.
 	function updateActivity() {
-		const present = mode === 'visible';
+		const isPresent = present;
+		// A new parent exit must also release already-hidden retained boundaries.
+		const parentGeneration = parentPresence?.snapshot.generation;
 		const data = custom;
 		const pop = layoutMode === 'pop';
 		const options = {
@@ -117,25 +132,27 @@
 			nonce: nonce ?? (config() as { nonce?: string }).nonce
 		};
 		untrack(() => {
-			if (present) {
+			if (isPresent) {
 				phase = 'visible';
 				restorePop?.();
 				restorePop = undefined;
 			} else if (phase !== 'hidden') {
 				phase = 'exiting';
-				if (pop && !restorePop) restorePop = popPresenceNodes(scope.nodes, options);
+				if (pop && !restorePop) restorePop = popPresenceNodes(ref ? [ref] : scope.nodes, options);
 			}
 			if (!pop) {
 				restorePop?.();
 				restorePop = undefined;
 			}
-			scope.update(present, data);
+			scope.update(isPresent, data);
+			if (phase === 'hidden' && parentGeneration !== undefined) completeParent();
 		});
 	}
 	$effect.pre(updateActivity);
 	onDestroy(() => {
 		alive = false;
 		scope.destroy();
+		parentRegistration?.unregister();
 		restorePop?.();
 	});
 </script>
@@ -145,7 +162,7 @@
 	{...attributes}
 	bind:this={ref}
 	style={`${style ?? ''};display:${phase === 'hidden' ? 'none' : 'contents'}`}
-	inert={mode === 'hidden' || attributes.inert}
+	inert={!present || attributes.inert}
 	data-astra-activity={phase}
 >
 	{@render children()}

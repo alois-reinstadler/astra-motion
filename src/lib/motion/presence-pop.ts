@@ -11,12 +11,15 @@ let nextId = 0;
 
 /** Captures every root before any style write and releases only its own stylesheet/attribute. */
 export function popPresenceNodes(
-	nodes: ReadonlySet<HTMLElement | SVGElement>,
+	nodes: Iterable<HTMLElement | SVGElement>,
 	options: PresencePopOptions
 ): () => void {
-	const roots = [...nodes].filter(
+	const flatten = (node: Element): Element[] =>
+		getComputedStyle(node).display === 'contents' ? [...node.children].flatMap(flatten) : [node];
+	const candidates = [...nodes].flatMap(flatten);
+	const roots = candidates.filter(
 		(node) =>
-			node.isConnected && ![...nodes].some((other) => other !== node && other.contains(node))
+			node.isConnected && !candidates.some((other) => other !== node && other.contains(node))
 	);
 	const captures = roots.flatMap((node) => {
 		if (!(node instanceof node.ownerDocument.defaultView!.HTMLElement)) return [];
