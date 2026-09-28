@@ -8,6 +8,7 @@ export interface PresencePopOptions {
 }
 
 let nextId = 0;
+const popOwners = new WeakMap<HTMLElement, { original: string | null; ids: string[] }>();
 
 /** Captures every root before any style write and releases only its own stylesheet/attribute. */
 export function popPresenceNodes(
@@ -56,7 +57,13 @@ export function popPresenceNodes(
 		if (!alive) return;
 		for (const { element, width, height, horizontal, vertical } of captures) {
 			const id = `astra-pop-${++nextId}`;
-			const previous = element.getAttribute('data-astra-presence-pop');
+			const current = element.getAttribute('data-astra-presence-pop');
+			let owners = popOwners.get(element);
+			if (!owners) {
+				owners = { original: current, ids: [] };
+				popOwners.set(element, owners);
+			} else if (current === null || !owners.ids.includes(current)) owners.original = current;
+			owners.ids.push(id);
 			element.setAttribute('data-astra-presence-pop', id);
 			const style = element.ownerDocument.createElement('style');
 			if (options.nonce) style.nonce = options.nonce;
@@ -64,13 +71,17 @@ export function popPresenceNodes(
 			(options.root ?? element.ownerDocument.head).appendChild(style);
 			cleanup.push(() => {
 				style.remove();
+				owners.ids.splice(owners.ids.indexOf(id), 1);
+				if (!owners.ids.length) popOwners.delete(element);
 				if (element.getAttribute('data-astra-presence-pop') !== id) return;
-				if (previous === null) element.removeAttribute('data-astra-presence-pop');
-				else element.setAttribute('data-astra-presence-pop', previous);
+				const remaining = owners.ids.at(-1) ?? owners.original;
+				if (remaining === null) element.removeAttribute('data-astra-presence-pop');
+				else element.setAttribute('data-astra-presence-pop', remaining);
 			});
 		}
 	});
 	return () => {
+		if (!alive) return;
 		alive = false;
 		for (const dispose of cleanup) dispose();
 	};
