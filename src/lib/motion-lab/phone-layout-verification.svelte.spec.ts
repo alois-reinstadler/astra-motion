@@ -566,13 +566,24 @@ it('keeps partially entered text continuous and visibly fading inside a note clo
 			exiting.currentTime = time;
 			for (const animation of closing) animation.time = time / 1000;
 			await frames();
+			const control = toggle.getBoundingClientRect();
+			const hit = document.elementFromPoint(
+				control.x + control.width / 2,
+				control.y + control.height / 2
+			);
 			samples.push({
 				time,
 				opacity: Number(getComputedStyle(detail).opacity),
+				toggleReachable: hit === toggle || (!!hit && toggle.contains(hit)),
+				toggleHit: hit?.className,
 				...paintedText(detail, card)
 			});
 		}
 		console.info('Early-close note geometry', JSON.stringify({ before, start, samples }));
+		expect(
+			samples.map(({ toggleReachable }) => toggleReachable),
+			JSON.stringify(samples)
+		).toEqual(samples.map(() => true));
 		expect(samples.every(({ opacity }) => opacity > 0 && opacity < before.opacity)).toBe(true);
 		expect(samples[0].opacity - samples.at(-1)!.opacity).toBeGreaterThan(0.2);
 		expect(
@@ -597,6 +608,59 @@ it('keeps partially entered text continuous and visibly fading inside a note clo
 		expect(Math.abs(box(card).width - collapsed.width)).toBeLessThan(1.5);
 		expect(Math.abs(box(card).height - collapsed.height)).toBeLessThan(1.5);
 		expect(toggle.getAttribute('aria-expanded')).toBe('false');
+		expect(document.activeElement).toBe(toggle);
+
+		// A trusted pointer click must reopen the same paragraph while an early
+		// exit is paused; keyboard focus alone does not establish pointer access.
+		toggle.click();
+		await tick();
+		await expect
+			.poll(() => Boolean(visualElementStore.get(card)?.projection?.currentAnimation))
+			.toBe(true);
+		for (const animation of animations(stage.container)) {
+			animation.pause();
+			animation.time = 0.09;
+		}
+		const retained = stage.container.querySelector<HTMLElement>('.detail')!;
+		const retainedOpacity = () =>
+			retained
+				.getAnimations()
+				.find((animation) =>
+					(animation.effect as KeyframeEffect)
+						.getKeyframes()
+						.some((keyframe) => keyframe.opacity !== undefined)
+				)!;
+		await expect.poll(() => Boolean(retainedOpacity())).toBe(true);
+		retainedOpacity().pause();
+		retainedOpacity().currentTime = 90;
+		await frames();
+		expect(box(card).width).toBeGreaterThan(collapsed.width + 8);
+		expect(box(card).width).toBeLessThan(302);
+		toggle.click();
+		await tick();
+		await expect.poll(() => Boolean(retainedOpacity())).toBe(true);
+		retainedOpacity().pause();
+		retainedOpacity().currentTime = 90;
+		for (const animation of animations(stage.container)) animation.pause();
+		await frames();
+		expect(Number(getComputedStyle(retained).opacity)).toBeGreaterThan(0);
+		expect(Number(getComputedStyle(retained).opacity)).toBeLessThan(0.8);
+		let trustedClick = false;
+		toggle.addEventListener(
+			'click',
+			(event) => {
+				trustedClick = event.isTrusted;
+			},
+			{ once: true }
+		);
+		await screen.getByRole('button', { name: 'Read the note', exact: true }).click();
+		expect(trustedClick).toBe(true);
+		expect(stage.container.querySelector('.detail')).toBe(retained);
+		expect(toggle.getAttribute('aria-expanded')).toBe('true');
+		await expect.poll(() => Number(getComputedStyle(retained).opacity)).toBe(1);
+		for (const animation of animations(stage.container)) animation.complete();
+		await frames();
+		expect(Math.abs(box(card).width - 310)).toBeLessThan(1.5);
 		expect(document.activeElement).toBe(toggle);
 	} finally {
 		await screen.unmount();
