@@ -118,7 +118,8 @@ Unicode segmentation, independent reveal effects/stagger, accessible replacement
 and explicit sizing. `astra-motion/tilt` provides `Tilt` with shared springs and
 separate measurement/perspective/rotation ownership. Both honor MotionConfig and
 Activity lifecycle. See the [text contract](docs/text-motion.md), [tilt contract](docs/tilt.md)
-and `/motion-lab/text-tilt` for interactive compositions.
+and the [Text and Tilt demo](http://100.64.0.2:4083/motion-lab/text-tilt) for interactive compositions
+on the local evaluation preview.
 
 ## Smaller entries and compatibility
 

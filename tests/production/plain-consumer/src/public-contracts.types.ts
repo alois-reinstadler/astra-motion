@@ -425,10 +425,10 @@ export function nativeBindingContracts() {
 	// @ts-expect-error The lite entry does not include gestures.
 	liteMotion.bind({ whileHover: { scale: 1.1 } });
 	// @ts-expect-error The removed constructor has no compatibility export.
-	rootEntry.createMotion;
+	void rootEntry.createMotion;
 	// @ts-expect-error Native full exposes motion.bind only.
-	stateEntry.createMotion;
+	void stateEntry.createMotion;
 	// @ts-expect-error Native lite exposes motion.bind only.
-	liteEntry.createMotion;
+	void liteEntry.createMotion;
 	return [full, lite];
 }

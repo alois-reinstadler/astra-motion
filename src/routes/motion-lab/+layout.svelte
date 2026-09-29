@@ -11,6 +11,7 @@
 		state: { slug: 'state', title: 'State' },
 		inheritance: { slug: 'state', title: 'State' },
 		scroll: { slug: 'scroll', title: 'Scroll' },
+		'text-tilt': { slug: 'text-animation', title: 'Text animation' },
 		timelines: { slug: 'timelines', title: 'Timelines' },
 		product: { slug: 'routes', title: 'Routes' },
 		guide: { slug: 'getting-started', title: 'Getting started' }
@@ -56,6 +57,10 @@
 		<a
 			href={resolve('/motion-lab/timelines')}
 			aria-current={page.url.pathname.includes('/timelines') ? 'page' : undefined}>Timelines</a
+		>
+		<a
+			href={resolve('/motion-lab/text-tilt')}
+			aria-current={page.url.pathname.includes('/text-tilt') ? 'page' : undefined}>Text and Tilt</a
 		>
 		<a
 			href={resolve('/motion-lab/product')}

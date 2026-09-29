@@ -1,6 +1,28 @@
 # Changelog
 
-## Unreleased
+## 0.1.0-rc.2 — local release candidate
+
+This candidate is prepared for local installation; it is not a registry publication.
+
+- Remove the legacy `createMotion` export and its separate runtime semantics. Use
+  `motion.bind` from the root, `/state`, or `/state/lite` entry; see the
+  [migration guide](docs/migration.md). `motion.create` custom components remain supported.
+- Share modern component/native defaults, transform ownership, variant ancestry,
+  reduced-motion policy and cleanup. Fix reactive variant results, live policy
+  changes during retained native exits, and per-animation reduced-motion opt-outs.
+- Add optional `/text` and `/tilt` entries with `TextReveal`, `TextSwap`, and `Tilt`.
+- Include an isolated, attributed [Threlte scene port](docs/research/threlte-scene.md)
+  with scroll-driven camera/clip sampling and cursor interactions. Its dependencies
+  are excluded from the library package. Real GPU rendering remains unqualified here.
+- Clarify WebGPU secure-context and adapter failures. `MotionConfig.isStatic`
+  remains excluded as an upstream internal editor flag, not a documented freeze API.
+
+RC1 already introduced `bind:values`, single-value `AnimatePresence`, `motion.bind`,
+`useAnimate` settlement, `useWillChange`, `useFollowValue`, and `animateView`.
+The original RC1 archive is retained unchanged. Exact RC2 qualification is recorded
+with its archive and hashes, separately from historical results below.
+
+## Earlier repository changes
 
 Astra Motion remains a working beta. These notes describe repository changes, not a public registry release.
 
@@ -15,7 +37,7 @@ Astra Motion remains a working beta. These notes describe repository changes, no
 
 ### Svelte contracts and compatibility
 
-- Keep direct props as the primary authoring API. Existing native bindings, `motion={{ ... }}`, `Presence` and create* helpers remain available; see the [migration guide](docs/migration.md) for differences in defaults and ownership.
+- Keep direct props as the primary authoring API. Modern native bindings, `motion={{ ... }}`, `Presence`, `createLayout` and `createAnimate` remain available; see the [migration guide](docs/migration.md) for differences in defaults and ownership.
 - Give keyed presence explicit `items` / `key` and Svelte snippets. `AnimatePresence` defaults to `sync`; the older `Presence` keeps its `wait` default.
 - Retain Activity child and DOM state, coordinate exit and visibility, and pause Astra-owned work while hidden. `useActivityEffect` opts application effects into that lifecycle; ordinary Svelte effects continue running.
 - Coordinate view captures through `startViewTransition(update, options)` and root attachments, with asynchronous updates, cancellation, supersession and browser fallback behavior.

@@ -1,5 +1,12 @@
 # Motion parity contract and evidence
 
+Current RC2 scope removes legacy `createMotion` and adds optional `/text` and
+`/tilt` entries. [Migration](../migration.md) defines the current native API;
+[Text/Tilt handoff](../text-tilt-handoff.md) and [Threlte research](../research/threlte-scene.md)
+record their bounded evidence. Earlier qualification records below describe their
+own revisions, not the RC2 archive. Final local qualification accompanies the exact
+archive in `/workspace/releases/astra-motion/0.1.0-rc.2/`.
+
 Latest example qualification: [phone feedback and performance evidence](PHONE-FEEDBACK.md)
 records list/grid content correction, continuous note collapse, and independent
 shared View artwork/title snapshots. The [containment follow-up](PHONE-CONTAINMENT.md)

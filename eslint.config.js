@@ -23,6 +23,11 @@ export default defineConfig(
 	prettier,
 	svelte.configs.prettier,
 	{
+		// This isolated Vite app has no SvelteKit router or $app/paths.
+		files: ['experiments/threlte-scene/**/*.svelte'],
+		rules: { 'svelte/no-navigation-without-resolve': 'off' }
+	},
+	{
 		languageOptions: { globals: { ...globals.browser, ...globals.node } },
 		rules: {
 			// typescript-eslint strongly recommend that you do not use the no-undef lint rule on TypeScript projects.
