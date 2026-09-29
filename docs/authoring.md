@@ -19,7 +19,7 @@ From your application directory, install the archive supplied in the release-can
 handoff. No checkout or consumer-side library build is needed:
 
 ```sh
-pnpm add /absolute/path/to/astra-motion-0.1.0-rc.1.tgz
+pnpm add /absolute/path/to/astra-motion-0.1.0-rc.2.tgz
 ```
 
 This artifact is prepared locally; no registry publication is implied. Match its hash

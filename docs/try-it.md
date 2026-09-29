@@ -3,7 +3,7 @@
 To evaluate inside your own app, install the supplied release candidate directly:
 
 ```sh
-pnpm add /absolute/path/to/astra-motion-0.1.0-rc.1.tgz
+pnpm add /absolute/path/to/astra-motion-0.1.0-rc.2.tgz
 ```
 
 Match the archive hash to the handoff record. This local artifact requires no checkout

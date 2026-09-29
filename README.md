@@ -4,7 +4,7 @@ Motion’s animation engine, connected to Svelte 5. Animate native HTML and SVG,
 coordinate presence and layout, add gestures and drag, and compose reactive values
 without a React runtime.
 
-**Local release candidate: 0.1.0-rc.1.** Registry publication is not implied.
+**Local release candidate: 0.1.0-rc.2.** Registry publication is not implied.
 Astra is [MIT licensed](LICENSE). Start with the
 [documentation](https://alois-reinstadler.github.io/astra-motion/docs/getting-started),
 try the [examples](https://alois-reinstadler.github.io/astra-motion/examples), or explore
@@ -52,7 +52,7 @@ Use the supplied versioned archive from the release-candidate handoff. No checko
 or library build is required. From your application directory:
 
 ```sh
-pnpm add /absolute/path/to/astra-motion-0.1.0-rc.1.tgz
+pnpm add /absolute/path/to/astra-motion-0.1.0-rc.2.tgz
 ```
 
 Use Svelte 5.57.0 or newer within Svelte 5. SvelteKit 2.70.3 or newer within Kit 2

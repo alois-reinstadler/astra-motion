@@ -13,12 +13,12 @@ export const guidesDocs: DocPage[] = [
 				title: 'Install the package',
 				text: [
 					'Astra connects Motion’s animation engine to Svelte 5. Use direct props on motion elements for targets, variants, gestures and layout; use managed helpers when values, scrolling or imperative playback need their own lifecycle.',
-					'Evaluate the local release candidate by installing the supplied astra-motion-0.1.0-rc.1.tgz artifact into your application. No repository checkout or consumer-side library build is needed. This is a local package artifact, not a registry publication.'
+					'Evaluate the local release candidate by installing the supplied astra-motion-0.1.0-rc.2.tgz artifact into your application. No repository checkout or consumer-side library build is needed. This is a local package artifact, not a registry publication.'
 				],
 				code: {
 					label: 'Install the supplied release-candidate archive',
 					source:
-						'# Run from your application directory:\npnpm add /absolute/path/to/astra-motion-0.1.0-rc.1.tgz'
+						'# Run from your application directory:\npnpm add /absolute/path/to/astra-motion-0.1.0-rc.2.tgz'
 				}
 			},
 			{
