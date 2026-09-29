@@ -1,3 +1,5 @@
+import type { TargetAndTransition } from './animation-types.js';
+import type { VariantLabels } from 'motion-dom';
 import type {
 	HTMLVisualElement,
 	SVGVisualElement,
@@ -38,7 +40,11 @@ export interface GestureOptions
 		MotionNodePanHandlers,
 		MotionNodeDragHandlers {
 	disabled?: boolean;
-	whileDrag?: MotionNodeHoverHandlers['whileHover'];
+	whileHover?: TargetAndTransition | VariantLabels;
+	whileTap?: TargetAndTransition | VariantLabels;
+	whileFocus?: TargetAndTransition | VariantLabels;
+	whileInView?: TargetAndTransition | VariantLabels;
+	whileDrag?: TargetAndTransition | VariantLabels;
 	drag?: boolean | 'x' | 'y';
 	dragConstraints?: DragConstraintSource;
 	dragMomentum?: boolean;

@@ -1,3 +1,4 @@
+import type { Transition } from './animation-types.js';
 import {
 	animateTarget,
 	calcChildStagger,
@@ -10,7 +11,6 @@ import {
 	type AnimationPlaybackControlsWithThen,
 	type AnimationDefinition,
 	type MotionPath,
-	type Transition,
 	type TargetAndTransition,
 	type VisualElement,
 	type VisualElementAnimationOptions
@@ -108,7 +108,7 @@ export function cancelMotionSequence(visual: VisualElement) {
 export function animateMotionDefinition(
 	visual: VisualElement,
 	definition: AnimationDefinition,
-	options: VisualElementAnimationOptions = {},
+	options: VisualElementAnimationOptions & { transitionOverride?: Transition } = {},
 	parentCurrent: () => boolean = () => true,
 	run: Run = new Map()
 ): Promise<void> {
@@ -149,7 +149,20 @@ export function animateMotionDefinition(
 			visual.values.forEach((value) =>
 				prepareMotionHandoff(value.animation, { finishedOnly: true })
 			);
-			const ownedTarget = pathTransition?.path ? { ...values, transition: pathTransition } : values;
+			// The pinned engine reads reduction before applying transitionOverride.
+			// Carry its explicit policy on the target too, so timing and policy agree.
+			const overrideReduction = options.transitionOverride?.reduceMotion;
+			const ownedTarget = pathTransition?.path
+				? { ...values, transition: pathTransition }
+				: overrideReduction !== undefined
+					? {
+							...values,
+							transition: {
+								...(values.transition ?? visual.getDefaultTransition()),
+								reduceMotion: overrideReduction
+							}
+						}
+					: values;
 			const effectiveTransition = ownedTarget.transition
 				? resolveTransition(ownedTarget.transition, visual.getDefaultTransition())
 				: visual.getDefaultTransition();

@@ -1,3 +1,4 @@
+import type { TargetAndTransition, Variants, Transition } from './animation-types.js';
 import { diagnoseMotionOptions, diagnoseInfiniteExit } from './diagnostics.js';
 import { flushSync, untrack } from 'svelte';
 import { createAttachmentKey, type Attachment } from 'svelte/attachments';
@@ -14,10 +15,7 @@ import {
 	positionalKeys,
 	type MotionNodeOptions,
 	type MotionStyle,
-	type TargetAndTransition,
-	type VariantLabels,
-	type Variants,
-	type Transition
+	type VariantLabels
 } from 'motion-dom';
 import type { createLayout, updateLayout, LayoutController, LayoutOptions } from './layout.js';
 import { layoutBridge, synchronousMutation } from './commit.js';
@@ -71,7 +69,9 @@ export type MotionTarget = TargetAndTransition | VariantLabels;
 export interface MotionOptions extends MotionConfigOptions, GestureOptions {
 	ignoreStrict?: boolean;
 	initial?: MotionTarget | false;
-	animate?: MotionNodeOptions['animate'];
+	animate?:
+		| Exclude<MotionNodeOptions['animate'], import('motion-dom').TargetAndTransition>
+		| TargetAndTransition;
 	exit?: MotionTarget;
 	variants?: Variants;
 	inherit?: boolean;

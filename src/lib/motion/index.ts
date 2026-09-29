@@ -56,10 +56,9 @@ export type {
 	Transition,
 	Variants,
 	TargetAndTransition,
-	AnimationDefinition,
-	AnimationPlaybackControls,
-	PanInfo
-} from 'motion-dom';
+	AnimationDefinition
+} from './animation-types.js';
+export type { AnimationPlaybackControls, PanInfo } from 'motion-dom';
 export {
 	useMotionValue,
 	useMotionTemplate,

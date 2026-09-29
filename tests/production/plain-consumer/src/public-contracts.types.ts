@@ -432,3 +432,24 @@ export function nativeBindingContracts() {
 	void liteEntry.createMotion;
 	return [full, lite];
 }
+
+// Per-animation reduction overrides are valid in both authoring paths and controls.
+const reductionTransition: import('astra-motion').Transition = { reduceMotion: false, duration: 1 };
+const reductionTarget: import('astra-motion').TargetAndTransition = {
+	x: 100,
+	transition: reductionTransition
+};
+const reductionVariants: import('astra-motion').Variants = { active: reductionTarget };
+const reductionProps: ComponentProps<typeof motion.div> = {
+	animate: { x: 100, transition: { reduceMotion: false } },
+	whileHover: { scale: 1.1, transition: { reduceMotion: false } },
+	variants: reductionVariants,
+	transition: reductionTransition
+};
+void reductionProps;
+export function reductionBinding() {
+	// @ts-expect-error Projection uses reducedMotion, not a timing override.
+	motion.bind({ layoutTransition: { reduceMotion: false } });
+	const binding = motion.bind({ animate: reductionTarget, transition: reductionTransition });
+	return binding.animate({ x: 200 }, { reduceMotion: false, duration: 1 });
+}

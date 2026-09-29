@@ -67,3 +67,52 @@ it('preserves an imperative path override opt-out during a live policy change', 
 	await finished;
 	expect(position()).toEqual([200, 0]);
 });
+
+for (const reduceMotion of [false, true]) {
+	it(`honors an imperative non-path reduction override of ${reduceMotion}`, async () => {
+		const { component } = render(Fixture);
+		const read = () => visualElementStore.get(document.querySelector('[data-optout="native"]')!)!;
+		await expect
+			.poll(() => read()?.getValue('x')?.animation instanceof AsyncMotionValueAnimation)
+			.toBe(true);
+		const visual = read();
+		const value = visual.getValue('x')!;
+		const entrance = value.animation as AsyncMotionValueAnimation<number>;
+		entrance.complete();
+		await expect.poll(() => value.get()).toBe(100);
+		if (!reduceMotion) {
+			flushSync(() => component.reduce());
+			await expect.poll(() => visual.shouldReduceMotion).toBe(true);
+		}
+		const finished = component.runPlain(reduceMotion);
+		if (!reduceMotion) {
+			const playback = value.animation;
+			if (!(playback instanceof AsyncMotionValueAnimation))
+				throw new Error('Expected owned animation');
+			playback.pause();
+			playback.time = 1;
+			await expect.poll(() => value.get()).toBe(125);
+			expect(playback.state).toBe('paused');
+			playback.complete();
+		}
+		await finished;
+		expect(value.get()).toBe(200);
+		expect(value.isAnimating()).toBe(false);
+	});
+}
+
+it('preserves default skipAnimations when overriding reduction', async () => {
+	const { component } = render(Fixture);
+	const read = () => visualElementStore.get(document.querySelector('[data-optout="native"]')!)!;
+	await expect
+		.poll(() => read()?.getValue('x')?.animation instanceof AsyncMotionValueAnimation)
+		.toBe(true);
+	const visual = read();
+	(visual.getValue('x')!.animation as AsyncMotionValueAnimation<number>).complete();
+	await expect.poll(() => visual.getValue('x')!.get()).toBe(100);
+	flushSync(() => component.skip());
+	await expect.poll(() => visual.getDefaultTransition()?.skipAnimations).toBe(true);
+	await component.runPlain(false);
+	expect(visual.getValue('x')!.get()).toBe(200);
+	expect(visual.getValue('x')!.isAnimating()).toBe(false);
+});

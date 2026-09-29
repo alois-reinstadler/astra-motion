@@ -1,10 +1,12 @@
+import type { Transition } from './animation-types.js';
 import { getContext, setContext, untrack } from 'svelte';
-import { resolveTransition, type Point2D, type Transition } from 'motion-dom';
+import { resolveTransition, type Point2D, type Transition as EngineTransition } from 'motion-dom';
 import type { MotionPolicy } from './policy.js';
 
 export interface MotionConfigOptions extends MotionPolicy {
 	transition?: Transition;
-	layoutTransition?: Transition;
+	/** Projection timing; use reducedMotion for its policy. */
+	layoutTransition?: EngineTransition;
 	automatic?: boolean;
 	transformPagePoint?: (point: Point2D) => Point2D;
 	nonce?: string;

@@ -59,6 +59,9 @@ remain identical after migration.
 Components and native bindings default to `reducedMotion: 'never'`, following Motion.
 Set `MotionConfig reducedMotion="user"` near the application root to follow the OS.
 Reduction settles positional/layout animation while paint effects can continue.
+A target or `binding.animate` transition can override positional playback with
+`reduceMotion: true` or `false`. Layout projection follows `reducedMotion`;
+`layoutTransition` supplies timing, not a separate reduction policy.
 
 Components and native bindings follow upstream raw-transform precedence. A nonempty
 `transform` takes precedence over independent transform aliases. Removing a target

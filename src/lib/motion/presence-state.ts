@@ -1,3 +1,4 @@
+import type { TargetAndTransition, Transition } from './animation-types.js';
 import {
 	DOMKeyframesResolver,
 	JSAnimation,
@@ -11,8 +12,6 @@ import {
 	type VisualElement,
 	type MotionValue,
 	type ResolvedValues,
-	type TargetAndTransition,
-	type Transition,
 	type ValueAnimationOptions,
 	type ValueTransition
 } from 'motion-dom';
