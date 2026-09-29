@@ -270,7 +270,7 @@ export class ProjectionBoundary extends HTMLProjectionNode {
 		this.shouldResetTransform = false;
 	}
 
-	measurePageBox() {
+	measurePageBox(): import('framer-motion').Box {
 		const rect = this.element.getBoundingClientRect();
 		const box = createBox();
 		const fixed = this.scroll?.wasRoot || this.path.some((ancestor) => ancestor.scroll?.wasRoot);
