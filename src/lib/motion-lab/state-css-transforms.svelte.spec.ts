@@ -36,7 +36,7 @@ it.each([
 	['scale', '2'],
 	['translate', '20px'],
 	['rotate', '20deg']
-])('rejects authored CSS %s before acquiring a state visual', async (property, value) => {
+])('composes authored CSS %s with the independent Motion transform', async (property, value) => {
 	const node = document.createElement('div');
 	const sheet = document.createElement('style');
 	sheet.textContent = `[data-state-css-transform] { ${property}: ${value}; }`;
@@ -52,8 +52,10 @@ it.each([
 		() => true
 	);
 	try {
-		expect(() => ensureMotionVisual(node)).toThrow('Motion owns');
-		expect(node.style.transform).toBe('scale(0.5)');
+		const visual = ensureMotionVisual(node)!;
+		visual.getValue('scale', 0.5).set(0.75);
+		visual.render();
+		expect(node.style.transform).toBe('scale(0.75)');
 		expect(getComputedStyle(node).getPropertyValue(property)).toBe(value);
 	} finally {
 		unregister();
@@ -106,7 +108,7 @@ it('claims inherited transform targets before browser serialization can change t
 	}
 });
 
-it('rejects authored CSS before an inherited variant first acquires transform ownership', async () => {
+it('replaces a raw CSS transform when an inherited variant takes transform ownership', async () => {
 	const node = document.createElement('div');
 	node.style.transform = 'scale(2)';
 	document.body.append(node);
@@ -119,10 +121,11 @@ it('rejects authored CSS before an inherited variant first acquires transform ow
 	);
 	try {
 		const visual = ensureMotionVisual(node)!;
-		await expect(
-			animateMotionDefinition(visual, 'moved', { transitionOverride: { duration: 0 } })
-		).rejects.toThrow('Motion owns');
-		expect(node.style.transform).toBe('scale(2)');
+		await animateMotionDefinition(visual, 'moved', { transitionOverride: { duration: 0 } });
+		visual.render();
+		const matrix = new DOMMatrix(getComputedStyle(node).transform);
+		expect(matrix.e).toBeCloseTo(12.123456789, 3);
+		expect(matrix.a).toBe(1);
 	} finally {
 		unregister();
 		await Promise.resolve();

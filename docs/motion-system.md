@@ -2,19 +2,21 @@
 
 Current primary API and scope: [parity matrix](parity/MATRIX.md),
 [shared Svelte contracts](parity/CONTRACTS.md), and [migration](migration.md).
-This document explains the adapter architecture and retains the compatibility-binding
-recipes and original design reasoning. The primary references and parity records above
-define current API scope and qualification; historical experiments below are not new
-release evidence. Native finite-transition restrictions apply to compatibility bindings.
+This document explains the current adapter architecture alongside original design
+reasoning. Dated research links retain their historical scope and do not establish
+current API support or release qualification. Native outro retention requires a
+finite total duration; it uses the same target resolution as motion components.
 
 **Recommendation: adopt the Svelte/Motion hybrid with the exact dependency pin and
 scoped adapter compatibility fix, without compiler integration.** Automatic layout now uses ordinary
 Svelte assignments. The explicit transaction remains available for controlled workloads.
 
-**State expansion:** `createMotion` now adds initial/update/exit targets, matching SSR
-styles, shared VisualElement ownership, variants/orchestration, MotionValues, gestures,
-and context defaults. Complete examples and the remaining boundaries are in the
-[state API](research/state-api.md) and [implementation report](research/state-implementation.md).
+**State bindings:** `motion.bind` supplies initial/update/exit targets, matching SSR
+styles, shared VisualElement ownership, variants/orchestration, MotionValues,
+gestures and context defaults. See [authoring](authoring.md) for current recipes.
+The [original state API](research/state-api.md) and
+[implementation report](research/state-implementation.md) record the earlier
+`createMotion` design; that helper has been removed.
 
 The follow-up breakthrough is that Motion's cached layout and current projected pose
 can seed a postcommit snapshot. This works through interruption, nested projection and
@@ -26,8 +28,8 @@ continues to use Motion's projection engine rather than introducing a second FLI
 The modern entry points are `motion.*`, native `motion.bind`, and `motion.create`.
 Native bindings reuse the component engine and captured environment; their explicit
 SSR spread and native outro directive remain Svelte markup requirements. `.child`
-retains the modern contract and declares native SSR variant ancestry. Legacy
-`createMotion` defaults remain unchanged.
+retains the same contract and declares native SSR variant ancestry. The removed
+`createMotion` helper has no compatibility export.
 
 `AnimatePresence` adds a retained `value` form through the existing keyed reconciler.
 `Reorder.Group` adds bindable values while explicit callbacks retain proposal authority.
@@ -141,13 +143,12 @@ not gain those form bindings.
 
 Use `motion.bind` for existing native markup, native directives such as `bind:group`,
 parent-scoped styles and headless components. Spread its props, merge authored styles,
-and install its native transition. Its props include the attachment and SSR styles, so
-do not attach it twice. Modern bindings share the motion.* engine contract;
-`createMotion` preserves historical compatibility behavior. Each binding owns one simultaneously mounted node.
-Nested tag components establish variant ancestry during SSR; native bindings use
-`parent.child()`. Both preserve the DOM containment contract. For portaled content,
-create an independent native binding rather than inheriting an outside visual parent.
-See the complete [authoring and forwarding contracts](authoring.md).
+and install its native transition for removal. Props include the attachment and SSR
+styles, so do not attach it twice. Bindings share the `motion.*` engine contract and
+each owns one simultaneously mounted node. Nested tags establish variant ancestry
+through context; native bindings use `parent.child()`. Variant ancestry is distinct
+from the DOM ancestry used for projection. See the complete
+[authoring and forwarding contracts](authoring.md).
 
 Root imports are the default; focused entries are optional bundle optimizations.
 The lite binding retains the authoring contract but excludes layout and gestures.
@@ -384,12 +385,12 @@ interpolation remain excluded. See the current
 [layout reference](https://alois-reinstadler.github.io/astra-motion/docs/layout#troubleshooting)
 and the [historical boundary review](research/projection-boundaries.md). A state
 binding that only animates paint (for example opacity) preserves existing CSS
-transforms. It checks for conflicting ownership if transforms, layout or drag are
-subsequently requested.
+transforms. When transform targets are introduced, Motion composes them using the same
+precedence as components; a nonempty raw transform masks independent targets.
 
 Default layout has no initial animation or hidden SSR state. Attachment-only numeric
 styles are applied on the client. For initial transforms and matching SSR markup,
-use `createMotion` and spread `binding.props`; its native `binding.transition` adds
+use `motion.bind` and spread `binding.props`; its native `binding.transition` adds
 transform-aware exits. State and layout use the same transform owner.
 
 ### Route transitions and shared route elements
@@ -576,10 +577,10 @@ requires current DOM ordering for connected participants.
   in the current layout reference; the older boundary report records its earlier scope.
 - **SSR inheritance needs declared ancestry.** Nested tag components declare it through
   context; native bindings use `parent.child()`. Arbitrary DOM ancestry discovered
-  after mounting cannot determine server styles. Children must remain inside their
-  declared parent; portaled content needs an independent native binding.
-  Compatibility createMotion presence targets must be finite; unresolved `auto`/CSS-variable targets and
-  repeating exits are diagnosed. Use layout for intrinsic dimensions.
+  after mounting cannot determine server styles. Variant ancestry and projection's
+  DOM ancestry are distinct. Native exits resolve intrinsic dimensions, CSS variables
+  and relative units through the DOM resolver. Finite repeats are supported; an
+  infinite exit cannot supply a finite Svelte removal clock.
 - **Global coordination costs O(N).** The 500-node compositing cliff improved materially
   with generated 2D translations: measured cold maximum frame from 217 ms to 33 ms, with warm frames around 17 ms.
   These are Chromium development samples, not a mobile or production performance guarantee.

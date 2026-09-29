@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createMotion } from '../motion/motion.svelte.js';
+	import { motion } from '../motion/motion.svelte.js';
 	let {
 		when = 'afterChildren',
 		initial = false
@@ -9,7 +9,7 @@
 	} = $props();
 	let open = $state(true);
 	let reduced = $state(false);
-	const parent = createMotion(() => ({
+	const parent = motion.bind(() => ({
 		initial,
 		animate: 'visible',
 		exit: 'hidden',

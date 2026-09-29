@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { createMotion } from 'astra-motion/state';
+	import { motion } from 'astra-motion/state';
 	import { createAnimate } from 'astra-motion/animate';
 	let moved = $state(false);
 	const revision = 'A';
-	const tile = createMotion(() => ({
+	const tile = motion.bind(() => ({
 		initial: false,
 		animate: { x: moved ? 120 : 0 },
 		transition: { duration: 0.3 }

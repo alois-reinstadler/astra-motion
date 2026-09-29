@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createMotion } from '../motion/motion.svelte.js';
+	import { motion } from '../motion/motion.svelte.js';
 	import Motion from '../motion/MotionComponent.svelte';
 	import { motionValue } from '../motion/values.js';
 
@@ -8,11 +8,11 @@
 		animate: { x: 0 },
 		transition: { duration: 0 }
 	});
-	const object = createMotion(options);
-	const getter = createMotion(() => options);
+	const object = motion.bind(options);
+	const getter = motion.bind(() => options);
 	const value = motionValue(0.5);
 	const variants = $state({ active: { x: [0, 0] } });
-	const variant = createMotion({
+	const variant = motion.bind({
 		initial: false,
 		animate: 'active',
 		variants,
@@ -20,7 +20,7 @@
 		transition: { duration: 0 }
 	});
 	const custom = $state({ x: 0 });
-	const dynamic = createMotion({
+	const dynamic = motion.bind({
 		initial: false,
 		animate: 'active',
 		custom,

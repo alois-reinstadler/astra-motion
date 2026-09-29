@@ -14,7 +14,7 @@
 	);
 	let before: CoordinatedPresence;
 	let after: CoordinatedPresence;
-	const example = `const panel = createMotion({
+	const example = `const panel = motion.bind({
   initial: 'hidden', animate: 'visible', exit: 'hidden',
   variants: { hidden: { opacity: 0 }, visible: { opacity: 1 } },
   transition: { when: 'afterChildren', staggerChildren: 0.08 }

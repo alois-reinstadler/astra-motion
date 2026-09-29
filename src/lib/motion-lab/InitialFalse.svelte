@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { createMotion } from '$lib/motion/motion.svelte.js';
+	import { motion } from '$lib/motion/motion.svelte.js';
 	let { intro = false }: { intro?: boolean } = $props();
 	let reduced = $state(false);
 	let open = $state(true);
-	const binding = createMotion(() => ({
+	const binding = motion.bind(() => ({
 		initial: intro ? { x: 0, opacity: 0 } : false,
 		reducedMotion: reduced ? 'always' : 'never',
 		exit: { x: -80, opacity: 0 },

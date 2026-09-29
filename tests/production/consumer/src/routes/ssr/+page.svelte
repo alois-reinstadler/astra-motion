@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { createMotion } from 'astra-motion/state';
+	import { motion } from 'astra-motion/state';
 	import { MotionConfig } from 'astra-motion';
 	import NativeCard from './NativeCard.svelte';
 	let target = $state(40);
 	let attached = $state(true);
-	const card = createMotion(() => ({
+	const card = motion.bind(() => ({
 		initial: false,
 		animate: { x: target, opacity: 0.75 },
 		transition: { duration: 0.18 }

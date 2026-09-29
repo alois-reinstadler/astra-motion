@@ -1,6 +1,17 @@
 import { captureMotionEnvironment } from './component-context.js';
-import { createMotion, type MotionBinding, type MotionOptions } from './motion.svelte.js';
+import {
+	createBindingWithFeatures,
+	type MotionBinding,
+	type MotionOptions
+} from './motion-core.svelte.js';
+import { createLayout, updateLayout } from './layout.js';
+import { attachMotionGestures } from './gestures.js';
 import type { MotionRenderOptions } from './motion-types.js';
+const features = {
+	drag: true,
+	layout: { create: createLayout, update: updateLayout },
+	gestures: attachMotionGestures
+};
 
 /** Native rendering information needed to serialize SVG attributes during SSR. */
 export type NativeMotionOptions = Pick<MotionRenderOptions, 'namespace' | 'tag' | 'attributes'>;
@@ -11,20 +22,18 @@ export type NativeMotionOptions = Pick<MotionRenderOptions, 'namespace' | 'tag' 
  * @param render SVG namespace/tag/attribute metadata when binding native SVG markup.
  * @example
  * const panel = motion.bind(() => ({ animate: { x: distance }, exit: { opacity: 0 } }));
- * // <div {...panel.props} transition:panel.transition|global />
+ * const exit = panel.transition;
+ * // <div {...panel.props} transition:exit|global />
  * // props includes the attachment and SSR styles; do not attach it twice.
  * @remarks Native descendants use panel.child(options) for explicit SSR ancestry.
- * The creating component determines configuration context. createMotion retains
- * its historical defaults for compatibility.
+ * The creating component determines configuration context.
  */
 export function bind(
 	input: MotionOptions | (() => MotionOptions) = {},
 	render: NativeMotionOptions = {}
 ): MotionBinding {
-	return createMotion(input, {
+	return createBindingWithFeatures(input, features, {
 		...render,
-		component: true,
-		defaultReducedMotion: 'never',
 		environment: captureMotionEnvironment()
 	});
 }

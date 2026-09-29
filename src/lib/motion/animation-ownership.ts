@@ -1,6 +1,11 @@
 import type { VisualElement } from 'motion-dom';
 
 const owners = new WeakMap<object, VisualElement>();
+const reductionOptOuts = new WeakSet<object>();
+/** The policy belongs to the playback that acquired the value, including target overrides. */
+export function allowsMotionReduction(playback: object): boolean {
+	return !reductionOptOuts.has(playback);
+}
 
 /** Borrowing a style value does not borrow its external playback's lifecycle. */
 export function ownsMotionAnimation(visual: VisualElement, playback: object): boolean {
@@ -8,7 +13,11 @@ export function ownsMotionAnimation(visual: VisualElement, playback: object): bo
 }
 
 /** Claim only playback started by this visual's declarative/controls command. */
-export function startOwnedMotionAnimations<T>(visual: VisualElement, start: () => T): T {
+export function startOwnedMotionAnimations<T>(
+	visual: VisualElement,
+	start: () => T,
+	reduceMotion?: boolean
+): T {
 	const previous = new Set<object>();
 	visual.values.forEach((value) => {
 		if (value.animation) previous.add(value.animation);
@@ -16,7 +25,10 @@ export function startOwnedMotionAnimations<T>(visual: VisualElement, start: () =
 	const result = start();
 	visual.values.forEach((value) => {
 		const animation = value.animation;
-		if (animation && !previous.has(animation)) owners.set(animation, visual);
+		if (animation && !previous.has(animation)) {
+			owners.set(animation, visual);
+			if (reduceMotion === false) reductionOptOuts.add(animation);
+		}
 	});
 	return result;
 }

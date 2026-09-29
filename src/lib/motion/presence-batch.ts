@@ -96,6 +96,7 @@ export function coordinatePresence(
 			return timeline.span;
 		},
 		schedule: timeline.schedule,
+		reduceMotion: timeline.reduceMotion,
 		easing: timeline.easing,
 		tick(t, u) {
 			flush();

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { createMotion } from '../motion/motion.svelte.js';
-	const panel = createMotion({ initial: false, animate: 'visible' });
+	import { motion } from '../motion/motion.svelte.js';
+	const panel = motion.bind({ initial: false, animate: 'visible' });
 	const child = panel.child({
 		variants: { visible: { x: [-100, 0], opacity: [0, 1] } },
 		transition: { duration: 0.35 }

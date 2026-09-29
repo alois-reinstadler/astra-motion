@@ -1,15 +1,18 @@
 <script lang="ts">
-	import { createMotion } from '../motion/lite.svelte.js';
+	import { motion } from '../motion/lite.svelte.js';
+	import type { LiteMotionOptions } from '../motion/lite.svelte.js';
+	let { options = {} }: { options?: LiteMotionOptions } = $props();
 	import type { MotionBinding } from '../motion/motion.svelte.js';
 	let open = $state(true);
 	let changed = $state(false);
-	const parent = createMotion(() => ({
+	const parent = motion.bind(() => ({
 		initial: false,
 		animate: changed ? 'shifted' : 'visible',
 		exit: 'hidden',
 		variants: { visible: { opacity: 1 }, shifted: { opacity: 0.8 }, hidden: { opacity: 0 } },
 		transition: { duration: 0.2, when: 'afterChildren' },
-		reducedMotion: 'never'
+		reducedMotion: 'never',
+		...options
 	}));
 	const child = parent.child({
 		variants: {

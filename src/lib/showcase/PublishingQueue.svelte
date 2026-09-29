@@ -2,7 +2,7 @@
 	import { tick } from 'svelte';
 	import type { Attachment } from 'svelte/attachments';
 	import { createLayout } from '$lib/motion/layout.js';
-	import { createMotion } from '$lib/motion/lite.svelte.js';
+	import { motion } from '$lib/motion/lite.svelte.js';
 	import QueueItem from './QueueItem.svelte';
 	import { photos } from './collection.js';
 
@@ -27,7 +27,7 @@
 	};
 	const available = $derived(photos.filter((photo) => !items.some((item) => item.id === photo.id)));
 	const layout = createLayout({ transition: { type: 'spring', stiffness: 430, damping: 38 } });
-	const notice = createMotion({
+	const notice = motion.bind({
 		initial: { opacity: 0, y: 8 },
 		animate: { opacity: 1, y: 0 },
 		exit: { opacity: 0, y: 8 },

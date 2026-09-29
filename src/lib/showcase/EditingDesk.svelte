@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { createLayout } from '$lib/motion/layout.js';
-	import { createMotion } from '$lib/motion/lite.svelte.js';
+	import { motion } from '$lib/motion/lite.svelte.js';
 	import { photos } from './collection.js';
 	const layout = createLayout({ transition: { type: 'spring', stiffness: 390, damping: 36 } });
-	const inspectorMotion = createMotion({
+	const inspectorMotion = motion.bind({
 		initial: { opacity: 0 },
 		animate: { opacity: 1 },
 		exit: { opacity: 0 },

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
-	import { createMotion } from '../motion/lite.svelte.js';
+	import { motion as nativeMotion } from '../motion/lite.svelte.js';
 	import type { Attachment } from 'svelte/attachments';
 	let {
 		native = false,
@@ -10,7 +10,7 @@
 	let revision = $state(0);
 	let x = $state(0);
 	let open = $state(true);
-	const motion = createMotion(() => ({
+	const motion = nativeMotion.bind(() => ({
 		initial: initial ? { x: -80, opacity: 0 } : false,
 		animate: { x, opacity: 1 },
 		exit: { x: -80, opacity: 0 },

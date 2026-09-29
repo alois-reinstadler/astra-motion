@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
-	import { createMotion, type MotionOptions } from '../motion/motion.svelte.js';
+	import { motion, type MotionOptions } from '../motion/motion.svelte.js';
 	import Card from '../components/ui/card/card.svelte';
 	let {
 		reducedInitially = false,
@@ -12,7 +12,7 @@
 	let enabled = $state(false);
 	let blue = $state(false);
 	let completions = 0;
-	const parent = createMotion(() => ({
+	const parent = motion.bind(() => ({
 		initial: false,
 		animate: moved ? 'moved' : 'ready',
 		reducedMotion: reducedInitially || reduced ? 'always' : 'never',
@@ -26,15 +26,13 @@
 			completions++;
 		}
 	});
-	const child = untrack(() => domInferred)
-		? createMotion(childOptions)
-		: parent.child(childOptions);
-	const movingCard = createMotion(() => ({
+	const child = untrack(() => domInferred) ? motion.bind(childOptions) : parent.child(childOptions);
+	const movingCard = motion.bind(() => ({
 		initial: false,
 		animate: { x: moved ? 120 : 0 },
 		transition: { duration: 0.2 }
 	}));
-	const card = createMotion({ initial: false, animate: { opacity: 1 } });
+	const card = motion.bind({ initial: false, animate: { opacity: 1 } });
 	export function completed() {
 		return completions;
 	}

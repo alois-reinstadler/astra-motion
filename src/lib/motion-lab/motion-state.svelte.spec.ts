@@ -99,9 +99,13 @@ it('does not restore an exiting node when reduced motion changes during its reta
 		).click()
 	);
 	await microtasks();
-	expect(Number(node.style.opacity)).toBe(0);
+	const visual = visualElementStore.get(node)!;
+	expect(visual.getValue('y')!.get()).toBe(35);
+	expect(visual.getValue('scale')!.get()).toBe(0.85);
+	const paint = Number(visual.getValue('opacity')!.get());
+	expect(paint).toBeGreaterThan(0);
 	await frames();
-	expect(Number(node.style.opacity)).toBe(0);
+	expect(Number(visual.getValue('opacity')!.get())).toBeLessThanOrEqual(paint);
 	await expect.poll(() => node.isConnected).toBe(false);
 });
 
@@ -225,20 +229,18 @@ it('releases DOM rendering on destruction while preserving the external MotionVa
 	}
 });
 
-it('accepts hover before introend and hands the incoming pose to Motion state without a stale reset', async () => {
+it('accepts hover during Motion entry and hands off without a stale reset', async () => {
 	const screen = render(MotionState);
 	const node = screen.getByTestId('incoming-gesture').element() as HTMLElement;
-	let introEnded = false;
-	node.addEventListener(
-		'introend',
-		() => {
-			introEnded = true;
-		},
-		{ once: true }
-	);
 	await frames();
 	const visual = visualElementStore.get(node)!;
-	expect(introEnded).toBe(false);
+	expect(visual.getValue('scale')!.isAnimating()).toBe(true);
+	const entry = visual.getValue('scale')!.animation!;
+	if (!(entry instanceof AsyncMotionValueAnimation))
+		throw new Error('Expected Motion entry playback');
+	entry.pause();
+	entry.time = 0.2;
+	await frame();
 	const before = Number(visual.getValue('scale')?.get() ?? visual.latestValues.scale);
 	node.dispatchEvent(new PointerEvent('pointerenter', { pointerType: 'mouse', isPrimary: true }));
 	expect(visual.animationState!.getState().whileHover.isActive).toBe(true);
@@ -248,5 +250,5 @@ it('accepts hover before introend and hands the incoming pose to Motion state wi
 		.toBeCloseTo(1.2, 3);
 	for (let i = 0; i < 5; i++) await frame();
 	expect(Number(visual.getValue('scale')!.get())).toBeCloseTo(1.2, 3);
-	expect(introEnded).toBe(true);
+	expect(visual.getValue('scale')!.isAnimating()).toBe(false);
 });

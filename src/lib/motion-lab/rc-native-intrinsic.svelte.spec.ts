@@ -63,35 +63,6 @@ it('settles intrinsic native exits under always-reduced motion', async () => {
 	flushSync(() => component.show(false));
 	await expect.poll(() => nodes.some((node) => node.isConnected)).toBe(false);
 });
-it('preserves the legacy timeline restriction on unresolved intrinsic targets', () => {
-	const node = document.createElement('div');
-	const visual = new HTMLVisualElement({
-		presenceContext: null,
-		props: {},
-		visualState: {
-			latestValues: { height: 0 },
-			renderState: { style: {}, vars: {}, transform: {}, transformOrigin: {} }
-		}
-	});
-	visual.mount(node);
-	try {
-		expect(() =>
-			createPresenceTimeline(visual, { height: 0 }, { height: 'auto' }, { duration: 0.2 }, 'in')
-		).toThrow('resolve "height" before animating it');
-		expect(() =>
-			createPresenceTimeline(
-				visual,
-				{ height: 0 },
-				{ height: ['auto', 0] },
-				{ duration: 0.2 },
-				'in'
-			)
-		).toThrow('resolve "height" before animating it');
-	} finally {
-		visual.unmount();
-	}
-});
-
 it('measures a modern intrinsic exit without resolving another element pending entry', () => {
 	const nodes = [document.createElement('div'), document.createElement('div')];
 	const visuals = nodes.map((node, index) => {
@@ -125,8 +96,7 @@ it('measures a modern intrinsic exit without resolving another element pending e
 			'out',
 			{},
 			undefined,
-			false,
-			true
+			false
 		);
 		expect(unrelatedReads).toBe(0);
 		trajectory.finish();
@@ -180,8 +150,7 @@ for (const repeatType of ['loop', 'reverse', 'mirror'] as const) {
 				'out',
 				{},
 				undefined,
-				false,
-				true
+				false
 			);
 			expect(timeline.span).toBeCloseTo(270, 4);
 			timeline.tick?.(1, 0);
@@ -220,8 +189,7 @@ it('honors explicit modern first keyframes, CSS-variable final values, and rejec
 			'out',
 			{},
 			undefined,
-			false,
-			true
+			false
 		);
 		explicit.tick?.(1, 0);
 		expect(Number(node.style.opacity)).toBe(0.3);
@@ -234,8 +202,7 @@ it('honors explicit modern first keyframes, CSS-variable final values, and rejec
 			'out',
 			{},
 			undefined,
-			false,
-			true
+			false
 		);
 		variable.finish();
 		expect(node.style.opacity).toBe('var(--exit-opacity)');
@@ -249,8 +216,7 @@ it('honors explicit modern first keyframes, CSS-variable final values, and rejec
 				'out',
 				{},
 				undefined,
-				false,
-				true
+				false
 			)
 		).toThrow('infinite repeat cannot complete an outro');
 	} finally {
@@ -288,8 +254,7 @@ it('measures relative width and intrinsic height together before sampling their 
 			'out',
 			{},
 			undefined,
-			false,
-			true
+			false
 		);
 		timeline.tick?.(1, 0);
 		timeline.tick?.(0.5, 0.5);
@@ -354,8 +319,7 @@ for (const repeatType of ['reverse', 'mirror'] as const) {
 					'out',
 					{},
 					undefined,
-					false,
-					true
+					false
 				);
 				expect(timeline.span).toBe(0);
 				expect(Number(node.style.opacity)).toBe(1);

@@ -37,14 +37,10 @@ export function resolveInitialMotionValues(
 	render: MotionRenderOptions = {}
 ): ResolvedValues {
 	const values = { ...svgMotionValues(render.attributes?.() ?? {}), ...styleValues(options, true) };
-	const component = render.component;
-	const immediate = options.initial === false || (!component && options.reducedMotion === 'always');
+	const immediate = options.initial === false;
 	const target = resolveMotionTarget(
 		options as MotionNodeOptions,
-		immediate
-			? options.animate
-			: ((options.initial === false ? undefined : options.initial) ??
-					(component ? undefined : options.animate)),
+		immediate ? options.animate : options.initial === false ? undefined : options.initial,
 		options.custom
 	);
 	for (const [key, value] of Object.entries(target)) {

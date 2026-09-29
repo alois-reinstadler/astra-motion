@@ -1,9 +1,9 @@
 <script lang="ts">
 	import Card from '../components/ui/card/card.svelte';
-	import { createMotion } from '../motion/motion.svelte.js';
+	import { motion } from '../motion/motion.svelte.js';
 	let wide = $state(false);
 	let blue = $state(false);
-	const surface = createMotion(() => ({
+	const surface = motion.bind(() => ({
 		initial: false,
 		animate: { opacity: wide ? 0.3 : 1 },
 		style: { borderRadius: 16 },

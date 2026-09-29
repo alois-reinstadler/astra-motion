@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { createMotion } from '../motion/motion.svelte.js';
+	import { motion } from '../motion/motion.svelte.js';
 	let changed = $state(false);
 	const nodes = Array.from({ length: 100 }, (_, id) => ({
 		id,
-		motion: createMotion(() => ({
+		motion: motion.bind(() => ({
 			initial: false,
 			layout: true,
 			animate: { opacity: changed ? 0.4 : 1, backgroundColor: changed ? '#0000ff' : '#ff0000' },

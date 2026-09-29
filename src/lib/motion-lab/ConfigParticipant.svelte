@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createLayout, type LayoutOptions } from '$lib/motion/layout.js';
-	import { createMotion } from '$lib/motion/motion.svelte.js';
+	import { motion as nativeMotion } from '$lib/motion/motion.svelte.js';
 	import ForwardedMotion from './ForwardedMotion.svelte';
 	let {
 		prefix,
@@ -16,7 +16,7 @@
 		mode: LayoutOptions['mode'];
 	} = $props();
 	const layout = createLayout();
-	const motion = createMotion(() => ({
+	const motion = nativeMotion.bind(() => ({
 		initial: { opacity: 0, x: -12 },
 		animate: { opacity: 1, x: changed ? 70 : 0 },
 		exit: { opacity: 0 },
@@ -37,6 +37,11 @@
 		Layout
 	</div>
 </div>
-<ForwardedMotion {...motion.props} transition={motion.transition} data-testid={`${prefix}-motion`}>
+<ForwardedMotion
+	{...motion.props}
+	transition={motion.transition}
+	data-testid={`${prefix}-motion`}
+	data-reduced={motion.reducedMotion}
+>
 	Motion
 </ForwardedMotion>

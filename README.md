@@ -120,12 +120,13 @@ provides the smaller native DOM-style `useAnimate`; use the root helper for hybr
 subjects and sequences. Actual production measurements and their import fixtures
 belong to the bundle-size guide and package qualification record.
 
-Existing `createMotion`, `createLayout`, `createAnimate`, `createScroll`, `createInView`,
-`Presence`, route helpers and the `motion={{ ... }}` component prop remain available.
-Defined direct props override matching legacy motion-object props. `createMotion` compatibility bindings
-retain their previous ownership rules and reduced-motion defaults. Modern `motion.bind`
-uses the same animation contract as `motion.*`. See
-[migration guidance](docs/migration.md) before changing an existing integration.
+`createMotion` has been removed. Use `motion.bind` for existing native markup;
+`motion.*` and `motion.bind` share Motion's animation defaults and lifecycle.
+Both default to `reducedMotion: 'never'`; select `'user'` explicitly to follow the OS.
+`createLayout`, `createAnimate`, `createScroll`, `createInView`, `Presence`, route
+helpers and the `motion={{ ... }}` component prop remain available. Defined direct
+props override matching motion-object props. See [migration guidance](docs/migration.md)
+for the required import, initial-style, transform and drag changes.
 
 ## Development and verification
 

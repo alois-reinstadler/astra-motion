@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createInView, createMotion } from '$lib/motion/index.js';
+	import { createInView, motion } from '$lib/motion/index.js';
 
 	let panel = $state<HTMLElement>();
 	let target = $state<HTMLElement>();
@@ -7,7 +7,7 @@
 		() => target,
 		() => ({ root: panel, amount: 0.6 })
 	);
-	const card = createMotion(() => ({
+	const card = motion.bind(() => ({
 		initial: false,
 		animate: { opacity: visible.current ? 1 : 0, y: visible.current ? 0 : 24 },
 		transition: { type: 'spring', stiffness: 220, damping: 25 }

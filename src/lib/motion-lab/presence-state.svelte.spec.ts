@@ -137,7 +137,7 @@ it('samples colors, keyframes, per-property delay, and transitionEnd with Motion
 	}
 });
 
-it('settles finite springs, applies zero-duration targets without tick, and rejects repeating exits', async () => {
+it('settles finite springs, applies zero-duration targets without tick, and rejects infinite exits', async () => {
 	const { visual, cleanup } = await participant();
 	try {
 		visual.getValue('scale', 1).jump(1);
@@ -165,7 +165,7 @@ it('settles finite springs, applies zero-duration targets without tick, and reje
 		expect(complete).toHaveBeenCalledOnce();
 		expect(() =>
 			createPresenceTimeline(visual, { scale: 1 }, { scale: 0 }, { repeat: Infinity }, 'out')
-		).toThrow('repeated');
+		).toThrow('infinite repeat');
 	} finally {
 		await cleanup();
 	}
@@ -250,6 +250,60 @@ it('does not retain unchanged scalar targets for an invisible no-op intro', asyn
 		);
 		expect(timeline.duration).toBe(0);
 		expect(complete).toHaveBeenCalledOnce();
+	} finally {
+		await cleanup();
+	}
+});
+
+it('keeps transitionEnd after its own pose ends while child retention continues', async () => {
+	const { visual, cleanup } = await participant();
+	try {
+		visual.getValue('x', 0).jump(0);
+		const complete = vi.fn();
+		const timeline = createPresenceTimeline(
+			visual,
+			{ x: 0 },
+			{ x: 100, transitionEnd: { x: 200 } },
+			{ duration: 0.2, ease: 'linear' },
+			'out',
+			{ complete },
+			undefined,
+			true
+		);
+		timeline.schedule(0, 1000);
+		timeline.tick!(1, 0);
+		timeline.tick!(0.7, 0.3);
+		expect(visual.getValue('x')!.get()).toBe(200);
+		expect(complete).not.toHaveBeenCalled();
+		timeline.reduceMotion();
+		expect(visual.getValue('x')!.get()).toBe(200);
+		timeline.tick!(0, 1);
+		expect(visual.getValue('x')!.get()).toBe(200);
+		expect(complete).toHaveBeenCalledOnce();
+	} finally {
+		await cleanup();
+	}
+});
+it('preserves a retained trajectory with an explicit reduction opt-out', async () => {
+	const { visual, cleanup } = await participant();
+	try {
+		visual.getValue('x', 0).jump(0);
+		const timeline = createPresenceTimeline(
+			visual,
+			{ x: 0 },
+			{ x: 100, transition: { duration: 1, ease: 'linear', reduceMotion: false } },
+			{},
+			'out'
+		);
+		timeline.tick!(1, 0);
+		timeline.tick!(0.75, 0.25);
+		expect(visual.getValue('x')!.get()).toBe(25);
+		timeline.reduceMotion();
+		expect(visual.getValue('x')!.get()).toBe(25);
+		timeline.tick!(0.5, 0.5);
+		expect(visual.getValue('x')!.get()).toBe(50);
+		timeline.finish();
+		expect(visual.getValue('x')!.get()).toBe(100);
 	} finally {
 		await cleanup();
 	}

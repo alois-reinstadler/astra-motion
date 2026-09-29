@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { createMotion } from '../motion/lite.svelte.js';
+	import { motion as nativeMotion } from '../motion/lite.svelte.js';
 	let open = $state(true);
 	let value = $state(0);
 	let label = $state('first');
-	const motion = createMotion(() => ({
+	const motion = nativeMotion.bind(() => ({
 		initial: false,
 		animate: { x: value },
 		transition: { duration: 0.6, ease: 'linear' },

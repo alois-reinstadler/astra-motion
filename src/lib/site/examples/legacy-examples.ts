@@ -137,10 +137,10 @@ export const legacyExamples = {
 	'in-view': {
 		id: 'in-view',
 		snippet:
-			"const visible = createInView(\n  () => target,\n  () => ({ root: panel, amount: 0.6 })\n);\nconst card = createMotion(() => ({\n  initial: false,\n  animate: { opacity: visible.current ? 1 : 0, y: visible.current ? 0 : 24 },\n  transition: { type: 'spring', stiffness: 220, damping: 25 }\n}));",
+			"const visible = createInView(\n  () => target,\n  () => ({ root: panel, amount: 0.6 })\n);\nconst card = motion.bind(() => ({\n  initial: false,\n  animate: { opacity: visible.current ? 1 : 0, y: visible.current ? 0 : 24 },\n  transition: { type: 'spring', stiffness: 220, damping: 25 }\n}));",
 		title: 'Reveal content in a scroll container',
 		description:
-			'Combine createInView and createMotion bindings to reveal a card in its own viewport.',
+			'Combine createInView and motion.bind bindings to reveal a card in its own viewport.',
 		category: 'Scroll & timelines',
 		guide: 'use-in-view',
 		anchor: 'usage',
@@ -152,12 +152,12 @@ export const legacyExamples = {
 		id: 'gestures',
 		title: 'Add button and drag feedback',
 		description:
-			'Use createMotion bindings for hover, press and focus; move a tile by pointer or keyboard.',
+			'Use motion.bind bindings for hover, press and focus; move a tile by pointer or keyboard.',
 		category: 'State & gestures',
 		guide: 'gestures',
 		anchor: 'feedback',
 		snippet:
-			"const button = createMotion({\n  whileHover: { y: -3, scale: 1.03 },\n  whileTap: { scale: 0.95 },\n  whileFocus: { scale: 1.03 },\n  transition: { type: 'spring', stiffness: 400, damping: 24 }\n});\n\n<button {...button.props}>Save to collection</button>",
+			"const button = motion.bind({\n  whileHover: { y: -3, scale: 1.03 },\n  whileTap: { scale: 0.95 },\n  whileFocus: { scale: 1.03 },\n  transition: { type: 'spring', stiffness: 400, damping: 24 }\n});\n\n<button {...button.props}>Save to collection</button>",
 		filename: 'GestureExample.svelte',
 		component: GestureExample,
 		source: publicExampleSource(GestureExampleSource)

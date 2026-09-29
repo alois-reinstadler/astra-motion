@@ -19,7 +19,6 @@
 		"createAnimate",
 		"createInView",
 		"createLayout",
-		"createMotion",
 		"createScroll",
 		"domAnimation",
 		"domMax",
@@ -81,7 +80,7 @@
 	],
 	"./routes": ["routeShared", "routeTransitions"],
 	"./policy": ["shouldReduceMotion"],
-	"./state": ["createMotion"],
+	"./state": ["motion"],
 	"./values": [
 		"WillChangeMotionValue",
 		"mapValue",
@@ -95,7 +94,7 @@
 	],
 	"./animate": ["createAnimate", "useAnimate"],
 	"./scroll": ["createScroll"],
-	"./state/lite": ["createMotion"],
+	"./state/lite": ["motion"],
 	"./in-view": ["createInView"],
 	"./m": [
 		"a",

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createMotion } from '../motion/motion.svelte.js';
+	import { motion } from '../motion/motion.svelte.js';
 	let {
 		mode = 'object',
 		replacementDuration = 0.12
@@ -7,7 +7,7 @@
 	let x = $state(0);
 	let visible = $state(false);
 	let disabled = $state(false);
-	const binding = createMotion(() => ({
+	const binding = motion.bind(() => ({
 		initial: { x: -100, opacity: 1 },
 		animate:
 			mode === 'object'

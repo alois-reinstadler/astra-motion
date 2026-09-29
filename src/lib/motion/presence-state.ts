@@ -7,6 +7,7 @@ import {
 	isTransitionDefined,
 	resolveTransition,
 	transformPropOrder,
+	positionalKeys,
 	type VisualElement,
 	type MotionValue,
 	type ResolvedValues,
@@ -28,6 +29,8 @@ export interface PresenceTimeline extends TransitionConfig {
 	schedule(offset: number, until?: number): void;
 	/** Apply the final pose and complete once, including when policy changes during retention. */
 	finish(): void;
+	/** Settle positional tracks while paint and the native retention clock continue. */
+	reduceMotion(): void;
 	/** Suppress stale ticks and completion callbacks when replaced or destroyed. */
 	cancel(): void;
 }
@@ -43,15 +46,11 @@ function isDOMVisual(
 ): visual is VisualElement<HTMLElement | SVGElement> & { current: HTMLElement | SVGElement } {
 	return visual.current instanceof HTMLElement || visual.current instanceof SVGElement;
 }
-function resolved(value: unknown, key: string, modern = false): Value {
+function resolved(value: unknown, key: string): Value {
 	if (typeof value !== 'number' && typeof value !== 'string')
 		throw new Error(`Astra presence: "${key}" requires a resolved number or string.`);
 	if (typeof value === 'number' && !Number.isFinite(value))
 		throw new Error(`Astra presence: "${key}" must be finite.`);
-	if (!modern && typeof value === 'string' && (value === 'auto' || value.includes('var(')))
-		throw new Error(
-			`Astra presence: resolve "${key}" before animating it; use layout for intrinsic size.`
-		);
 	return value;
 }
 
@@ -67,12 +66,13 @@ export function createPresenceTimeline(
 	direction: 'in' | 'out',
 	callbacks: PresenceCallbacks = {},
 	startingProgress?: number | (() => number),
-	deferred = false,
-	modern = false
+	deferred = false
 ): PresenceTimeline {
 	const { transition: targetTransition, transitionEnd = {}, ...values } = target;
 	const inherited = resolveTransition(targetTransition, transition) ?? transition;
 	const tracks: {
+		key: string;
+		reduced?: boolean;
 		value: MotionValue<Value>;
 		animation: JSAnimation<Value>;
 		final: Value;
@@ -93,16 +93,8 @@ export function createPresenceTimeline(
 		const supplied = Array.isArray(destination) ? destination : [null, destination];
 		if (!supplied.length) throw new Error(`Astra presence: "${key}" has no keyframes.`);
 		const frames: (Value | null)[] = [];
-		if (modern) {
-			frames.push(...supplied);
-			frames[0] ??= rawSource;
-		} else {
-			const source = resolved(rawSource, key);
-			// Historical native keyframes fill wildcards before replacing the first
-			// supplied value with the sampled source (including [explicit, null, end]).
-			for (const entry of supplied) frames.push(resolved(entry ?? frames.at(-1) ?? source, key));
-			frames[0] = source;
-		}
+		frames.push(...supplied);
+		frames[0] ??= rawSource;
 		// A replacement direction begins at the current pose, including interrupted keyframes.
 		const input: {
 			key: string;
@@ -120,7 +112,7 @@ export function createPresenceTimeline(
 			frames
 		};
 		if (input.frames.length === 1) input.frames.push(supplied[0] ?? rawSource);
-		if (modern) {
+		{
 			if (!isDOMVisual(visual))
 				throw new Error('Astra presence: DOM keyframes require a mounted element.');
 			input.resolver = new DOMKeyframesResolver<Value>(
@@ -169,22 +161,18 @@ export function createPresenceTimeline(
 	}
 	for (const input of inputs) input.resolver?.complete();
 	for (const { key, destination, value, velocity, frames, finalKeyframe } of inputs) {
-		const source = resolved(frames[0], key, modern);
+		const source = resolved(frames[0], key);
 		const keyframes: Value[] = [];
-		for (const entry of frames)
-			keyframes.push(resolved(entry ?? keyframes.at(-1) ?? source, key, modern));
+		for (const entry of frames) keyframes.push(resolved(entry ?? keyframes.at(-1) ?? source, key));
 		const specified: ValueTransition = getValueTransition(inherited, key) ?? {};
 		if (
 			specified.repeat &&
-			(!modern ||
-				(!Number.isFinite(specified.repeat) &&
-					!specified.skipAnimations &&
-					specified.type !== false))
+			!Number.isFinite(specified.repeat) &&
+			!specified.skipAnimations &&
+			specified.type !== false
 		)
 			throw new Error(
-				modern
-					? 'Astra presence: an infinite repeat cannot complete an outro. Use a finite exit repeat; keep infinite repetition on animate while present.'
-					: 'Astra presence: repeated animations cannot own an outro. Animate repetition while present.'
+				'Astra presence: an infinite repeat cannot complete an outro. Use a finite exit repeat; keep infinite repetition on animate while present.'
 			);
 		// Motion's declaration restricts this default selector to numbers; it only inspects
 		// keyframe count and a numeric zero scale target, so strings use a nonzero sentinel.
@@ -211,10 +199,10 @@ export function createPresenceTimeline(
 			continue;
 		const instant =
 			config.type === false ||
-			(config.duration === 0 && (!modern || !config.repeatDelay)) ||
+			(config.duration === 0 && !config.repeatDelay) ||
 			config.skipAnimations;
-		const repeat = modern && !instant ? (config.repeat ?? 0) : 0;
-		const repeatDelay = modern && !instant ? (config.repeatDelay ?? 0) * 1000 : 0;
+		const repeat = !instant ? (config.repeat ?? 0) : 0;
+		const repeatDelay = !instant ? (config.repeatDelay ?? 0) * 1000 : 0;
 		if (repeat < 0 || !Number.isFinite(repeat) || !Number.isFinite(repeatDelay) || repeatDelay < 0)
 			throw new Error(
 				'Astra presence: repeat must be a finite non-negative number and repeatDelay a finite non-negative duration.'
@@ -247,16 +235,17 @@ export function createPresenceTimeline(
 			);
 		}
 		tracks.push({
+			key,
 			value,
 			animation,
 			// Suppressing playback must not discard reverse/mirror endpoint semantics.
-			final: getFinalKeyframe(keyframes, modern ? config : options, finalKeyframe),
+			final: getFinalKeyframe(keyframes, config, finalKeyframe),
 			duration: trackDuration
 		});
 		duration = Math.max(duration, trackDuration);
 	}
 	const endValues = Object.entries(transitionEnd).map(
-		([key, value]) => [key, resolved(value, key, modern)] as const
+		([key, value]) => [key, resolved(value, key)] as const
 	);
 	const readStartingProgress = () =>
 		clamp(
@@ -326,6 +315,16 @@ export function createPresenceTimeline(
 			return t;
 		},
 		finish,
+		reduceMotion() {
+			if (!active || completed || poseEnded || inherited.reduceMotion === false) return;
+			for (const track of tracks) {
+				if (!positionalKeys.has(track.key)) continue;
+				track.reduced = true;
+				track.value.set(track.final);
+				track.animation.stop();
+			}
+			visual.render();
+		},
 		get progress() {
 			return progress;
 		},
@@ -358,7 +357,7 @@ export function createPresenceTimeline(
 			}
 			if (poseEnded) return;
 			for (const track of tracks)
-				track.value.set(track.animation.sample(Math.max(0, elapsed)).value);
+				if (!track.reduced) track.value.set(track.animation.sample(Math.max(0, elapsed)).value);
 			visual.render();
 		}
 	};

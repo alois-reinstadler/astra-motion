@@ -13,8 +13,15 @@
 		let disposed = false;
 		let cleanup = () => {};
 		async function start() {
+			if (!window.isSecureContext) {
+				status =
+					'WebGPU needs HTTPS or localhost. This HTTP preview is not a secure browser context; the Threlte comparison does not require WebGPU.';
+				report(status);
+				return;
+			}
 			if (!navigator.gpu) {
-				status = 'WebGPU unavailable in this context';
+				status =
+					'This browser does not expose WebGPU. Try a browser with WebGPU support; the Threlte comparison does not require it.';
 				report(status);
 				return;
 			}

@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
-	import { createMotion } from '../motion/motion.svelte.js';
+	import { motion as nativeMotion } from '../motion/motion.svelte.js';
 	import { createLayout } from '../motion/layout.js';
 	import { observeMotionConfig, readMotionConfig } from '../motion/config.js';
 	let { name, report }: { name: string; report: (name: string) => void } = $props();
 	const config = readMotionConfig();
-	const motion = createMotion({
+	const motion = nativeMotion.bind({
 		initial: false,
 		animate: { opacity: 1, x: 0 },
 		exit: { opacity: 0, x: 100 }

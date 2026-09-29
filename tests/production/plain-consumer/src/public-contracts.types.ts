@@ -405,3 +405,26 @@ const elementTarget: TargetAndTransition = { x: 100 };
 // @ts-expect-error Predeclared Motion element targets do not bypass the snapshot contract.
 export const widened: ViewAnimationTarget = elementTarget;
 export const ordinary: TargetAndTransition = { x: 100, transitionEnd: { display: 'none' } };
+
+import { motion as nativeMotion } from 'astra-motion/state';
+import { motion as liteMotion } from 'astra-motion/state/lite';
+import * as rootEntry from 'astra-motion';
+import * as stateEntry from 'astra-motion/state';
+import * as liteEntry from 'astra-motion/state/lite';
+/** Type-only setup recipe; native package boundaries retain the same authoring shape. */
+export function nativeBindingContracts() {
+	const full = nativeMotion.bind(() => ({ initial: false, animate: { x: 20 }, layout: true }));
+	const lite = liteMotion.bind(() => ({ initial: { opacity: 0 }, animate: { opacity: 1 } }));
+	lite.child({ animate: { pathLength: 1 } }, { namespace: 'svg', tag: 'path' });
+	// @ts-expect-error The lite entry does not include layout features.
+	liteMotion.bind({ layout: true });
+	// @ts-expect-error The lite entry does not include gestures.
+	liteMotion.bind({ whileHover: { scale: 1.1 } });
+	// @ts-expect-error The removed constructor has no compatibility export.
+	rootEntry.createMotion;
+	// @ts-expect-error Native full exposes motion.bind only.
+	stateEntry.createMotion;
+	// @ts-expect-error Native lite exposes motion.bind only.
+	liteEntry.createMotion;
+	return [full, lite];
+}

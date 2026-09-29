@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
-	import { createMotionWithFeatures } from '../motion/motion-core.svelte.js';
+	import { createBindingWithFeatures } from '../motion/motion-core.svelte.js';
 	import {
 		createLayout,
 		updateLayout,
@@ -32,7 +32,7 @@
 			{ update: controller.update, stats: controller.stats }
 		);
 	}
-	const binding = createMotionWithFeatures(
+	const binding = createBindingWithFeatures(
 		() => ({
 			initial: false,
 			layout: layout ? { style: { rotate: 0 } } : false,

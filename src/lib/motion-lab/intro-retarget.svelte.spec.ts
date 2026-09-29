@@ -20,6 +20,13 @@ it.each(['object', 'custom', 'labels'] as const)(
 		await frame();
 		const visual = visualElementStore.get(node)!;
 		const value = visual.getValue('x')!;
+		const entry = value.animation;
+		expect(entry).toBeInstanceOf(AsyncMotionValueAnimation);
+		if (!(entry instanceof AsyncMotionValueAnimation))
+			throw new Error('Expected Motion entry playback');
+		entry.pause();
+		entry.time = 0.3;
+		await frame();
 		const before = Number(value.get());
 		expect(before).toBeLessThan(0);
 		flushSync(() => screen.component.retarget());
@@ -30,7 +37,7 @@ it.each(['object', 'custom', 'labels'] as const)(
 	}
 );
 
-it('does not replace the native intro when an options getter returns equivalent targets', async () => {
+it('keeps the Motion entry playback when an options getter returns equivalent targets', async () => {
 	const screen = render(IntroRetarget);
 	flushSync(() => screen.component.toggle());
 	await frame();
@@ -38,10 +45,12 @@ it('does not replace the native intro when an options getter returns equivalent 
 	const node = screen.getByTestId('intro-retarget').element();
 	const value = visualElementStore.get(node)!.getValue('x')!;
 	const before = Number(value.get());
+	const playback = value.animation;
+	expect(playback).toBeDefined();
 	flushSync(() => screen.component.refresh());
 	await microtasks();
 	await frame();
-	expect(value.animation).toBeUndefined();
+	expect(value.animation).toBe(playback);
 	expect(Number(value.get())).toBeGreaterThan(before);
 	expect(Number(value.get())).toBeLessThan(0);
 });

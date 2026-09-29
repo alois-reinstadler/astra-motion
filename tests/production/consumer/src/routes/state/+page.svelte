@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { createMotion } from 'astra-motion/state';
+	import { motion } from 'astra-motion/state';
 	let open = $state(true);
-	const panel = createMotion({
+	const panel = motion.bind({
 		initial: { opacity: 0, y: 12 },
 		animate: { opacity: 1, y: 0 },
 		exit: { opacity: 0, y: -12 },

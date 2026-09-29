@@ -2,7 +2,7 @@
 	import { createAttachmentKey } from 'svelte/attachments';
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import { createMotion } from '$lib/motion/motion.svelte.js';
+	import { motion as nativeMotion } from '$lib/motion/motion.svelte.js';
 	import { popLayout } from '$lib/motion/presence.js';
 	import type { LayoutController } from '$lib/motion/layout.js';
 
@@ -19,7 +19,7 @@
 		layout: LayoutController;
 		onremove: () => void;
 	} = $props();
-	const motion = createMotion(() => ({
+	const motion = nativeMotion.bind(() => ({
 		initial: { opacity: 0, scale: 0.96 },
 		animate: { opacity: 1, scale: 1 },
 		exit: { opacity: 0, scale: 0.96 },

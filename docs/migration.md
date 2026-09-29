@@ -4,37 +4,67 @@ Reference: 27 September 2026; Motion, Framer Motion and Motion DOM 13.4.4,
 Motion Utils 13.3.0; Svelte 5.57.0. The requested surface supersedes earlier scope
 exclusions. Current contracts and evidence live in [the parity matrix](parity/MATRIX.md).
 
-## Keep existing integrations working
+## Replace legacy native bindings
 
-`createMotion`, `createLayout`, `createAnimate`, `createScroll`, `createInView`,
-`Presence`, `presence`, `popLayout` and the route adapter remain supported. Existing
-`motion={{ ... }}` component props remain valid; a defined direct prop wins over its
-matching nested option. No compiler plugin is required.
+`createMotion` has been removed. Replace its import with `{ motion }` from
+`astra-motion`, `astra-motion/state`, or `astra-motion/state/lite`, and construct
+bindings with `motion.bind(options)`. Keep the returned props spread and native
+exit directive. The lite entry excludes layout and gestures. `createLayout`,
+`createAnimate`, `createScroll`, `createInView`, `Presence`, `presence`, `popLayout`
+and the route adapter remain supported. Existing `motion={{ ... }}` props remain
+valid; a defined direct prop wins over its matching nested option.
+No compiler plugin is required.
 
 Prefer direct `motion.*` props for new elements, `motion.bind` for existing native
 markup, and `motion.create` for reusable components with attachment forwarding. A generated element supplies native
 SSR styles and a Svelte outro. A native binding still needs its spread and
-`transition:binding.transition|global` for native exit retention. Native directives
+an alias of `binding.transition` applied as `transition:alias|global` for native
+exit retention. Native directives
 such as `bind:group` and parent-scoped CSS selectors belong to native markup.
+
+```svelte
+<script lang="ts">
+	import { motion } from 'astra-motion/state';
+	let shown = $state(true);
+	const panel = motion.bind(() => ({
+		initial: { opacity: 0, y: 12 },
+		animate: { opacity: 1, y: 0 },
+		exit: { opacity: 0, y: 12 },
+		reducedMotion: 'user'
+	}));
+	const exit = panel.transition;
+</script>
+
+<button onclick={() => (shown = !shown)}>Toggle</button>
+{#if shown}
+	<section {...panel.props} transition:exit|global>Native Svelte markup</section>
+{/if}
+```
+
+The props spread includes the attachment and initial SSR style; do not add a second
+attachment. Use Motion's `onAnimationComplete` for entry completion. Native
+`introend` now describes Svelte's retention directive, not the Motion entry driver.
+Native drag follows window pointer events; lost capture does not cancel a keyed
+reorder. Set `dragMomentum: false` to disable release inertia explicitly.
 
 ## Primary component behavior
 
-Primary motion components use the qualified Motion engine’s property defaults,
-keyframes, repeats and animation lifecycle. Modern `motion.bind` uses the same
-contract. `createMotion` compatibility bindings retain their finite Svelte-transition
-path and historical defaults. Set explicit transition values
-where application timing must remain identical after a migration.
+Motion components and `motion.bind` use the qualified engine's property defaults,
+keyframes, repeats and animation lifecycle. Initial entry uses Motion playback;
+Svelte retains native elements during finite outros. Omitted initial targets preserve
+authored initial styles; use `initial: false` when the first rendered pose should be
+the animate destination. Set explicit transitions where application timing must
+remain identical after migration.
 
-The primary component reduced-motion default is `never`, following Motion’s baseline.
-`motion.bind` shares that default; existing `createMotion` bindings retain `user`. Set `MotionConfig reducedMotion="user"`
-near the application root to make the application choice explicit. Primary reduction
-settles positional/layout animation while paint effects can continue.
+Components and native bindings default to `reducedMotion: 'never'`, following Motion.
+Set `MotionConfig reducedMotion="user"` near the application root to follow the OS.
+Reduction settles positional/layout animation while paint effects can continue.
 
-The primary API follows upstream raw-transform precedence. A nonempty `transform`
-takes precedence over independent transform aliases. Removing a target can return to
-its initial or authored base; use an explicit empty raw transform before aliases take
-over. `motion.bind` follows that precedence. `createMotion` compatibility bindings retain
-their stricter transform ownership diagnostic.
+Components and native bindings follow upstream raw-transform precedence. A nonempty
+`transform` takes precedence over independent transform aliases. Removing a target
+can return to its initial or authored base; use an explicit empty raw transform
+before aliases take over. Diagnostics explain masking, without a separate legacy
+transform-ownership mode.
 
 ## Presence and Activity
 

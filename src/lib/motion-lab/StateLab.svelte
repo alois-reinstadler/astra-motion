@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onDestroy } from 'svelte';
 	import { resolve } from '$app/paths';
-	import { createMotion } from '../motion/motion.svelte.js';
+	import { motion } from '../motion/motion.svelte.js';
 	import { motionValue, motionStore, mapValue, springValue, stagger } from '../motion/values.js';
 	import VariantTile from './VariantTile.svelte';
 	import { shouldReduceMotion } from '../motion/policy.js';
@@ -17,21 +17,21 @@
 	let stressTimer: ReturnType<typeof setTimeout> | undefined;
 	let stressing = $state(false);
 
-	const card = createMotion(() => ({
+	const card = motion.bind(() => ({
 		initial: { opacity: 0, scale: 0.94, y: 16 },
 		animate: { opacity: 1, scale: 1, y: 0, backgroundColor: expanded ? '#ece1cb' : '#f8f6ef' },
 		exit: { opacity: 0, scale: 0.9, y: -20 },
 		layout: true
 	}));
 	const cardPresence = card.transition;
-	const cardContent = createMotion({ layout: { mode: 'position' } });
-	const constellation = createMotion(() => ({
+	const cardContent = motion.bind({ layout: { mode: 'position' } });
+	const constellation = motion.bind(() => ({
 		initial: 'rest',
 		animate: sequence ? 'lifted' : 'rest',
 		variants: { rest: { opacity: 1 }, lifted: { opacity: 1 } },
 		transition: { delayChildren: stagger(0.075), type: 'spring', stiffness: 330, damping: 27 }
 	}));
-	const pressable = createMotion({
+	const pressable = motion.bind({
 		initial: false,
 		animate: { scale: 1, backgroundColor: '#343c2b', outlineColor: '#c9563700', outlineOffset: 0 },
 		whileHover: { scale: 1.055, backgroundColor: '#4b563d' },
@@ -44,8 +44,8 @@
 	const directX = mapValue(progress, [0, 100], [0, 180]);
 	const smooth = springValue(progress, { stiffness: 240, damping: 24 });
 	const smoothX = mapValue(smooth, [0, 100], [0, 180]);
-	const direct = createMotion({ style: { x: directX }, initial: false });
-	const follower = createMotion(() => ({
+	const direct = motion.bind({ style: { x: directX }, initial: false });
+	const follower = motion.bind(() => ({
 		style: {
 			x: shouldReduceMotion({ reducedMotion: reduced ? 'always' : 'user' }) ? directX : smoothX
 		},
@@ -53,7 +53,7 @@
 	}));
 	const dragX = motionValue(0);
 	const dragY = motionValue(0);
-	const draggable = createMotion(() => ({
+	const draggable = motion.bind(() => ({
 		style: { x: dragX, y: dragY },
 		initial: false,
 		animate: { scale: 1 },
@@ -212,7 +212,7 @@
 		<details>
 			<summary>See the binding</summary>
 			<pre><code
-					>{`const card = createMotion({
+					>{`const card = motion.bind({
   initial: { opacity: 0, scale: 0.94, y: 16 },
   animate: { opacity: 1, scale: 1, y: 0 },
   exit: { opacity: 0, scale: 0.9, y: -20 },
@@ -257,14 +257,14 @@ const cardPresence = card.transition;
 			<summary>See the parent and child</summary>
 			<pre><code
 					>{`// Parent
-createMotion(() => ({
+motion.bind(() => ({
   animate: lifted ? 'lifted' : 'rest',
   variants: { rest: { opacity: 1 }, lifted: { opacity: 1 } },
   transition: { delayChildren: stagger(0.075) }
 }));
 
 // Each child uses its own binding; no animate label needed.
-createMotion({
+motion.bind({
   variants: {
     rest: { y: 0, opacity: 0.5 },
     lifted: { y: -24, opacity: 1 }
@@ -312,7 +312,7 @@ createMotion({
 const position = motionStore(progress);
 const smooth = springValue(progress);
 const x = mapValue(smooth, [0, 100], [0, 180]);
-const marker = createMotion({ style: { x } });
+const marker = motion.bind({ style: { x } });
 
 <input type="range" bind:value={$position} />
 <span {...marker.props}></span>`}</code
@@ -345,7 +345,7 @@ const marker = createMotion({ style: { x } });
 			<details>
 				<summary>See the interaction states</summary>
 				<pre><code
-						>{`createMotion({
+						>{`motion.bind({
   animate: { scale: 1 },
   whileHover: { scale: 1.055 },
   whileTap: { scale: 0.94 },
@@ -387,7 +387,7 @@ const marker = createMotion({ style: { x } });
 		<details>
 			<summary>See the drag binding</summary>
 			<pre><code
-					>{`const card = createMotion({
+					>{`const card = motion.bind({
   drag: true,
   dragConstraints: { left: 0, right: 180, top: -36, bottom: 36 },
   whileDrag: { scale: 1.06 },

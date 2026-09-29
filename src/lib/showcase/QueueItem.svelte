@@ -2,7 +2,7 @@
 	import { flushSync, onDestroy } from 'svelte';
 	import { motionValue } from '$lib/motion/values.js';
 	import type { Attachment } from 'svelte/attachments';
-	import { createMotion } from '$lib/motion/motion.svelte.js';
+	import { motion } from '$lib/motion/motion.svelte.js';
 	import { popLayout } from '$lib/motion/presence.js';
 	import type { LayoutController } from '$lib/motion/layout.js';
 	import type { photos } from './collection.js';
@@ -115,7 +115,7 @@
 			abort.abort();
 		};
 	};
-	const row = createMotion(() => ({
+	const row = motion.bind(() => ({
 		initial: 'arriving',
 		animate: 'ready',
 		exit: 'leaving',

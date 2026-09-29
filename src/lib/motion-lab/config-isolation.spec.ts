@@ -11,8 +11,12 @@ it('isolates initial styles across SSR providers and independent render requests
 	const reduced = render(ConfigLifecycle, { props: { initialPolicy: 'always' } }).body;
 	const animated = render(ConfigLifecycle, { props: { initialPolicy: 'never' } }).body;
 	const reducedAgain = render(ConfigLifecycle, { props: { initialPolicy: 'always' } }).body;
-	expect(style(reduced, 'outer-motion')).toContain('opacity:1');
+	expect(style(reduced, 'outer-motion')).toContain('opacity:0');
+	expect(reduced).toMatch(/data-testid="outer-motion"[^>]*data-reduced="true"/);
+	expect(reduced).toMatch(/data-testid="nested-motion"[^>]*data-reduced="false"/);
+	expect(animated).toMatch(/data-testid="outer-motion"[^>]*data-reduced="false"/);
 	expect(style(reduced, 'nested-motion')).toContain('opacity:0');
 	expect(style(animated, 'outer-motion')).toContain('opacity:0');
-	expect(style(reducedAgain, 'outer-motion')).toContain('opacity:1');
+	expect(style(reducedAgain, 'outer-motion')).toContain('opacity:0');
+	expect(reducedAgain).toMatch(/data-testid="outer-motion"[^>]*data-reduced="true"/);
 });

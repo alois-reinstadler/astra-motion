@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createMotion } from '../motion/motion.svelte.js';
+	import { motion } from '../motion/motion.svelte.js';
 	import { motionValue } from '../motion/values.js';
 	let open = $state(true);
 	let changed = $state(false);
@@ -10,7 +10,7 @@
 	let gestureDisabled = $state(false);
 	let gestureOpen = $state(true);
 	const x = motionValue(0);
-	const card = createMotion(() => ({
+	const card = motion.bind(() => ({
 		initial: { opacity: 0, scale: 0.6, y: -20 },
 		animate: changed
 			? { opacity: [null, 0.7, 1], scale: 0.9, y: 0 }
@@ -21,15 +21,15 @@
 		transition: { duration: 0.3, ease: 'linear' }
 	}));
 	const presence = card.transition;
-	const valueBinding = createMotion({ style: { x }, initial: false });
-	const customBinding = createMotion(() => ({
+	const valueBinding = motion.bind({ style: { x }, initial: false });
+	const customBinding = motion.bind(() => ({
 		initial: false,
 		animate: 'shown',
 		custom,
 		variants: { shown: (value: unknown) => ({ x: Number(value) }) },
 		transition: { duration: 0.1 }
 	}));
-	const parent = createMotion(() => ({
+	const parent = motion.bind(() => ({
 		initial: 'hidden',
 		animate: shown ? 'visible' : 'hidden',
 		variants: { hidden: { opacity: 0.5 }, visible: { opacity: 1 } },
@@ -40,15 +40,15 @@
 			staggerChildren: 0.12
 		}
 	}));
-	const child = createMotion({
+	const child = motion.bind({
 		variants: { hidden: { x: 0 }, visible: { x: 50 } },
 		transition: { duration: 0.1 }
 	});
-	const secondChild = createMotion({
+	const secondChild = motion.bind({
 		variants: { hidden: { x: 0 }, visible: { x: 50 } },
 		transition: { duration: 0.1 }
 	});
-	const gesture = createMotion(() => ({
+	const gesture = motion.bind(() => ({
 		initial: false,
 		animate: { opacity: 1, scale: 1 },
 		exit: { opacity: 0 },
@@ -57,7 +57,7 @@
 		transition: { duration: 0.1 }
 	}));
 	const gesturePresence = gesture.transition;
-	const incomingGesture = createMotion({
+	const incomingGesture = motion.bind({
 		initial: { opacity: 0, scale: 0.7 },
 		animate: { opacity: 1, scale: 1 },
 		whileHover: { scale: 1.2 },

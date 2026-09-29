@@ -4,7 +4,6 @@
 		motion,
 		Motion,
 		MotionConfig,
-		createMotion,
 		createAnimate,
 		type AnimationSettlement
 	} from 'astra-motion';
@@ -17,8 +16,8 @@
 	let eventTag = $state('');
 	let visible = $state(true);
 	let options = $state({ initial: false as const, animate: { x: 0 }, transition: { duration: 0 } });
-	const direct = createMotion(options);
-	const getter = createMotion(() => options);
+	const direct = motion.bind(options);
+	const getter = motion.bind(() => options);
 	let reduced = $state(false);
 	let outcome = $state<AnimationSettlement>();
 	const scope = createAnimate(() => ({ reducedMotion: reduced ? 'always' : 'never' }));

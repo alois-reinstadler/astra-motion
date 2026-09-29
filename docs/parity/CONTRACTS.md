@@ -16,7 +16,9 @@ the shared implementation boundaries used by the subsystem audits.
 - Modern `motion.bind` shares the primary motion component engine/defaults. Its props
   spread includes attachment and SSR style; native removal also needs its transition.
   Explicit `.child` establishes native SSR ancestry. Context is captured in setup.
-  `createMotion` and other compatibility create* helpers retain their ownership
+  `createMotion` is removed. The `/state` and `/state/lite` entries expose
+  `motion.bind`; lite excludes layout and gestures. Both default to reducedMotion
+  `never`, matching components. Other create* controllers retain their ownership
   contracts. use* helpers are component-scoped, with automatic disposal, reactive
   getter inputs where re-evaluation is required, and no React hook call-order rules.
 - MotionValue helpers return the shared engine MotionValue. Reactive booleans/data

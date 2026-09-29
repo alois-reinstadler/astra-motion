@@ -1,13 +1,13 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card/index.js';
 	import * as Accordion from '$lib/components/ui/accordion/index.js';
-	import { createMotion } from '$lib/motion/motion.svelte.js';
+	import { motion } from '$lib/motion/motion.svelte.js';
 
-	const card = createMotion({
+	const card = motion.bind({
 		initial: { opacity: 0.2, y: 16 },
 		animate: { opacity: 1, y: 0 }
 	});
-	const content = createMotion({
+	const content = motion.bind({
 		initial: { opacity: 0.3, y: -4 },
 		animate: { opacity: 1, y: 0 }
 	});

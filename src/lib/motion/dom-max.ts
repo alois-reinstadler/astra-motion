@@ -1,4 +1,4 @@
-import { createMotionWithFeatures } from './motion-core.svelte.js';
+import { createBindingWithFeatures } from './motion-core.svelte.js';
 import { createLayout, updateLayout } from './layout.js';
 import { attachMotionGestures } from './gestures.js';
 import type { FeatureBundle } from './lazy-context.js';
@@ -11,7 +11,7 @@ export const domMax: FeatureBundle = {
 		layout: { create: createLayout, update: updateLayout }
 	},
 	create(input, render, features = domMax.features) {
-		return createMotionWithFeatures(input, features, render);
+		return createBindingWithFeatures(input, features, render);
 	}
 };
 export default domMax;

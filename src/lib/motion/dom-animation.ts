@@ -1,4 +1,4 @@
-import { createMotionWithFeatures } from './motion-core.svelte.js';
+import { createBindingWithFeatures } from './motion-core.svelte.js';
 import { attachBaseGestures } from './base-gestures.js';
 import type { FeatureBundle } from './lazy-context.js';
 
@@ -6,7 +6,7 @@ import type { FeatureBundle } from './lazy-context.js';
 export const domAnimation: FeatureBundle = {
 	features: { gestures: attachBaseGestures },
 	create(input, render, features = domAnimation.features) {
-		return createMotionWithFeatures(input, features, render);
+		return createBindingWithFeatures(input, features, render);
 	}
 };
 export default domAnimation;

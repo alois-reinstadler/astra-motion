@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { onDestroy } from 'svelte';
-	import { createMotion, motionStore, motionValue } from '$lib/motion/index.js';
+	import { motion, motionStore, motionValue } from '$lib/motion/index.js';
 
 	let saved = $state(false);
-	const button = createMotion({
+	const button = motion.bind({
 		whileHover: { y: -3, scale: 1.03 },
 		whileTap: { scale: 0.95 },
 		whileFocus: { scale: 1.03 },
@@ -11,7 +11,7 @@
 	});
 	const x = motionValue(0);
 	const position = motionStore(x);
-	const handle = createMotion({
+	const handle = motion.bind({
 		style: { x },
 		drag: 'x',
 		dragConstraints: { left: 0, right: 168 },

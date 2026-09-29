@@ -38,13 +38,9 @@ export interface MotionRenderOptions {
 	environment?: MotionEnvironment;
 	initialValues?: ResolvedValues;
 	lazy?: boolean;
-	/** Compiled components follow Motion defaults; native bindings retain legacy semantics. */
-	component?: boolean;
 	namespace?: 'html' | 'svg';
 	tag?: string;
 	attributes?: () => Record<string, unknown>;
-	/** Native bindings retain their original user-policy default. Components match Motion. */
-	defaultReducedMotion?: 'user' | 'never';
 }
 
 export function isSVGElement(node: Element): node is SVGElement {

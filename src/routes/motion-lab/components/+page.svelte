@@ -7,7 +7,7 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { createLayout } from '$lib/motion/layout.js';
-	import { createMotion } from '$lib/motion/motion.svelte.js';
+	import { motion } from '$lib/motion/motion.svelte.js';
 	import MotionCard from '$lib/motion-lab/MotionCard.svelte';
 
 	const layout = createLayout();
@@ -17,9 +17,9 @@
 		exit: { opacity: 0, y: -4 },
 		transition: { duration: 0.2 }
 	};
-	const accordionMotion = createMotion(revealOptions);
-	const keyboardMotion = createMotion(revealOptions);
-	const dialogMotion = createMotion({
+	const accordionMotion = motion.bind(revealOptions);
+	const keyboardMotion = motion.bind(revealOptions);
+	const dialogMotion = motion.bind({
 		initial: { opacity: 0, scale: 0.96 },
 		animate: { opacity: 1, scale: 1 },
 		exit: { opacity: 0, scale: 0.96 },
@@ -27,7 +27,7 @@
 		layout: true,
 		layoutGroup: layout
 	});
-	const overlayMotion = createMotion({
+	const overlayMotion = motion.bind({
 		initial: { opacity: 0 },
 		animate: { opacity: 1 },
 		exit: { opacity: 0 },

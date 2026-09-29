@@ -4,7 +4,7 @@
 
 <script lang="ts">
 	import { untrack } from 'svelte';
-	import { Motion, motion, createMotion, type MotionOptions } from '../motion/index.js';
+	import { Motion, motion, type MotionOptions } from '../motion/index.js';
 	type Style = NonNullable<MotionOptions['style']>;
 	let {
 		surface = 'flat',
@@ -30,7 +30,7 @@
 		layout,
 		reducedMotion: 'never'
 	});
-	const binding = createMotion(options);
+	const binding = motion.bind(options);
 	export function mutate(next: Style) {
 		Object.assign(style, next);
 	}

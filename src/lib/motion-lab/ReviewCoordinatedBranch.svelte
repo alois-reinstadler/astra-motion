@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { createMotion } from '../motion/motion.svelte.js';
+	import { motion } from '../motion/motion.svelte.js';
 	import { popLayout } from '../motion/presence.js';
 	import type { LayoutController } from '../motion/layout.js';
 	let { value, layout }: { value: string; layout: LayoutController } = $props();
-	const parent = createMotion(() => ({
+	const parent = motion.bind(() => ({
 		initial: false,
 		animate: 'visible',
 		exit: 'hidden',

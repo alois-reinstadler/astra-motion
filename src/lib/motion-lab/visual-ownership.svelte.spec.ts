@@ -6,7 +6,7 @@ const microtasks = async () => {
 	for (let i = 0; i < 12; i++) await Promise.resolve();
 };
 
-it('diagnoses a pre-existing application transform without overwriting it on a state-only node', async () => {
+it('preserves an authored transform until an animation acquires independent targets', async () => {
 	const node = document.createElement('div');
 	node.style.cssText = 'transform:rotate(12deg);opacity:0.8';
 	document.body.append(node);
@@ -18,7 +18,7 @@ it('diagnoses a pre-existing application transform without overwriting it on a s
 		() => true
 	);
 	try {
-		expect(() => ensureMotionVisual(node)).toThrow('Motion owns');
+		expect(ensureMotionVisual(node)).toBeDefined();
 		expect(node.style.transform).toBe('rotate(12deg)');
 	} finally {
 		unregister();

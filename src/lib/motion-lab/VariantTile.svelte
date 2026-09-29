@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { createMotion } from '../motion/motion.svelte.js';
+	import { motion } from '../motion/motion.svelte.js';
 	let { number, label }: { number: number; label: string } = $props();
-	const tile = createMotion({
+	const tile = motion.bind({
 		style: { opacity: 0.5, y: 0 },
 		variants: {
 			rest: { opacity: 0.5, y: 0, rotate: 0 },

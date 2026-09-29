@@ -2,9 +2,8 @@
 
 Current primary API: [34-page documentation](https://alois-reinstadler.github.io/astra-motion/docs),
 [parity matrix](parity/MATRIX.md), and [migration guide](migration.md).
-Modern `motion.bind` and `motion.*` share one animation contract. The explicitly
-labelled `createMotion` recipes remain compatible with their historical stricter
-ownership and finite-transition rules.
+`motion.bind` and `motion.*` share one animation contract. `createMotion` has been
+removed; migrate native bindings to `motion.bind` using the migration guide.
 
 For simple enter/exit effects, prefer Svelte's native `transition:fade`, `transition:fly`
 or `transition:slide`. When new markup needs Astra capabilities, start with
@@ -141,9 +140,10 @@ never adds a native disabled attribute. An undefined top-level `disabled` preser
 that nested gesture setting. Native handlers such as `onclick` and animation
 callbacks such as `onAnimationComplete` remain separate.
 
-`createMotion(options)`, layout/controller options and reusable components accepting
-`motion={binding}` keep their existing contracts. This change does not add Motion
-React props that Astra does not otherwise support, or new Svelte native bindings.
+Layout/controller options and reusable components accepting `motion={binding}`
+keep their existing contracts. Create native bindings with `motion.bind(options)`.
+This does not add Motion React props that Astra does not otherwise support, or new
+Svelte native bindings.
 
 ## Native bindings and forwarding
 
@@ -293,14 +293,15 @@ keep its owner mounted while children exit. `initial: false` suppresses initial 
 Configuration context is captured during setup. A provider around markup in this
 same component cannot retroactively configure its binding; place the provider above
 the component or pass explicit options. For native SSR variant ancestry, create
-`const child = parent.child(options)` and mount it inside the native parent. Tag
+`const child = parent.child(options)` to declare its variant parent before rendering. Tag
 components establish that ancestry themselves. Each binding owns one simultaneous root.
 For SVG metadata, use the optional second argument:
 `motion.bind(options, { namespace: 'svg', tag: 'circle', attributes: { cx: 20, cy: 20, r: 8 } })`.
 
-`createMotion` stays available when an existing integration needs its historical
-finite native transitions, strict transform ownership, and `user` reduced-motion
-default. Modern bindings default to `never`, like `motion.*`; choose `user` explicitly.
+`motion.bind` and `motion.*` default to `reducedMotion: 'never'`, matching Motion.
+Choose `'user'` explicitly to follow the OS. The removed `createMotion` helper is
+not a compatibility option; specify initial targets and transition settings when
+migrating code that relied on its different defaults.
 
 ## Automatic layout
 
@@ -442,7 +443,7 @@ popLayout captures the exiting element, frees its space, and lets projected sibl
 </style>
 ```
 
-The direct parent must be positioned. The retained item needs a native outro. Use a per-item component if each item also needs its own createMotion binding.
+The direct parent must be positioned. The retained item needs a native outro. Use a per-item component if each item also needs its own `motion.bind` binding.
 
 Try [Remove from flow, finish the exit](/motion-lab).
 
@@ -497,9 +498,9 @@ parent.child() declares variant ancestry before any DOM exists. Motion resolves 
 
 ```svelte
 <script lang="ts">
-	import { createMotion } from 'astra-motion';
+	import { motion } from 'astra-motion';
 	let open = $state(true);
-	const panel = createMotion({
+	const panel = motion.bind({
 		initial: 'hidden',
 		animate: 'visible',
 		exit: 'hidden',
@@ -521,7 +522,10 @@ parent.child() declares variant ancestry before any DOM exists. Motion resolves 
 {/if}
 ```
 
-The child must mount inside its declared parent. Add |global when a child transition must participate in removal of an enclosing block. initial: false skips the first intro.
+`parent.child()` declares variant ancestry before mounting, including SSR. Keep the
+parent binding mounted while its child uses that ancestry. Add `|global` when a
+child transition must participate in removal of an enclosing block. `initial: false`
+skips the first entrance.
 
 Try [Coordinated children, including SSR](/motion-lab/inheritance).
 
@@ -675,7 +679,7 @@ Selectors stay inside the attached root. Replaying an overlapping sequence repla
 </style>
 ```
 
-Use the returned controls for pause, play, time and speed. Do not give a timeline a node already owned by createMotion, layout or a scroll animation.
+Use the returned controls for pause, play, time and speed. Do not give a timeline a node already owned by a motion binding, layout or a scroll animation.
 
 Try [Scoped timelines](/motion-lab/timelines).
 
@@ -741,29 +745,30 @@ contents need an intentional response:
 - Give images a stable intrinsic aspect ratio or deliberate `object-fit` crop.
   `mode: 'preserve-aspect'` avoids scaling between different aspect ratios by
   choosing position-only projection for that change. It does not morph the crop.
-- Put authored rotation/scale into Motion’s `style` or animation targets. Independent
-  CSS transforms conflict when the binding owns transforms, layout or drag. A
-  paint-only opacity/color binding preserves existing CSS transforms; adding a
-  transform target later checks ownership at that point.
+- Put authored rotation/scale into Motion’s `style` or animation targets. A nonempty raw
+  `transform` masks independent transform targets. Reset that raw transform before
+  switching to independent targets; use an outer element for a separately authored
+  transform. Paint-only bindings preserve existing CSS transforms.
 - Intrinsic-height accordions often suit Svelte’s reveal transition. The project’s
   accordion uses its existing content elements and keeps text away from surface scale.
 
 ## Defaults and reduced motion
 
-Wrap the application’s descendants in `MotionConfig` from `astra-motion` to set
-`transition`, `layoutTransition` and `reducedMotion`. `createMotion` compatibility bindings follow the OS by default; modern `motion.bind` and primary motion components default
-to never for upstream compatibility. Set `reducedMotion="user"` explicitly to follow the OS; `'always'` and `'never'` provide explicit overrides. Configuration
-is inherited by bindings created in descendant component initialization. A provider
-rendered around markup in the same component cannot retroactively configure bindings
-created in that component’s script. Move it above the component
-that creates the binding, or supply explicit options. Tag components rendered beneath
-the provider inherit it. Routes inherit the ancestor policy; explicit options win.
+Wrap the application's descendants in `MotionConfig` from `astra-motion` to set
+`transition`, `layoutTransition` and `reducedMotion`. Both `motion.bind` and
+`motion.*` default to `'never'`, matching Motion. Set `reducedMotion="user"`
+explicitly to follow the OS; `'always'` and `'never'` provide explicit overrides.
+Configuration is inherited by bindings created during descendant component setup.
+A provider around markup in the same component cannot retroactively configure its
+script's bindings. Move it above that component or pass explicit options. Tag
+components rendered beneath the provider inherit it. Routes inherit the ancestor
+policy; explicit options win.
 
-Nested tag components inherit variants during SSR. Use `parent.child()` for the
-equivalent native-binding ancestry; children must mount inside their declared parent.
-Live DOM ancestry alone cannot determine child server styles. `initial: false` renders the final initial pose and
-suppresses the first intro. Existing animations settle when reduced motion turns on;
-a Svelte outro clock already running still owns its original retention duration.
+Nested tag components inherit variants during SSR. Use `parent.child()` for native
+binding ancestry; live DOM discovery cannot determine server styles. `initial: false`
+renders the final animate pose and suppresses first entry. Without an initial target,
+the binding preserves its authored initial styles. Reduced-motion policy settles
+positional/layout animation while paint effects can continue.
 
 ## Ownership and cleanup
 
@@ -772,8 +777,9 @@ through reactive options, `binding.animate()`, or its MotionValues. Give a scope
 timeline or scroll animation a different element. Attachment cleanup releases
 controllers and owned animation styles; user-owned MotionValues remain yours.
 
-The legacy native-binding finite presence path requires resolved values and finite
-transitions. Primary motion components use engine keyframes and repeats.
+Motion components and native bindings share engine keyframes and repeats. Native
+outro retention requires a finite total duration; intrinsic dimensions and CSS
+variables are resolved from the mounted DOM.
 `AnimatePresence` coordinates arbitrary async work through generation-scoped
 `usePresence().safeToRemove`; an infinite exit intentionally never completes.
 For scoped timelines, `await controls.settled` resolves to `{ status: 'finished' }`
@@ -857,11 +863,12 @@ Keyed DOM order also cannot be inferred from setup callback order; see
 
 ## Optional feature entries
 
-Keep root imports while authoring. For a measured bundle need, `/state/lite` exposes
-the same `createMotion` contract without layout or gestures; `/state` retains those
-capabilities. Other focused entries are `/layout`, `/presence`, `/values`, `/animate`,
-`/scroll`, `/in-view` and `/policy`. `/routes` and `/view-navigation` stay separate
-because they require Kit.
+Keep root imports while authoring. For a measured bundle need, import `{ motion }`
+from `astra-motion/state` for full native binding features or from
+`astra-motion/state/lite` for bindings without layout or gestures. Both expose the
+same `motion.bind` spelling and animation contract; neither exports `createMotion`.
+Other focused entries are `/layout`, `/presence`, `/values`, `/animate`, `/scroll`,
+`/in-view` and `/policy`. `/routes` and `/view-navigation` require Kit.
 No compiler plugin is needed.
 
 Create MotionValues through `astra-motion` or `astra-motion/values`, which share the
@@ -918,5 +925,4 @@ Modern native exits resolve intrinsic dimensions, CSS variables and relative uni
 through the same DOM resolver as components. Explicit first keyframes are honored,
 and finite repeats include their repeat delay and final repeat direction. Native
 outros require a finite total duration; an infinite repeat cannot supply a finite
-Svelte removal clock. Compatibility `createMotion` retains its original stricter
-resolved-target and non-repeating exit rules.
+Svelte removal clock.

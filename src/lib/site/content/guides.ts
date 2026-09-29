@@ -152,7 +152,7 @@ export const guidesDocs: DocPage[] = [
 				id: 'migration',
 				title: 'Migrate existing Astra components',
 				text: [
-					'Existing createMotion attachments, createLayout controllers, createAnimate scopes, createScroll and Presence remain supported. Prefer direct motion props in new markup. The legacy motion={{ ... }} prop still works; defined direct props override it. Existing low-level bindings retain their stricter style-ownership rules and user reduced-motion default.',
+					'createMotion has been removed. Replace it with motion.bind and retain the props spread and native exit directive. Bindings now share motion.* initial styles, transform precedence, drag behavior and reducedMotion: never; choose user explicitly to follow the OS. createLayout controllers, createAnimate scopes, createScroll and Presence remain supported. The motion={{ ... }} prop still works; defined direct props override it.',
 					'Presence keeps its historical wait default. AnimatePresence defaults to sync and uses present, items with a stable key, or value with an optional key selector. Replace a legacy Presence only when you need the new coordination contract. Reuse real item identity rather than array positions for reorderable collections.',
 					'HTML and SVG are both supported. Custom Svelte components must forward the attachment props to one native root when wrapped with motion.create. The generic Motion component remains available; native value bindings belong to the generated tag components.'
 				],

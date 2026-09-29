@@ -2,25 +2,13 @@ import {
 	HTMLVisualElement,
 	SVGVisualElement,
 	visualElementStore,
-	buildHTMLStyles,
 	camelToDash,
-	resolveMotionValue,
-	transformProps,
-	isAnimationControls,
 	type MotionNodeOptions,
-	type MotionStyle,
 	type ResolvedValues,
-	type TargetAndTransition,
 	type VisualElement
 } from 'motion-dom';
-import {
-	ensureMotionAnimationState,
-	cancelMotionSequence,
-	setMotionAnimationGuard
-} from './animation.js';
-import { useComponentAnimationPolicy } from './animation.js';
+import { ensureMotionAnimationState, cancelMotionSequence } from './animation.js';
 import { prepareMotionHandoff } from './motion-compat.js';
-import { resolveMotionTarget } from './targets.js';
 import { isSVGElement, type MotionElement, type MotionVisual } from './motion-types.js';
 import { createSVGRenderState, svgAttributeName } from './svg.js';
 
@@ -35,8 +23,6 @@ interface MotionVisualRecord {
 	parent?: () => MotionElement | undefined;
 	original: Map<string, { value: string; priority: string }>;
 	originalAttributes?: Map<string, string>;
-	transformOwned?: boolean;
-	component?: boolean;
 	removeAdoptedVariant?: () => void;
 }
 const records = new Map<MotionElement, MotionVisualRecord>();
@@ -71,82 +57,19 @@ export function hasActiveMotionVisual(node: MotionElement) {
 	return records.get(node)?.active === true;
 }
 
-/** Paint-only bindings leave authored transforms alone, until a transform is actually requested. */
-export function assertMotionTransformOwnership(
-	node: MotionElement,
-	props?: MotionNodeOptions & { style?: MotionStyle },
-	additional?: TargetAndTransition
-) {
-	const record = records.get(node);
-	if (!record || record.transformOwned || record.component) return;
-	props ??= record.props();
-	const transforms = (values: object | undefined) =>
-		Object.entries(values ?? {}).some(
-			([key, value]) => value != null && (key === 'transform' || transformProps.has(key))
-		);
-	const definitions = [
-		props.initial === false ? undefined : props.initial,
-		props.animate,
-		props.exit,
-		props.whileHover,
-		props.whileTap,
-		props.whileFocus,
-		props.whileDrag,
-		props.whileInView
-	];
-	const needsTransform =
-		props.layout ||
-		props.drag ||
-		transforms(props.style) ||
-		transforms(record.initial) ||
-		transforms(record.visual?.latestValues) ||
-		transforms(additional) ||
-		transforms(additional?.transitionEnd) ||
-		definitions.some((definition) => {
-			if (typeof definition === 'boolean' || isAnimationControls(definition)) return false;
-			const target = resolveMotionTarget(props!, definition, props!.custom, record.visual);
-			return transforms(target) || transforms(target.transitionEnd);
-		});
-	if (!needsTransform) return;
-	const expected = { style: {}, vars: {}, transform: {}, transformOrigin: {} };
-	buildHTMLStyles(expected, record.initial);
-	const authoredTransform =
-		record.visual?.renderState.style.transform ??
-		(expected.style as { transform?: string }).transform ??
-		// Static raw transforms are authored CSS, not forced Motion values.
-		// They still belong to this binding when checking for external CSS conflicts.
-		resolveMotionValue(props.style?.transform);
-	const computed = getComputedStyle(node);
-	if (
-		(computed.transform !== 'none' && node.style.transform !== authoredTransform) ||
-		computed.translate !== 'none' ||
-		computed.rotate !== 'none' ||
-		computed.scale !== 'none'
-	) {
-		throw new Error(
-			'Astra motion: move CSS transform/translate/rotate/scale into the binding style/targets (x, y, rotate, scale), or put it on an outer element. Motion owns this element’s transform.'
-		);
-	}
-	record.transformOwned = true;
-}
-
 export function ensureMotionVisual(node: HTMLElement): HTMLVisualElement | undefined;
 export function ensureMotionVisual(node: SVGElement): SVGVisualElement | undefined;
 export function ensureMotionVisual(node: MotionElement): MotionVisual | undefined;
 export function ensureMotionVisual(node: MotionElement): MotionVisual | undefined {
 	const record = records.get(node);
 	if (!record) return undefined;
-	assertMotionTransformOwnership(node);
 	if (record.visual) return record.visual;
 	let parent: MotionVisual | undefined;
 	const declaredParent = record.parent?.();
 	if (record.parent) {
-		if (!declaredParent || (!record.component && !declaredParent.contains(node)))
-			throw new Error(
-				'Astra motion: binding.child() must attach inside its parent binding element.'
-			);
-		// Components preserve lexical variant ancestry across portals. Projection ancestry
-		// is measured separately from the DOM; explicit binding.child() stays structural.
+		if (!declaredParent)
+			throw new Error('Astra motion: binding.child() requires its parent binding to be attached.');
+		// Declared variant ancestry survives portals; projection measures DOM ancestry separately.
 		parent = ensureMotionVisual(declaredParent);
 	}
 	for (
@@ -177,12 +100,8 @@ export function ensureMotionVisual(node: MotionElement): MotionVisual | undefine
 	// otherwise treats every child as a late mount and replays initial=false keyframes.
 	if (record.props().initial === false) visual.manuallyAnimateOnMount = false;
 	record.visual = visual;
-	if (record.component) useComponentAnimationPolicy(visual);
 	if (isSVGElement(node)) (visual as SVGVisualElement).mount(node);
 	else (visual as HTMLVisualElement).mount(node);
-	setMotionAnimationGuard(visual, (target) => {
-		assertMotionTransformOwnership(node, record.props(), target);
-	});
 	for (const [childNode, child] of records) {
 		if (childNode !== node && child.active && child.parent?.() === node) adoptVisual(child, visual);
 	}
@@ -195,13 +114,11 @@ export function registerMotionVisual(
 	props: () => MotionNodeOptions,
 	reduced: () => 'user' | 'always' | 'never',
 	canAnimate: () => boolean,
-	parent?: () => MotionElement | undefined,
-	component = false
+	parent?: () => MotionElement | undefined
 ) {
 	let record = records.get(node);
 	if (record?.active) throw new Error('Astra motion: one motion binding per native element.');
-	if (record)
-		Object.assign(record, { active: true, initial, props, reduced, canAnimate, parent, component });
+	if (record) Object.assign(record, { active: true, initial, props, reduced, canAnimate, parent });
 	else {
 		const original = new Map(
 			Array.from(node.style, (key) => [
@@ -216,7 +133,6 @@ export function registerMotionVisual(
 			reduced,
 			canAnimate,
 			parent,
-			component,
 			original,
 			originalAttributes: isSVGElement(node)
 				? new Map(Array.from(node.attributes, (attr) => [attr.name, attr.value]))

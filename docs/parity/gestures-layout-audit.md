@@ -70,19 +70,17 @@ below; it does not mean every possible composition or the final release passed.
    default; SD selects a direction only above **10px**, checking y first and
    skipping the pose update on that selection frame. Both thresholds are
    implemented and documented.
-3. **Primary cancellation policy:** `motion.*` follows upstream native
+3. **Cancellation policy:** `motion.*` and `motion.bind` follow upstream native
    `pointercancel`: flush the pending last move, end the drag, and run configured
    release inertia. Explicit `controls.cancel()` omits end/inertia;
    `controls.stop()` releases normally. Window blur, disablement and removal
-   cancel safely. Reduced-motion policy does not independently suppress primary
-   drag inertia. Existing `createMotion` bindings retain their earlier native
-   cancellation/reduced-motion suppression behavior, documented as compatibility.
+   cancel safely. Reduced-motion policy does not independently suppress drag
+   inertia; use `dragMomentum={false}` to discard release velocity.
 4. **Pointer tracking:** SP tracks the pointer on window without capturing it.
-   The final candidate does the same for `motion.*`. Explicit capture and
-   lost-capture cancellation remain only in legacy bindings. Capturing the primary
-   Reorder item caused a real failure: Svelte's keyed DOM move released capture
-   after the first swap and cancelled later movement. Root corrected this and
-   reports the installed consumer now performs two consecutive trusted swaps.
+   `motion.*` and `motion.bind` use that policy. Losing capture during a keyed DOM
+   move does not end the drag; explicit release or cancellation ends the session.
+   Earlier capture-based Reorder failures remain documented in their dated
+   verification records.
 5. **Hard release bounds:** Astra preserves its existing clamped inertia target
    when elasticity is false, avoiding the upstream generator's initial overshoot.
    This deliberate difference is documented; elastic rebound uses engine defaults.
@@ -91,8 +89,9 @@ below; it does not mean every possible composition or the final release passed.
    are needed. Stable getters may read reactive state. `useDragControls()` is an
    ordinary SSR-safe factory; the attached element owns its subscription and work.
 7. **Reorder:** controlled `values`/`onReorder`, generic values and keyed Svelte
-   each blocks replace React child reconciliation. There is no `bind:values`
-   shortcut. Current upstream supports automatic x/y/xy detection, wrapped rows,
+   each blocks replace React child reconciliation. `bind:values` supports local
+   Svelte state; an explicit `onReorder` callback remains proposal authority,
+   including when both are supplied. Current upstream supports automatic x/y/xy detection, wrapped rows,
    RTL in the xy branch and edge scrolling. No extra auto-scroll tuning props are
    invented. Astra owns scroll state per group, includes a self-scrolling group,
    and accounts for clipping; these improve upstream's module-global ownership.

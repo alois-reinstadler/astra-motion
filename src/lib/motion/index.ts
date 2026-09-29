@@ -8,12 +8,7 @@ export {
 export { presence, popLayout, type PresenceOptions } from './presence.js';
 export { default as Presence } from './Presence.svelte';
 export { shouldReduceMotion, type MotionPolicy, type ReducedMotion } from './policy.js';
-export {
-	createMotion,
-	type MotionBinding,
-	type MotionOptions,
-	type MotionTarget
-} from './motion.svelte.js';
+export { type MotionBinding, type MotionOptions, type MotionTarget } from './motion.svelte.js';
 export { default as MotionConfig } from './MotionConfig.svelte';
 export { default as LayoutGroup } from './LayoutGroup.svelte';
 export { default as AnimatePresence, type AnimatePresenceProps } from './AnimatePresence.svelte';

@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { onMount } from 'svelte';
-	import { createMotion } from 'astra-motion/state';
+	import { motion } from 'astra-motion/state';
 	import { createLayout } from 'astra-motion/layout';
 	import { routeShared } from 'astra-motion/routes';
 	let moved = $state(false);
 	let ready = $state(false);
 	let counter = $state(0);
 	const layout = createLayout();
-	const tile = createMotion(() => ({
+	const tile = motion.bind(() => ({
 		initial: false,
 		animate: { x: moved ? 120 : 0 },
 		transition: { duration: 0.8 }

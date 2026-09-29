@@ -23,7 +23,6 @@ import type {
 	DragElastic
 } from './gestures.js';
 import { createGestureSession } from './gesture-session.js';
-import { isComponentMotionVisual } from './animation.js';
 import { observeResizeDrag } from './drag-measurement.js';
 type GestureVisual = HTMLVisualElement | SVGVisualElement;
 type Axis = 'x' | 'y';
@@ -248,12 +247,7 @@ export function attachDragGestures(
 			momentum.clear();
 		};
 		const startMomentum = (velocity: MotionPoint, dragAxes: Axis[]) => {
-			if (
-				disabled() ||
-				visual.shouldSkipAnimations ||
-				(visual.shouldReduceMotion && !isComponentMotionVisual(visual))
-			)
-				return;
+			if (disabled() || visual.shouldSkipAnimations) return;
 			const generation = ++releaseGeneration;
 			const options = getOptions();
 			let constraints: DragConstraints;
@@ -533,13 +527,6 @@ export function attachDragGestures(
 				'pointerup',
 				(end) => {
 					if (end.pointerId !== event.pointerId) return;
-					// Legacy bindings consume release coordinates even without a move.
-					// Components consume only coalesced moves: layout may already have
-					// rebased the released item, and pointerup must not emit extra onDrag.
-					if (!isComponentMotionVisual(visual)) {
-						latest = end;
-						pendingMove = true;
-					}
 					if (pendingMove) process();
 					latest = end;
 					if (started) {
@@ -562,11 +549,10 @@ export function attachDragGestures(
 				'pointercancel',
 				(end) => {
 					if (end.pointerId !== event.pointerId) return;
-					const normalRelease = isComponentMotionVisual(visual);
 					// Upstream cancels from the last move, including a coalesced move
 					// that has not reached the frame loop, rather than cancel coordinates.
-					if (normalRelease && pendingMove) process();
-					finish(end, !normalRelease, true);
+					if (pendingMove) process();
+					finish(end, false, true);
 				},
 				listenerOptions
 			);
@@ -575,18 +561,6 @@ export function attachDragGestures(
 			view.addEventListener('blur', () => finish(latest, true, true), {
 				signal: sessionAbort.signal
 			});
-			// Motion's component sessions follow the pointer on window. Explicit
-			// capture is lost when a keyed reorder moves the same connected node;
-			// that event is not a release. Keep legacy binding capture semantics.
-			if (!isComponentMotionVisual(visual)) {
-				node.addEventListener(
-					'lostpointercapture',
-					(end) => {
-						if ((end as PointerEvent).pointerId === event.pointerId) finish(latest, true, true);
-					},
-					listenerOptions
-				);
-			}
 			const scrollPositions = new Map<Element, MotionPoint>();
 			for (let parent = node.parentElement; parent; parent = parent.parentElement)
 				scrollPositions.set(parent, { x: parent.scrollLeft, y: parent.scrollTop });
@@ -607,13 +581,6 @@ export function attachDragGestures(
 				},
 				listenerOptions
 			);
-			if (!isComponentMotionVisual(visual)) {
-				try {
-					node.setPointerCapture(event.pointerId);
-				} catch {
-					/* Synthetic pointers have no capture. */
-				}
-			}
 			const startInfo = info;
 			defer(() => getOptions().onPanSessionStart?.(event, startInfo), 'update');
 		};

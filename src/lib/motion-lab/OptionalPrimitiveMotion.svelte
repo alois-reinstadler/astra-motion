@@ -1,10 +1,10 @@
 <script lang="ts">
 	import * as Dialog from '../components/ui/dialog/index.js';
 	import * as Accordion from '../components/ui/accordion/index.js';
-	import { createMotion } from '../motion/lite.svelte.js';
+	import { motion } from '../motion/lite.svelte.js';
 	let enabled = $state(false);
-	const dialog = createMotion({ initial: false, animate: { opacity: 1 }, exit: { opacity: 0 } });
-	const accordion = createMotion({ initial: false, animate: { opacity: 1 }, exit: { opacity: 0 } });
+	const dialog = motion.bind({ initial: false, animate: { opacity: 1 }, exit: { opacity: 0 } });
+	const accordion = motion.bind({ initial: false, animate: { opacity: 1 }, exit: { opacity: 0 } });
 	export function setMotion(value: boolean) {
 		enabled = value;
 	}

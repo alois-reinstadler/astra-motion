@@ -1,19 +1,21 @@
 import { expect, it } from 'vitest';
 import { render } from 'svelte/server';
-import { createMotion, type MotionOptions } from '../motion/motion.svelte.js';
+import * as state from '../motion/motion.svelte.js';
+import * as lite from '../motion/lite.svelte.js';
 import TransformOwnership from './TransformOwnership.svelte';
-
-it.each<MotionOptions>([
-	{ layout: true, animate: { transform: 'rotate(30deg)' } },
-	{ style: { x: 10 }, animate: { transform: 'rotate(30deg)' } },
-	{ style: { transform: 'rotate(30deg)' }, exit: { scale: 0.5 } },
-	{ animate: { transform: 'none' }, whileInView: { x: 20 } },
-	{ animate: { x: 20, transitionEnd: { transform: 'none' } } },
-	{ initial: 'start', animate: 'end', variants: { start: { transform: 'none' }, end: { y: 10 } } }
-])('diagnoses mixed raw/decomposed transform ownership before SSR: %j', (config) => {
-	expect(() => createMotion(config)).toThrow('raw transform cannot compose');
+it('exports the same native namespace from full and lite boundaries without a legacy constructor', () => {
+	expect(typeof state.motion.bind).toBe('function');
+	expect(typeof lite.motion.bind).toBe('function');
+	expect(state).not.toHaveProperty('createMotion');
+	expect(lite).not.toHaveProperty('createMotion');
 });
-
+it('uses raw transform precedence for a mixed native SSR target', () => {
+	const html = render(TransformOwnership, {
+		props: { config: { animate: { transform: 'rotate(30deg)', x: 40 } } }
+	}).body;
+	expect(html).toContain('transform:rotate(30deg)');
+	expect(html).not.toContain('translateX');
+});
 it('allows a consistent raw transform strategy without layout', () => {
 	const html = render(TransformOwnership, {
 		props: { config: { animate: { transform: 'rotate(30deg)' } } }

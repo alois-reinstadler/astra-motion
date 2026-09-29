@@ -9,7 +9,6 @@ import {
 	resolveTransition,
 	camelToDash,
 	setTarget,
-	transformProps,
 	cancelFrame,
 	frame,
 	positionalKeys,
@@ -29,19 +28,14 @@ import {
 	type MotionConfigOptions
 } from './config.js';
 import { shouldReduceMotion } from './policy.js';
-import {
-	assertMotionTransformOwnership,
-	ensureMotionVisual,
-	registerMotionVisual,
-	scheduleMotionState
-} from './visual.js';
+import { ensureMotionVisual, registerMotionVisual, scheduleMotionState } from './visual.js';
 import { createPresenceTimeline, type PresenceTimeline } from './presence-state.js';
 import type { attachMotionGestures, GestureOptions } from './gestures.js';
 import { resolveMotionTarget } from './targets.js';
 import { coordinatePresence } from './presence-batch.js';
 import { claimMotionOwnership } from './ownership.js';
 import { pauseMotionPlayback, prepareMotionHandoff } from './motion-compat.js';
-import { ownsMotionAnimation } from './animation-ownership.js';
+import { ownsMotionAnimation, allowsMotionReduction } from './animation-ownership.js';
 import { renderedMotionStyle } from './rendered-style.js';
 import { snapshotMotionOptions } from './options-snapshot.js';
 import {
@@ -125,45 +119,6 @@ function targetSnapshot(target: TargetAndTransition): unknown[] {
 	return snapshot;
 }
 
-function assertLegacyTransformOwnership(
-	config: MotionOptions,
-	visual?: MotionVisual,
-	additional?: MotionTarget
-) {
-	const definitions = [
-		config.animate,
-		config.exit,
-		config.initial === false ? undefined : config.initial,
-		config.whileHover,
-		config.whileTap,
-		config.whileFocus,
-		config.whileDrag,
-		config.whileInView,
-		additional
-	];
-	let raw = false;
-	let decomposed = false;
-	const collect = (values: object) => {
-		for (const [key, value] of Object.entries(values)) {
-			if (value === undefined || value === null) continue;
-			if (key === 'transform') raw = true;
-			else if (transformProps.has(key)) decomposed = true;
-		}
-	};
-	collect(config.style ?? {});
-	collect(visual?.latestValues ?? {});
-	for (const definition of definitions) {
-		const target = resolved(config, definition, visual);
-		collect(target);
-		collect(target.transitionEnd ?? {});
-	}
-	if (raw && (config.layout || decomposed)) {
-		throw new Error(
-			'Astra motion: raw transform cannot compose with layout or x/y/rotate/scale values on the same binding. Use individual Motion values in style and targets instead.'
-		);
-	}
-}
-
 export interface MotionBinding {
 	readonly tree: MotionTree;
 	readonly attach: Attachment<MotionElement>;
@@ -187,7 +142,7 @@ export interface MotionFeatures {
 }
 
 /** Internal construction boundary: entrypoints select features without global registration. */
-export function createMotionWithFeatures(
+export function createBindingWithFeatures(
 	input: MotionOptions | (() => MotionOptions),
 	features: MotionFeatures,
 	render: MotionRenderOptions = {}
@@ -207,19 +162,12 @@ function createBinding(
 	parentElement?: () => MotionElement | undefined,
 	render: MotionRenderOptions = {}
 ): MotionBinding {
-	const assertTransformOwnership = (
-		config: MotionOptions,
-		visual?: MotionVisual,
-		additional?: MotionTarget
-	) => {
-		if (!render.component) assertLegacyTransformOwnership(config, visual, additional);
-	};
 	const inherited = render.environment?.config ?? readMotionConfig();
 	const layoutScope = render.environment ? render.environment.layout : readLayoutScope();
 	const presence = render.environment ? render.environment.presence : readPresenceScope();
 	const isActivityActive = render.environment?.activity ?? readActivityState();
 	const options = (): MotionOptions => ({
-		reducedMotion: render.defaultReducedMotion,
+		reducedMotion: 'never',
 		layoutGroup: layoutScope?.controller,
 		...inherited(),
 		...(typeof input === 'function' ? input() : input)
@@ -244,7 +192,6 @@ function createBinding(
 	};
 	const first = untrack(initialOptions);
 	assertFeatures(first);
-	assertTransformOwnership(first);
 	function assertFeatures(config: MotionOptions) {
 		if (
 			render.lazy &&
@@ -264,7 +211,7 @@ function createBinding(
 			throw new Error(
 				render.lazy
 					? 'Astra LazyMotion: layout requires the domMax feature bundle.'
-					: 'Astra motion: layout requires createMotion from astra-motion/state. The lite entry supports state and presence.'
+					: 'Astra motion: layout requires motion.bind from astra-motion/state. The lite entry supports state and presence.'
 			);
 		if (
 			!features.gestures &&
@@ -283,7 +230,7 @@ function createBinding(
 			)
 		)
 			throw new Error(
-				'Astra motion: gestures require createMotion from astra-motion/state. The lite entry supports state and presence.'
+				'Astra motion: gestures require motion.bind from astra-motion/state. The lite entry supports state and presence.'
 			);
 	}
 	const readInitial = (config: MotionOptions) => resolveInitialMotionValues(config, render);
@@ -292,6 +239,7 @@ function createBinding(
 	let element: MotionElement | undefined;
 	let retainedNode: MotionElement | undefined;
 	let visual: MotionVisual | undefined;
+	let reducedMotionPolicy = shouldReduceMotion(first);
 	let timeline: PresenceTimeline | undefined;
 	let transitioning = false;
 	let nativeTransitionVersion = 0;
@@ -598,8 +546,7 @@ function createBinding(
 				get transition() {
 					return (
 						options().layoutTransition ??
-						options().transition ??
-						(render.component ? { duration: 0.45, ease: [0.4, 0, 0.1, 1] } : undefined)
+						options().transition ?? { duration: 0.45, ease: [0.4, 0, 0.1, 1] }
 					);
 				},
 				get reducedMotion() {
@@ -628,8 +575,6 @@ function createBinding(
 		if (!visual || disposed || !activityActive) return;
 		assertFeatures(config);
 		if (process.env.NODE_ENV !== 'production') diagnoseMotionOptions(visual, props(config));
-		assertTransformOwnership(config, visual);
-		if (element) assertMotionTransformOwnership(element, props(config));
 		syncLayout(config);
 		const previousProps = visual.getProps() as MotionNodeOptions & Record<string, unknown>;
 		const nextProps = props(config) as MotionNodeOptions & Record<string, unknown>;
@@ -690,14 +635,12 @@ function createBinding(
 			visual.render();
 			styleVersion++;
 		}
-		const policyChanged = visual.shouldReduceMotion !== shouldReduceMotion(config);
-		visual.shouldReduceMotion = shouldReduceMotion(config);
+		const nextReducedMotion = shouldReduceMotion(config);
+		const policyChanged = reducedMotionPolicy !== nextReducedMotion;
+		reducedMotionPolicy = visual.shouldReduceMotion = nextReducedMotion;
 		ensureMotionAnimationState(visual);
-		const transitionOptsOut =
-			config.transition &&
-			'reduceMotion' in config.transition &&
-			config.transition.reduceMotion === false;
-		if (policyChanged && visual.shouldReduceMotion && render.component && !transitionOptsOut) {
+		if (policyChanged && visual.shouldReduceMotion) {
+			timeline?.reduceMotion();
 			// A policy update can leave the animation target unchanged. Finish existing
 			// positional playback directly; the state resolver correctly skips unchanged
 			// targets and must not restart independent paint animations to apply policy.
@@ -707,6 +650,7 @@ function createBinding(
 				if (
 					positionalKeys.has(key) &&
 					animation &&
+					allowsMotionReduction(animation) &&
 					ownsMotionAnimation(visual!, animation) &&
 					!completed.includes(animation) &&
 					'complete' in animation &&
@@ -733,29 +677,6 @@ function createBinding(
 				timeline?.cancel();
 				transitioning = false;
 			}
-		}
-		if (visual.shouldReduceMotion && !render.component) {
-			const target = resolved(
-				config,
-				presenceDirection === 'out'
-					? (config.exit ??
-							getVariantContext(visual.parent)?.exit ??
-							(config.initial === false ? undefined : config.initial))
-					: (config.animate ?? getVariantContext(visual.parent)?.animate),
-				visual
-			);
-			// Inherited labels can introduce transforms absent from this binding's props.
-			// Claim them before the reduced-motion shortcut changes any owned values.
-			if (element) assertMotionTransformOwnership(element, props(config), target);
-			cancelMotionSequence(visual);
-			timeline?.finish();
-			visual.values.forEach((value) => {
-				prepareMotionHandoff(value.animation);
-				value.stop();
-			});
-			setTarget(visual, target);
-			visual.projection?.finishAnimation();
-			visual.render();
 		}
 		if (!transitioning && presenceDirection === 'in') {
 			// Motion must still dispatch inherited variants. Each visual applies its
@@ -790,8 +711,7 @@ function createBinding(
 					props,
 					() => options().reducedMotion ?? 'user',
 					() => !disposed && !transitioning && presenceDirection === 'in' && activityActive,
-					parentElement,
-					render.component
+					parentElement
 				);
 				const config = untrack(options);
 				syncLayout(config);
@@ -889,7 +809,6 @@ function createBinding(
 		resolveElement(current.viewport?.root);
 		// Variant functions can themselves read reactive custom data or state.
 		assertFeatures(current);
-		assertTransformOwnership(current, visual);
 		const latest = ++revision;
 		const version = generation;
 		queueMicrotask(() => {
@@ -923,7 +842,6 @@ function createBinding(
 			if (!element) {
 				const config = untrack(initialOptions);
 				assertFeatures(config);
-				assertTransformOwnership(config);
 				initial = render.initialValues ?? readInitial(config);
 				style = inlineStyle(
 					{ ...styleValues(config, false), ...initial },
@@ -961,8 +879,6 @@ function createBinding(
 		},
 		child(input = {}, childRender = {}) {
 			return createBinding(input, features, source, () => element, {
-				component: render.component,
-				defaultReducedMotion: render.defaultReducedMotion,
 				environment: render.environment,
 				...childRender
 			});
@@ -982,14 +898,13 @@ function createBinding(
 					);
 				setMotionAnimationActivity(visual, isActivityActive);
 				const config = options();
-				assertTransformOwnership(config, visual);
 				// Component entry uses Motion's frame loop, including repeats, keyframe resolution
 				// and inherited orchestration. Native Svelte still owns conditional removal.
 				// A retained native exit must reverse through its sampled trajectory below:
 				// the state resolver still remembers the unchanged animate target and would
 				// otherwise leave the component frozen at its interrupted exit pose.
 				if (
-					(render.component && direction === 'in' && presenceDirection !== 'out') ||
+					(direction === 'in' && presenceDirection !== 'out') ||
 					(direction === 'out' && managedExitComplete && !presence?.snapshot.isPresent)
 				) {
 					timeline?.cancel();
@@ -1018,16 +933,13 @@ function createBinding(
 				);
 				if (direction === 'in') introTarget = targetSnapshot(target);
 				const immediate =
-					(!render.component && shouldReduceMotion(config)) ||
-					(direction === 'in' &&
-						(config.initial ?? source().initial) === false &&
-						!previousTimeline);
+					direction === 'in' && (config.initial ?? source().initial) === false && !previousTimeline;
 				if (immediate) target = { ...target, transition: { duration: 0 } };
-				const transition: Transition = immediate
-					? { duration: 0 }
-					: (config.transition ??
-						(render.component ? {} : { type: 'spring', stiffness: 420, damping: 38 }));
-				if (render.component && shouldReduceMotion(config)) {
+				const transition: Transition = immediate ? { duration: 0 } : (config.transition ?? {});
+				const effectiveTransition = target.transition
+					? resolveTransition(target.transition, transition)
+					: transition;
+				if (effectiveTransition?.reduceMotion ?? shouldReduceMotion(config)) {
 					const reduction = Object.fromEntries(
 						Object.keys(target)
 							.filter((key) => positionalKeys.has(key))
@@ -1035,7 +947,7 @@ function createBinding(
 					);
 					target = { ...target, transition: { ...transition, ...target.transition, ...reduction } };
 				}
-				if (render.component && direction === 'in') {
+				if (direction === 'in') {
 					const effective = resolveTransition(target.transition, transition) ?? transition;
 					const hasInfinitePlayback = Object.entries(target).some(([key, value]) => {
 						if (key === 'transition' || key === 'transitionEnd' || value === undefined)
@@ -1078,22 +990,19 @@ function createBinding(
 					direction,
 					{
 						start() {
-							if (render.component)
-								visual?.notify('AnimationStart', direction === 'in' ? config.animate : config.exit);
+							visual?.notify('AnimationStart', direction === 'in' ? config.animate : config.exit);
 						},
 						complete() {
-							if (render.component)
-								visual?.notify(
-									'AnimationComplete',
-									direction === 'in' ? config.animate : config.exit
-								);
+							visual?.notify(
+								'AnimationComplete',
+								direction === 'in' ? config.animate : config.exit
+							);
 							transitioning = false;
 							if (direction === 'in' && !disposed) withBoundary(() => refresh(options()));
 						}
 					},
 					previousTimeline ? () => previousTimeline.progress : undefined,
-					true,
-					render.component
+					true
 				);
 				timeline = coordinatePresence(
 					visual,
@@ -1114,24 +1023,8 @@ function createBinding(
 						'Astra motion: animate() cannot replace a retained exit. Change Svelte state to reverse the exit.'
 					)
 				);
-			try {
-				assertTransformOwnership(options(), visual, target);
-				if (element)
-					assertMotionTransformOwnership(element, props(), resolved(options(), target, visual));
-			} catch (error) {
-				return Promise.reject(error);
-			}
 			timeline?.cancel();
 			transitioning = false;
-			if (!render.component && shouldReduceMotion(options())) {
-				visual.values.forEach((value) => {
-					prepareMotionHandoff(value.animation);
-					value.stop();
-				});
-				setTarget(visual, resolved(options(), target, visual));
-				visual.render();
-				return Promise.resolve();
-			}
 			return animateMotionDefinition(visual, target, { transitionOverride: transition });
 		},
 		stop() {

@@ -1,15 +1,15 @@
 <script lang="ts">
-	import { createMotion } from '../motion/motion.svelte.js';
+	import { motion } from '../motion/motion.svelte.js';
 	let outerChanged = $state(false);
 	let middleChanged = $state(false);
-	const outer = createMotion(() => ({
+	const outer = motion.bind(() => ({
 		initial: false,
 		animate: outerChanged ? 'outerMoved' : 'outerReady',
 		variants: { outerReady: { opacity: 1 }, outerMoved: { opacity: 1 } },
 		layout: true,
 		reducedMotion: 'never'
 	}));
-	const middle = createMotion(() => ({
+	const middle = motion.bind(() => ({
 		initial: false,
 		animate: middleChanged ? 'middleMoved' : 'middleReady',
 		variants: { middleReady: { opacity: 1 }, middleMoved: { opacity: 1 } },

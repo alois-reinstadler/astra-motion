@@ -24,6 +24,7 @@ const noTransition = (): PresenceTimeline => ({
 	span: 0,
 	schedule() {},
 	finish() {},
+	reduceMotion() {},
 	cancel() {}
 });
 
@@ -34,9 +35,9 @@ export function createLazyComponentMotion(
 ): MotionBinding {
 	const lazy = readLazyMotion();
 	const environment = render.environment ?? captureMotionEnvironment();
-	render = { component: true, defaultReducedMotion: 'never', ...render, environment, lazy: true };
+	render = { ...render, environment, lazy: true };
 	const options = (): MotionOptions => ({
-		reducedMotion: render.defaultReducedMotion,
+		reducedMotion: 'never',
 		layoutGroup: environment.layout?.controller,
 		...environment.config(),
 		...(typeof input === 'function' ? input() : input)

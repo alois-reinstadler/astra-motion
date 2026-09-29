@@ -61,12 +61,12 @@ export const authoringExamples = [
 		title: 'Keep existing native markup',
 		lab: '/motion-lab/state',
 		summary:
-			'Use createMotion when native directives, scoped selectors or an existing component own the markup.',
+			'Use motion.bind when native directives, scoped selectors or an existing component own the markup.',
 		note: 'Spread binding.props for SSR styles and its attachment, merge authored style after the spread, and add the native transition for exit. One binding owns one mounted element.',
 		source: `<script lang="ts">
-  import { createMotion } from 'astra-motion';
+  import { motion } from 'astra-motion';
   let open = $state(true);
-  const panel = createMotion({
+  const panel = motion.bind({
     initial: { opacity: 0 },
     animate: { opacity: 1 },
     exit: { opacity: 0 }
@@ -87,7 +87,7 @@ export const authoringExamples = [
 		lab: '/motion-lab/state',
 		summary:
 			'Tag components forward native attributes and events and implement supported Svelte bindings.',
-		note: 'Use bind:ref for the actual DOM element. bind:group, media bindings and readonly dimensions still use native markup with createMotion.',
+		note: 'Use bind:ref for the actual DOM element. bind:group, media bindings and readonly dimensions still use native markup with motion.bind.',
 		source: `<script lang="ts">
   import { motion } from 'astra-motion';
   let name = $state('');
@@ -167,7 +167,7 @@ export const authoringExamples = [
 		lab: '/motion-lab',
 		summary:
 			'popLayout captures the exiting element, frees its space, and lets projected siblings reflow immediately.',
-		note: 'The direct parent must be positioned. The retained item needs a native outro. Use a per-item component if each item also needs its own createMotion binding.',
+		note: 'The direct parent must be positioned. The retained item needs a native outro. Use a per-item component if each item also needs its own motion.bind binding.',
 		source: `<script lang="ts">
   import { createLayout } from 'astra-motion';
   import { popLayout, presence } from 'astra-motion';
@@ -229,9 +229,9 @@ export const authoringExamples = [
 			'parent.child() declares variant ancestry before any DOM exists. Motion resolves trajectories; Svelte owns outro retention.',
 		note: 'The child must mount inside its declared parent. Add |global when a child transition must participate in removal of an enclosing block. initial: false skips the first intro.',
 		source: `<script lang="ts">
-  import { createMotion } from 'astra-motion';
+  import { motion } from 'astra-motion';
   let open = $state(true);
-  const panel = createMotion({
+  const panel = motion.bind({
     initial: 'hidden', animate: 'visible', exit: 'hidden',
     variants: { hidden: { opacity: 0 }, visible: { opacity: 1 } },
     transition: { duration: 0.2, when: 'afterChildren', staggerChildren: 0.06 }
@@ -256,7 +256,7 @@ export const authoringExamples = [
 		lab: '/motion-lab/components',
 		summary:
 			'A custom component accepts a binding and forwards it to its real element. It imports only a type.',
-		note: 'Save this as MotionCard.svelte, then pass motion={card} from a parent using createMotion(). The project’s shadcn Card, Dialog and Accordion implement this contract.',
+		note: 'Save this as MotionCard.svelte, then pass motion={card} from a parent using motion.bind(). The project’s shadcn Card, Dialog and Accordion implement this contract.',
 		source: `<script lang="ts">
   import type { HTMLAttributes } from 'svelte/elements';
   import type { MotionBinding } from 'astra-motion';
@@ -330,7 +330,7 @@ export const authoringExamples = [
 		lab: '/motion-lab/timelines',
 		summary:
 			'Selectors stay inside the attached root. Replaying an overlapping sequence replaces stale playback and cleanup follows the scope.',
-		note: 'Use the returned controls for pause, play, time and speed. Do not give a timeline a node already owned by createMotion, layout or a scroll animation.',
+		note: 'Use the returned controls for pause, play, time and speed. Do not give a timeline a node already owned by layout or a scroll animation.',
 		source: `<script lang="ts">
   import { createAnimate } from 'astra-motion';
   const scene = createAnimate();

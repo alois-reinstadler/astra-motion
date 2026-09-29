@@ -2,7 +2,7 @@
 	import { onDestroy, onMount, tick } from 'svelte';
 	import { createLayout } from '$lib/motion/layout.js';
 	import { createAnimate } from '$lib/motion/animate.js';
-	import { createMotion } from '$lib/motion/lite.svelte.js';
+	import { motion } from '$lib/motion/lite.svelte.js';
 	import { photos, type Photo } from './collection.js';
 	const layout = createLayout({ transition: { type: 'spring', stiffness: 360, damping: 34 } });
 	let selected = $state<Photo | null>(null);
@@ -12,7 +12,7 @@
 	let scene: HTMLElement;
 	let returnId = '';
 	const replacement = createAnimate();
-	const policy = createMotion();
+	const policy = motion.bind();
 	let requested: Photo | null = null;
 	let navigation = 0;
 	let replacing = $state(false);
