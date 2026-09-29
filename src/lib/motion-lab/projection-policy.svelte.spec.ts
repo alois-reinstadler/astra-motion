@@ -33,9 +33,9 @@ it('updates transition policy without reattachment, resetting values, or interru
 			captured = current;
 			cancelFrame(capture);
 		};
-		// Projection creates its clock in a scheduled update. Capture it in that
-		// frame instead of assuming one test requestAnimationFrame sees it live.
-		motionFrame.postRender(capture, true);
+		// Projection's microtask commit flushes update/preRender/render, but not
+		// postRender. Capture here before a delayed RAF can finish a short clock.
+		motionFrame.preRender(capture, true);
 		try {
 			screen.component.move();
 			await expect.poll(() => Boolean(captured)).toBe(true);
@@ -58,6 +58,7 @@ it('updates transition policy without reattachment, resetting values, or interru
 	expect(visual.getValue('rotate')!.get()).toBe(35);
 	expect(projection.options.transition?.duration).toBe(0.2);
 	active.complete();
+	await active.finished;
 	await frame();
 	const { animation: next } = await captureNextProjection();
 	expect(projection.currentAnimation).toBe(next);

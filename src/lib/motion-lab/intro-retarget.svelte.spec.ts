@@ -1,7 +1,7 @@
-import { expect, it } from 'vitest';
+import { expect, it, onTestFinished } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import { flushSync } from 'svelte';
-import { visualElementStore } from 'motion-dom';
+import { visualElementStore, AsyncMotionValueAnimation } from 'motion-dom';
 import IntroRetarget from './IntroRetarget.svelte';
 
 const frame = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
@@ -97,34 +97,102 @@ it('hands a still-running retarget to native exit and reentry without resetting 
 	const renderedX = () => new DOMMatrix(getComputedStyle(node).transform).e;
 	await frame();
 	await frame();
-	flushSync(() => screen.component.retarget());
-	await expect.poll(renderedX, { interval: 10, timeout: 700 }).toBeGreaterThan(0);
 	const value = visualElementStore.get(node)!.getValue('x')!;
-	expect(value.animation?.state).toBe('running');
-	const sampledAt = performance.now();
-	const beforeExit = renderedX();
-	expect(beforeExit).toBeLessThan(100);
-	flushSync(() => screen.component.toggle());
-	await microtasks();
-	expect(node.isConnected).toBe(true);
-	const afterExit = renderedX();
-	// Stopping Motion samples playback between rendered frames. Allow that small
-	// linear advancement, but reject resetting to initial, animate, or exit poses.
-	const speed = 280 / replacementDuration;
-	const samplingAllowance = 20 + (speed * (performance.now() - sampledAt)) / 1000;
-	expect(Math.abs(afterExit - beforeExit)).toBeLessThan(samplingAllowance);
+	let replacement: AsyncMotionValueAnimation<number> | undefined;
+	const stop = value.on('animationStart', () => {
+		const animation = value.animation;
+		if (!(animation instanceof AsyncMotionValueAnimation)) return;
+		replacement = animation;
+		animation.pause();
+	});
+	onTestFinished(stop);
+	try {
+		flushSync(() => screen.component.retarget());
+		await expect.poll(() => Boolean(replacement)).toBe(true);
+	} finally {
+		stop();
+	}
+	const animation = replacement!;
+	animation.time = animation.duration / 2;
 	await frame();
-	await frame();
-	const beforeReentry = renderedX();
-	expect(beforeReentry).toBeLessThan(afterExit);
-	flushSync(() => screen.component.toggle());
-	await microtasks();
-	expect(screen.getByTestId('intro-retarget').element()).toBe(node);
-	expect(renderedX()).toBeCloseTo(beforeReentry, 1);
-	await expect.poll(renderedX).toBeCloseTo(180, 2);
-	await delay(400);
-	expect(renderedX()).toBeCloseTo(180, 2);
-	expect(Number(getComputedStyle(node).opacity)).toBe(1);
-	flushSync(() => screen.component.toggle());
-	await expect.poll(() => node.isConnected).toBe(false);
+	expect(renderedX()).toBeGreaterThan(0);
+	expect(renderedX()).toBeLessThan(100);
+
+	let afterExit: number | undefined;
+	let reversing = false;
+	let finishReentry: () => void;
+	const reentered = new Promise<void>((resolve) => (finishReentry = resolve));
+	const onIntroEnd = () => {
+		if (reversing) finishReentry();
+	};
+	let observer: MutationObserver;
+	const reversal = new Promise<{ before: number; after: number; sameNode: boolean }>(
+		(resolve, reject) => {
+			observer = new MutationObserver(() => {
+				try {
+					if (afterExit === undefined || reversing) return;
+					if (!node.isConnected) throw new Error('Native exit detached before reversal');
+					const before = renderedX();
+					if (before >= afterExit) return;
+					if (before <= -160) throw new Error('Native exit completed before reversal');
+					// Reverse at a rendered partial exit, in this microtask checkpoint.
+					// Two awaited frames can outlast the entire 300ms native outro.
+					reversing = true;
+					observer.disconnect();
+					flushSync(() => screen.component.toggle());
+					void microtasks()
+						.then(() => ({
+							before,
+							after: renderedX(),
+							sameNode: screen.getByTestId('intro-retarget').element() === node
+						}))
+						.then(resolve, reject);
+				} catch (error) {
+					reject(error);
+				}
+			});
+		}
+	);
+	const cleanup = () => {
+		observer.disconnect();
+		node.removeEventListener('introend', onIntroEnd);
+	};
+	onTestFinished(cleanup);
+	observer!.observe(node, { attributes: true, attributeFilter: ['style'] });
+	node.addEventListener('introend', onIntroEnd);
+	try {
+		// Resume immediately before handoff: this must exercise a running driver,
+		// not a paused driver, while keeping the sampled starting pose deterministic.
+		animation.play();
+		expect(value.animation).toBe(animation);
+		expect(animation.state).toBe('running');
+		const sampledAt = performance.now();
+		const beforeExit = renderedX();
+		expect(beforeExit).toBeLessThan(100);
+		flushSync(() => screen.component.toggle());
+		await microtasks();
+		expect(node.isConnected).toBe(true);
+		afterExit = renderedX();
+		// Stopping Motion samples playback between rendered frames. Allow that small
+		// linear advancement, but reject resetting to initial, animate, or exit poses.
+		const speed = 280 / replacementDuration;
+		const samplingAllowance = 20 + (speed * (performance.now() - sampledAt)) / 1000;
+		expect(Math.abs(afterExit - beforeExit)).toBeLessThan(samplingAllowance);
+		const reversed = await reversal;
+		expect(reversed.before).toBeLessThan(afterExit);
+		expect(reversed.before).toBeGreaterThan(-160);
+		expect(reversed.sameNode).toBe(true);
+		expect(reversed.after).toBeCloseTo(reversed.before, 1);
+		await reentered;
+		await expect.poll(renderedX).toBeCloseTo(180, 2);
+		// Preserve the original stale-clock check: the cancelled intro lasts 1.2s,
+		// longer than the 800ms replacement/reentry; its transitionEnd must not win.
+		await delay(400);
+		expect(renderedX()).toBeCloseTo(180, 2);
+		expect(Number(getComputedStyle(node).opacity)).toBe(1);
+		flushSync(() => screen.component.toggle());
+		await expect.poll(() => node.isConnected).toBe(false);
+	} finally {
+		cleanup();
+	}
 });

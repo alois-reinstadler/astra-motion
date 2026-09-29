@@ -1,7 +1,12 @@
 import { expect, it } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import { tick } from 'svelte';
-import { visualElementStore } from 'motion-dom';
+import {
+	cancelFrame,
+	frame as motionFrame,
+	visualElementStore,
+	type AnimationPlaybackControls
+} from 'motion-dom';
 import Lab from '../../routes/motion-lab/+page.svelte';
 
 const frame = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
@@ -28,18 +33,40 @@ function glyph(element: HTMLElement) {
 }
 
 async function pauseIntermediate(trigger: string, parent: HTMLElement | (() => HTMLElement)) {
-	element(`[data-testid="${trigger}"]`).click();
-	await tick();
-	await frame();
-	await frame();
-	const projections = [...document.querySelectorAll<HTMLElement>('*')]
-		.map((node) => visualElementStore.get(node)?.projection)
-		.filter((projection) => projection !== undefined);
-	const controls = new Set(projections.map((projection) => projection.currentAnimation));
-	for (const control of controls) {
-		if (!control) continue;
+	const currentControls = () =>
+		[...document.querySelectorAll<HTMLElement>('*')].flatMap((node) => {
+			const control = visualElementStore.get(node)?.projection?.currentAnimation;
+			return control ? [control] : [];
+		});
+	const previous = new Set(currentControls());
+	const controls = new Set<AnimationPlaybackControls>();
+	const capture = () => {
+		for (const control of currentControls()) {
+			if (previous.has(control) || controls.has(control)) continue;
+			control.pause();
+			control.time = 0.075;
+			controls.add(control);
+		}
+	};
+	// Projection's microtask update flushes update/preRender/render, without
+	// postRender. Capture and seek immediately after the update creates clocks.
+	motionFrame.preRender(capture, true);
+	try {
+		element(`[data-testid="${trigger}"]`).click();
+		await tick();
+		await frame();
+		await frame();
+		expect(controls.size).toBeGreaterThan(0);
+	} finally {
+		cancelFrame(capture);
+	}
+	// Reorder can retain a resize clock on an ancestor or child. Keep the
+	// original helper's all-active-clock sampling and settlement coordination,
+	// alongside the new clocks captured before yielding to the test runner.
+	for (const control of currentControls()) {
 		control.pause();
 		control.time = 0.075;
+		controls.add(control);
 	}
 	await frame();
 	await frame();

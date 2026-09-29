@@ -2,7 +2,13 @@ import { flushSync, tick } from 'svelte';
 import { expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import Fixture from './PopResize.svelte';
-import { visualElementStore } from 'motion-dom';
+import {
+	AsyncMotionValueAnimation,
+	cancelFrame,
+	frame as motionFrame,
+	visualElementStore,
+	type AnimationPlaybackControls
+} from 'motion-dom';
 import { beforeCommit } from '../motion/commit.js';
 
 const frames = async (count = 2) => {
@@ -16,6 +22,23 @@ const lines = (node: HTMLElement) => {
 	range.selectNodeContents(node);
 	return [...range.getClientRects()].map(({ width, height }) => ({ width, height }));
 };
+
+// Projection's microtask update flushes update/preRender/render, without
+// postRender. Capture in preRender immediately after the clock is created.
+function pauseProjectionStarts(nodes: HTMLElement[]) {
+	const previous = nodes.map((node) => visualElementStore.get(node)?.projection?.currentAnimation);
+	const animations: AnimationPlaybackControls[] = [];
+	const capture = () => {
+		for (const [index, node] of nodes.entries()) {
+			const animation = visualElementStore.get(node)?.projection?.currentAnimation;
+			if (!animation || animation === previous[index] || animations.includes(animation)) continue;
+			animation.pause();
+			animations.push(animation);
+		}
+	};
+	motionFrame.preRender(capture, true);
+	return { animations, stop: () => cancelFrame(capture) };
+}
 
 for (const transaction of [false, true]) {
 	it(`preserves outgoing wrapping through simultaneous ancestor resize (${transaction ? 'transaction' : 'automatic'})`, async () => {
@@ -127,61 +150,94 @@ it.each([
 ])(
 	'preserves text and parent continuity during shrink (interrupted=$interrupted, transaction=$transaction)',
 	async ({ interrupted, transaction }) => {
-		const { component } = render(Fixture, { projected: true, transaction });
-		await new Promise((resolve) => setTimeout(resolve, 300));
-		await frames();
-		if (interrupted) {
-			flushSync(() => component.resize(440));
+		const screen = render(Fixture, { projected: true, transaction });
+		const { component } = screen;
+		const cleanups: (() => void)[] = [];
+		try {
 			await frames();
 			const parent = document.querySelector<HTMLElement>('[data-pop-resize-parent]')!;
-			const animation = visualElementStore.get(parent)?.projection?.currentAnimation;
-			expect(animation).toBeDefined();
-			animation!.pause();
-			animation!.time = 0.3;
-			await frames();
-		}
-		const original = text();
-		const before = original.getBoundingClientRect();
-		const parent = document.querySelector<HTMLElement>('[data-pop-resize-parent]')!;
-		const parentBefore = parent.getBoundingClientRect();
-		const intrinsicWidth = original.offsetWidth;
-		const wrapping = lines(original);
-		flushSync(() => component.toggle());
-		await tick();
-		// Managed exits must freeze the intrinsic box before the next frame callback.
-		expect(original.offsetWidth).toBe(intrinsicWidth);
-		await frames();
-		const animations = [parent, original].flatMap((node) => {
-			const animation = visualElementStore.get(node)?.projection?.currentAnimation;
-			return animation ? [animation] : [];
-		});
-		expect(animations.length).toBeGreaterThan(0);
-		for (const animation of animations) animation.pause();
-		for (const time of [0, 0.2, 0.4, 0.6]) {
-			for (const animation of animations) animation.time = time;
-			await frames();
-			const current = original.getBoundingClientRect();
-			expect(current.width, `width at ${time}`).toBeCloseTo(before.width, 0);
-			expect(current.height, `height at ${time}`).toBeCloseTo(before.height, 0);
-			if (time === 0) {
-				expect(current.left).toBeCloseTo(before.left, 0);
-				expect(current.top).toBeCloseTo(before.top, 0);
-				expect(parent.getBoundingClientRect().width).toBeCloseTo(parentBefore.width, 0);
-				expect(parent.getBoundingClientRect().height).toBeCloseTo(parentBefore.height, 0);
-			} else {
-				expect(parent.getBoundingClientRect().width).toBeLessThan(parentBefore.width - 1);
-				expect(parent.getBoundingClientRect().width).toBeGreaterThan(parent.offsetWidth + 1);
+			// Projection deliberately blocks during resize; wait for that lifecycle
+			// rather than assuming a fixed setup delay outlasts it.
+			await expect
+				.poll(() => visualElementStore.get(parent)?.projection?.root.isUpdateBlocked())
+				.toBe(false);
+			if (interrupted) {
+				const opening = pauseProjectionStarts([parent]);
+				cleanups.push(opening.stop);
+				flushSync(() => component.resize(440));
+				await expect.poll(() => opening.animations.length).toBe(1);
+				opening.stop();
+				const animation = opening.animations[0];
+				expect(animation).toBeDefined();
+				animation.time = 0.3;
+				await frames();
 			}
-			const currentLines = lines(original);
-			expect(currentLines.length).toBe(wrapping.length);
-			for (let index = 0; index < wrapping.length; index++)
-				expect(currentLines[index].width).toBeCloseTo(wrapping[index].width, 0);
+			const original = text();
+			const before = original.getBoundingClientRect();
+			const parentBefore = parent.getBoundingClientRect();
+			const intrinsicWidth = original.offsetWidth;
+			const wrapping = lines(original);
+			const visual = visualElementStore.get(original)!;
+			let exit: AsyncMotionValueAnimation<number> | undefined;
+			const captureExit = () => {
+				const animation = visual.getValue('opacity')?.animation;
+				if (!(animation instanceof AsyncMotionValueAnimation)) return;
+				// Observe the value created by the exit itself. Do not seed an
+				// opacity value before Motion reads its actual DOM origin.
+				exit = animation;
+				exit.pause();
+				cancelFrame(captureExit);
+			};
+			// The exit has its own clock: pausing projection alone still allows
+			// opacity to finish and remove the node while geometry is sampled.
+			// Use the phase flushed by both projection commits and normal frames.
+			motionFrame.preRender(captureExit, true);
+			cleanups.push(() => cancelFrame(captureExit));
+			const closing = pauseProjectionStarts([parent, original]);
+			cleanups.push(closing.stop);
+			flushSync(() => component.toggle());
+			await tick();
+			// Managed exits must freeze the intrinsic box before the next frame callback.
+			expect(original.offsetWidth).toBe(intrinsicWidth);
+			await expect.poll(() => closing.animations.length).toBeGreaterThan(0);
+			await frames();
+			closing.stop();
+			const { animations } = closing;
+			expect(animations.length).toBeGreaterThan(0);
+			expect(exit).toBeInstanceOf(AsyncMotionValueAnimation);
+			for (const time of [0, 0.2, 0.4, 0.6]) {
+				for (const animation of animations) animation.time = time;
+				exit!.time = time;
+				await frames();
+				expect(original.isConnected).toBe(true);
+				const current = original.getBoundingClientRect();
+				expect(current.width, `width at ${time}`).toBeCloseTo(before.width, 0);
+				expect(current.height, `height at ${time}`).toBeCloseTo(before.height, 0);
+				if (time === 0) {
+					expect(current.left).toBeCloseTo(before.left, 0);
+					expect(current.top).toBeCloseTo(before.top, 0);
+					expect(parent.getBoundingClientRect().width).toBeCloseTo(parentBefore.width, 0);
+					expect(parent.getBoundingClientRect().height).toBeCloseTo(parentBefore.height, 0);
+				} else {
+					expect(parent.getBoundingClientRect().width).toBeLessThan(parentBefore.width - 1);
+					expect(parent.getBoundingClientRect().width).toBeGreaterThan(parent.offsetWidth + 1);
+				}
+				const currentLines = lines(original);
+				expect(currentLines.length).toBe(wrapping.length);
+				for (let index = 0; index < wrapping.length; index++)
+					expect(currentLines[index].width).toBeCloseTo(wrapping[index].width, 0);
+			}
+			for (const cleanup of cleanups) cleanup();
+			flushSync(() => component.toggle());
+			await frames();
+			expect(text()).toBe(original);
+			expect(original.hasAttribute('data-astra-presence-pop')).toBe(false);
+			for (const animation of animations) animation.complete();
+		} finally {
+			for (const cleanup of cleanups) cleanup();
+			// Unmount owns the paused exit and any interrupted projection clocks.
+			await screen.unmount();
 		}
-		flushSync(() => component.toggle());
-		await frames();
-		expect(text()).toBe(original);
-		expect(original.hasAttribute('data-astra-presence-pop')).toBe(false);
-		for (const animation of animations) animation.complete();
 	}
 );
 

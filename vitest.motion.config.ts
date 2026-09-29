@@ -9,7 +9,7 @@ if (selected && !engines.some((engine) => engine === selected)) {
 }
 export default defineConfig({
 	...base,
-	optimizeDeps: { include: ['bits-ui'] },
+	optimizeDeps: { include: ['bits-ui', 'motion-utils'] },
 	test: {
 		expect: { requireAssertions: true },
 		fileParallelism: false,

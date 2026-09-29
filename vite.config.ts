@@ -6,6 +6,7 @@ import { sveltekit } from '@sveltejs/kit/vite';
 
 export default defineConfig({
 	cacheDir: './.svelte-kit/vite-cache',
+	optimizeDeps: { include: ['motion-utils'] },
 	plugins: [
 		tailwindcss(),
 		sveltekit({

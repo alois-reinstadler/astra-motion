@@ -2,7 +2,12 @@ import { expect, it } from 'vitest';
 import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-svelte';
 import { tick } from 'svelte';
-import { visualElementStore, type AnimationPlaybackControls } from 'motion-dom';
+import {
+	visualElementStore,
+	frame as motionFrame,
+	cancelFrame,
+	type AnimationPlaybackControls
+} from 'motion-dom';
 import Reorder from '../site/examples/ParityGestureReorder.svelte';
 import Layout from '../site/examples/ParityLayoutExpand.svelte';
 import '../../routes/layout.css';
@@ -61,6 +66,32 @@ const animations = (root: HTMLElement) => [
 	)
 ];
 
+async function captureProjectionAnimations(root: HTMLElement, trigger: () => Promise<unknown>) {
+	const previous = new Set(animations(root));
+	const captured = new Set<AnimationPlaybackControls>();
+	const capture = () => {
+		for (const animation of animations(root)) {
+			if (previous.has(animation) || captured.has(animation)) continue;
+			animation.pause();
+			animation.time = 0;
+			captured.add(animation);
+		}
+	};
+	// Arm before trusted input crosses the browser transport. Projection's
+	// microtask commit flushes update/preRender/render, but not postRender.
+	// Capture in preRender before a delayed RAF can finish a short clock.
+	motionFrame.preRender(capture, true);
+	try {
+		await trigger();
+		await tick();
+		await frames();
+		expect(captured.size).toBeGreaterThan(0);
+		return [...captured];
+	} finally {
+		cancelFrame(capture);
+	}
+}
+
 async function phoneStage(scrolled = false) {
 	const previous = { width: window.innerWidth, height: window.innerHeight, scroll: window.scrollY };
 	await page.viewport(393, 852);
@@ -111,12 +142,11 @@ it('keeps reorder labels and controls unscaled while list/grid width animates in
 		};
 		const change = async (phase: string, finish: boolean, first = false) => {
 			const before = box(item);
-			if (first) await screen.getByRole('button', { name: 'Use grid' }).click();
-			else await userEvent.keyboard('{Enter}');
-			await tick();
-			await frames();
-			const running = animations(stage.container);
-			expect(running.length).toBeGreaterThan(0);
+			const running = await captureProjectionAnimations(stage.container, () =>
+				first
+					? screen.getByRole('button', { name: 'Use grid' }).click()
+					: userEvent.keyboard('{Enter}')
+			);
 			for (const animation of running) {
 				animation.pause();
 				animation.time = 0;
@@ -190,12 +220,11 @@ it('has no reachable horizontal scroll during list/grid changes and reversal whi
 		};
 		const change = async (phase: string, finish: boolean, first = false) => {
 			const before = box(item).width;
-			if (first) await screen.getByRole('button', { name: 'Use grid' }).click();
-			else await userEvent.keyboard('{Enter}');
-			await tick();
-			await frames();
-			const running = animations(stage.container);
-			expect(running.length).toBeGreaterThan(0);
+			const running = await captureProjectionAnimations(stage.container, () =>
+				first
+					? screen.getByRole('button', { name: 'Use grid' }).click()
+					: userEvent.keyboard('{Enter}')
+			);
 			for (const animation of running) animation.pause();
 			for (const time of [0, 0.04, 0.08, 0.12]) {
 				for (const animation of running) animation.time = time;

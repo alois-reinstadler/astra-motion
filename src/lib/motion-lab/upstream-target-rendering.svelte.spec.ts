@@ -2,6 +2,8 @@
 import { flushSync, tick } from 'svelte';
 import { expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
+import { frameData, time } from 'motion-dom';
+import { MotionGlobalConfig } from 'motion-utils';
 import Fixture from './UpstreamTargetRendering.svelte';
 const node = () => document.querySelector<HTMLElement | SVGElement>('[data-upstream-render]')!;
 const frames = async (count = 3) => {
@@ -15,29 +17,55 @@ it.each([
 ])(
 	'target-discrete: $property $from to $to switches at its correct phase',
 	async ({ property, from, to, first }) => {
-		const complete = vi.fn();
-		const updates: Record<string, unknown>[] = [];
-		render(Fixture, {
-			options: {
-				initial: { [property]: from, opacity: from === 'none' || from === 'hidden' ? 0 : 1 },
-				animate: { [property]: to, opacity: to === 'none' || to === 'hidden' ? 0 : 1 },
-				transition: { duration: 0.15 },
-				onUpdate: (v) => updates.push({ ...v }),
-				onAnimationComplete: complete
+		const previousManualTiming = MotionGlobalConfig.useManualTiming;
+		const previousTimestamp = frameData.timestamp;
+		const startedAt = performance.now();
+		MotionGlobalConfig.useManualTiming = true;
+		frameData.timestamp = startedAt;
+		time.set(startedAt);
+		let screen: ReturnType<typeof render<typeof Fixture>> | undefined;
+		try {
+			const complete = vi.fn();
+			const updates: Record<string, unknown>[] = [];
+			screen = render(Fixture, {
+				options: {
+					initial: { [property]: from, opacity: from === 'none' || from === 'hidden' ? 0 : 1 },
+					animate: { [property]: to, opacity: to === 'none' || to === 'hidden' ? 0 : 1 },
+					transition: { duration: 0.15 },
+					onUpdate: (v) => updates.push({ ...v }),
+					onAnimationComplete: complete
+				}
+			});
+			// onUpdate uses Motion's JS driver. Hold its clock while resolving the
+			// initial target, then exercise real frames at explicit animation times.
+			// A busy browser may legitimately skip the entire 150 ms wall-clock span.
+			await frames();
+			for (let elapsed = 0; elapsed <= 200; elapsed += 20) {
+				frameData.timestamp = startedAt + elapsed;
+				time.set(frameData.timestamp);
+				await frames(1);
 			}
-		});
-		await expect.poll(() => complete.mock.calls.length).toBe(1);
-		await frames();
-		expect(updates.length).toBeGreaterThan(1);
-		expect(updates[0][property]).toBe(first);
-		if (to === 'none' || to === 'hidden') {
-			const intermediate = updates.filter(
-				(value) => Number(value.opacity) > 0 && Number(value.opacity) < 1
-			);
-			expect(intermediate.length).toBeGreaterThan(0);
-			expect(intermediate.every((value) => value[property] === first)).toBe(true);
+			await expect.poll(() => complete.mock.calls.length).toBe(1);
+			await frames();
+			expect(updates.length).toBeGreaterThan(1);
+			expect(updates[0][property]).toBe(first);
+			if (to === 'none' || to === 'hidden') {
+				const intermediate = updates.filter(
+					(value) => Number(value.opacity) > 0 && Number(value.opacity) < 1
+				);
+				expect(intermediate.length).toBeGreaterThan(0);
+				expect(intermediate.every((value) => value[property] === first)).toBe(true);
+			}
+			expect(getComputedStyle(node()).getPropertyValue(property)).toBe(to);
+		} finally {
+			try {
+				await screen?.unmount();
+			} finally {
+				MotionGlobalConfig.useManualTiming = previousManualTiming;
+				frameData.timestamp = previousManualTiming ? previousTimestamp : performance.now();
+				time.set(frameData.timestamp);
+			}
 		}
-		expect(getComputedStyle(node()).getPropertyValue(property)).toBe(to);
 	}
 );
 it('target-discrete: display-only completion and numeric zIndex/fontWeight apply valid styles', async () => {

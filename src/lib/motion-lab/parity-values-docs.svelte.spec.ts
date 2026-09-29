@@ -1,6 +1,7 @@
 import { tick } from 'svelte';
-import { afterEach, expect, it, vi } from 'vitest';
+import { afterEach, expect, it, onTestFinished, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
+import { visualElementStore } from 'motion-dom';
 import MotionValues from '../site/examples/MotionValuesExample.svelte';
 import Template from '../site/examples/MotionTemplateExample.svelte';
 import Events from '../site/examples/MotionValueEventExample.svelte';
@@ -120,9 +121,21 @@ it('maps one source into a typed scale and rendered color', async () => {
 it('displays a nonzero velocity during movement and returns to rest', async () => {
 	render(Velocity);
 	await tick();
-	button('Move the marker').click();
-	await expect.poll(() => Math.abs(parseInt(output()))).toBeGreaterThan(0);
-	await expect.poll(output).toBe('0 pixels per second');
+	const value = visualElementStore.get(document.querySelector('.marker')!)!.getValue('x')!;
+	let stop = () => {};
+	const completed = new Promise<void>((resolve) => {
+		stop = value.on('animationComplete', resolve);
+	});
+	onTestFinished(() => stop());
+	try {
+		button('Move the marker').click();
+		await expect.poll(() => Math.abs(parseInt(output()))).toBeGreaterThan(0);
+		// Spring completion is causal; the velocity resets on a subsequent frame.
+		await completed;
+		await expect.poll(output).toBe('0 pixels per second');
+	} finally {
+		stop();
+	}
 });
 
 it('plays, pauses, resumes and completes the canonical scoped sequence', async () => {

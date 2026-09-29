@@ -3,6 +3,7 @@ import { tick } from 'svelte';
 import { afterEach, expect, it } from 'vitest';
 import { userEvent, page } from 'vitest/browser';
 import { render } from 'vitest-browser-svelte';
+import { visualElementStore, AsyncMotionValueAnimation } from 'motion-dom';
 import Fixture from './UpstreamReorderExpanded.svelte';
 const frame = () => new Promise<void>((r) => requestAnimationFrame(() => r()));
 const frames = async () => {
@@ -62,17 +63,41 @@ it('reorder-visuals: entering content and changing label finish through overlapp
 	await expect.poll(() => getComputedStyle(item(0)).opacity).toBe('1');
 	expect(node('label-0').getBoundingClientRect().width).toBe(48);
 	expect(getComputedStyle(node('content-0')).opacity).toBe('0.35');
-	view.component.animateVisuals();
-	view.component.insert(4);
-	await frames();
-	view.component.insert(5);
-	await frames();
-	const entering = Number(getComputedStyle(node('content-0')).opacity);
-	expect(entering).toBeGreaterThan(0.35);
-	expect(entering).toBeLessThan(1);
-	const p = await start(0);
-	await move(p.x + 120, p.y);
-	await release(p.x + 120, p.y);
+	const opacity = visualElementStore.get(node('content-0'))!.getValue('opacity')!;
+	let animation: AsyncMotionValueAnimation<number> | undefined;
+	const unsubscribe = opacity.on('animationStart', () => {
+		const current = opacity.animation;
+		if (!(current instanceof AsyncMotionValueAnimation)) return;
+		animation = current;
+		animation.pause();
+	});
+	try {
+		view.component.animateVisuals();
+		view.component.insert(4);
+		await expect.poll(() => Boolean(animation)).toBe(true);
+		const enteringAnimation = animation!;
+		// Hold the actual finite clock across insertion commits. A frame wait
+		// cannot guarantee it is still in flight when the test resumes.
+		enteringAnimation.time = enteringAnimation.duration / 3;
+		await frames();
+		view.component.insert(5);
+		await frames();
+		expect(opacity.animation).toBe(enteringAnimation);
+		expect(renderedOrder()).toEqual([0, 1, 2, 3, 4, 5]);
+		const entering = Number(getComputedStyle(node('content-0')).opacity);
+		expect(entering).toBeGreaterThan(0.35);
+		expect(entering).toBeLessThan(1);
+		const p = await start(0);
+		pointer(window, 'pointermove', p.x + 120, p.y);
+		// Begin the drag while that same content animation is intermediate,
+		// then let playback finish naturally through the drag and release.
+		enteringAnimation.play();
+		await frames();
+		await release(p.x + 120, p.y);
+	} finally {
+		unsubscribe();
+	}
+
 	await expect.poll(() => view.component.read().values[0]).toBe(1);
 	await expect.poll(() => getComputedStyle(node('content-0')).opacity).toBe('1');
 	await expect.poll(() => node('label-0').getBoundingClientRect().width).toBeCloseTo(132, 1);

@@ -1,4 +1,5 @@
-import { expect, it, vi } from 'vitest';
+import { expect, it, onTestFinished, vi } from 'vitest';
+import { flushSync } from 'svelte';
 import { render } from 'vitest-browser-svelte';
 import ScrollLab from './ScrollLab.svelte';
 import ScrollRetention from './ScrollRetention.svelte';
@@ -100,15 +101,58 @@ it('updates the container range after resize and rapid direction changes', async
 	await expect.poll(() => matrix(fill).a).toBeCloseTo(0.25, 2);
 });
 
+// Observe the policy change in the same browser task as retained-outro state.
+// The test timeout bounds failure; no animation duration or frame count is assumed.
+function reduceDuringOutro(fill: Element, remove: () => void, reduce: () => void) {
+	const wrapper = fill.parentElement!.parentElement!;
+	return new Promise<{ scale: number; retained: boolean }>((resolve, reject) => {
+		let frame = 0;
+		const cleanup = () => {
+			cancelAnimationFrame(frame);
+			wrapper.removeEventListener('outrostart', start);
+		};
+		const inspect = () => {
+			try {
+				expect(fill.isConnected).toBe(true);
+				const scale = matrix(fill).a;
+				if (Math.abs(scale - 1) < 0.005) {
+					cleanup();
+					resolve({ scale, retained: fill.isConnected });
+				} else frame = requestAnimationFrame(inspect);
+			} catch (error) {
+				cleanup();
+				reject(error);
+			}
+		};
+		const start = () => {
+			try {
+				expect(fill.isConnected).toBe(true);
+				expect(wrapper.inert).toBe(true);
+				flushSync(reduce);
+				inspect();
+			} catch (error) {
+				cleanup();
+				reject(error);
+			}
+		};
+		onTestFinished(cleanup);
+		wrapper.addEventListener('outrostart', start, { once: true });
+		flushSync(remove);
+		expect(fill.isConnected).toBe(true);
+	});
+}
+
 it('applies inherited reduced-motion policy while a native outro retains a paused child', async () => {
 	const screen = render(ScrollRetention);
 	const fill = screen.getByTestId('retained-scroll-fill').element();
 	await expect.poll(() => matrix(fill).a).toBeCloseTo(0, 2);
-	await screen.getByRole('button', { name: 'Remove scrolling child' }).click();
-	expect(fill.isConnected).toBe(true);
-	await screen.getByRole('button', { name: 'Reduce scrolling child' }).click();
-	await expect.poll(() => matrix(fill).a).toBeCloseTo(1, 2);
-	expect(fill.isConnected).toBe(true);
+	const observed = await reduceDuringOutro(
+		fill,
+		() => screen.component.update({ open: false }),
+		() => screen.component.update({ reduced: true })
+	);
+	expect(observed.scale).toBeCloseTo(1, 2);
+	expect(observed.retained).toBe(true);
 	await expect.poll(() => fill.isConnected, { timeout: 2000 }).toBe(false);
 });
 
@@ -121,11 +165,18 @@ it('applies a live OS reduction event while the child is retained by its outro',
 	try {
 		const fill = screen.getByTestId('retained-scroll-fill').element();
 		await expect.poll(() => matrix(fill).a).toBeCloseTo(0, 2);
-		await screen.getByRole('button', { name: 'Remove scrolling child' }).click();
-		reduced = true;
-		media.dispatchEvent(new MediaQueryListEvent('change', { matches: true, media: media.media }));
-		await expect.poll(() => matrix(fill).a).toBeCloseTo(1, 2);
-		expect(fill.isConnected).toBe(true);
+		const observed = await reduceDuringOutro(
+			fill,
+			() => screen.component.update({ open: false }),
+			() => {
+				reduced = true;
+				media.dispatchEvent(
+					new MediaQueryListEvent('change', { matches: true, media: media.media })
+				);
+			}
+		);
+		expect(observed.scale).toBeCloseTo(1, 2);
+		expect(observed.retained).toBe(true);
 	} finally {
 		await screen.unmount();
 		mock.mockRestore();

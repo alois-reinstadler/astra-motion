@@ -1,5 +1,5 @@
 import { flushSync, tick } from 'svelte';
-import { expect, it, vi } from 'vitest';
+import { expect, it, onTestFinished, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import Fixture from './PresenceLifecycle.svelte';
 
@@ -74,14 +74,103 @@ it('sync groups rapid exits and restores a retained keyed node on reversal', asy
 	const complete = vi.fn();
 	const { component } = render(Fixture, { mode: 'sync', onExitComplete: complete });
 	await tick();
-	await delay(220);
-	const initial = node('a');
+	const initial = node('a')!;
+	const child = (element: HTMLElement) => element.querySelector<HTMLElement>('span')!;
+	const opacity = (element: HTMLElement) => Number(getComputedStyle(element).opacity);
+	await expect.poll(() => opacity(child(initial))).toBeCloseTo(1, 3);
+	await expect.poll(() => child(initial).getAnimations().length).toBe(0);
+
+	const latest = new Map<HTMLElement, Animation>();
+	const owned = new Map<Animation, { node: HTMLElement; rate: number }>();
+	const animate = Element.prototype.animate;
+	let controlled = true;
+	const spy = vi.spyOn(Element.prototype, 'animate').mockImplementation(function (
+		this: Element,
+		keyframes,
+		options
+	) {
+		const animation = animate.call(this, keyframes, options);
+		const duration = animation.effect?.getTiming().duration;
+		if (
+			controlled &&
+			this instanceof HTMLElement &&
+			this.matches('[data-lifecycle], [data-lifecycle] > span') &&
+			typeof duration === 'number' &&
+			duration > 0
+		) {
+			owned.set(animation, { node: this, rate: animation.playbackRate });
+			latest.set(this, animation);
+			// Keep Svelte's tick loop alive while holding the real native clock.
+			animation.playbackRate = 0;
+			animation.currentTime = 0;
+		}
+		return animation;
+	});
+	onTestFinished(() => {
+		spy.mockRestore();
+		for (const animation of owned.keys()) animation.cancel();
+	});
+	const clocksAfter = async (elements: HTMLElement[], change: () => void) => {
+		const before = elements.map((element) => latest.get(element));
+		flushSync(change);
+		await expect
+			.poll(() =>
+				elements.every(
+					(element, index) => latest.has(element) && latest.get(element) !== before[index]
+				)
+			)
+			.toBe(true);
+		await Promise.all(elements.map((element) => latest.get(element)!.ready));
+	};
+	const seekPartial = (element: HTMLElement) => {
+		const animation = latest.get(element)!;
+		const duration = animation.effect!.getTiming().duration as number;
+		animation.currentTime = duration / 3;
+		const partial = opacity(element);
+		expect(partial).toBeGreaterThan(0);
+		expect(partial).toBeLessThan(1);
+	};
+
 	flushSync(() => component.select('b'));
-	await delay(40);
-	flushSync(() => component.select('c'));
-	await delay(40);
-	flushSync(() => component.select('a'));
+	const middle = node('b')!;
+	expect(middle).not.toBeNull();
+	await expect
+		.poll(() =>
+			[initial, child(initial), middle, child(middle)].every((element) => latest.has(element))
+		)
+		.toBe(true);
+	await Promise.all([...latest.values()].map((animation) => animation.ready));
+	seekPartial(initial);
+	seekPartial(child(initial));
+	seekPartial(middle);
+	seekPartial(child(middle));
+	await clocksAfter([middle, child(middle)], () => component.select('c'));
+	const last = node('c')!;
+	expect(last).not.toBeNull();
+	expect(node('b')).toBe(middle);
+	expect(middle.inert).toBe(true);
+	await expect.poll(() => latest.has(last) && latest.has(child(last))).toBe(true);
+	await Promise.all([latest.get(last)!.ready, latest.get(child(last))!.ready]);
+	seekPartial(last);
+	seekPartial(child(last));
+	expect(opacity(child(initial))).toBeGreaterThan(0);
+	expect(opacity(child(initial))).toBeLessThan(0.99);
 	expect(node('a')).toBe(initial);
+
+	await clocksAfter([initial, child(initial), last, child(last)], () => component.select('a'));
+	expect(node('a')).toBe(initial);
+	expect(node('c')).toBe(last);
+	expect(last.inert).toBe(true);
+	controlled = false;
+	for (const [animation, owner] of owned) {
+		// Resume only current running clocks; aborted/finished clocks stay retired.
+		if (
+			latest.get(owner.node) === animation &&
+			animation.effect &&
+			animation.playState === 'running'
+		)
+			animation.playbackRate = owner.rate;
+	}
 	await expect.poll(() => document.querySelectorAll('[data-lifecycle]').length).toBe(1);
 	expect(node('a')).toBe(initial);
 	expect(complete).toHaveBeenCalledTimes(1);

@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest';
+import { expect, it, onTestFinished } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import { tick } from 'svelte';
 import { visualElementStore } from 'motion-dom';
@@ -11,8 +11,23 @@ const frames = async () => {
 const node = (id: string) => document.querySelector<HTMLElement>(`[data-testid="${id}"]`)!;
 const visual = (id: string) => visualElementStore.get(node(id))!;
 
+async function initialIntro(id: string) {
+	const element = node(id);
+	if (Number(getComputedStyle(element).opacity) === 1) return;
+	await new Promise<void>((resolve) => {
+		const complete = () => {
+			element.removeEventListener('introend', complete);
+			resolve();
+		};
+		onTestFinished(() => element.removeEventListener('introend', complete));
+		element.addEventListener('introend', complete);
+	});
+}
+
 it('live reduced policy stops both plain layout and state while a nested override stays animated', async () => {
 	const screen = render(ConfigLifecycle);
+	// The inherited 800ms native intro can exceed the default polling window.
+	await initialIntro('outer-motion');
 	await expect.poll(() => Number(getComputedStyle(node('outer-motion')).opacity)).toBe(1);
 	screen.component.change();
 	await frames();
@@ -45,6 +60,8 @@ it('reenables projection after the inherited reduced policy changes back', async
 
 it('toggles projection without replacing the forwarded native element or state VisualElement', async () => {
 	const screen = render(ConfigLifecycle);
+	// The inherited 800ms native intro can exceed the default polling window.
+	await initialIntro('outer-motion');
 	await expect.poll(() => Number(getComputedStyle(node('outer-motion')).opacity)).toBe(1);
 	const element = node('outer-motion');
 	const state = visual('outer-motion');
