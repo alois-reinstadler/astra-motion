@@ -12,6 +12,11 @@
 		scaleX: number;
 		scaleY: number;
 	}>();
+	const detailStyle = $derived(
+		exitText
+			? { ...exitText, position: 'absolute' as const, margin: 0, originX: 0, originY: 0 }
+			: undefined
+	);
 	function toggle() {
 		if (expanded && card) {
 			// A close can interrupt expansion: hold the currently painted size, not its destination.
@@ -70,9 +75,7 @@
 			<motion.p
 				bind:ref={detail}
 				class="detail"
-				style={exitText
-					? { ...exitText, position: 'absolute', margin: 0, originX: 0, originY: 0 }
-					: undefined}
+				style={detailStyle}
 				initial={{ opacity: 0 }}
 				animate={{ opacity: 1 }}
 				exit={{ opacity: 0 }}
