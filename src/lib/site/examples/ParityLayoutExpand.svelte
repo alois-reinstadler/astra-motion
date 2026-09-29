@@ -2,17 +2,47 @@
 	import { AnimatePresence, motion } from '$lib/motion/index.js';
 	let expanded = $state(false);
 	let card = $state<HTMLElement | null>(null);
+	let detail = $state<HTMLElement | null>(null);
 	let exitSize = $state<{ width: number; height: number }>();
+	let exitText = $state<{
+		left: number;
+		top: number;
+		width: number;
+		height: number;
+		scaleX: number;
+		scaleY: number;
+	}>();
 	function toggle() {
 		if (expanded && card) {
 			// A close can interrupt expansion: hold the currently painted size, not its destination.
-			const { width, height } = card.getBoundingClientRect();
-			exitSize = { width, height };
-		} else exitSize = undefined;
+			const bounds = card.getBoundingClientRect();
+			exitSize = { width: bounds.width, height: bounds.height };
+			if (detail) {
+				const text = detail.getBoundingClientRect();
+				const style = getComputedStyle(detail);
+				const width = parseFloat(style.width);
+				const height = parseFloat(style.height);
+				// Preserve the text's current wrapping and inherited scale when the card stops resizing.
+				exitText = {
+					left: text.left - bounds.left - card.clientLeft,
+					top: text.top - bounds.top - card.clientTop,
+					width,
+					height,
+					scaleX: text.width / width,
+					scaleY: text.height / height
+				};
+			}
+		} else {
+			exitSize = undefined;
+			exitText = undefined;
+		}
 		expanded = !expanded;
 	}
 	function finishExit() {
-		if (!expanded) exitSize = undefined;
+		if (!expanded) {
+			exitSize = undefined;
+			exitText = undefined;
+		}
 	}
 </script>
 
@@ -35,10 +65,14 @@
 				{expanded ? 'Close the note' : 'Read the note'}
 			</button>
 		</motion.div>
-		<!-- Keep the paragraph in flow at its readable width until its fade has finished. -->
+		<!-- Hold both painted boxes until the paragraph's fade has finished. -->
 		<AnimatePresence present={expanded} onExitComplete={finishExit}>
 			<motion.p
+				bind:ref={detail}
 				class="detail"
+				style={exitText
+					? { ...exitText, position: 'absolute', margin: 0, originX: 0, originY: 0 }
+					: undefined}
 				initial={{ opacity: 0 }}
 				animate={{ opacity: 1 }}
 				exit={{ opacity: 0 }}
