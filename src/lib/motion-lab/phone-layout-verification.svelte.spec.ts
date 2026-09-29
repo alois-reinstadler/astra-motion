@@ -473,7 +473,6 @@ it('keeps partially entered text continuous and visibly fading inside a note clo
 		window.scrollTo({ top: 500, behavior: 'instant' });
 		await frames();
 		const card = stage.container.querySelector<HTMLElement>('.card')!;
-		await expect.poll(() => visualElementStore.get(card)?.projection?.layout).toBeDefined();
 		// The phone viewport change intentionally blocks Motion projection until
 		// its resize debounce ends; this case needs a running opening animation.
 		await expect
@@ -497,6 +496,7 @@ it('keeps partially entered text continuous and visibly fading inside a note clo
 		for (const animation of animations(stage.container)) animation.complete();
 		await frames();
 		expect(Math.abs(box(card).width - collapsed.width)).toBeLessThan(1.5);
+		await expect.poll(() => visualElementStore.get(card)?.projection?.layout).toBeDefined();
 		toggle.click();
 		await tick();
 		await expect
