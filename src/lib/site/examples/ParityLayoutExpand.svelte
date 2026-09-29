@@ -17,6 +17,7 @@
 			? { ...exitText, position: 'absolute' as const, margin: 0, originX: 0, originY: 0 }
 			: undefined
 	);
+	const detailLayout = $derived(exitText ? false : ('position' as const));
 	function toggle() {
 		if (expanded && card) {
 			// A close can interrupt expansion: hold the currently painted size, not its destination.
@@ -70,10 +71,11 @@
 				{expanded ? 'Close the note' : 'Read the note'}
 			</button>
 		</motion.div>
-		<!-- Hold both painted boxes until the paragraph's fade has finished. -->
+		<!-- Correct scale while entering; the captured exit box takes over during the fade. -->
 		<AnimatePresence present={expanded} onExitComplete={finishExit}>
 			<motion.p
 				bind:ref={detail}
+				layout={detailLayout}
 				class="detail"
 				style={detailStyle}
 				initial={{ opacity: 0 }}

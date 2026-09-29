@@ -1,6 +1,8 @@
 # Public site deployment
 
-No public domain has been selected. Local and preview builds deliberately omit
+The repository’s GitHub Pages workflow builds `main` with `BASE_PATH=/astra-motion`.
+It does not configure `PUBLIC_SITE_URL`; a custom public origin has not been selected.
+Builds without that explicit origin, including the current Pages configuration, omit
 canonical URLs and absolute sharing URLs, emit `noindex, nofollow`, return a
 robots policy disallowing crawling, and generate an empty sitemap.
 
@@ -18,8 +20,8 @@ error page handles errors reached through the app, while direct missing-URL
 responses depend on the host. The preview manager used in the development container is not
 a production deployment mechanism.
 
-The shared metadata catalog covers the homepage, About, Status, Examples, Showcase
-and all current documentation routes. Both server rendering and client navigation
+The shared metadata catalog covers the homepage, About, Status, Examples, Showcase,
+every registered example detail page and all current documentation routes. Both server rendering and client navigation
 use it. `/robots.txt` points to `/sitemap.xml` only with a valid configured origin.
 Labs, demos and error pages are nonindexable and excluded from the sitemap.
 The sharing card is `static/social-card.png`; its editable source is the adjacent

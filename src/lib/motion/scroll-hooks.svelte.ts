@@ -37,10 +37,13 @@ function viewRange(offset: EngineScrollOptions['offset']) {
 			.map((edge) => edges[edge as keyof typeof edges] ?? edge)
 			.join(' ');
 	});
+	// Crossing ranges preserve the specified edges even for targets larger than
+	// the viewport: https://www.w3.org/TR/scroll-animations-1/#view-timelines-ranges
+	// The descending Any preset ('1 0,0 1') cannot use forward cover progress;
+	// leave it to the MotionValue observer, as with other unmatched offsets.
 	const name: Record<string, string> = {
-		'0 1,1 1': 'entry',
-		'0 0,1 0': 'exit',
-		'1 0,0 1': 'cover',
+		'0 1,1 1': 'entry-crossing',
+		'0 0,1 0': 'exit-crossing',
 		'0 0,1 1': 'contain'
 	};
 	const range = name[pairs.join(',')];

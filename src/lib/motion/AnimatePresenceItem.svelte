@@ -4,6 +4,7 @@
 	import { popPresenceNodes, type PresencePopOptions } from './presence-pop.js';
 	import type { PresenceEntry } from './presence-model.js';
 	import { layoutBridge } from './commit.js';
+	import { observePresenceBoxes, type PresenceBox } from './presence-measure.js';
 
 	let {
 		entry,
@@ -33,6 +34,13 @@
 		queueMicrotask(() => scope.releaseInitial());
 	});
 	let restorePop: (() => void) | undefined;
+	const boxes = new WeakMap<HTMLElement, PresenceBox>();
+	function trackPopBoxes() {
+		if (!pop || !entry.isPresent) return;
+		const nodes = [...scope.nodes];
+		return untrack(() => observePresenceBoxes(nodes, boxes, () => entry.isPresent && !restorePop));
+	}
+	$effect(trackPopBoxes);
 	function updatePresence() {
 		const present = entry.isPresent;
 		const data = custom;
@@ -41,7 +49,8 @@
 		const affectsLayout = presenceAffectsLayout;
 		void entry;
 		untrack(() => {
-			if (!present && shouldPop && !restorePop) restorePop = popPresenceNodes(scope.nodes, options);
+			if (!present && shouldPop && !restorePop)
+				restorePop = popPresenceNodes(scope.nodes, options, boxes);
 			if (present || !shouldPop) {
 				restorePop?.();
 				restorePop = undefined;

@@ -52,7 +52,8 @@ export const presenceViewDocs: DocPage[] = [
 				id: 'pop-layout',
 				title: 'Let remaining items fill the space',
 				text: [
-					'popLayout records outgoing root boxes and places those roots outside normal flow for the duration of their exits. The other items can occupy the freed space immediately. Add layout animation to the siblings and share their layout group when they must measure together.',
+					'popLayout keeps the last observed present root boxes and places outgoing roots outside normal flow for the duration of their exits, preserving their wrapping when an ancestor resizes in the same update. The other items can occupy the freed space immediately. Add layout animation to the siblings and share their layout group when they must measure together.',
+					'Keep the positioning container unchanged during extraction. For consecutive synchronous mutations before observers can refresh, wrap the exit update in updateLayout. Newly mounted roots without a prior measurement use their current box. Use layout="position" on projected text to correct inherited scale; popLayout does not guarantee containment inside a shrinking clipping ancestor.',
 					'Use a positioned containing block, such as position: relative on the list. A transformed ancestor may also establish an absolute-position containing block. Size and position are captured before the temporary positioning styles are written, and those styles are removed on completion or re-entry.',
 					'Motion elements register their roots automatically. For plain or custom content, call presenceRoot() inside the retained child component and attach it to the actual HTML root. Forward that attachment through your custom component when necessary. A fragment can register more than one root. SVG can animate its exit, but popLayout’s absolute-position extraction applies to HTML roots.'
 				],
@@ -328,7 +329,7 @@ export const presenceViewDocs: DocPage[] = [
 				title: 'The Svelte lifecycle contract',
 				text: [
 					'Ordinary Svelte $effects and onMount resources remain active while the panel is hidden. Svelte 5 does not provide a public primitive for disconnecting and recreating every effect in a mounted component subtree. Use useActivityEffect for application work that needs cleanup on hiding.',
-					'This approved Svelte adaptation retains DOM and component state without changing Svelte’s scheduler priority, background rendering, or the lifecycle of arbitrary third-party resources.',
+					'This Svelte adaptation retains DOM and component state without changing Svelte’s scheduler priority, background rendering, or the lifecycle of arbitrary third-party resources.',
 					'The upstream AnimateActivity reference was still a Motion+ alpha on 27 September 2026, requiring Motion 12.23.24 or later and React 19.2 or later. Astra’s documented contract is the Svelte behavior described here; no React dependency or Motion+ token is required.'
 				]
 			},

@@ -23,6 +23,8 @@ Astra Motion remains a working beta. These notes describe repository changes, no
 
 ### Fixes
 
+- Preserve observed outgoing boxes when an ancestor resizes during AnimatePresence popLayout or AnimateActivity pop exits; snapshot explicit layout transactions and apply managed flow removal before the next animation frame.
+
 - Preserve style and animation ownership when raw transforms, Motion Values, shared layouts and reactive configuration change together.
 - Complete positional animation when live reduced-motion policy changes while preserving paint animation.
 - Keep external-handle drags active when focus moves between elements; cancel when the browser window loses focus.

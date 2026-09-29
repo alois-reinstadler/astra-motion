@@ -63,7 +63,7 @@ export const presenceViewExamples = {
 		title: 'Open a field note with shared artwork and a title',
 		description:
 			'Choose a card: its artwork and title travel into a new detail view, then return to their places in the collection.',
-		category: 'Routes',
+		category: 'View Transitions',
 		guide: 'animate-view',
 		anchor: 'usage',
 		filename: 'AnimateViewExample.svelte',

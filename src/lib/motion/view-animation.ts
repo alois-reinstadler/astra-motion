@@ -63,8 +63,9 @@ export function animateViewChanges(
 		!['x', 'y', 'z', 'rotate', 'scale', 'cssText', 'transition'].includes(property) &&
 		(property.startsWith('--') ||
 			typeof document.documentElement.style[property as keyof CSSStyleDeclaration] === 'string');
-	for (const [property, value] of Object.entries(values)) {
-		if (value !== undefined && !isProperty(property))
+	const properties = Object.entries(values).filter(([, value]) => value !== undefined);
+	for (const [property] of properties) {
+		if (!isProperty(property))
 			throw new Error(
 				`Astra AnimateView: ${property} is not a CSS snapshot property. Use a complete transform string for transforms.`
 			);
@@ -110,23 +111,33 @@ export function animateViewChanges(
 	}
 	validateTiming(transition);
 	validateTiming(specific);
-	const custom = Object.keys(values).length > 0;
+	const custom = properties.length > 0;
 	const reduced = shouldReduceMotion(snapshot.options);
 	const animations: AnimationPlaybackControls[] = [];
 	try {
+		// Newly created custom animations belong to an already visited name. Capture
+		// native layers once so multi-root views do not repeatedly scan the document.
+		const layers = new Map<
+			string,
+			{ animation: Animation; effect: KeyframeEffect; isGroup: boolean }[]
+		>();
+		for (const animation of document.getAnimations()) {
+			const effect = animation.effect as KeyframeEffect | null;
+			if (!effect?.pseudoElement || animation.playState === 'finished') continue;
+			const info = getViewAnimationLayerInfo(effect.pseudoElement);
+			if (!info) continue;
+			let entries = layers.get(info.layer);
+			if (!entries) layers.set(info.layer, (entries = []));
+			entries.push({ animation, effect, isGroup: info.type === 'group' });
+		}
 		for (const { name } of changes) {
-			let matched = false;
-			for (const animation of document.getAnimations()) {
-				const effect = animation.effect as KeyframeEffect | null;
-				if (!effect?.pseudoElement || animation.playState === 'finished') continue;
-				const info = getViewAnimationLayerInfo(effect.pseudoElement);
-				if (!info || info.layer !== name) continue;
-				matched = true;
-				if (custom && info.type !== 'group') {
+			const matched = layers.get(name) ?? [];
+			for (const { animation, effect, isGroup } of matched) {
+				if (custom && !isGroup) {
 					animation.cancel();
 					continue;
 				}
-				const property = info.type === 'group' ? 'layout' : '';
+				const property = isGroup ? 'layout' : '';
 				const options = {
 					...getValueTransition(transition, property),
 					...getValueTransition(specific, property)
@@ -154,9 +165,8 @@ export function animateViewChanges(
 				if (options.autoplay === false && !reduced) animation.pause();
 				animations.push(new NativeAnimationWrapper(animation));
 			}
-			if (custom && matched) {
-				for (const [property, value] of Object.entries(values)) {
-					if (value === undefined) continue;
+			if (custom && matched.length) {
+				for (const [property, value] of properties) {
 					let keyframes = value as ValueKeyframesDefinition;
 					if (property === 'opacity' && !Array.isArray(keyframes))
 						keyframes = [type === 'enter' ? 0 : 1, keyframes];

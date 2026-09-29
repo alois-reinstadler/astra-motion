@@ -41,7 +41,8 @@ export const legacyExamples = {
 	layout: {
 		id: 'layout',
 		title: 'Expand a player',
-		description: 'Resize a surface while its text and artwork keep their proportions.',
+		description:
+			'Use a createLayout controller to resize a player while preserving text and artwork proportions.',
 		category: 'Layout',
 		guide: 'layout',
 		anchor: 'automatic',
@@ -54,7 +55,7 @@ export const legacyExamples = {
 	shared: {
 		id: 'shared',
 		title: 'Move a selection between tabs',
-		description: 'Give one highlight a shared identity as the active tab changes.',
+		description: 'Move a shared highlight between tabs using an explicit createLayout controller.',
 		category: 'Layout',
 		guide: 'layout',
 		anchor: 'shared-elements',
@@ -67,7 +68,8 @@ export const legacyExamples = {
 	'list-composition': {
 		id: 'list-composition',
 		title: 'Remove and reflow list items',
-		description: 'Let an item exit while the remaining items fill its space.',
+		description:
+			'Combine the compatibility popLayout attachment and native exits to reflow a task list.',
 		category: 'Presence',
 		guide: 'animate-presence',
 		anchor: 'pop-layout',
@@ -80,7 +82,8 @@ export const legacyExamples = {
 	wait: {
 		id: 'wait',
 		title: 'Sequence changing content',
-		description: 'Compare waiting for an exit with overlapping the next card.',
+		description:
+			'Compare wait and sync modes using the supported compatibility Presence component.',
 		category: 'Presence',
 		guide: 'animate-presence',
 		anchor: 'sequencing',
@@ -108,7 +111,8 @@ export const legacyExamples = {
 		snippet:
 			"const scene = createAnimate();\n\n// Call after the scope is mounted.\nconst playback = scene.sequence([\n  ['.disc', { x: [-72, 0], scale: [0.4, 1], opacity: [0, 1] }, { duration: 0.8 }],\n  ['.tile', { y: [60, 0], rotate: [-45, 0], opacity: [0, 1] }, { at: 0.35, duration: 0.8 }]\n]);\n\nplayback.pause();\nplayback.play();",
 		title: 'Control an animation sequence',
-		description: 'Play, pause and replay a scoped graphic composition.',
+		description:
+			'Play, pause and replay a graphic composition using the compatibility createAnimate scope.',
 		category: 'Scroll & timelines',
 		guide: 'use-animate',
 		anchor: 'usage',
@@ -121,7 +125,8 @@ export const legacyExamples = {
 		snippet:
 			"const reading = createScroll();\nconst progress = motionStore(reading.progress);\nconst orbit = reading.animate({\n  transform: ['rotate(-90deg) scale(0.65)', 'rotate(90deg) scale(1.15)']\n});\n\n<section {@attach reading.container}>\n  <div {@attach orbit}></div>\n  <!-- Scrollable content -->\n</section>",
 		title: 'Compose a scene on scroll',
-		description: 'Scrub a pinned composition through scatter, assembly and release.',
+		description:
+			'Use createScroll to scrub a pinned composition through scatter, assembly and release.',
 		category: 'Scroll & timelines',
 		guide: 'scroll',
 		anchor: 'choices',
@@ -134,7 +139,8 @@ export const legacyExamples = {
 		snippet:
 			"const visible = createInView(\n  () => target,\n  () => ({ root: panel, amount: 0.6 })\n);\nconst card = createMotion(() => ({\n  initial: false,\n  animate: { opacity: visible.current ? 1 : 0, y: visible.current ? 0 : 24 },\n  transition: { type: 'spring', stiffness: 220, damping: 25 }\n}));",
 		title: 'Reveal content in a scroll container',
-		description: 'Observe a card as it enters and leaves its own viewport.',
+		description:
+			'Combine createInView and createMotion bindings to reveal a card in its own viewport.',
 		category: 'Scroll & timelines',
 		guide: 'use-in-view',
 		anchor: 'usage',
@@ -145,7 +151,8 @@ export const legacyExamples = {
 	gestures: {
 		id: 'gestures',
 		title: 'Add button and drag feedback',
-		description: 'Respond to hover, press and focus; move a tile by pointer or keyboard.',
+		description:
+			'Use createMotion bindings for hover, press and focus; move a tile by pointer or keyboard.',
 		category: 'State & gestures',
 		guide: 'gestures',
 		anchor: 'feedback',

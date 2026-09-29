@@ -25,7 +25,8 @@ import { observeMotionConfig, observeMotionPreference, readMotionConfig } from '
 import {
 	completeMotionPlayback,
 	pauseMotionPlayback,
-	prepareMotionHandoff
+	prepareMotionHandoff,
+	stopMotionPlayback
 } from './motion-compat.js';
 import { shouldReduceMotion, type MotionPolicy } from './policy.js';
 import { readMotionGetter, type MotionGetter } from './value-hooks.svelte.js';
@@ -392,7 +393,7 @@ export function useAnimate<T extends Element = HTMLElement>(
 				detachTimeline?.();
 				detachTimeline = undefined;
 				if (cancel) controls.cancel();
-				else controls.stop();
+				else stopMotionPlayback(controls);
 				release();
 			}
 		};

@@ -2,6 +2,7 @@
 export const beforeCommit = new Set<() => void>();
 export const layoutBridge: {
 	update?: (change: () => void) => void;
+	updateAfterRender?: (change: () => void) => void;
 	schedule?: (flush: () => void) => void;
 	refreshPolicy?: (element: HTMLElement) => void;
 	presence?: (element: HTMLElement, present: boolean) => void;
@@ -9,23 +10,33 @@ export const layoutBridge: {
 } = {};
 const mutations = new Set<() => void>();
 let scheduled = false;
+let beforePaintScheduled = false;
+let scheduleVersion = 0;
 
-/** Native transition lifecycle events arrive after the Svelte DOM transaction. */
-export function queueLayoutMutation(change: () => void): void {
+/** Batch flow changes outside Svelte's flush; managed exits cannot wait for a frame read. */
+export function queueLayoutMutation(change: () => void, beforePaint = false): void {
 	mutations.add(change);
-	if (scheduled) return;
+	if (scheduled && (!beforePaint || beforePaintScheduled)) return;
 	scheduled = true;
+	beforePaintScheduled = beforePaint;
+	const version = ++scheduleVersion;
 	const flush = () => {
+		// A managed exit can advance an already queued frame batch to this microtask.
+		if (version !== scheduleVersion) return;
 		scheduled = false;
+		beforePaintScheduled = false;
 		const pending = [...mutations];
 		mutations.clear();
 		const apply = () => {
 			for (const mutation of pending) mutation();
 		};
-		if (layoutBridge.update) layoutBridge.update(apply);
+		const update = beforePaint
+			? (layoutBridge.updateAfterRender ?? layoutBridge.update)
+			: layoutBridge.update;
+		if (update) update(apply);
 		else apply();
 	};
-	(layoutBridge.schedule ?? queueMicrotask)(flush);
+	(beforePaint ? queueMicrotask : (layoutBridge.schedule ?? queueMicrotask))(flush);
 }
 
 /** Validate a synchronous state transaction without importing layout projection. */

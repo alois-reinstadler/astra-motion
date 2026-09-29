@@ -113,7 +113,12 @@ it.each([
 		expect(node('sibling').getBoundingClientRect().top).toBeCloseTo(siblingTop - before.height, 1);
 		expect(popped.getBoundingClientRect().top).toBeCloseTo(before.top, 1);
 		expect(popped.getBoundingClientRect().width).toBeCloseTo(before.width, 1);
-		await screen.getByRole('button', { name: 'Outside focus target' }).click();
+		// Move focus synchronously: Playwright's click actionability wait can outlast
+		// the finite exit, turning this into a completed-exit test instead of re-entry.
+		node('outside').focus();
+		expect(document.activeElement).toBe(node('outside'));
+		expect(node('outer').dataset.astraActivity).toBe('exiting');
+		expect(complete).not.toHaveBeenCalled();
 		flushSync(() => screen.component.show());
 		await frames(20);
 		expect(node('outer').dataset.astraActivity).toBe('visible');

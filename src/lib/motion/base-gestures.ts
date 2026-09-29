@@ -90,16 +90,22 @@ export function attachBaseGestures(
 		const viewport = initial.viewport;
 		const threshold =
 			viewport?.amount === 'all' ? 1 : typeof viewport?.amount === 'number' ? viewport.amount : 0;
+		let enteredOnce = false;
 		const observer = new IntersectionObserver(
 			(entries) => {
-				if (isDisposed()) return;
 				for (const entry of entries) {
+					if (isDisposed() || enteredOnce) return;
 					const visible = entry.isIntersecting && entry.intersectionRatio >= threshold;
 					if (disabled() || active.has('whileInView') === visible) continue;
+					if (visible && viewport?.once) {
+						// Disconnect does not remove records already delivered in this batch.
+						enteredOnce = true;
+						observer.disconnect();
+					}
 					activate('whileInView', visible);
+					if (isDisposed()) return;
 					if (visible) getOptions().onViewportEnter?.(entry);
 					else getOptions().onViewportLeave?.(entry);
-					if (visible && viewport?.once) observer.disconnect();
 				}
 			},
 			{ root: resolveElement(viewport?.root), rootMargin: viewport?.margin, threshold }

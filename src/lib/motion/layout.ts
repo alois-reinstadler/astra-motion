@@ -10,12 +10,14 @@ import {
 	createDelta,
 	calcBoxDelta,
 	applyBoxDelta,
+	removeBoxTransforms,
 	type Measurements,
 	type LayoutUpdateData,
 	type DocumentProjectionNode,
 	correctBorderRadius,
 	correctBoxShadow,
 	frame,
+	microtask,
 	type IProjectionNode,
 	type ResolvedValues,
 	type MotionStyle,
@@ -37,6 +39,7 @@ import {
 	getMotionVisualProps
 } from './visual.js';
 import { readMotionConfig, observeMotionPreference, observeMotionConfig } from './config.js';
+import { compensateResizeDrag } from './drag-measurement.js';
 
 export interface LayoutOptions {
 	id?: string;
@@ -102,6 +105,10 @@ const participants = new Map<HTMLElement, Participant>();
 const pendingMounts = new Map<HTMLElement, (previous?: Participant) => void>();
 const pendingRemovals = new Set<Participant>();
 const disposedRoots = new Set<IProjectionNode>();
+// Motion force-measures suppressed resize commits, then clears its measurements.
+// Keep that committed origin for Astra's next after-render automatic snapshot.
+const resizeMeasurements = new WeakMap<DOMProjection, Measurements>();
+const measuringResizeRoots = new WeakSet<IProjectionNode>();
 let registrationScheduled = false;
 let automaticScheduled = false;
 let observer: ReturnType<typeof observeLayout> | undefined;
@@ -297,16 +304,22 @@ function seedCachedSnapshots(affected: Iterable<Participant> = participants.valu
 	const selected = [...affected];
 	const snapshots = new Map<DOMProjection, Measurements>();
 	for (const { projection: node } of selected) {
-		if (!node.layout || node.snapshot) continue;
+		const layout = node.layout ?? resizeMeasurements.get(node);
+		if (!layout || node.snapshot) continue;
 		const layoutBox = createBox();
-		copyBoxInto(layoutBox, node.target ?? node.layout.layoutBox);
+		copyBoxInto(layoutBox, node.target ?? layout.layoutBox);
 		// Keep fractional measured dimensions: WebKit rounds Motion's logical layout boxes.
-		const measuredBox = node.removeElementScroll(node.layout.measuredBox);
+		// Resize fallback boxes had scroll removed before Motion cleared the scroll records.
+		const measuredBox = createBox();
+		copyBoxInto(
+			measuredBox,
+			node.layout ? node.removeElementScroll(layout.measuredBox) : layout.measuredBox
+		);
 		const delta = createDelta();
-		calcBoxDelta(delta, node.layout.layoutBox, layoutBox);
+		calcBoxDelta(delta, layout.layoutBox, layoutBox);
 		applyBoxDelta(measuredBox, delta);
 		snapshots.set(node, {
-			...node.layout,
+			...layout,
 			layoutBox,
 			measuredBox,
 			latestValues: { ...node.latestValues }
@@ -425,8 +438,24 @@ function commit(immediate = false) {
 		if (projection.root) roots.add(projection.root);
 	}
 	for (const root of roots) {
-		if (immediate) (root as DocumentProjection).update();
-		else root.didUpdate();
+		const resized = root.updateBlockedByResize;
+		if (resized) measuringResizeRoots.add(root);
+		const finishResizeMeasurement = () => {
+			measuringResizeRoots.delete(root);
+			// Motion clears this flag after a measurement-only update. Observer
+			// commits must retain suppression until its existing resize timer ends.
+			root.updateBlockedByResize = true;
+		};
+		if (immediate) {
+			try {
+				(root as DocumentProjection).update();
+			} finally {
+				if (resized) finishResizeMeasurement();
+			}
+		} else {
+			root.didUpdate();
+			if (resized) microtask.postRender(finishResizeMeasurement);
+		}
 	}
 }
 
@@ -484,6 +513,12 @@ export function createLayout(options: LayoutGroupOptions = {}) {
 	};
 	if (layoutBridge.update !== updateLayout) {
 		layoutBridge.update = updateLayout;
+		layoutBridge.updateAfterRender = (change) => {
+			// Managed exits run after ancestor DOM writes. Preserve the last projection
+			// measurements before the pop transaction reads that already-reflowed DOM.
+			if (!transactionDepth) seedCachedSnapshots();
+			updateLayout(change);
+		};
 		layoutBridge.schedule = (flush) => frame.read(flush, false, true);
 		layoutBridge.refreshPolicy = refreshLayoutPolicy;
 		layoutBridge.presence = setPresence;
@@ -610,6 +645,7 @@ export function createLayout(options: LayoutGroupOptions = {}) {
 				projection.setOptions({
 					layout: !config.measureOnly,
 					layoutId: config.id === undefined ? undefined : JSON.stringify([scope, config.id]),
+					layoutDependency: config.dependency,
 					animationType: config.mode ?? 'both',
 					visualElement: visual,
 					crossfade: config.crossfade ?? true,
@@ -624,7 +660,33 @@ export function createLayout(options: LayoutGroupOptions = {}) {
 				// Measurement resets the DOM transform. Same-frame commits can hit Motion's
 				// VisualElement timestamp deduplication, so enqueue restoration directly.
 				// Motion's render queue still deduplicates this by callback identity.
+				let previousLayoutBox: Measurements['layoutBox'] | undefined;
 				projection.addEventListener('measure', () => {
+					const measuringResize = projection.root && measuringResizeRoots.has(projection.root);
+					if (projection.layout && measuringResize) {
+						const layoutBox = createBox();
+						copyBoxInto(layoutBox, projection.layout.layoutBox);
+						resizeMeasurements.set(projection, {
+							...projection.layout,
+							layoutBox,
+							latestValues: { ...projection.layout.latestValues },
+							measuredBox: projection.removeElementScroll(projection.layout.measuredBox)
+						});
+					} else resizeMeasurements.delete(projection);
+					if (projection.layout) {
+						let delta;
+						if (measuringResize && previousLayoutBox) {
+							delta = createDelta();
+							calcBoxDelta(delta, projection.layout.layoutBox, previousLayoutBox);
+						}
+						previousLayoutBox ??= createBox();
+						copyBoxInto(previousLayoutBox, projection.layout.layoutBox);
+						// Resize suppresses didUpdate, but held drags still need their
+						// origin rebased when a reorder moves the underlying layout slot.
+						if (delta && (delta.x.translate || delta.y.translate)) {
+							compensateResizeDrag(projection, delta);
+						}
+					}
 					correctBoundarySnapshot(projection as IProjectionNode);
 					frame.render(visual.render, false, true);
 				});
@@ -639,14 +701,21 @@ export function createLayout(options: LayoutGroupOptions = {}) {
 						snapshot.source === projection.layout.source
 					)
 						return;
-					calcBoxDelta(
-						delta,
-						projection.applyTransform(
-							projection.removeElementScroll(projection.layout.measuredBox),
-							true
-						),
-						projection.removeElementScroll(snapshot.measuredBox)
+					const target = projection.applyTransform(
+						projection.removeElementScroll(projection.layout.measuredBox),
+						true
 					);
+					const source = projection.removeElementScroll(snapshot.measuredBox);
+					// A detached resume source is cleared before target resolution, which then
+					// uses the logical layout box. Express both delta boxes in that same
+					// ancestor-transform space; otherwise scaling also scales its translation.
+					for (const ancestor of projection.path) {
+						const origin = ancestor.snapshot?.layoutBox ?? ancestor.layout?.layoutBox;
+						const measured = ancestor.instance ? ancestor.measurePageBox() : undefined;
+						removeBoxTransforms(target, ancestor.latestValues, origin, measured);
+						removeBoxTransforms(source, ancestor.latestValues, origin, measured);
+					}
+					calcBoxDelta(delta, target, source);
 				});
 				projection.mount(element);
 				let authoredStyle = { ...config.style };
@@ -677,6 +746,7 @@ export function createLayout(options: LayoutGroupOptions = {}) {
 						layoutAnchor: next.anchor,
 						crossfade: next.crossfade ?? true,
 						layoutId: id,
+						layoutDependency: next.dependency,
 						animationType: next.mode ?? 'both',
 						layoutScroll: next.scroll,
 						layoutRoot: next.root,
@@ -727,6 +797,7 @@ export function createLayout(options: LayoutGroupOptions = {}) {
 					visual.render();
 				};
 				const dispose = () => {
+					resizeMeasurements.delete(projection);
 					if (projection.root) disposedRoots.add(projection.root);
 					registered.owner.delete(registered);
 					registered.releaseConfig();

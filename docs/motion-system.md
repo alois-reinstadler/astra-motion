@@ -2,8 +2,10 @@
 
 Current primary API and scope: [parity matrix](parity/MATRIX.md),
 [shared Svelte contracts](parity/CONTRACTS.md), and [migration](migration.md).
-This detailed record also retains the native-binding architecture and its historical
-reasoning; native finite-transition restrictions do not limit the new primary API.
+This document explains the adapter architecture and retains the compatibility-binding
+recipes and original design reasoning. The primary references and parity records above
+define current API scope and qualification; historical experiments below are not new
+release evidence. Native finite-transition restrictions apply to compatibility bindings.
 
 **Recommendation: adopt the Svelte/Motion hybrid with the exact dependency pin and
 scoped adapter compatibility fix, without compiler integration.** Automatic layout now uses ordinary
@@ -66,7 +68,7 @@ records; it does not repeatedly query the document.
 
 ### Dependency contract
 
-The published archive contains one DOM-only engine: `motion-dom@13.4.4`, the
+The locally packed archive contains one DOM-only engine: `motion-dom@13.4.4`, the
 `framer-motion@13.4.4` DOM entry and `motion-utils@13.3.0`. These are exact build
 dependencies. Source imports use the public Motion package roots; prepack copies
 only the DOM ESM dependency graph and rewrites runtime/type imports to that shared
@@ -103,9 +105,11 @@ actual element destruction. Native Svelte CSS transitions use its WAAPI machiner
 
 The package has independent `astra-motion/layout`, `/presence`, `/state`, `/values`, `/policy` and `/routes`
 entry points, plus `/animate`, `/scroll`, `/in-view` and `/state/lite`.
-Begin with the root entry for local motion; the routes entry requires SvelteKit.
-Svelte 5.57+ within Svelte 5 is the baseline. Kit 2.70.3+ within Kit 2 is an optional
-peer for routes.
+These are the compatibility entries discussed below. The package also provides
+`/m`, `/lazy`, `/features/dom-animation`, `/features/dom-max`, `/mini`, `/reorder`,
+`/view` and `/view-navigation`. Begin with the root entry for local motion.
+Svelte 5.57.0+ within Svelte 5 is the baseline. Kit 2.70.3+ within Kit 2 is an optional
+peer required by both `/routes` and `/view-navigation`.
 
 ### Recommended authoring model
 
@@ -356,9 +360,12 @@ transforms during measurement and restores authored declarations and priorities.
 still owns interpolation and descendant scale correction. Nested scroll/clipping and
 sticky entry/exit use the browser’s actual sticky displacement, so automatic layout
 retargeting does not replay scrolling. Animated wrapper transforms, changing the affine
-basis during a shared handoff, singular transforms such as zero scale, CSS 3D matrices
-and perspective remain unqualified. See the [boundary review](research/projection-boundaries.md)
-for tested cases and remaining limits. A state
+basis during a shared handoff and singular transforms such as zero scale remain
+outside the general contract. Static 3D and perspective ancestors now have descendant
+layout coverage; changing camera/orientation, edge-on planes and general 3D scene
+interpolation remain excluded. See the current
+[layout reference](https://alois-reinstadler.github.io/astra-motion/docs/layout#troubleshooting)
+and the [historical boundary review](research/projection-boundaries.md). A state
 binding that only animates paint (for example opacity) preserves existing CSS
 transforms. It checks for conflicting ownership if transforms, layout or drag are
 subsequently requested.
@@ -434,7 +441,9 @@ const layout = createLayout(policy);
 // On a native transition: transition:presence={policy}
 ```
 
-Policies are `user` (default), `always`, or `never`. `MotionConfig` supplies context
+Policies are `user`, `always`, or `never`. Compatibility bindings default to `user`;
+primary motion components default to `never`. Set `MotionConfig reducedMotion="user"`
+explicitly for an application that follows the device preference. `MotionConfig` supplies context
 defaults to bindings created in descendant components. Existing layout/state animations
 respond to live OS and configuration changes; nested overrides remain independent.
 The narrow legacy `presence` helper checks its policy when a transition is created.
@@ -545,8 +554,9 @@ requires current DOM ordering for connected participants.
 - **No general CSS-transform coexistence.** The adapter has an explicit ownership
   contract. Static affine wrapper transforms and nested sticky/scroll/clipping contexts
   have geometry regressions, including interruption and cleanup. Changing wrapper transforms,
-  3D/perspective, pop-layout exits through transformed ancestors, shadows and arbitrary aspect
-  changes still need broader qualification.
+  camera/orientation during a 3D transition, edge-on planes and general 3D scene
+  interpolation remain excluded. Static 3D/perspective ancestor support is described
+  in the current layout reference; the older boundary report records its earlier scope.
 - **SSR inheritance needs declared ancestry.** Nested tag components declare it through
   context; native bindings use `parent.child()`. Arbitrary DOM ancestry discovered
   after mounting cannot determine server styles. Children must remain inside their

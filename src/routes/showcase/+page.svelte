@@ -85,7 +85,7 @@
 							A contact sheet becomes a closer look. Pick a photograph, change the view, follow what
 							catches your eye.
 						</p>
-						<a href={resolve('/docs/[slug]#identity', { slug: 'shared-layout' })}
+						<a href={resolve('/docs/[slug]#shared-elements', { slug: 'layout' })}
 							>Shared layout guide
 						</a>
 					</div>
@@ -123,7 +123,9 @@
 							Build an issue from your favourite frames. Reorder, remove, reconsider. There’s always
 							room to change your mind.
 						</p>
-						<a href={resolve('/docs/[slug]#pop-layout', { slug: 'presence' })}>Presence guide </a>
+						<a href={resolve('/docs/[slug]#pop-layout', { slug: 'animate-presence' })}
+							>Exit and layout guide
+						</a>
 					</div>
 				</div>
 				<PublishingQueue /><ShowcaseSource
@@ -145,7 +147,7 @@
 							A journal to linger in. Follow the landscape as you read, then assemble a world from
 							six fragments.
 						</p>
-						<a href={resolve('/docs/[slug]', { slug: 'scroll' })}>Scroll &amp; sequence guides </a>
+						<a href={resolve('/docs/[slug]', { slug: 'scroll' })}>Scroll animation guide </a>
 					</div>
 				</div>
 				<StoryPreview /><ShowcaseSource

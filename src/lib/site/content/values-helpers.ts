@@ -23,7 +23,7 @@ const related = (...slugs: string[]): DocSection => ({
 export const valuesHelpersDocs: DocPage[] = [
 	{
 		slug: 'motion-values',
-		title: 'Motion Values overview',
+		title: 'Motion values overview',
 		group: 'Motion Values',
 		summary:
 			'Share animation state, derive new values, and update visual properties without routing every frame through component state.',

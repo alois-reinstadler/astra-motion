@@ -5,7 +5,8 @@ export function observeLayout(document: Document, changed: (nodes: Set<HTMLEleme
 	const ancestors = new Map<Element, Set<HTMLElement>>();
 	const paths = new Map<HTMLElement, { root: Element; ancestors: Element[] }>();
 	const styles = new WeakMap<Element, string>();
-	const sizes = new WeakMap<Element, string>();
+	type Size = { inlineSize: number; blockSize: number };
+	const sizes = new WeakMap<Element, Size>();
 	const parser = document.createElement('div').style;
 	const owned = new Set([
 		'transform',
@@ -13,6 +14,10 @@ export function observeLayout(document: Document, changed: (nodes: Set<HTMLEleme
 		'rotate',
 		'scale',
 		'transform-origin',
+		// WebKit enumerates the shorthand as these longhands.
+		'transform-origin-x',
+		'transform-origin-y',
+		'transform-origin-z',
 		'opacity',
 		'visibility',
 		'pointer-events',
@@ -34,12 +39,22 @@ export function observeLayout(document: Document, changed: (nodes: Set<HTMLEleme
 		'fill',
 		'stroke'
 	]);
-	const signature = (style: CSSStyleDeclaration) =>
-		Array.from(style)
-			.filter((key) => !owned.has(key))
-			.sort()
-			.map((key) => `${key}:${style.getPropertyValue(key)}!${style.getPropertyPriority(key)}`)
-			.join(';');
+	function signature(style: CSSStyleDeclaration) {
+		// Keep declaration order irrelevant without allocating arrays for every
+		// intermediate filter/map step on Motion's per-frame style writes.
+		const keys: string[] = [];
+		for (let index = 0, length = style.length; index < length; index++) {
+			const key = style[index];
+			if (!owned.has(key)) keys.push(key);
+		}
+		keys.sort();
+		let result = '';
+		for (const key of keys) {
+			if (result) result += ';';
+			result += `${key}:${style.getPropertyValue(key)}!${style.getPropertyPriority(key)}`;
+		}
+		return result;
+	}
 	function removePath(node: HTMLElement) {
 		const path = paths.get(node);
 		if (!path) return;
@@ -138,16 +153,49 @@ export function observeLayout(document: Document, changed: (nodes: Set<HTMLEleme
 		attributes: true,
 		attributeOldValue: true
 	});
+	function committedBorderSize(element: Element): Size | undefined {
+		const css = getComputedStyle(element);
+		if (css.display === 'none') return { inlineSize: 0, blockSize: 0 };
+		// Unresolved/inline boxes are left to ResizeObserver. Used CSS dimensions
+		// preserve fractions and exclude Motion's temporary projection transforms.
+		if (css.display === 'inline' || css.display === 'contents') return;
+		let width = parseFloat(css.width),
+			height = parseFloat(css.height);
+		if (!Number.isFinite(width) || !Number.isFinite(height)) return;
+		if (css.boxSizing !== 'border-box') {
+			width +=
+				parseFloat(css.paddingLeft) +
+				parseFloat(css.paddingRight) +
+				parseFloat(css.borderLeftWidth) +
+				parseFloat(css.borderRightWidth);
+			height +=
+				parseFloat(css.paddingTop) +
+				parseFloat(css.paddingBottom) +
+				parseFloat(css.borderTopWidth) +
+				parseFloat(css.borderBottomWidth);
+		}
+		return css.writingMode.startsWith('horizontal')
+			? { inlineSize: width, blockSize: height }
+			: { inlineSize: height, blockSize: width };
+	}
 	const resize = new ResizeObserver((entries) => {
 		const dirty = new Set<HTMLElement>();
 		for (const entry of entries) {
 			const box = entry.borderBoxSize[0];
-			const next = box
-				? `${box.inlineSize},${box.blockSize}`
-				: `${entry.contentRect.width},${entry.contentRect.height}`;
+			const next = box ??
+				committedBorderSize(entry.target) ?? {
+					inlineSize: entry.contentRect.width,
+					blockSize: entry.contentRect.height
+				};
 			const previous = sizes.get(entry.target);
-			sizes.set(entry.target, next);
-			if (previous !== undefined && previous !== next) {
+			sizes.set(entry.target, { inlineSize: next.inlineSize, blockSize: next.blockSize });
+			// Computed style serializes fewer decimal places than ResizeObserver;
+			// tolerate serialization noise while preserving fractional layout changes.
+			if (
+				previous !== undefined &&
+				(Math.abs(previous.inlineSize - next.inlineSize) > 0.001 ||
+					Math.abs(previous.blockSize - next.blockSize) > 0.001)
+			) {
 				for (const node of ancestors.get(entry.target) ?? []) dirty.add(node);
 			}
 		}
@@ -170,6 +218,12 @@ export function observeLayout(document: Document, changed: (nodes: Set<HTMLEleme
 		/** Explicit commits already cover their mutations; update signatures and discard records. */
 		acknowledge() {
 			recordsChanged(mutations.takeRecords());
+			// A committed resize must not be measured again when its observer delivery
+			// arrives after projection starts and invalidates relative child targets.
+			for (const element of ancestors.keys()) {
+				const size = committedBorderSize(element);
+				if (size) sizes.set(element, size);
+			}
 		},
 		disconnect() {
 			mutations.disconnect();

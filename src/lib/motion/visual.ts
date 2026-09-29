@@ -141,10 +141,12 @@ export function ensureMotionVisual(node: MotionElement): MotionVisual | undefine
 	let parent: MotionVisual | undefined;
 	const declaredParent = record.parent?.();
 	if (record.parent) {
-		if (!declaredParent || !declaredParent.contains(node))
+		if (!declaredParent || (!record.component && !declaredParent.contains(node)))
 			throw new Error(
 				'Astra motion: binding.child() must attach inside its parent binding element.'
 			);
+		// Components preserve lexical variant ancestry across portals. Projection ancestry
+		// is measured separately from the DOM; explicit binding.child() stays structural.
 		parent = ensureMotionVisual(declaredParent);
 	}
 	for (

@@ -17,6 +17,7 @@ export interface LiveExample {
 	snippetLabel?: string;
 	component: Component;
 	source: string;
+	additionalSources?: { filename: string; source: string }[];
 }
 
 export const liveExamples = {

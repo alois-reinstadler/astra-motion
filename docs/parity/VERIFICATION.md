@@ -3,7 +3,8 @@
 Latest example qualification: [phone feedback and performance evidence](PHONE-FEEDBACK.md)
 records independent regressions and current bundle provenance. The
 [containment follow-up](PHONE-CONTAINMENT.md) adds transient scroll and outgoing
-text checks, with a documented ancestor-resize/popLayout capture limitation.
+text checks and the original ancestor-resize/popLayout capture limitation. The
+[runtime capture follow-up](POP-RESIZE.md) records its correction and bounded qualification.
 
 Follow-up: [Activity, View types and difficult geometry](PARITY-NEXT.md) records
 nested retained exits, automatic Activity pop roots, native View contracts, and

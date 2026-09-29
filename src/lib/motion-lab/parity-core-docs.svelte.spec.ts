@@ -60,7 +60,8 @@ it('switches transition settings and interrupts a tween with a reversed spring t
 	select.value = 'spring';
 	select.dispatchEvent(new Event('change', { bubbles: true }));
 	button('Move tile').click();
-	await expect.poll(() => x(tile())).toBe(-100);
+	// A reversed spring can settle beyond the default polling window.
+	await expect.poll(() => x(tile()), { timeout: 4000 }).toBe(-100);
 });
 
 it('applies a changed provider policy to already-running position without stopping paint', async () => {

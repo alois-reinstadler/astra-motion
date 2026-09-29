@@ -33,6 +33,10 @@ intermediate geometry or painted containment. This follow-up adds those checks.
 
 ## Remaining contract limitation
 
+Runtime follow-up: [popLayout resize capture](POP-RESIZE.md) addresses the capture
+ordering below for observed roots and explicit transactions. This section records
+the limitation at the time of the example-only correction.
+
 Automatic `popLayout` capture is not qualified when the same Svelte update resizes
 an ancestor before the presence boundary processes the outgoing record. The
 captured box may already reflect reflow. This example now uses explicit exit

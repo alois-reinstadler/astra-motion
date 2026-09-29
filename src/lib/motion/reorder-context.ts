@@ -80,6 +80,9 @@ export function reorderValues<T>(
 			let nearest = boxDistance(box);
 			let targetIndex = from;
 			order.forEach((entry, index) => {
+				// The nearest row was selected above. An empty row-end slot must
+				// not jump back to a different row whose boxes happen to be closer.
+				if (!target.items.includes(entry)) return;
 				const next = boxDistance(entry.layout);
 				if (next < nearest) {
 					nearest = next;

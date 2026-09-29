@@ -41,7 +41,7 @@
 					>
 					<a class="action secondary" href={resolve('/examples')}>Explore examples</a>
 				</div>
-				<p class="hero-note">Svelte 5 · Native elements · Respects reduced motion</p>
+				<p class="hero-note">Svelte 5 · Native elements · Configurable reduced motion</p>
 			</div>
 			<div class="hero-playground"><HomeLayoutExample /></div>
 		</section>

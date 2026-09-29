@@ -2,7 +2,7 @@ import { expect, it } from 'vitest';
 import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-svelte';
 import { tick } from 'svelte';
-import { visualElementStore } from 'motion-dom';
+import { visualElementStore, type AnimationPlaybackControls } from 'motion-dom';
 import Reorder from '../site/examples/ParityGestureReorder.svelte';
 import Layout from '../site/examples/ParityLayoutExpand.svelte';
 import '../../routes/layout.css';
@@ -71,6 +71,8 @@ async function phoneStage(scrolled = false) {
 	document.body.append(container, tail);
 	await document.fonts.ready;
 	await frames();
+	// These animation cases begin after the viewport resize quiet period.
+	await new Promise((resolve) => setTimeout(resolve, 350));
 	return {
 		container,
 		async dispose() {
@@ -78,6 +80,8 @@ async function phoneStage(scrolled = false) {
 			tail.remove();
 			await page.viewport(previous.width, previous.height);
 			window.scrollTo({ top: previous.scroll, behavior: 'instant' });
+			await frames();
+			await new Promise((resolve) => setTimeout(resolve, 350));
 		}
 	};
 }
@@ -413,8 +417,21 @@ it('closes and reverses the narrow note without an intermediate growth or docume
 		const close = await capture(90);
 		await userEvent.keyboard('{Enter}');
 		await capture(6);
-		const interrupted = sample();
+		let interrupted = sample();
+		let capturedInterruption = false;
+		const toggle = stage.container.querySelector<HTMLButtonElement>('[aria-expanded]')!;
+		// Capture at the actual trusted activation, before the component handler.
+		// Keyboard transport can advance the opening animation after this test turn.
+		toggle.addEventListener(
+			'click',
+			() => {
+				interrupted = sample();
+				capturedInterruption = true;
+			},
+			{ capture: true, once: true }
+		);
 		await userEvent.keyboard('{Enter}');
+		expect(capturedInterruption).toBe(true);
 		const reverse = await capture(90);
 		const settled = sample();
 		const diagnostic = JSON.stringify({
@@ -507,20 +524,20 @@ it('keeps partially entered text continuous and visibly fading inside a note clo
 		for (const animation of opening) animation.pause();
 		const detail = stage.container.querySelector<HTMLElement>('.detail')!;
 		const opacityAnimation = () =>
-			detail
-				.getAnimations()
-				.find((animation) =>
-					(animation.effect as KeyframeEffect)
-						.getKeyframes()
-						.some((keyframe) => keyframe.opacity !== undefined)
-				)!;
+			visualElementStore.get(detail)?.getValue('opacity')?.animation as
+				AnimationPlaybackControls | undefined;
 		await expect.poll(() => Boolean(opacityAnimation())).toBe(true);
-		const entering = opacityAnimation();
+		const entering = opacityAnimation()!;
 		expect(entering).toBeDefined();
 		entering.pause();
-		entering.currentTime = 90;
+		entering.time = 0.09;
 		for (const animation of opening) animation.time = 0.09;
 		await frames();
+		// Close a live partial entry. Motion samples native interruption from its
+		// start time, so resume the seeked opacity and await the browser's clock
+		// before capturing it; a raw paused WAAPI seek leaves those clocks apart.
+		entering.play();
+		await Promise.all(detail.getAnimations().map((animation) => animation.ready));
 		const before = {
 			card: box(card),
 			detail: box(detail),
@@ -538,10 +555,10 @@ it('keeps partially entered text continuous and visibly fading inside a note clo
 		await tick();
 		await frames();
 		await expect.poll(() => Boolean(opacityAnimation())).toBe(true);
-		const exiting = opacityAnimation();
+		const exiting = opacityAnimation()!;
 		expect(exiting).toBeDefined();
 		exiting.pause();
-		exiting.currentTime = 0;
+		exiting.time = 0;
 		const closing = animations(stage.container);
 		for (const animation of closing) {
 			animation.pause();
@@ -563,7 +580,7 @@ it('keeps partially entered text continuous and visibly fading inside a note clo
 		}
 		const samples = [];
 		for (const time of [30, 90, 150]) {
-			exiting.currentTime = time;
+			exiting.time = time / 1000;
 			for (const animation of closing) animation.time = time / 1000;
 			await frames();
 			const control = toggle.getBoundingClientRect();
@@ -599,7 +616,7 @@ it('keeps partially entered text continuous and visibly fading inside a note clo
 			JSON.stringify(samples)
 		).toEqual(samples.map(() => before.visibleInside));
 		expect(document.activeElement).toBe(toggle);
-		exiting.finish();
+		exiting.complete();
 		for (const animation of closing) animation.complete();
 		await expect.poll(() => stage.container.querySelector('.detail')).toBeNull();
 		await frames();
@@ -623,24 +640,21 @@ it('keeps partially entered text continuous and visibly fading inside a note clo
 		}
 		const retained = stage.container.querySelector<HTMLElement>('.detail')!;
 		const retainedOpacity = () =>
-			retained
-				.getAnimations()
-				.find((animation) =>
-					(animation.effect as KeyframeEffect)
-						.getKeyframes()
-						.some((keyframe) => keyframe.opacity !== undefined)
-				)!;
+			visualElementStore.get(retained)?.getValue('opacity')?.animation as
+				AnimationPlaybackControls | undefined;
 		await expect.poll(() => Boolean(retainedOpacity())).toBe(true);
-		retainedOpacity().pause();
-		retainedOpacity().currentTime = 90;
+		retainedOpacity()!.pause();
+		retainedOpacity()!.time = 0.09;
 		await frames();
 		expect(box(card).width).toBeGreaterThan(collapsed.width + 8);
 		expect(box(card).width).toBeLessThan(302);
+		retainedOpacity()!.play();
+		await Promise.all(retained.getAnimations().map((animation) => animation.ready));
 		toggle.click();
 		await tick();
 		await expect.poll(() => Boolean(retainedOpacity())).toBe(true);
-		retainedOpacity().pause();
-		retainedOpacity().currentTime = 90;
+		retainedOpacity()!.pause();
+		retainedOpacity()!.time = 0.09;
 		for (const animation of animations(stage.container)) animation.pause();
 		await frames();
 		expect(Number(getComputedStyle(retained).opacity)).toBeGreaterThan(0);

@@ -49,6 +49,7 @@
 				><span class="sr-only">Search examples</span><span aria-hidden="true">⌕</span><input
 					disabled={!ready}
 					type="search"
+					name="example-search"
 					bind:value={query}
 					placeholder="Find an example…"
 				/></label

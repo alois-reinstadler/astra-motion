@@ -555,7 +555,7 @@ export const coreDocs: DocPage[] = [
 				id: 'native-bindings',
 				title: 'Compatibility and existing markup',
 				text: [
-					'Direct animation props are the primary API. The existing motion={{ ... }} object remains supported; defined direct props take precedence over each matching object option. Native form bindings such as bind:value, bind:checked and bind:group use the compiled tag components. Keep the input type and generic Motion as tag stable while mounted.',
+					'Direct animation props are the primary API. The existing motion={{ ... }} object remains supported; defined direct props take precedence over each matching object option. Native value bindings such as bind:value and bind:checked use the compiled tag components. For bind:group, use native inputs with createMotion so Svelte owns the group in one component. Keep the input type and generic Motion as tag stable while mounted.',
 					'For an existing native element, createMotion(() => options) returns props, transition, animate, stop, update and child. Spread props and add transition:binding.transition|global for native removal. These lower-level bindings retain their earlier finite native-transition and reduced-motion defaults; migration guidance lists the differences from primary motion components.'
 				],
 				aliases: ['component-props', 'components', 'api'],

@@ -65,7 +65,7 @@ A similarly named registry package should not be assumed to be this project.
 | [Gestures](https://alois-reinstadler.github.io/astra-motion/docs/gestures)           | Hover, tap, focus, pan, viewport, drag and controls                                                   |
 | [Components](https://alois-reinstadler.github.io/astra-motion/docs/motion)           | motion, AnimateActivity, AnimatePresence, AnimateView, LayoutGroup, LazyMotion, MotionConfig, Reorder |
 | [Motion Values](https://alois-reinstadler.github.io/astra-motion/docs/motion-values) | Values, templates, events, scroll, springs, time, transforms and velocity                             |
-| [Helpers](https://alois-reinstadler.github.io/astra-motion/docs/use-animate)         | Scoped animation, frame callbacks, drag controls, in-view/page visibility and reduced motion          |
+| [Hooks](https://alois-reinstadler.github.io/astra-motion/docs/use-animate)           | Scoped animation, frame callbacks, drag controls, in-view/page visibility and reduced motion          |
 | [Guides](https://alois-reinstadler.github.io/astra-motion/docs/getting-started)      | Getting started, accessibility, bundle size and text animation                                        |
 
 Each reference has an interactive example with its canonical complete Svelte source.
@@ -84,7 +84,7 @@ observable behavior, evidence and precise differences. The
   and pauses Astra-owned work while hidden. `useActivityEffect` opts application effects
   into cleanup/restart. Ordinary Svelte effects remain active. See the
   [Activity lifecycle contract](https://alois-reinstadler.github.io/astra-motion/docs/animate-activity#svelte-lifecycle)
-  for this approved Svelte adaptation.
+  for this Svelte adaptation.
 - `AnimateView` registers snapshot boundaries. `startViewTransition` coordinates normal
   state changes, including async updates; `viewTransitionsForNavigation` integrates
   SvelteKit navigation through a separate entry. Unsupported browsers still apply state.
@@ -94,8 +94,9 @@ observable behavior, evidence and precise differences. The
 - A live MotionValue text child uses `children={value}`. An ordinary Svelte `{value}`
   interpolation remains a snippet and does not subscribe to that value.
 
-The upstream AnimateActivity/AnimateView contracts are experimental Motion+ references.
-Their Svelte lifecycle and fallback contracts are documented explicitly. Projection
+The 27 September 2026 reference baseline records AnimateActivity as a Motion+ alpha
+and AnimateView as a public separate Motion entry. Astra documents their Svelte
+lifecycle and fallback contracts explicitly. Projection
 uses upstream exports that require qualification on every dependency update. Native
 View Transitions depend on browser support. Physical-device performance, animated
 external 3D transforms and perspective are not general guarantees.

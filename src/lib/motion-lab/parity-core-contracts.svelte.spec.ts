@@ -1,7 +1,6 @@
 import { flushSync, tick } from 'svelte';
 import { expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
-import { visualElementStore } from 'motion-dom';
 import Fixture from './ParityCoreContracts.svelte';
 const node = (name: string) => document.querySelector<HTMLElement>(`[data-${name}]`)!;
 const x = (element: Element) => new DOMMatrix(getComputedStyle(element).transform).m41;
@@ -72,9 +71,11 @@ it('reactively reduces positional targets while allowing paint animation to fini
 	await frames();
 	flushSync(() => component.changePolicy());
 	await expect.poll(() => x(node('policy'))).toBe(100);
-	const visual = visualElementStore.get(node('policy'))!;
-	expect(visual.shouldReduceMotion).toBe(true);
-	expect(visual.getValue('opacity')?.isAnimating()).toBe(true);
+	// Position reaches its reduced-motion target before paint reaches its endpoint.
+	await expect
+		.poll(() => Number(getComputedStyle(node('policy')).opacity), { interval: 10 })
+		.toBeLessThan(1);
+	expect(Number(getComputedStyle(node('policy')).opacity)).toBeGreaterThan(0.3);
 	await expect.poll(() => Number(getComputedStyle(node('policy')).opacity)).toBe(0.3);
 });
 

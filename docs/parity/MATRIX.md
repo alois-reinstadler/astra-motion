@@ -3,8 +3,9 @@
 Latest example qualification: [phone feedback and performance evidence](PHONE-FEEDBACK.md)
 records list/grid content correction, continuous note collapse, and independent
 shared View artwork/title snapshots. The [containment follow-up](PHONE-CONTAINMENT.md)
-adds transient scroll and outgoing text checks, and records the remaining
-simultaneous ancestor-resize/popLayout capture limitation. Physical iPhone
+adds transient scroll and outgoing text checks. The subsequent
+[runtime capture follow-up](POP-RESIZE.md) addresses simultaneous ancestor resize
+for observed roots and explicit transactions, with stated boundaries. Physical iPhone
 performance remains unqualified.
 
 Follow-up: [Activity, View types and difficult geometry](PARITY-NEXT.md) records

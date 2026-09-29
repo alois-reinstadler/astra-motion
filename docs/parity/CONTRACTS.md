@@ -31,11 +31,15 @@ to sync; existing `Presence` retains its wait default. Modes include sync/wait/p
 Nested boundaries shield exits unless propagate is true. Dynamic custom values,
 manual removal and re-entry are generation-scoped.
 
-Known capture gap: when the same update resizes an ancestor, `popLayout` can
-measure the outgoing root after it has reflowed. It does not guarantee the old
-box in that composition. The [phone containment follow-up](PHONE-CONTAINMENT.md)
-records the reproduction and the canonical note's explicit fade-then-collapse
-solution; this remains a general runtime parity limitation.
+`AnimatePresence` popLayout and `AnimateActivity` pop exits retain the last
+observed present box. A synchronous `updateLayout` captures it immediately before
+the state change. Managed flow removal runs in a microtask after the Svelte flush,
+before the next animation frame. See [runtime capture qualification](POP-RESIZE.md).
+The containing block must stay the same; newly mounted/unmeasured roots fall back
+to live measurement. Automatic capture cannot recover an unobserved intermediate
+layout between consecutive synchronous mutations: use `updateLayout` for that case.
+Preserving an exit box does not keep it inside a shrinking clip boundary; the
+canonical note still sequences its fade and collapse for readable containment.
 
 Internal bridge (`presence-context.svelte.ts`):
 

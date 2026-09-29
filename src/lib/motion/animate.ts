@@ -17,7 +17,11 @@ import type { Attachment } from 'svelte/attachments';
 import { readMotionConfig, observeMotionConfig, observeMotionPreference } from './config.js';
 import { shouldReduceMotion, type MotionPolicy } from './policy.js';
 import { claimMotionOwnership } from './ownership.js';
-import { completeMotionPlayback, prepareMotionHandoff } from './motion-compat.js';
+import {
+	completeMotionPlayback,
+	prepareMotionHandoff,
+	stopMotionPlayback
+} from './motion-compat.js';
 import { observeAnimatePolicy } from './animate-policy.svelte.js';
 
 export type ScopedTarget = string | Element | Iterable<Element>;
@@ -173,7 +177,7 @@ export function createAnimate(policy: MotionPolicy | (() => MotionPolicy) = {}):
 						const detach = detachTimeline;
 						detachTimeline = undefined;
 						detach();
-					} else native.stop();
+					} else stopMotionPlayback(native);
 				} finally {
 					run.release();
 					settle({ status: 'cancelled', reason });

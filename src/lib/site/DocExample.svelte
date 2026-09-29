@@ -3,7 +3,7 @@
 	import ExamplePreview from './ExamplePreview.svelte';
 	import DocCode from './DocCode.svelte';
 	import type { LiveExample } from './examples.js';
-	let { example }: { example: LiveExample } = $props();
+	let { example, defer = false }: { example: LiveExample; defer?: boolean } = $props();
 	let revision = $state(0);
 	let ready = $state(false);
 	let sourceOpen = $state(false);
@@ -17,11 +17,29 @@
 		};
 	}
 	onMount(() => {
-		ready = true;
+		if (!defer) ready = true;
 	});
+	function preparePreview(node: HTMLElement) {
+		if (!defer) return;
+		if (typeof IntersectionObserver === 'undefined') {
+			ready = true;
+			return;
+		}
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries.some((entry) => entry.isIntersecting)) {
+					ready = true;
+					observer.disconnect();
+				}
+			},
+			{ rootMargin: '100px' }
+		);
+		observer.observe(node);
+		return () => observer.disconnect();
+	}
 </script>
 
-<div class="example" data-example={example.id}>
+<div class="example" data-example={example.id} {@attach preparePreview}>
 	<div class="preview-heading">
 		<span><i aria-hidden="true"></i> {example.title}</span>
 		<button
@@ -56,12 +74,18 @@
 		<summary><span>Complete source</span><span class="filename">{example.filename}</span></summary>
 		{#if sourceOpen}
 			<DocCode source={example.source} label={example.filename} />
+			{#each example.additionalSources ?? [] as file (file.filename)}
+				<DocCode source={file.source} label={file.filename} />
+			{/each}
 		{/if}
 		<noscript>
 			<!-- svelte-ignore a11y_no_noninteractive_tabindex (Keyboard users need to scroll the source without JavaScript.) -->
 			<pre role="region" aria-label={`${example.filename} source`} tabindex="0"><code
 					>{example.source}</code
 				></pre>
+			{#each example.additionalSources ?? [] as file (file.filename)}
+				<pre><code>{file.filename + '\n\n' + file.source}</code></pre>
+			{/each}
 		</noscript>
 	</details>
 </div>

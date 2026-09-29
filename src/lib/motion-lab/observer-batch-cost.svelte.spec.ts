@@ -101,3 +101,57 @@ it('acknowledges explicit style changes before filtering later owned animation w
 		f.dispose();
 	}
 });
+
+for (const boxSizing of ['content-box', 'border-box'])
+	for (const writingMode of ['horizontal-tb', 'vertical-rl'])
+		it(`acknowledges fractional ${boxSizing} sizes in ${writingMode} without suppressing later CSS-only resizes`, async () => {
+			const f = fixture(1);
+			const style = document.createElement('style');
+			style.textContent = `.observer-fractional { width: 30.109375px !important; height: 42.375px !important; box-sizing: ${boxSizing}; writing-mode: ${writingMode}; padding: 2.25px; border: 1px solid; }`;
+			document.head.append(style);
+			f.nodes[0].className = 'observer-fractional';
+			const frames = async () => {
+				for (let i = 0; i < 3; i++) await new Promise(requestAnimationFrame);
+			};
+			try {
+				await frames();
+				f.batches.length = 0;
+				const rule = style.sheet!.cssRules[0] as CSSStyleRule;
+				// CSSOM edits emit no DOM mutation record, isolating ResizeObserver.
+				rule.style.setProperty('width', '40.109375px', 'important');
+				f.observer.acknowledge();
+				await frames();
+				expect(f.batches).toHaveLength(0);
+				rule.style.setProperty('width', '50.609375px', 'important');
+				await expect.poll(() => f.batches.length).toBeGreaterThan(0);
+				expect(f.batches.at(-1)).toEqual(new Set(f.nodes));
+				// Gecko quantizes CSS dimensions to 1/60px; preserve fractional sizing
+				// without requiring Blink's 1/64px layout grid.
+				expect(Math.abs(parseFloat(getComputedStyle(f.nodes[0]).width) - 50.609375)).toBeLessThan(
+					0.02
+				);
+			} finally {
+				f.dispose();
+				style.remove();
+			}
+		});
+
+// WebKit enumerates transform-origin as three longhands in CSSStyleDeclaration.
+it('ignores projection transform-origin writes while retaining later authored size invalidation', async () => {
+	const f = fixture(2);
+	try {
+		f.nodes[0].style.transformOrigin = '25% 75% 3px';
+		f.nodes[0].style.transform = 'scale(1.5)';
+		await microtasks();
+		expect(f.batches).toHaveLength(0);
+		f.nodes[0].style.transformOrigin = '75% 25% 0px';
+		await microtasks();
+		expect(f.batches).toHaveLength(0);
+		f.nodes[0].style.width = '30px';
+		await microtasks();
+		expect(f.batches).toHaveLength(1);
+		expect(f.batches[0]).toEqual(new Set(f.nodes));
+	} finally {
+		f.dispose();
+	}
+});

@@ -45,6 +45,7 @@
 	import { provideActivityState, readActivityState } from './activity-scope.js';
 	import { popPresenceNodes } from './presence-pop.js';
 	import { readMotionConfig } from './config.js';
+	import { observePresenceBoxes, type PresenceBox } from './presence-measure.js';
 
 	let {
 		mode = 'visible',
@@ -112,6 +113,15 @@
 		}
 	);
 	providePresenceScope(scope);
+	const boxes = new WeakMap<HTMLElement, PresenceBox>();
+	function trackPopBoxes() {
+		if (layoutMode !== 'pop' || !present) return;
+		// Reading the registrations also refreshes display:contents roots as children mount.
+		const nodes = [...scope.nodes];
+		const roots = ref ? [ref] : nodes;
+		return untrack(() => observePresenceBoxes(roots, boxes, () => present && !restorePop));
+	}
+	$effect(trackPopBoxes);
 	// Only the first mounted subtree inherits initial=false. Later descendants
 	// can enter, including those introduced while this retained boundary is hidden.
 	onMount(() => {
@@ -138,7 +148,8 @@
 				restorePop = undefined;
 			} else if (phase !== 'hidden') {
 				phase = 'exiting';
-				if (pop && !restorePop) restorePop = popPresenceNodes(ref ? [ref] : scope.nodes, options);
+				if (pop && !restorePop)
+					restorePop = popPresenceNodes(ref ? [ref] : scope.nodes, options, boxes);
 			}
 			if (!pop) {
 				restorePop?.();

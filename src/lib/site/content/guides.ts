@@ -255,7 +255,7 @@ export const guidesDocs: DocPage[] = [
 				id: 'measurements',
 				title: 'Measure Astra’s output',
 				text: [
-					'These measurements come from independent production applications installed from release 93f06a3’s packed package on 28 September 2026, using Svelte 5.57.0, Vite 8.2.2 and Rolldown 1.2.11. They include Svelte and each fixture’s bootstrap code. They describe complete example applications, not library-only sizes.',
+					'These measurements come from independent production applications installed from commit 93f06a3’s packed package on 28 September 2026, using Svelte 5.57.0, Vite 8.2.2 and Rolldown 1.2.11. They include Svelte and each fixture’s bootstrap code. They describe complete example applications, not library-only sizes.',
 					'Each application counts its initial shared chunks once. Compressed totals sum separately compressed HTTP assets. Deferred bytes are requested when the feature loader runs; do not add figures from separate applications. The recorded module graphs verify that basic features exclude pan, drag and layout projection, while mini excludes the hybrid sequence engine.',
 					'Use the repository’s bundle and installed-consumer checks to reproduce the measurements. Compare the same bundler, minifier, compression settings and shared dependencies. A docs page containing many live examples naturally imports more features than an isolated component.'
 				],
@@ -281,7 +281,7 @@ export const guidesDocs: DocPage[] = [
 				title: 'Budget layout work as well as downloads',
 				text: [
 					'Lazy loading reduces initial download and parsing; it does not make an active layout animation cheaper. Animate transforms and opacity for continuous gestures, give projected text its own layout="position" boundary, and keep the number of simultaneously measured layout elements small.',
-					'The current package’s desktop production benchmark found a real large-grid limit. Across three trials per configuration at normal CPU speed, automatic layout had a median p95 frame interval of 16.7 ms for 100 cells and 100 ms for 500 cells; explicit layout measured 49.9 ms for 500 cells. This used Linux Chromium on a Xeon E3-1275 v5 with software rendering. It is not an iPhone or Safari frame-rate guarantee. All 18 trials settled correctly with zero geometry/style reads in the measured idle windows.',
+					'The recorded desktop production benchmark found a real large-grid limit. Across three trials per configuration at normal CPU speed, automatic layout had a median p95 frame interval of 16.7 ms for 100 cells and 100 ms for 500 cells; explicit layout measured 49.9 ms for 500 cells. This used Linux Chromium on a Xeon E3-1275 v5 with software rendering. It is not an iPhone or Safari frame-rate guarantee. All 18 trials settled correctly with zero geometry/style reads in the measured idle windows.',
 					'Profile your production build on the target phone, including interrupted animations, scrolling and reduced motion. For large collections, window the visible items, reduce simultaneous layout changes, or use an explicit layout transaction when you control the update. Preserve readable content and usable controls when motion is reduced.'
 				],
 				related: ['layout', 'accessibility']

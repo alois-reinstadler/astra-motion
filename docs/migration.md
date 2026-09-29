@@ -44,7 +44,7 @@ the exit generation that started the work.
 `AnimateActivity` stays mounted while `mode` changes. Child state and DOM survive;
 Astra-owned work pauses only after exits complete and the phase becomes hidden.
 Ordinary Svelte effects remain active. Replace an effect that should stop while hidden
-with `useActivityEffect(() => { ...; return cleanup; })`. This approved adaptation does
+with `useActivityEffect(() => { ...; return cleanup; })`. This Svelte adaptation does
 not claim to suspend third-party effects or change Svelte scheduler priorities.
 Borrowed MotionValues retain their external playback owner; reading one inside a
 hidden panel does not pause playback used elsewhere. See the

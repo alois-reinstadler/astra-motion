@@ -11,7 +11,7 @@ or `transition:slide`. When new markup needs Astra capabilities, start with
 Use `createMotion` when an existing native element or component owns the markup. These
 complete recipes are also available with copy buttons and links to live scenarios
 at [/motion-lab/guide](/motion-lab/guide). This is a beta adapter over pinned Motion
-13.4.3; see the [upgrade qualification](research/motion-upgrade-13.4.md).
+13.4.4; see the [release checklist](release-checklist.md) for the current engine pins.
 
 ## Install a local build
 
@@ -22,14 +22,19 @@ with the generated archive. The package includes one qualified DOM-only Motion
 engine; no app overrides or separate Motion installation are required, and strict
 declarations are checked with
 `skipLibCheck: false`.
-Svelte 5.57.0 or newer within Svelte 5 is a peer dependency. Only the routes entry
-requires SvelteKit (2.70.3 or newer within Kit 2).
+Svelte 5.57.0 or newer within Svelte 5 is a peer dependency. Only the `routes` and
+`view-navigation` entries require SvelteKit (2.70.3 or newer within Kit 2).
 
 Package imports in this guide refer to that local build. The public site’s
 Getting started guide includes the same installation path. See the
-[current scope and release work](research/motion-focus.md) before adopting it.
+[current project status](https://alois-reinstadler.github.io/astra-motion/status) before adopting it.
 
 ## Choose an authoring path
+
+The table below includes the supported compatibility controllers used by this guide’s
+recipes. For new code, the primary references also cover `AnimatePresence`,
+`LayoutGroup`, `useAnimate`, `useScroll`, `useInView` and `AnimateView`. See the
+[migration guide](migration.md) when moving between these contracts.
 
 | Need                                                             | Start with                                                             |
 | ---------------------------------------------------------------- | ---------------------------------------------------------------------- |
@@ -755,7 +760,8 @@ Keyed DOM order also cannot be inferred from setup callback order; see
 Keep root imports while authoring. For a measured bundle need, `/state/lite` exposes
 the same `createMotion` contract without layout or gestures; `/state` retains those
 capabilities. Other focused entries are `/layout`, `/presence`, `/values`, `/animate`,
-`/scroll`, `/in-view` and `/policy`. `/routes` stays separate because it requires Kit.
+`/scroll`, `/in-view` and `/policy`. `/routes` and `/view-navigation` stay separate
+because they require Kit.
 No compiler plugin is needed.
 
 Create MotionValues through `astra-motion` or `astra-motion/values`, which share the

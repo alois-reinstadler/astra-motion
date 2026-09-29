@@ -1,4 +1,4 @@
-import { onDestroy, untrack } from 'svelte';
+import { flushSync, onDestroy, untrack } from 'svelte';
 import {
 	attachSpring,
 	cancelFrame,
@@ -50,7 +50,13 @@ function deriveValue<T>(compute: () => T, accelerate?: () => AccelerateConfig | 
 	let revision = $state(0);
 	let subscriptions: { input: MotionValue; stop: () => void }[] = [];
 	let live = false;
-	const invalidate = () => revision++;
+	const invalidate = () => {
+		if (!live) return;
+		// Motion renders immediately after preRender. Flush the tracked computation
+		// here so derived DOM values share the sources' frame, while Svelte still
+		// recollects reactive/conditional dependencies inside its owning effect.
+		flushSync(() => revision++);
+	};
 	const schedule = () => frame.preRender(invalidate, false, true);
 	const cleanup = () => {
 		live = false;

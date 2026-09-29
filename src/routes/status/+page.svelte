@@ -13,7 +13,8 @@
 		<div>
 			<ul>
 				<li>
-					Animate reactive targets with initial, animate and exit states, variants and MotionValues.
+					Animate reactive targets with initial, animate and exit states, variants and motion
+					values.
 				</li>
 				<li>
 					Coordinate conditional and keyed exits, retained Activity panels, automatic layout changes
@@ -21,7 +22,7 @@
 				</li>
 				<li>
 					Add hover, tap, focus, pan, constrained dragging and controlled reorder lists or grids.
-					Connect reactive Motion Values to scroll, springs, transforms and timelines.
+					Connect reactive motion values to scroll, springs, transforms and timelines.
 				</li>
 				<li>
 					Animate HTML and SVG, share configuration and load animation features on demand.
@@ -87,8 +88,11 @@
 					<code>skipLibCheck: false</code>; upstream runtime algorithms remain unchanged.
 				</li>
 				<li>
-					Large animated layouts are expensive. A recorded 500-participant workload is slow under
-					CPU throttling, even with explicit layout transactions.
+					Large animated layouts are expensive. The recorded desktop production benchmark found a
+					slowdown with 500 participants even at normal CPU speed. See the
+					<a href={resolve('/docs/[slug]#runtime-cost', { slug: 'reduce-bundle-size' })}
+						>measured layout costs</a
+					> for the workload, results and device limits.
 				</li>
 				<li>
 					AnimatePresence uses explicit keys and snippets. AnimateActivity retains DOM and pauses
@@ -97,13 +101,14 @@
 					documented on their component pages.
 				</li>
 				<li>
-					Static 2D transformed wrappers and nested sticky/scroll/clipping boundaries have
-					regression coverage. Animated wrapper transforms, perspective and 3D layouts remain
-					unqualified.
+					Static transformed wrappers, including 3D and perspective ancestors, and nested
+					sticky/scroll/clipping boundaries have regression coverage for descendant layout changes.
+					Changing camera or wrapper orientation during a transition, edge-on planes and general 3D
+					scene interpolation remain outside the qualified contract.
 				</li>
 			</ul>
 			<p>
-				<a href={resolve('/docs/[slug]', { slug: 'troubleshooting' })}
+				<a href={resolve('/docs/[slug]#troubleshooting', { slug: 'getting-started' })}
 					>Troubleshoot a specific interaction
 				</a>
 			</p>
@@ -117,8 +122,8 @@
 				qualification. There is no release date to plan against yet.
 			</p>
 			<p>
-				For a bug report, include the smallest component that reproduces the problem, your Svelte
-				and Motion versions, the browser, and what happens when the animation is interrupted.
+				For a bug report, include the smallest component that reproduces the problem, your Astra and
+				Svelte versions, the browser, and what happens when the animation is interrupted.
 			</p>
 			<p>
 				<a href="https://github.com/alois-reinstadler/astra-motion/issues"

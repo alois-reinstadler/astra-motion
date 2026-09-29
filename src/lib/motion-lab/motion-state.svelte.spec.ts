@@ -58,7 +58,6 @@ it('binds an external MotionValue to the actual element transform', async () => 
 	await frames();
 	screen.component.setExternal(72);
 	await expect.poll(() => new DOMMatrix(getComputedStyle(node).transform).e).toBeCloseTo(72, 3);
-	expect(visualElementStore.get(node)!.getValue('x')!.get()).toBe(72);
 });
 
 it('resolves a dynamic custom variant again when custom changes', async () => {

@@ -8,6 +8,7 @@ import {
 	setTarget,
 	transformProps,
 	cancelFrame,
+	frame,
 	positionalKeys,
 	type MotionNodeOptions,
 	type MotionStyle,
@@ -295,6 +296,8 @@ function createBinding(
 	let disposed = false;
 	let presenceRegistration: PresenceRegistration | undefined;
 	let presenceGeneration = -1;
+	let presenceExitVersion = 0;
+	let releaseProjectionExit: (() => void) | undefined;
 	let managedExitComplete = false;
 	let activityActive = untrack(isActivityActive);
 	let pausedAnimations: { isPaused(): boolean; resume(): void }[] = [];
@@ -309,6 +312,8 @@ function createBinding(
 		const previous = presenceGeneration;
 		presenceGeneration = snapshot.generation;
 		const current = snapshot.generation;
+		const exitVersion = ++presenceExitVersion;
+		releaseProjectionExit?.();
 		if (element && !isSVGElement(element)) layoutBridge.presence?.(element, snapshot.isPresent);
 		if (snapshot.isPresent && previous === -1) return;
 		if (!snapshot.isPresent && previous === -1 && !isActivityActive()) {
@@ -335,8 +340,57 @@ function createBinding(
 			syncGestures(options());
 		} else {
 			pauseGestures();
-			void state.setActive('exit', true).then(() => {
-				if (disposed || presence?.snapshot.isPresent || presence?.snapshot.generation !== current)
+			// Presence publishes to every registered descendant synchronously. Start after
+			// publication so propagated variants resolve the same current boundary custom.
+			void Promise.resolve().then(async () => {
+				if (disposed || presenceExitVersion !== exitVersion) return;
+				const projection = visual!.projection;
+				const projectedExit = projection?.options.layoutId
+					? new Promise<void>((resolve) => {
+							const previous = projection.options.onExitComplete;
+							const layoutId = projection.options.layoutId;
+							let settled = false;
+							const finish = () => {
+								if (settled) return;
+								settled = true;
+								removeComplete();
+								cancelFrame(checkIdle);
+								if (projection.options.onExitComplete === complete)
+									projection.options.onExitComplete = previous;
+								if (releaseProjectionExit === finish) releaseProjectionExit = undefined;
+								resolve();
+							};
+							const complete = () => {
+								previous?.();
+								finish();
+							};
+							const removeComplete = projection.addEventListener('animationComplete', finish);
+							const checkIdle = () => {
+								// Match MeasureLayout's idle release and include already-completed
+								// instant/reduced-motion shared leads. Keep watching because an exiting
+								// follower can detach its layout binding without unmounting its visual.
+								const lead = projection.getLead();
+								if (
+									disposed ||
+									presenceExitVersion !== exitVersion ||
+									visual?.projection !== projection ||
+									projection.options.layoutId !== layoutId ||
+									(!lead.currentAnimation && !lead.pendingAnimation)
+								)
+									finish();
+							};
+							projection.setOptions({ onExitComplete: complete });
+							releaseProjectionExit = finish;
+							frame.postRender(checkIdle, true);
+						})
+					: Promise.resolve();
+				await Promise.all([state.setActive('exit', true), projectedExit]);
+				if (
+					disposed ||
+					presenceExitVersion !== exitVersion ||
+					presence?.snapshot.isPresent ||
+					presence?.snapshot.generation !== current
+				)
 					return;
 				managedExitComplete = true;
 				presenceRegistration?.complete(current);
@@ -564,7 +618,15 @@ function createBinding(
 		assertTransformOwnership(config, visual);
 		if (element) assertMotionTransformOwnership(element, props(config));
 		syncLayout(config);
-		const previousStyle = (visual.getProps() as MotionOptions).style ?? {};
+		const previousProps = visual.getProps() as MotionNodeOptions & Record<string, unknown>;
+		const nextProps = props(config) as MotionNodeOptions & Record<string, unknown>;
+		if (render.namespace === 'svg') {
+			// Preserve explicit removals when merging with the previous visual props.
+			for (const alias of ['attrX', 'attrY', 'attrScale'] as const) {
+				if (!(alias in nextProps)) nextProps[alias] = undefined;
+			}
+		}
+		const previousStyle = (previousProps as MotionOptions).style ?? {};
 		const nextStyle = config.style ?? {};
 		const styleKeys = new Set([...Object.keys(previousStyle), ...Object.keys(nextStyle)]);
 		const ownedStyleChanged = [...styleKeys].some(
@@ -577,15 +639,39 @@ function createBinding(
 		);
 		visual.update(
 			{
-				...visual.getProps(),
-				...props(config),
+				...previousProps,
+				...nextProps,
 				transformTemplate: config.transformTemplate
 			},
 			presenceContext()
 		);
+		let svgAliasesChanged = false;
+		if (render.namespace === 'svg') {
+			// Motion scrapes attribute MotionValues, but scalar aliases are seeded
+			// only by our initial renderer. Keep their native prop updates live so
+			// the generated binding props cannot overwrite them with an old pose.
+			for (const [alias, attribute] of [
+				['attrX', 'x'],
+				['attrY', 'y'],
+				['attrScale', 'scale']
+			] as const) {
+				const next = nextProps[alias];
+				if (Object.is(next, previousProps[alias]) || isMotionValue(next)) continue;
+				const value = visual.getValue(alias);
+				if (value?.hasAnimated && value.liveStyle !== true) continue;
+				if (typeof next === 'number' || typeof next === 'string') {
+					if (value) value.set(next);
+					else visual.setStaticValue(alias, next);
+				} else if (next === undefined) {
+					visual.removeValue(alias);
+					element?.removeAttribute(attribute);
+				} else continue;
+				svgAliasesChanged = true;
+			}
+		}
 		syncControls(config);
 		if (element && !isSVGElement(element)) layoutBridge.refreshPolicy?.(element);
-		if (ownedStyleChanged) {
+		if (ownedStyleChanged || svgAliasesChanged) {
 			// Replacement/removal can change value ownership without scheduling a frame.
 			// Render that handoff, then let Svelte drop declarations Motion no longer owns.
 			visual.render();
@@ -743,6 +829,7 @@ function createBinding(
 			return () => {
 				if (generation !== version || disposed) return;
 				disposed = true;
+				releaseProjectionExit?.();
 				element = undefined;
 				retainedNode = node;
 				pauseGestures();
@@ -781,6 +868,9 @@ function createBinding(
 		// reduced parent settles directly instead of dispatching Motion animation state.
 		parentSource();
 		const current = snapshotMotionOptions(options());
+		// SVG attributes are separate from MotionOptions. Read them in the owner's
+		// tracked effect, not only in the deferred VisualElement refresh.
+		if (render.namespace === 'svg') render.attributes?.();
 		// Getter refs must be resolved while the owner's effect is tracking.
 		// The queued refresh then replaces the observer when that root changes.
 		resolveElement(current.viewport?.root);
@@ -876,8 +966,11 @@ function createBinding(
 				assertTransformOwnership(config, visual);
 				// Component entry uses Motion's frame loop, including repeats, keyframe resolution
 				// and inherited orchestration. Native Svelte still owns conditional removal.
+				// A retained native exit must reverse through its sampled trajectory below:
+				// the state resolver still remembers the unchanged animate target and would
+				// otherwise leave the component frozen at its interrupted exit pose.
 				if (
-					(render.component && direction === 'in') ||
+					(render.component && direction === 'in' && presenceDirection !== 'out') ||
 					(direction === 'out' && managedExitComplete && !presence?.snapshot.isPresent)
 				) {
 					timeline?.cancel();

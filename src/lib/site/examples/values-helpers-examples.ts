@@ -155,7 +155,19 @@ export const valuesHelpersExamples: Record<string, LiveExample> = Object.fromEnt
 			filename,
 			source: publicExampleSource(source),
 			category:
-				id.includes('scroll') || id.includes('view') ? 'Scroll & timelines' : 'State & gestures',
+				id === 'use-animate' || id.includes('scroll') || id.includes('view')
+					? 'Scroll & timelines'
+					: id === 'motion-values' ||
+						  [
+								'use-motion-template',
+								'use-motion-value-event',
+								'use-spring',
+								'use-time',
+								'use-transform',
+								'use-velocity'
+						  ].includes(id)
+						? 'Motion values'
+						: 'State & gestures',
 			guide: id,
 			anchor: 'usage'
 		}

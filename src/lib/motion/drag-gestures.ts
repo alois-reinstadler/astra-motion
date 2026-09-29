@@ -24,6 +24,7 @@ import type {
 } from './gestures.js';
 import { createGestureSession } from './gesture-session.js';
 import { isComponentMotionVisual } from './animation.js';
+import { observeResizeDrag } from './drag-measurement.js';
 type GestureVisual = HTMLVisualElement | SVGVisualElement;
 type Axis = 'x' | 'y';
 export type DragGestureCleanup = (() => void) & { update?: () => void };
@@ -357,8 +358,16 @@ export function attachDragGestures(
 			let info: PanInfo = { point: initialPoint, delta: zero(), offset: zero(), velocity: zero() };
 			const selectedAxes = () =>
 				direction ? dragAxes().filter((axis) => axis === direction) : dragAxes();
+			let processedFrame = false;
+			const resetProcessFrame = () => {
+				processedFrame = false;
+			};
 			const process = () => {
-				if (released) return;
+				if (released || (processedFrame && !pendingMove)) return;
+				// Projection commits synchronously flush update/render, but not read.
+				// A stationary held drag runs once per frame so reorder/layout updates
+				// cannot recursively replay it. Fresh pointer input still runs immediately.
+				processedFrame = true;
 				pendingMove = false;
 				if (disabled() || (drag && !getOptions().drag)) {
 					finish(latest, true, true);
@@ -456,24 +465,30 @@ export function attachDragGestures(
 				}
 				getOptions().onPan?.(latest, info);
 			};
+			const compensateLayout = (delta: LayoutUpdateData['delta']) => {
+				if (released || !started || !drag) return;
+				for (const axis of dragAxes()) {
+					origin[axis] += delta[axis].translate;
+					const value = visual.getValue(axis, 0);
+					value.set(Number(value.get()) + delta[axis].translate);
+				}
+				visual.render();
+			};
+			const releaseResizeProjection = projection && observeResizeDrag(projection, compensateLayout);
 			const releaseProjection = projection?.addEventListener(
 				'didUpdate',
 				({ delta, hasLayoutChanged }: LayoutUpdateData) => {
-					if (!started || !drag || !hasLayoutChanged) return;
-					for (const axis of dragAxes()) {
-						origin[axis] += delta[axis].translate;
-						const value = visual.getValue(axis, 0);
-						value.set(Number(value.get()) + delta[axis].translate);
-					}
-					visual.render();
+					if (hasLayoutChanged) compensateLayout(delta);
 				}
 			);
 			const finish = (end: PointerEvent, cancelled: boolean, notify: boolean) => {
 				if (released) return;
 				released = true;
 				cancelFrame(process);
+				cancelFrame(resetProcessFrame);
 				sessionAbort.abort();
 				releaseProjection?.();
+				releaseResizeProjection?.();
 				if (projection && started && drag)
 					projection.isAnimationBlocked = previouslyBlocked ?? false;
 				releaseLock?.();
@@ -509,6 +524,7 @@ export function attachDragGestures(
 					if (move.pointerId !== event.pointerId) return;
 					latest = move;
 					pendingMove = true;
+					frame.read(resetProcessFrame, true);
 					frame.update(process, true);
 				},
 				listenerOptions
@@ -517,8 +533,27 @@ export function attachDragGestures(
 				'pointerup',
 				(end) => {
 					if (end.pointerId !== event.pointerId) return;
+					// Legacy bindings consume release coordinates even without a move.
+					// Components consume only coalesced moves: layout may already have
+					// rebased the released item, and pointerup must not emit extra onDrag.
+					if (!isComponentMotionVisual(visual)) {
+						latest = end;
+						pendingMove = true;
+					}
+					if (pendingMove) process();
 					latest = end;
-					process();
+					if (started) {
+						const point = transform(pagePoint(end));
+						info = {
+							...info,
+							point,
+							delta: difference(point, previous),
+							offset: {
+								x: point.x - initialPoint.x + scrollOffset.x,
+								y: point.y - initialPoint.y + scrollOffset.y
+							}
+						};
+					}
 					finish(end, false, true);
 				},
 				listenerOptions
@@ -567,6 +602,7 @@ export function attachDragGestures(
 						scrollOffset.y += delta.y;
 						scrollPositions.set(element, current);
 					}
+					frame.read(resetProcessFrame, true);
 					frame.update(process, true);
 				},
 				listenerOptions

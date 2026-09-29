@@ -44,5 +44,6 @@ window size and shortest sequence of clicks that reproduces it. A short recordin
 is particularly useful for intermediate text/image distortion: a settled screenshot
 often misses it.
 
-The [aftercare report](research/aftercare-and-site.md) separates verified behavior
-from remaining release and browser limitations.
+Use the [project status](https://alois-reinstadler.github.io/astra-motion/status) and
+[current parity matrix](parity/MATRIX.md) for supported scope and qualification.
+The [dated aftercare report](research/aftercare-and-site.md) records an earlier review.

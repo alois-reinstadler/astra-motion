@@ -32,6 +32,59 @@ export function pauseMotionPlayback(
 	}
 }
 
+/** Stop at a held native pose without resampling a paused clock as elapsed wall time. */
+export function stopMotionPlayback(playback: AnimationPlaybackControls): void {
+	if (playback instanceof GroupAnimation) {
+		for (const animation of playback.animations) stopMotionPlayback(animation);
+		return;
+	}
+	if (playback instanceof AsyncMotionValueAnimation) {
+		// Do not resolve pending measurements just to stop their owner.
+		const resolved = (playback as unknown as { _animation?: AnimationPlaybackControls })._animation;
+		// Only pre-stop the affected native case. Async.stop owns JS teardown and
+		// its callbacks; calling JS.stop twice can sample its MotionValue twice.
+		if (
+			resolved instanceof NativeAnimationExtended &&
+			resolved.state === 'paused' &&
+			!resolved.options.pseudoElement
+		)
+			stopMotionPlayback(resolved);
+		playback.stop();
+		return;
+	}
+	if (
+		playback instanceof NativeAnimationExtended &&
+		playback.state === 'paused' &&
+		!playback.options.pseudoElement
+	) {
+		// 13.4.4's native stop samples time.now() - startTime. A paused WAAPI
+		// animation has no startTime, so a held seek would jump to its endpoint.
+		// Commit the actual held effect, then make native stop take its idle path.
+		const { motionValue, ...options } = playback.options;
+		const heldTime = playback.time;
+		// The same version-qualified native handle is used by handoff below.
+		const handle = (playback as unknown as { animation: Animation }).animation;
+		if (options.element?.isConnected) handle.commitStyles?.();
+		playback.cancel();
+		playback.stop();
+		if (motionValue) {
+			const sample = new JSAnimation({
+				...options,
+				autoplay: false,
+				onPlay: undefined,
+				onStop: undefined,
+				onUpdate: undefined,
+				onComplete: undefined
+			});
+			const value = sample.sample(heldTime * 1000).value;
+			sample.stop();
+			motionValue.setWithVelocity(value, value, 1);
+		}
+		return;
+	}
+	playback.stop();
+}
+
 /** Complete the original playback, including WAAPI loops and playback frozen at speed zero. */
 export function completeMotionPlayback(playback: AnimationPlaybackControls): void {
 	if (playback instanceof GroupAnimation) {

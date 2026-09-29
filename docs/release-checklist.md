@@ -41,7 +41,7 @@ The distributable includes one DOM-only engine: motion-dom 13.4.4, the framer-mo
 13.4.4 DOM entry, and motion-utils 13.3.0. These are exact build dependencies, not ranges for
 consumer package managers to resolve. The qualification app has no Motion overrides
 or direct Motion dependencies. Svelte is the required peer; Kit is optional unless
-the routes entry is used.
+the `routes` or `view-navigation` entry is used.
 
 `package-motion-engine.mjs` preserves the upstream ESM boundaries and licenses,
 rewrites imports to one packaged engine and records version/source-hash provenance.

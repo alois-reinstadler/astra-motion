@@ -4,6 +4,7 @@
 	import DocCode from './DocCode.svelte';
 	import DocExample from './DocExample.svelte';
 	import { getExample } from './examples.js';
+	import { getSnippetPreview } from './snippet-previews.js';
 	let { doc }: { doc: DocPage } = $props();
 	const index = $derived(docs.findIndex((entry) => entry.slug === doc.slug));
 	const previous = $derived(docs[index - 1]);
@@ -27,6 +28,7 @@
 		</header>
 		{#each doc.sections as section (section.id)}
 			{@const example = getExample(section.example ?? '')}
+			{@const snippetPreview = getSnippetPreview(doc, section)}
 			<section id={section.id}>
 				{#each section.aliases ?? [] as alias (alias)}<span
 						id={alias}
@@ -63,7 +65,11 @@
 						</table>
 					</div>
 				{/if}
-				{#if section.code}<DocCode source={section.code.source} label={section.code.label} />{/if}
+				{#if snippetPreview}
+					<DocExample example={snippetPreview} defer />
+				{:else if section.code}
+					<DocCode source={section.code.source} label={section.code.label} />
+				{/if}
 				{#if example}
 					<DocExample {example} />
 				{/if}

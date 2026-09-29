@@ -5,15 +5,17 @@
 <div class="demo">
 	<LayoutGroup id="field-notes">
 		<motion.details layout class="panel">
-			<summary>What should move?</summary>
-			<p>Let layout connect the size and position changes that your CSS already describes.</p>
+			<motion.summary layout="position">What should move?</motion.summary>
+			<motion.p layout="position"
+				>Let layout connect the size and position changes that your CSS already describes.</motion.p
+			>
 		</motion.details>
 		<motion.details layout class="panel">
-			<summary>What stays native?</summary>
-			<p>
+			<motion.summary layout="position">What stays native?</motion.summary>
+			<motion.p layout="position">
 				These details elements keep their own open state, keyboard behavior, and semantics. The
 				sibling moves when either one expands.
-			</p>
+			</motion.p>
 		</motion.details>
 	</LayoutGroup>
 	<p class="hint">Open each panel independently. The group adds no wrapper element.</p>
@@ -33,16 +35,17 @@
 		background: #fffdf7;
 		overflow: hidden;
 	}
-	summary {
+	.demo :global(summary) {
 		padding: 17px;
 		font-size: 13px;
 		cursor: pointer;
 	}
-	summary:focus-visible {
+	.demo :global(summary:focus-visible) {
 		outline: 2px solid #bc3c21;
 		outline-offset: -4px;
 	}
-	p {
+	.demo :global(.panel p),
+	.hint {
 		margin: 0;
 		padding: 0 17px 18px;
 		color: #62695a;
