@@ -1,21 +1,31 @@
 <script lang="ts">
 	import { AnimatePresence, motion } from '$lib/motion/index.js';
 	let expanded = $state(false);
-	let reserveSpace = $state(false);
+	let card = $state<HTMLElement | null>(null);
+	let exitSize = $state<{ width: number; height: number }>();
 	function toggle() {
+		if (expanded && card) {
+			// A close can interrupt expansion: hold the currently painted size, not its destination.
+			const { width, height } = card.getBoundingClientRect();
+			exitSize = { width, height };
+		} else exitSize = undefined;
 		expanded = !expanded;
-		if (expanded) reserveSpace = true;
 	}
 	function finishExit() {
-		if (!expanded) reserveSpace = false;
+		if (!expanded) exitSize = undefined;
 	}
 </script>
 
 <div class="demo">
 	<motion.article
+		bind:ref={card}
 		class="card"
 		layout
-		style={{ width: reserveSpace ? 310 : 230, borderRadius: 10 }}
+		style={{
+			width: expanded ? 310 : (exitSize?.width ?? 230),
+			height: exitSize?.height,
+			borderRadius: 10
+		}}
 		transition={{ layout: { type: 'spring', stiffness: 320, damping: 30 } }}
 	>
 		<motion.div layout="position" class="content">
@@ -50,6 +60,7 @@
 	}
 	.demo :global(.card) {
 		position: relative;
+		overflow: clip;
 		max-width: 100%;
 		box-sizing: border-box;
 		padding: 23px;
