@@ -149,34 +149,98 @@ test('removes cards from flow during filter exits and restores current keyed car
 	const card = page.getByTestId('component-card-2');
 	await card.scrollIntoViewIfNeeded();
 	await expect(card).toHaveCSS('opacity', '1', { timeout: 1000 });
-	const result = await card.evaluate(async (original) => {
+	const result = await card.evaluate((original) => {
+		const grid = document.querySelector<HTMLElement>('[data-testid="component-grid"]')!;
 		const button = (id: string) =>
 			document.querySelector<HTMLButtonElement>(`[data-testid="component-${id}"]`)!;
-		const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-		button('filter').click();
-		const deadline = performance.now() + 1000;
-		while (original.style.position !== 'absolute' && performance.now() < deadline) await wait(16);
-		const positionDuringExit = original.style.position;
-		const retainedDuringExit =
-			document.querySelector('[data-testid="component-card-2"]') === original;
-		button('reorder').click();
-		await wait(0); // Let Svelte commit the reorder before reversing the filter.
-		button('filter').click();
-		await wait(600);
-		return {
-			positionDuringExit,
-			retainedDuringExit,
-			retainedAfterReversal:
-				document.querySelector('[data-testid="component-card-2"]') === original,
-			positionAfterReversal: original.style.position,
-			count: document.querySelectorAll('[data-testid^="component-card-"]').length,
-			ids: [...document.querySelector('[data-testid="component-grid"]')!.children].map((node) =>
-				node.getAttribute('data-testid')
-			)
-		};
+		const ids = () => [...grid.children].map((node) => node.getAttribute('data-testid'));
+		return new Promise<{
+			positionDuringExit: string;
+			retainedDuringExit: boolean;
+			reorderedIds: string[];
+			retainedWhenReversing: boolean;
+			retainedAfterReversal: boolean;
+			positionAfterReversal: string;
+			count: number;
+			ids: (string | null)[];
+		}>((resolve, reject) => {
+			let phase: 'exiting' | 'reordering' | 'restoring' = 'exiting';
+			let positionDuringExit = '';
+			let retainedDuringExit = false;
+			let reorderedIds: string[] = [];
+			let retainedWhenReversing = false;
+			let restoringStarted = false;
+			const cleanup = () => {
+				clearTimeout(timeout);
+				observer.disconnect();
+				original.removeEventListener('introstart', onIntroStart);
+				original.removeEventListener('introend', onIntroEnd);
+			};
+			const fail = (error: unknown) => {
+				cleanup();
+				reject(error);
+			};
+			const onIntroStart = () => {
+				if (phase === 'restoring') restoringStarted = true;
+			};
+			const onIntroEnd = () => {
+				if (phase !== 'restoring' || !restoringStarted) return;
+				queueMicrotask(() => {
+					cleanup();
+					resolve({
+						positionDuringExit,
+						retainedDuringExit,
+						reorderedIds,
+						retainedWhenReversing,
+						retainedAfterReversal:
+							grid.querySelector('[data-testid="component-card-2"]') === original,
+						positionAfterReversal: original.style.position,
+						count: grid.querySelectorAll('[data-testid^="component-card-"]').length,
+						ids: ids()
+					});
+				});
+			};
+			const observer = new MutationObserver(() => {
+				try {
+					if (!grid.contains(original)) throw new Error(`Original card detached while ${phase}`);
+					if (phase === 'exiting' && original.style.position === 'absolute') {
+						positionDuringExit = original.style.position;
+						retainedDuringExit =
+							grid.querySelector('[data-testid="component-card-2"]') === original;
+						phase = 'reordering';
+						button('reorder').click();
+					} else if (phase === 'reordering') {
+						const flowingIds = [...grid.children]
+							.filter((node) => (node as HTMLElement).style.position !== 'absolute')
+							.map((node) => node.getAttribute('data-testid')!);
+						if (flowingIds.join(',') !== 'component-card-5,component-card-3,component-card-1')
+							return;
+						// Observe the committed reorder, then reverse in this same microtask checkpoint.
+						reorderedIds = flowingIds;
+						retainedWhenReversing =
+							original.style.position === 'absolute' && grid.contains(original);
+						if (!retainedWhenReversing) throw new Error('Card stopped exiting before reversal');
+						phase = 'restoring';
+						button('filter').click();
+					}
+				} catch (error) {
+					fail(error);
+				}
+			});
+			const timeout = setTimeout(
+				() => fail(new Error(`Card reversal stalled while ${phase}`)),
+				5000
+			);
+			observer.observe(grid, { childList: true, subtree: true, attributes: true });
+			original.addEventListener('introstart', onIntroStart);
+			original.addEventListener('introend', onIntroEnd);
+			button('filter').click();
+		});
 	});
 	expect(result.positionDuringExit).toBe('absolute');
 	expect(result.retainedDuringExit).toBe(true);
+	expect(result.reorderedIds).toEqual([5, 3, 1].map((id) => `component-card-${id}`));
+	expect(result.retainedWhenReversing).toBe(true);
 	expect(result.retainedAfterReversal).toBe(true);
 	expect(result.positionAfterReversal).toBe('');
 	expect(result.count).toBe(6);

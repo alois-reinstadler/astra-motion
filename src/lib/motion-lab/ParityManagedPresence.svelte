@@ -10,6 +10,7 @@
 		onComplete,
 		onAnimationStart,
 		onAnimationComplete,
+		onDescendantAnimationComplete,
 		onUpdate
 	}: {
 		initial?: boolean;
@@ -19,6 +20,7 @@
 		onComplete?: () => void;
 		onAnimationStart?: (target: unknown) => void;
 		onAnimationComplete?: (target: unknown) => void;
+		onDescendantAnimationComplete?: (target: unknown) => void;
 		onUpdate?: (values: Record<string, unknown>) => void;
 	} = $props();
 	let visible = $state(untrack(() => !initiallyHidden));
@@ -99,6 +101,7 @@
 						>{/if}
 					<motion.span
 						data-managed-descendant
+						onAnimationComplete={onDescendantAnimationComplete}
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
 						exit={{ opacity: 0 }}

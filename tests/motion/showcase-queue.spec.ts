@@ -52,30 +52,137 @@ test('keeps text and photographs proportional during density changes and repeate
 test('removes during a reorder, immediately reflows, and undoes on the retained native node', async ({
 	page
 }) => {
-	const result = await page.getByTestId('publishing-queue').evaluate(async (desk) => {
-		const frame = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
-		const row = desk.querySelector<HTMLElement>('[data-queue-item]')!;
+	const result = await page.getByTestId('publishing-queue').evaluate((desk) => {
+		const rows = () => [...desk.querySelectorAll<HTMLElement>('[data-queue-item]')];
+		const row = rows()[0];
 		const id = row.dataset.queueItem!;
-		desk.querySelector<HTMLButtonElement>('[data-testid="queue-reverse"]')!.click();
-		await frame();
-		row.querySelector<HTMLButtonElement>('[data-queue-action="remove"]')!.click();
-		await frame();
-		await frame();
-		const popped = row.inert && getComputedStyle(row).position === 'absolute';
-		const flowing = [...desk.querySelectorAll<HTMLElement>('[data-queue-item]')].filter(
-			(node) => getComputedStyle(node).position !== 'absolute'
-		).length;
-		desk.querySelector<HTMLButtonElement>('[data-testid="queue-undo"]')!.click();
-		await frame();
-		await frame();
-		return {
-			popped,
-			flowing,
-			sameNode: desk.querySelector(`[data-queue-item="${id}"]`) === row,
-			inert: row.inert
-		};
+		const layoutParent = row.offsetParent as HTMLElement;
+		const renderedTop = () =>
+			row.getBoundingClientRect().top - layoutParent.getBoundingClientRect().top;
+		const initialRenderedTop = renderedTop();
+		const initialLayoutTop = row.offsetTop;
+		const reversedIds = rows()
+			.map((node) => node.dataset.queueItem!)
+			.reverse();
+		return new Promise<{
+			popped: boolean;
+			flowing: number;
+			sameNode: boolean;
+			inert: boolean;
+			reorderedIds: string[];
+			reorderLayoutDelta: number;
+			reorderProgress: number;
+			restoredIds: string[];
+			expectedIds: string[];
+			positionAfterReversal: string;
+		}>((resolve, reject) => {
+			let phase: 'reordering' | 'exiting' | 'restoring' = 'reordering';
+			let reorderedIds: string[] = [];
+			let reorderLayoutDelta = 0;
+			let reorderProgress = 0;
+			let popped = false;
+			let flowing = 0;
+			let restoringStarted = false;
+			let restoringEnded = false;
+			const cleanup = () => {
+				clearTimeout(timeout);
+				observer.disconnect();
+				row.removeEventListener('introstart', onIntroStart);
+				row.removeEventListener('introend', onIntroEnd);
+			};
+			const fail = (error: unknown) => {
+				cleanup();
+				reject(error);
+			};
+			const onIntroStart = () => {
+				if (phase === 'restoring') restoringStarted = true;
+			};
+			const onIntroEnd = () => {
+				if (phase !== 'restoring' || !restoringStarted) return;
+				restoringEnded = true;
+				queueMicrotask(inspect);
+			};
+			const inspect = () => {
+				try {
+					if (!desk.contains(row)) throw new Error(`Original queue row detached while ${phase}`);
+					if (phase === 'reordering') {
+						const currentIds = rows().map((node) => node.dataset.queueItem!);
+						if (currentIds.join(',') !== reversedIds.join(',')) return;
+						const layoutDelta = row.offsetTop - initialLayoutTop;
+						const renderedTravel = renderedTop() - initialRenderedTop;
+						const progress = renderedTravel / layoutDelta;
+						// A committed reorder jumps to its endpoint before projection renders.
+						// Remove only after playback has moved away from the start and is
+						// still visibly short of that endpoint, not at the initial inversion.
+						if (
+							!Number.isFinite(progress) ||
+							layoutDelta <= 0 ||
+							progress <= 0 ||
+							progress >= 1 ||
+							Math.abs(renderedTravel) <= 1 ||
+							Math.abs(layoutDelta - renderedTravel) <= 1
+						)
+							return;
+						reorderedIds = currentIds;
+						reorderLayoutDelta = layoutDelta;
+						reorderProgress = progress;
+						phase = 'exiting';
+						row.querySelector<HTMLButtonElement>('[data-queue-action="remove"]')!.click();
+					} else if (phase === 'exiting') {
+						const undo = desk.querySelector<HTMLButtonElement>('[data-testid="queue-undo"]');
+						if (
+							!row.inert ||
+							getComputedStyle(row).position !== 'absolute' ||
+							!undo ||
+							undo.disabled
+						)
+							return;
+						popped = row.inert && getComputedStyle(row).position === 'absolute';
+						flowing = rows().filter(
+							(node) => getComputedStyle(node).position !== 'absolute'
+						).length;
+						// Undo at the observed pop, before yielding to another animation frame.
+						phase = 'restoring';
+						undo.click();
+					} else if (restoringEnded && !row.inert) {
+						cleanup();
+						resolve({
+							popped,
+							flowing,
+							sameNode: desk.querySelector(`[data-queue-item="${id}"]`) === row,
+							inert: row.inert,
+							reorderedIds,
+							reorderLayoutDelta,
+							reorderProgress,
+							restoredIds: rows().map((node) => node.dataset.queueItem!),
+							expectedIds: reversedIds,
+							positionAfterReversal: row.style.position
+						});
+					}
+				} catch (error) {
+					fail(error);
+				}
+			};
+			const observer = new MutationObserver(inspect);
+			const timeout = setTimeout(
+				() => fail(new Error(`Queue reversal stalled while ${phase}`)),
+				5000
+			);
+			observer.observe(desk, { childList: true, subtree: true, attributes: true });
+			row.addEventListener('introstart', onIntroStart);
+			row.addEventListener('introend', onIntroEnd);
+			desk.querySelector<HTMLButtonElement>('[data-testid="queue-reverse"]')!.click();
+		});
 	});
-	expect(result).toEqual({ popped: true, flowing: 2, sameNode: true, inert: false });
+	expect(result).toMatchObject({ popped: true, flowing: 2, sameNode: true, inert: false });
+	expect(result.reorderedIds).toEqual(result.expectedIds);
+	expect(result.reorderLayoutDelta).toBeGreaterThan(0);
+	expect(result.reorderProgress).toBeGreaterThan(0);
+	expect(result.reorderProgress).toBeLessThan(1);
+	expect(Math.abs(result.reorderLayoutDelta * result.reorderProgress)).toBeGreaterThan(1);
+	expect(Math.abs(result.reorderLayoutDelta * (1 - result.reorderProgress))).toBeGreaterThan(1);
+	expect(result.restoredIds).toEqual(result.expectedIds);
+	expect(result.positionAfterReversal).toBe('');
 	await expect(page.locator('[data-queue-item]:not([inert])')).toHaveCount(3);
 });
 

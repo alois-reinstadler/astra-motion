@@ -6,16 +6,47 @@ const item = (id = 'a') => document.querySelector<HTMLElement>(`[data-managed-it
 const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
 it('waits for descendant motion exits and emits one completion without a second native outro', async () => {
-	const complete = vi.fn();
-	const end = vi.fn();
-	const { component } = render(Fixture, { onComplete: complete, onAnimationComplete: end });
+	const completions: string[] = [];
+	const retained: { phase: string; connected: boolean; sameNode: boolean }[] = [];
+	const recordAnimationCompletion = (phase: string) => {
+		completions.push(phase);
+		retained.push({ phase, connected: original.isConnected, sameNode: item() === original });
+	};
+	const complete = vi.fn(() => completions.push('presence'));
+	const end = vi.fn((definition: unknown) => {
+		if (definition === 'leave') recordAnimationCompletion('parent');
+	});
+	const descendantEnd = vi.fn((definition: unknown) => {
+		if (
+			definition &&
+			typeof definition === 'object' &&
+			'opacity' in definition &&
+			definition.opacity === 0
+		) {
+			recordAnimationCompletion('descendant');
+		}
+	});
+	const { component } = render(Fixture, {
+		onComplete: complete,
+		onAnimationComplete: end,
+		onDescendantAnimationComplete: descendantEnd
+	});
 	await expect.poll(() => item()?.style.opacity).toBe('1');
 	const original = item()!;
 	flushSync(() => component.hide());
 	expect(original.isConnected).toBe(true);
-	await sleep(135);
-	expect(original.isConnected).toBe(true);
 	await expect.poll(() => original.isConnected).toBe(false);
+	// Capture retention in the completion callbacks themselves: a delayed test
+	// continuation can legitimately run after both finite exits have finished.
+	expect(retained).toHaveLength(2);
+	expect(retained).toEqual(
+		expect.arrayContaining([
+			{ phase: 'parent', connected: true, sameNode: true },
+			{ phase: 'descendant', connected: true, sameNode: true }
+		])
+	);
+	expect(completions.slice(0, 2).sort()).toEqual(['descendant', 'parent']);
+	expect(completions[2]).toBe('presence');
 	expect(complete).toHaveBeenCalledTimes(1);
 	expect(end.mock.calls.filter(([definition]) => definition === 'leave')).toHaveLength(1);
 });
