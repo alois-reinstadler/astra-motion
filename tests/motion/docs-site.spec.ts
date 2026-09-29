@@ -132,13 +132,35 @@ test('documentation has connected navigation, topic filtering and complete copya
 	);
 	await page.getByRole('link', { name: 'Read Layout animation', exact: true }).click();
 	await expect(page).toHaveURL(/\/docs\/layout#automatic$/);
-	await page.getByRole('searchbox', { name: 'Find a guide' }).fill('scroll');
+	const search = page.getByRole('searchbox', { name: 'Find a guide' });
+	await search.fill('scroll');
 	await expect(
 		navigation.getByRole('link', { name: 'Scroll animations', exact: true })
 	).toBeVisible();
-	await expect(navigation.getByRole('link', { name: 'Getting started', exact: true })).toHaveCount(
-		0
-	);
+	// Search includes reference prose and code, where getting-started introduces useScroll.
+	await expect(
+		navigation.getByRole('link', { name: 'Getting started', exact: true })
+	).toBeVisible();
+	for (const api of ['useFollowValue', 'useWillChange']) {
+		await search.fill(api);
+		await expect(
+			navigation.getByRole('link', { name: 'Motion values overview', exact: true })
+		).toBeVisible();
+		await expect(
+			navigation.getByRole('link', { name: 'Getting started', exact: true })
+		).toHaveCount(0);
+	}
+	for (const api of ['motion.bind', 'motion.create']) {
+		await search.fill(api);
+		await expect(navigation.getByRole('link', { name: '<motion>', exact: true })).toBeVisible();
+		await expect(
+			navigation.getByRole('link', { name: 'Getting started', exact: true })
+		).toBeVisible();
+	}
+	await search.fill('no-such-astra-api');
+	await expect(navigation.getByRole('link')).toHaveCount(0);
+	await expect(navigation.getByRole('status')).toContainText('No guide matches');
+	await search.fill('scroll');
 	await navigation.getByRole('link', { name: 'Scroll animations', exact: true }).click();
 	await expect(page).toHaveURL(/\/docs\/scroll$/);
 	await expect(page.getByRole('searchbox', { name: 'Find a guide' })).toHaveValue('');

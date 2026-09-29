@@ -47,10 +47,16 @@ test('example discovery filters, searches, and opens a dedicated live example', 
 	page
 }) => {
 	await page.goto('/examples');
-	await page.getByRole('button', { name: 'Routes', exact: true }).click();
+	const category = page.getByRole('button', { name: 'View Transitions', exact: true });
+	await category.click();
+	await expect(category).toHaveAttribute('aria-pressed', 'true');
 	await expect(page.locator('.example-grid > .example')).toHaveCount(1);
 	await expect(page.locator('.example-grid > .example')).toContainText(
 		'Open a field note with shared artwork and a title'
+	);
+	await expect(page.locator('.example-grid > .example')).toHaveAttribute(
+		'href',
+		'/examples/animate-view'
 	);
 	await page.getByRole('searchbox', { name: 'Search examples' }).fill('no-such-example');
 	await expect(page.getByRole('heading', { name: 'No examples found.' })).toBeVisible();
@@ -179,7 +185,30 @@ test('the first lesson exposes runnable code and every catalog entry opens its p
 	await expect(first.getByRole('region', { name: 'Notification.svelte source' })).toContainText(
 		'{#if visible}'
 	);
-	await expect(page.locator('[data-example]')).toHaveCount(1);
+	await expect(first.locator('[data-example]')).toHaveCount(1);
+	const recipeIds = [
+		'snippet-getting-started-reactivity',
+		'snippet-getting-started-native-svelte',
+		'snippet-getting-started-panel-recipes',
+		'snippet-getting-started-accordion-recipe',
+		'snippet-getting-started-dialog-recipe',
+		'snippet-getting-started-headless-recipe'
+	];
+	expect(
+		await page
+			.locator('[data-example]')
+			.evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-example')))
+	).toEqual(['state', ...recipeIds]);
+	for (const id of recipeIds) {
+		const recipe = page.locator(`[data-example="${id}"]`);
+		await recipe.evaluate((node) => node.scrollIntoView({ behavior: 'instant', block: 'center' }));
+		await expect(recipe.locator(':scope > fieldset.preview')).toBeEnabled();
+		await expect(recipe.locator('.preview-root > *').first()).toBeAttached();
+		await expect(
+			recipe.locator(':scope > .preview-heading').getByRole('button', { name: /^Reset / })
+		).toBeEnabled();
+	}
+	expect(errors, 'browser errors after hydrating getting-started recipes').toEqual([]);
 	await page.goto('/examples');
 	const destinations = await page.locator('.example-grid > .example').evaluateAll((nodes) =>
 		nodes.map((node) => ({

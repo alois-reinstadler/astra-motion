@@ -17,6 +17,19 @@ import { createHash } from 'node:crypto';
 export const identityPath = '/__astra-qualification.json';
 export const digest = (bytes) => createHash('sha256').update(bytes).digest('hex');
 
+export function verifyPackedFiles(files) {
+	assert(
+		files.every(
+			(file) =>
+				/^package\/(package\.json|README\.md|LICENSE(?:\.md)?|dist\/index\.(js|d\.ts)|dist\/check-motion-forwarding\.mjs|dist\/motion\/.*)$/.test(
+					file
+				) && !file.split('/').includes('..')
+		),
+		'Unexpected packed files'
+	);
+	assert(!files.some((file) => /\.(test|spec)\./.test(file)), 'Tests leaked into tarball');
+}
+
 export function verifyPackedConsumer(setup) {
 	verifyConsumerDependencies(setup.consumer);
 	const bytes = readFileSync(setup.archive);
@@ -28,16 +41,7 @@ export function verifyPackedConsumer(setup) {
 	const files = execFileSync('tar', ['-tzf', setup.archive], { encoding: 'utf8' })
 		.trim()
 		.split('\n');
-	assert(
-		files.every(
-			(file) =>
-				/^package\/(package\.json|README\.md|LICENSE(?:\.md)?|dist\/index\.(js|d\.ts)|dist\/motion\/.*)$/.test(
-					file
-				) && !file.split('/').includes('..')
-		),
-		'Unexpected packed files'
-	);
-	assert(!files.some((file) => /\.(test|spec)\./.test(file)), 'Tests leaked into tarball');
+	verifyPackedFiles(files);
 	const installed = realpathSync(join(setup.consumer, 'node_modules/astra-motion'));
 	assert(
 		installed.startsWith(realpathSync(setup.consumer) + '/'),

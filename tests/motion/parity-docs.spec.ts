@@ -37,7 +37,7 @@ const groups = [
 	[
 		'Motion Values',
 		[
-			['motion-values', 'Motion Values overview'],
+			['motion-values', 'Motion values overview'],
 			['use-motion-template', 'useMotionTemplate'],
 			['use-motion-value-event', 'useMotionValueEvent'],
 			['use-scroll', 'useScroll'],
@@ -118,11 +118,39 @@ const historicalAnchors: Record<string, string[]> = {
 	troubleshooting: ['distortion', 'missing-exit', 'ownership', 'api-status']
 };
 
+test.beforeEach(async ({ page }) => {
+	// Preserve the first hydration exception in traces before a client-render retry
+	// can replace it with a secondary error or dispose its JavaScript handle.
+	await page.addInitScript(() => {
+		const warn = console.warn.bind(console);
+		console.warn = (...args: unknown[]) => {
+			if (String(args[0]).startsWith('Failed to hydrate')) {
+				warn(
+					'[Astra hydration cause]',
+					JSON.stringify(
+						args.map((value) =>
+							value instanceof Error
+								? { name: value.name, message: value.message, stack: value.stack }
+								: String(value)
+						)
+					)
+				);
+			}
+			warn(...args);
+		};
+	});
+});
+
 function captureErrors(page: Page) {
 	const errors: string[] = [];
 	page.on('pageerror', (error) => errors.push(error.message));
 	page.on('console', async (message) => {
-		if (message.type() !== 'error') return;
+		if (
+			message.type() !== 'error' &&
+			!message.text().startsWith('Failed to hydrate') &&
+			!message.text().startsWith('[Astra hydration cause]')
+		)
+			return;
 		const index = errors.push(message.text()) - 1;
 		const args = await Promise.all(
 			message.args().map((argument) =>
@@ -177,6 +205,25 @@ test('all 34 documentation pages hydrate their examples and reference tables wit
 				const response = await page.goto(`/docs/${slug}`);
 				expect(response?.status()).toBe(200);
 				await expect(page.getByRole('heading', { level: 1 })).toHaveText(title);
+				const examples = page.locator('[data-example]');
+				expect(await examples.count(), `live examples on /docs/${slug}`).toBeGreaterThan(0);
+				for (const example of await examples.all()) {
+					// Deferred examples mount when observed near the viewport. Visit each one
+					// and verify mounted content and usable controls before checking the page.
+					await example.evaluate((node) =>
+						node.scrollIntoView({ behavior: 'instant', block: 'center' })
+					);
+					await expect(example.locator(':scope > fieldset.preview')).toBeEnabled();
+					// SVG-only previews can have no text while still rendering native content.
+					await expect(example.locator('.preview-root > *').first()).toBeAttached();
+					await expect(
+						example.locator(':scope > .preview-heading').getByRole('button', { name: /^Reset / })
+					).toBeEnabled();
+					expect(
+						errors,
+						`browser errors after hydrating ${await example.getAttribute('data-example')} on /docs/${slug}`
+					).toEqual([]);
+				}
 				await expect(page.locator('[data-example] fieldset[disabled]')).toHaveCount(0);
 				const ids = await page.locator('[id]').evaluateAll((nodes) => nodes.map((node) => node.id));
 				expect(new Set(ids).size, `unique anchor and control ids on /docs/${slug}`).toBe(
@@ -187,7 +234,12 @@ test('all 34 documentation pages hydrate their examples and reference tables wit
 					const table = page.locator('.reference-table').first();
 					await expect(table).toHaveAttribute('role', 'region');
 					await expect(table).toHaveAttribute('tabindex', '0');
-					await expect(table.locator('thead th[scope="col"]')).toHaveCount(3);
+					if (slug === 'animate-view') {
+						// The fluent builder reference precedes the component's three-column props table.
+						await expect(table.locator('thead th[scope="col"]')).toHaveText(['Method', 'Contract']);
+					} else {
+						await expect(table.locator('thead th[scope="col"]')).toHaveCount(3);
+					}
 					await expect(table.locator('tbody th[scope="row"]').first()).toBeAttached();
 				}
 				expect(errors, `browser errors on /docs/${slug}`).toEqual([]);

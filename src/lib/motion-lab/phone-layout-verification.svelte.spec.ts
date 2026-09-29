@@ -392,6 +392,7 @@ it('keeps outgoing note text continuous and painted inside the card through its 
 it('closes and reverses the narrow note without an intermediate growth or document-space jump', async () => {
 	const stage = await phoneStage(true);
 	const screen = await render(Layout, { target: stage.container });
+	let recording = true;
 	try {
 		await document.fonts.ready;
 		window.scrollTo({ top: 500, behavior: 'instant' });
@@ -409,7 +410,7 @@ it('closes and reverses the narrow note without an intermediate growth or docume
 			do {
 				await frame();
 				samples.push(sample());
-			} while (!settled());
+			} while (recording && !settled());
 			return samples;
 		};
 		const collapsed = sample();
@@ -426,8 +427,11 @@ it('closes and reverses the narrow note without an intermediate growth or docume
 			animations(stage.container).length === 0 &&
 			Math.abs(box(card).width - collapsed.card.width) < 0.5 &&
 			Math.abs(box(card).height - collapsed.card.height) < 0.5;
+		// Record before the trusted input crosses the browser-control boundary;
+		// the animation can otherwise finish before keyboard() returns.
+		const closingFrames = captureUntil(closed);
 		await userEvent.keyboard('{Enter}');
-		const close = await captureUntil(closed);
+		const close = await closingFrames;
 		await userEvent.keyboard('{Enter}');
 		await expect.poll(() => animations(stage.container).length).toBeGreaterThan(0);
 		for (const animation of animations(stage.container)) {
@@ -448,11 +452,12 @@ it('closes and reverses the narrow note without an intermediate growth or docume
 			},
 			{ capture: true, once: true }
 		);
+		const reversingFrames = captureUntil(closed);
 		await userEvent.keyboard('{Enter}');
 		expect(capturedInterruption).toBe(true);
 		expect(interrupted.card.width).toBeGreaterThan(collapsed.card.width + 8);
 		expect(interrupted.card.width).toBeLessThan(expanded.card.width - 8);
-		const reverse = await captureUntil(closed);
+		const reverse = await reversingFrames;
 		const settled = sample();
 		const diagnostic = JSON.stringify({
 			collapsed,
@@ -483,7 +488,8 @@ it('closes and reverses the narrow note without an intermediate growth or docume
 			expect(
 				samples.some(
 					({ card }) => card.width < start.card.width - 3 && card.width > collapsed.card.width + 3
-				)
+				),
+				diagnostic
 			).toBe(true);
 		}
 		expect(
@@ -498,6 +504,7 @@ it('closes and reverses the narrow note without an intermediate growth or docume
 			screen.getByRole('button', { name: 'Read the note' }).element().getAttribute('aria-expanded')
 		).toBe('false');
 	} finally {
+		recording = false;
 		await screen.unmount();
 		await stage.dispose();
 	}

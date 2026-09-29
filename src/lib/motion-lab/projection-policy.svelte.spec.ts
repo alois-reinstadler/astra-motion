@@ -1,7 +1,12 @@
 import { expect, it } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import { flushSync, tick } from 'svelte';
-import { visualElementStore } from 'motion-dom';
+import {
+	visualElementStore,
+	frame as motionFrame,
+	cancelFrame,
+	type AnimationPlaybackControls
+} from 'motion-dom';
 import { createLayout } from '../motion/layout.js';
 import { layoutBridge } from '../motion/commit.js';
 import ProjectionPolicy from './ProjectionPolicy.svelte';
@@ -18,9 +23,29 @@ it('updates transition policy without reattachment, resetting values, or interru
 	const node = screen.getByTestId('projection-policy').element();
 	const visual = visualElementStore.get(node)!;
 	const projection = visual.projection!;
-	screen.component.move();
-	await frame();
-	const active = projection.currentAnimation!;
+	const captureNextProjection = async () => {
+		const previous = projection.currentAnimation;
+		let captured: AnimationPlaybackControls | undefined;
+		const capture = () => {
+			const current = projection.currentAnimation;
+			if (!current || current === previous) return;
+			current.pause();
+			captured = current;
+			cancelFrame(capture);
+		};
+		// Projection creates its clock in a scheduled update. Capture it in that
+		// frame instead of assuming one test requestAnimationFrame sees it live.
+		motionFrame.postRender(capture, true);
+		try {
+			screen.component.move();
+			await expect.poll(() => Boolean(captured)).toBe(true);
+			// Playback is thenable; return a wrapper so async does not await its completion.
+			return { animation: captured! };
+		} finally {
+			cancelFrame(capture);
+		}
+	};
+	const { animation: active } = await captureNextProjection();
 	expect(active).toBeDefined();
 	active.pause();
 	active.time = 0.25;
@@ -34,10 +59,10 @@ it('updates transition policy without reattachment, resetting values, or interru
 	expect(projection.options.transition?.duration).toBe(0.2);
 	active.complete();
 	await frame();
-	screen.component.move();
-	await frame();
-	expect(projection.currentAnimation).toBeDefined();
-	expect(projection.currentAnimation!.duration).toBeCloseTo(0.2);
+	const { animation: next } = await captureNextProjection();
+	expect(projection.currentAnimation).toBe(next);
+	expect(next).not.toBe(active);
+	expect(next.duration).toBeCloseTo(0.2);
 });
 
 it('keeps reduced-motion and automatic policy live without reattaching', async () => {

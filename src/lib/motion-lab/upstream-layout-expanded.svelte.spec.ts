@@ -30,10 +30,15 @@ for (const mode of [true, 'x', 'y'] as const)
 		const before = rect();
 		flushSync(() => view.component.change());
 		await expect.poll(() => events.mock.calls.map(([e]) => e)).toContain('start');
+		// The unprojected horizontal axis commits immediately in y-only mode.
+		// Wait for the configured animation's first projected frame before sampling.
 		await expect
-			.poll(() => Math.abs(rect().left - before.left - (mode === 'y' ? 200 : 100)))
+			.poll(() =>
+				Math.abs(mode === 'y' ? rect().top - before.top - 50 : rect().left - before.left - 100)
+			)
 			.toBeLessThan(1);
 		const during = rect();
+		near(during.left - before.left, mode === 'y' ? 200 : 100);
 		near(during.top - before.top, mode === 'x' ? 100 : 50);
 		near(during.width, mode === 'y' ? 300 : 200);
 		near(during.height, mode === 'x' ? 300 : 250);
