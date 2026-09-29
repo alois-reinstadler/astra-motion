@@ -31,6 +31,12 @@ to sync; existing `Presence` retains its wait default. Modes include sync/wait/p
 Nested boundaries shield exits unless propagate is true. Dynamic custom values,
 manual removal and re-entry are generation-scoped.
 
+Known capture gap: when the same update resizes an ancestor, `popLayout` can
+measure the outgoing root after it has reflowed. It does not guarantee the old
+box in that composition. The [phone containment follow-up](PHONE-CONTAINMENT.md)
+records the reproduction and the canonical note's explicit fade-then-collapse
+solution; this remains a general runtime parity limitation.
+
 Internal bridge (`presence-context.svelte.ts`):
 
 ```ts

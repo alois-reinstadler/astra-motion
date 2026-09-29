@@ -1,5 +1,10 @@
 # Phone example feedback and performance evidence
 
+The [2026-09-29 containment follow-up](PHONE-CONTAINMENT.md) supersedes the note's
+`popLayout` solution below. It reproduces transient horizontal scroll and escaping
+exit text, corrects the original-width capture claim, and sequences the note's
+fade before resizing. The earlier evidence below retains its historical scope.
+
 Follow-up to release `93f06a3`, 2026-09-28 UTC. The user reported these behaviors
 on an **iPhone 15 Pro using Safari**; iOS and browser versions are unknown.
 Drag, reorder operations and Activity retention worked in that user session.
