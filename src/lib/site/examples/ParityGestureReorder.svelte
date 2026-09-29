@@ -122,6 +122,8 @@
 	.demo :global(.items) {
 		margin: 0;
 		padding: 0;
+		/* Clip projected horizontal overflow without creating another scroll container. */
+		overflow-x: clip;
 	}
 	.demo :global(.item) {
 		position: relative;

@@ -1,23 +1,32 @@
 <script lang="ts">
 	import { AnimatePresence, motion } from '$lib/motion/index.js';
 	let expanded = $state(false);
+	let reserveSpace = $state(false);
+	function toggle() {
+		expanded = !expanded;
+		if (expanded) reserveSpace = true;
+	}
+	function finishExit() {
+		if (!expanded) reserveSpace = false;
+	}
 </script>
 
 <div class="demo">
 	<motion.article
 		class="card"
 		layout
-		style={{ width: expanded ? 310 : 230, borderRadius: 10 }}
+		style={{ width: reserveSpace ? 310 : 230, borderRadius: 10 }}
 		transition={{ layout: { type: 'spring', stiffness: 320, damping: 30 } }}
 	>
 		<motion.div layout="position" class="content">
 			<p class="eyebrow">FIELD NOTES</p>
 			<h3>Leave room for a new idea.</h3>
-			<button type="button" aria-expanded={expanded} onclick={() => (expanded = !expanded)}>
+			<button type="button" aria-expanded={expanded} onclick={toggle}>
 				{expanded ? 'Close the note' : 'Read the note'}
 			</button>
 		</motion.div>
-		<AnimatePresence present={expanded} mode="popLayout">
+		<!-- Keep the paragraph in flow at its readable width until its fade has finished. -->
+		<AnimatePresence present={expanded} onExitComplete={finishExit}>
 			<motion.p
 				class="detail"
 				initial={{ opacity: 0 }}
