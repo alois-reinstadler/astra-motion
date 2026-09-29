@@ -33,7 +33,19 @@ function deferred<T>(): Deferred<T> {
 	void promise.catch(() => {});
 	return { promise, resolve, reject };
 }
+/** Internal extension point: fluent and declarative views share this document transaction. */
+export interface ViewTransactionParticipant {
+	readonly owner: symbol;
+	/** Fluent requests configure a whole capture and therefore retain FIFO transaction boundaries. */
+	readonly exclusive?: boolean;
+	ownsRoot?(): boolean;
+	before(document: Document): void;
+	after(document: Document): void;
+	animate(document: Document): ViewLayerAnimation;
+	cleanup(): void;
+}
 interface Request {
+	participant?: ViewTransactionParticipant;
 	update: ViewUpdate;
 	options: ViewTransitionOptions;
 	controller: AbortController;
@@ -128,7 +140,10 @@ function schedule(document: Document, state: DocumentState) {
 	queueMicrotask(() => {
 		state.scheduled = false;
 		if (state.active || !state.queued.length) return;
-		startSession(document, state.queued.splice(0), state);
+		const firstExclusive = state.queued.findIndex((request) => request.participant?.exclusive);
+		const count =
+			firstExclusive === 0 ? 1 : firstExclusive < 0 ? state.queued.length : firstExclusive;
+		startSession(document, state.queued.splice(0, count), state);
 	});
 }
 
@@ -136,6 +151,7 @@ function release(session: Session, outcome: ViewTransitionOutcome) {
 	if (session.released) return;
 	session.released = true;
 	session.restoreNames();
+	for (const request of session.requests) request.participant?.cleanup();
 	session.removeStyles();
 	session.removeLifecycle();
 	for (const layers of session.layers.values()) for (const layer of layers) layer.cancel();
@@ -186,7 +202,7 @@ function installStyles(session: Session) {
 	if (nonce) style.nonce = nonce;
 	style.textContent = `
 ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation-timing-function:linear!important}
-::view-transition-old(root),::view-transition-new(root){animation:none!important}
+${session.requests.some((request) => request.participant?.ownsRoot?.()) ? '' : '::view-transition-old(root),::view-transition-new(root){animation:none!important}'}
 `;
 	document.head.appendChild(style);
 	session.removeStyles = () => style.remove();
@@ -234,6 +250,7 @@ function startSession(document: Document | undefined, requests: Request[], state
 	document.defaultView?.addEventListener('pagehide', pagehide);
 	session.removeLifecycle = () => document.defaultView?.removeEventListener('pagehide', pagehide);
 	try {
+		for (const request of requests) request.participant?.before(document);
 		session.before = snapshotViews(document, (message) => diagnostic(session, message));
 		installStyles(session);
 		session.restoreNames = applyViewNames(session.before);
@@ -244,6 +261,15 @@ function startSession(document: Document | undefined, requests: Request[], state
 			if (session.released) return;
 			await waitForViewResources(document, resources, requests[0].controller.signal);
 			if (session.released) return;
+			try {
+				for (const request of requests) request.participant?.after(document);
+			} catch (error) {
+				for (const request of requests) {
+					request.failed = true;
+					request.error = error;
+				}
+				throw error;
+			}
 			session.after = snapshotViews(document, (message) => diagnostic(session, message));
 			session.restoreNames = applyViewNames(session.after);
 		});
@@ -278,6 +304,12 @@ function startSession(document: Document | undefined, requests: Request[], state
 					group.set(change.type, entries);
 				}
 				try {
+					for (const request of requests) {
+						if (request.participant)
+							session.layers.set(request.participant.owner, [
+								request.participant.animate(document)
+							]);
+					}
 					for (const [owner, group] of groups) {
 						const layers: ViewLayerAnimation[] = [];
 						session.layers.set(owner, layers);
@@ -321,7 +353,13 @@ function startSession(document: Document | undefined, requests: Request[], state
 			.catch(() => {
 				if (!session.released) skip(session);
 			});
-	} catch {
+	} catch (error) {
+		if (requests.some((request) => request.participant)) {
+			for (const request of requests) {
+				request.failed = true;
+				request.error = error;
+			}
+		}
 		diagnostic(
 			session,
 			'The browser could not start the view animation. The state update still runs.'
@@ -335,12 +373,22 @@ export function startViewTransition(
 	update: ViewUpdate,
 	options: ViewTransitionOptions = {}
 ): ViewTransitionHandle {
+	return startManagedViewTransition(update, options);
+}
+
+/** Internal; no second document scheduler is introduced for fluent animations. */
+export function startManagedViewTransition(
+	update: ViewUpdate,
+	options: ViewTransitionOptions,
+	participant?: ViewTransactionParticipant
+): ViewTransitionHandle {
 	if (typeof update !== 'function')
 		throw new TypeError('Astra startViewTransition requires an update callback.');
 	const document =
 		options.document ??
 		(typeof globalThis.document === 'undefined' ? undefined : globalThis.document);
 	const request: Request = {
+		participant,
 		update,
 		options,
 		controller: new AbortController(),
@@ -354,17 +402,27 @@ export function startViewTransition(
 	const cancel = () => {
 		request.skipped = true;
 		if (request.session) skip(request.session);
-		else
+		else {
 			request.controller.abort(
 				new DOMException('The queued view animation was skipped.', 'AbortError')
 			);
+			const state = document && documents.get(document);
+			const index = state?.queued.indexOf(request) ?? -1;
+			if (participant?.exclusive && state && index !== -1) {
+				state.queued.splice(index, 1);
+				// Cancellation must not await a paused predecessor. No capture is acquired;
+				// the cancelled update deliberately runs ahead of still-queued transactions.
+				queueMicrotask(() => startSession(document, [request]));
+			}
+		}
 	};
 	if (!document) queueMicrotask(() => startSession(undefined, [request]));
 	else {
 		let state = documents.get(document);
 		if (!state) documents.set(document, (state = { queued: [], scheduled: false }));
 		if (options.policy === 'replace' && state.active) skip(state.active);
-		state.queued.push(request);
+		if (participant?.exclusive && options.policy === 'replace') state.queued.unshift(request);
+		else state.queued.push(request);
 		schedule(document, state);
 	}
 	return {

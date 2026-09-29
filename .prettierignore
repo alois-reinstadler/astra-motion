@@ -7,3 +7,6 @@ bun.lockb
 
 # Miscellaneous
 /static/
+
+# Immutable experimental verification evidence
+experiments/vgpu-threlte/evidence/

@@ -1584,9 +1584,9 @@
 		]
 	},
 	"auditCounts": {
-		"exclude": 1093,
-		"covered": 269,
-		"add": 628
+		"exclude": 1039,
+		"covered": 277,
+		"add": 674
 	},
 	"groups": [
 		{
@@ -7024,6 +7024,118 @@
 			"planId": "UP-179",
 			"implementationNotes": "Verified observable assertions; see verification record.",
 			"verification": "passed; see README.md complete expansion verification"
+		},
+		{
+			"key": "rc-animate-view-edge-coverage",
+			"title": "Remaining fluent snapshot assertions",
+			"upstreamIds": [
+				"tests/animate/view.spec.ts:4",
+				"tests/view/view-targets.spec.ts:64",
+				"tests/view/view-targets.spec.ts:80",
+				"tests/view/view-targets.spec.ts:125",
+				"tests/view/view-targets.spec.ts:137",
+				"tests/view/view-targets.spec.ts:156",
+				"tests/view/view-targets.spec.ts:167",
+				"tests/view/view-targets.spec.ts:184",
+				"tests/view/view-targets.spec.ts:198",
+				"tests/view/view-targets.spec.ts:211",
+				"tests/view/view-targets.spec.ts:224",
+				"tests/view/view-targets.spec.ts:279",
+				"tests/view/view-targets.spec.ts:295",
+				"tests/view/view-targets.spec.ts:310",
+				"tests/view/view-targets.spec.ts:332",
+				"tests/view/view-targets.spec.ts:353",
+				"tests/view/view-targets.spec.ts:372",
+				"tests/view/view-targets.spec.ts:388",
+				"tests/view/view-targets.spec.ts:407",
+				"tests/view/view-targets.spec.ts:423",
+				"tests/view/view-targets.spec.ts:440",
+				"tests/view/view-targets.spec.ts:455",
+				"tests/view/view-targets.spec.ts:468",
+				"tests/view/view-targets.spec.ts:482",
+				"tests/view/view-targets.spec.ts:505",
+				"tests/view/view-targets.spec.ts:522",
+				"tests/view/view-targets.spec.ts:538"
+			],
+			"assertions": [
+				"Port the specific listed public scenarios; focused API smoke coverage does not establish these detailed assertions."
+			],
+			"files": [
+				"src/lib/motion-lab/remaining-apis.svelte.spec.ts",
+				"src/lib/motion-lab/remaining-apis.spec.ts"
+			],
+			"notes": "Newly supported API coverage gap discovered during RC inventory reconciliation. Distinguish this from excluded direct React/private-engine tests.",
+			"domain": "presence_layout",
+			"status": "pending",
+			"tests": [],
+			"planId": "UP-180",
+			"partialEvidence": [
+				"src/lib/motion-lab/remaining-apis.svelte.spec.ts: animates fluent selectors with real snapshots, playback control and authored style restoration"
+			],
+			"verification": "Not yet fully covered. Do not infer success from the historical expansion verification."
+		},
+		{
+			"key": "rc-will-change-edge-coverage",
+			"title": "Remaining will-change registration and interruption assertions",
+			"upstreamIds": [
+				"packages/framer-motion/src/gestures/drag/__tests__/index.test.tsx:38",
+				"packages/framer-motion/src/gestures/drag/__tests__/index.test.tsx:66",
+				"packages/framer-motion/src/value/use-will-change/__tests__/will-change.test.tsx:13",
+				"packages/framer-motion/src/value/use-will-change/__tests__/will-change.test.tsx:26",
+				"packages/framer-motion/src/value/use-will-change/__tests__/will-change.test.tsx:46",
+				"packages/framer-motion/src/value/use-will-change/__tests__/will-change.test.tsx:70",
+				"packages/framer-motion/src/value/use-will-change/__tests__/will-change.test.tsx:89",
+				"packages/framer-motion/src/value/use-will-change/__tests__/will-change.test.tsx:118",
+				"packages/framer-motion/src/value/use-will-change/__tests__/will-change.test.tsx:141"
+			],
+			"assertions": [
+				"Port the specific listed public scenarios; focused API smoke coverage does not establish these detailed assertions."
+			],
+			"files": [
+				"src/lib/motion-lab/remaining-apis.svelte.spec.ts",
+				"src/lib/motion-lab/remaining-apis.spec.ts"
+			],
+			"notes": "Newly supported API coverage gap discovered during RC inventory reconciliation. Distinguish this from excluded direct React/private-engine tests.",
+			"domain": "components_values",
+			"status": "pending",
+			"tests": [],
+			"planId": "UP-181",
+			"partialEvidence": [
+				"src/lib/motion-lab/remaining-apis.spec.ts: matches pinned will-change eligible-target semantics and deduplicates values"
+			],
+			"verification": "Not yet fully covered. Do not infer success from the historical expansion verification."
+		},
+		{
+			"key": "rc-follow-value-edge-coverage",
+			"title": "Remaining follower event, unit and transition assertions",
+			"upstreamIds": [
+				"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:17",
+				"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:45",
+				"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:75",
+				"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:99",
+				"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:123",
+				"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:173",
+				"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:211",
+				"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:238",
+				"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:265",
+				"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:321"
+			],
+			"assertions": [
+				"Port the specific listed public scenarios; focused API smoke coverage does not establish these detailed assertions."
+			],
+			"files": [
+				"src/lib/motion-lab/remaining-apis.svelte.spec.ts",
+				"src/lib/motion-lab/remaining-apis.spec.ts"
+			],
+			"notes": "Newly supported API coverage gap discovered during RC inventory reconciliation. Distinguish this from excluded direct React/private-engine tests.",
+			"domain": "components_values",
+			"status": "pending",
+			"tests": [],
+			"planId": "UP-182",
+			"partialEvidence": [
+				"src/lib/motion-lab/remaining-apis.svelte.spec.ts: follows tween targets, replaces sources/settings and preserves borrowed ownership"
+			],
+			"verification": "Not yet fully covered. Do not infer success from the historical expansion verification."
 		}
 	],
 	"decisions": [
@@ -15843,10 +15955,11 @@
 			"suite": "view",
 			"title": "can pause and set time",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Standalone upstream animateView builder snapshot test; Astra exposes startViewTransition and AnimateView with separately tested controls.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "presence_layout"
+			"domain": "presence_layout",
+			"group": "rc-animate-view-edge-coverage"
 		},
 		{
 			"id": "tests/react/animate-view.spec.ts:58",
@@ -15920,10 +16033,11 @@
 			"suite": "animateView() target resolution",
 			"title": "Element target is auto-named and animates its new layer",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "presence_layout"
+			"domain": "presence_layout",
+			"group": "rc-animate-view-edge-coverage"
 		},
 		{
 			"id": "tests/view/view-targets.spec.ts:80",
@@ -15932,10 +16046,11 @@
 			"suite": "animateView() target resolution",
 			"title": "selector matching 3 elements produces 3 distinct named layers",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "presence_layout"
+			"domain": "presence_layout",
+			"group": "rc-animate-view-edge-coverage"
 		},
 		{
 			"id": "tests/view/view-targets.spec.ts:91",
@@ -15944,9 +16059,11 @@
 			"suite": "animateView() target resolution",
 			"title": "an already-named element keeps its author name (not auto-renamed)",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
-			"evidence": [],
+			"disposition": "covered",
+			"reason": "The RC public Svelte API has an assertion for this behavior; this maps the cited scenario only, not the entire upstream suite.",
+			"evidence": [
+				"src/lib/motion-lab/remaining-apis.svelte.spec.ts: animates fluent selectors with real snapshots, playback control and authored style restoration"
+			],
 			"domain": "presence_layout"
 		},
 		{
@@ -15956,9 +16073,11 @@
 			"suite": "animateView() target resolution",
 			"title": "a bare .add() auto-enables a layout (group) morph",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
-			"evidence": [],
+			"disposition": "covered",
+			"reason": "The RC public Svelte API has an assertion for this behavior; this maps the cited scenario only, not the entire upstream suite.",
+			"evidence": [
+				"src/lib/motion-lab/remaining-apis.svelte.spec.ts: pairs replacement elements, gates enter/exit, and resolves selector results after the update"
+			],
 			"domain": "presence_layout"
 		},
 		{
@@ -15968,10 +16087,11 @@
 			"suite": "animateView() target resolution",
 			"title": "stagger delays are applied per resolved element",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "presence_layout"
+			"domain": "presence_layout",
+			"group": "rc-animate-view-edge-coverage"
 		},
 		{
 			"id": "tests/view/view-targets.spec.ts:137",
@@ -15980,10 +16100,11 @@
 			"suite": "animateView() target resolution",
 			"title": "morphs that change aspect ratio are clipped + object-fit cover",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "presence_layout"
+			"domain": "presence_layout",
+			"group": "rc-animate-view-edge-coverage"
 		},
 		{
 			"id": "tests/view/view-targets.spec.ts:156",
@@ -15992,10 +16113,11 @@
 			"suite": "animateView() target resolution",
 			"title": ".crop(false) opts out of the default crop",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "presence_layout"
+			"domain": "presence_layout",
+			"group": "rc-animate-view-edge-coverage"
 		},
 		{
 			"id": "tests/view/view-targets.spec.ts:167",
@@ -16004,10 +16126,11 @@
 			"suite": "animateView() target resolution",
 			"title": "repeat/type don't leak into the cropped-clip radius animation",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "presence_layout"
+			"domain": "presence_layout",
+			"group": "rc-animate-view-edge-coverage"
 		},
 		{
 			"id": "tests/view/view-targets.spec.ts:184",
@@ -16016,10 +16139,11 @@
 			"suite": "animateView() target resolution",
 			"title": ".exit({ opacity: 0 }) animates from an inferred 1, not instantly",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "presence_layout"
+			"domain": "presence_layout",
+			"group": "rc-animate-view-edge-coverage"
 		},
 		{
 			"id": "tests/view/view-targets.spec.ts:198",
@@ -16028,10 +16152,11 @@
 			"suite": "animateView() target resolution",
 			"title": "a stagger in the default options staggers a browser-generated morph",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "presence_layout"
+			"domain": "presence_layout",
+			"group": "rc-animate-view-edge-coverage"
 		},
 		{
 			"id": "tests/view/view-targets.spec.ts:211",
@@ -16040,10 +16165,11 @@
 			"suite": "animateView() target resolution",
 			"title": "stagger indexes from the new snapshot when update replaces the nodes",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "presence_layout"
+			"domain": "presence_layout",
+			"group": "rc-animate-view-edge-coverage"
 		},
 		{
 			"id": "tests/view/view-targets.spec.ts:224",
@@ -16052,10 +16178,11 @@
 			"suite": "animateView() target resolution",
 			"title": "a second .add() of the same element doesn't drop the first's animation",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "presence_layout"
+			"domain": "presence_layout",
+			"group": "rc-animate-view-edge-coverage"
 		},
 		{
 			"id": "tests/view/view-targets.spec.ts:237",
@@ -16064,9 +16191,11 @@
 			"suite": "animateView() target resolution",
 			"title": "pairs two elements into one shared-name morph (open direction)",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
-			"evidence": [],
+			"disposition": "covered",
+			"reason": "The RC public Svelte API has an assertion for this behavior; this maps the cited scenario only, not the entire upstream suite.",
+			"evidence": [
+				"src/lib/motion-lab/remaining-apis.svelte.spec.ts: releases a surviving paired source name and restores both authored priorities"
+			],
 			"domain": "presence_layout"
 		},
 		{
@@ -16076,9 +16205,11 @@
 			"suite": "animateView() target resolution",
 			"title": "pairs morph even when the old element is removed (close direction)",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
-			"evidence": [],
+			"disposition": "covered",
+			"reason": "The RC public Svelte API has an assertion for this behavior; this maps the cited scenario only, not the entire upstream suite.",
+			"evidence": [
+				"src/lib/motion-lab/remaining-apis.svelte.spec.ts: pairs replacement elements, gates enter/exit, and resolves selector results after the update"
+			],
 			"domain": "presence_layout"
 		},
 		{
@@ -16088,10 +16219,11 @@
 			"suite": "animateView() target resolution",
 			"title": "enter/exit do not apply to a persistent (survivor) element",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "presence_layout"
+			"domain": "presence_layout",
+			"group": "rc-animate-view-edge-coverage"
 		},
 		{
 			"id": "tests/view/view-targets.spec.ts:295",
@@ -16100,10 +16232,11 @@
 			"suite": "animateView() target resolution",
 			"title": "`.class()` tags layers with a view-transition-class for CSS targeting",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "presence_layout"
+			"domain": "presence_layout",
+			"group": "rc-animate-view-edge-coverage"
 		},
 		{
 			"id": "tests/view/view-targets.spec.ts:310",
@@ -16112,10 +16245,11 @@
 			"suite": "animateView() target resolution",
 			"title": "x/y shorthands are skipped with a warning (use transform)",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "presence_layout"
+			"domain": "presence_layout",
+			"group": "rc-animate-view-edge-coverage"
 		},
 		{
 			"id": "tests/view/view-targets.spec.ts:332",
@@ -16124,10 +16258,11 @@
 			"suite": "animateView() target resolution",
 			"title": ".new()/.old() crossfade a persistent (survivor) element",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "presence_layout"
+			"domain": "presence_layout",
+			"group": "rc-animate-view-edge-coverage"
 		},
 		{
 			"id": "tests/view/view-targets.spec.ts:353",
@@ -16136,10 +16271,11 @@
 			"suite": "animateView() target resolution",
 			"title": "only animating .new() with a non-opacity reveal holds the old layer",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "presence_layout"
+			"domain": "presence_layout",
+			"group": "rc-animate-view-edge-coverage"
 		},
 		{
 			"id": "tests/view/view-targets.spec.ts:372",
@@ -16148,10 +16284,11 @@
 			"suite": "animateView() target resolution",
 			"title": ".new({scale}) on a survivor animates from the live value, not a 0.85 pop",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "presence_layout"
+			"domain": "presence_layout",
+			"group": "rc-animate-view-edge-coverage"
 		},
 		{
 			"id": "tests/view/view-targets.spec.ts:388",
@@ -16160,10 +16297,11 @@
 			"suite": "animateView() target resolution",
 			"title": "a pair whose new end matches more elements names the extras (no drop)",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "presence_layout"
+			"domain": "presence_layout",
+			"group": "rc-animate-view-edge-coverage"
 		},
 		{
 			"id": "tests/view/view-targets.spec.ts:407",
@@ -16172,10 +16310,11 @@
 			"suite": "animateView() target resolution",
 			"title": "doesn't crop a same-aspect survivor or a fade-only newcomer by default",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "presence_layout"
+			"domain": "presence_layout",
+			"group": "rc-animate-view-edge-coverage"
 		},
 		{
 			"id": "tests/view/view-targets.spec.ts:423",
@@ -16184,10 +16323,11 @@
 			"suite": "animateView() target resolution",
 			"title": ".crop(true) clips a new-only layer via the re-committed CSS",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "presence_layout"
+			"domain": "presence_layout",
+			"group": "rc-animate-view-edge-coverage"
 		},
 		{
 			"id": "tests/view/view-targets.spec.ts:440",
@@ -16196,10 +16336,11 @@
 			"suite": "animateView() target resolution",
 			"title": "emits a children-clip rule for a clipping nested parent",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "presence_layout"
+			"domain": "presence_layout",
+			"group": "rc-animate-view-edge-coverage"
 		},
 		{
 			"id": "tests/view/view-targets.spec.ts:455",
@@ -16208,10 +16349,11 @@
 			"suite": "animateView() target resolution",
 			"title": "nests layers under their DOM ancestor by default (contain)",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "presence_layout"
+			"domain": "presence_layout",
+			"group": "rc-animate-view-edge-coverage"
 		},
 		{
 			"id": "tests/view/view-targets.spec.ts:468",
@@ -16220,10 +16362,11 @@
 			"suite": "animateView() target resolution",
 			"title": ".group(false) opts a layer out of nesting (stays flat)",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "presence_layout"
+			"domain": "presence_layout",
+			"group": "rc-animate-view-edge-coverage"
 		},
 		{
 			"id": "tests/view/view-targets.spec.ts:482",
@@ -16232,10 +16375,11 @@
 			"suite": "animateView() target resolution",
 			"title": "a survivor's old/new crossfade stays synced and linear (no plus-lighter flash)",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "presence_layout"
+			"domain": "presence_layout",
+			"group": "rc-animate-view-edge-coverage"
 		},
 		{
 			"id": "tests/view/view-targets.spec.ts:505",
@@ -16244,10 +16388,11 @@
 			"suite": "animateView() target resolution",
 			"title": "an explicit .layout({duration}) overrides the inherited spring; a morph keeps its settle",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "presence_layout"
+			"domain": "presence_layout",
+			"group": "rc-animate-view-edge-coverage"
 		},
 		{
 			"id": "tests/view/view-targets.spec.ts:522",
@@ -16256,10 +16401,11 @@
 			"suite": "animateView() target resolution",
 			"title": "a morph crossfade fades over the spring's visual duration, geometry over its settle",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "presence_layout"
+			"domain": "presence_layout",
+			"group": "rc-animate-view-edge-coverage"
 		},
 		{
 			"id": "tests/view/view-targets.spec.ts:538",
@@ -16268,10 +16414,11 @@
 			"suite": "animateView() target resolution",
 			"title": ".new()/.old() slide a survivor's views in opposite directions",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "Upstream imperative animateView fluent builder API (.add/.new/.old/.crop/.class/.group/.layout) is not exported by Astra. Its target-resolution/style compiler internals are unchanged and not an Astra adapter contract.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "presence_layout"
+			"domain": "presence_layout",
+			"group": "rc-animate-view-edge-coverage"
 		},
 		{
 			"id": "packages/motion-dom/src/view/__tests__/assign-names.test.ts:12",
@@ -16281,7 +16428,7 @@
 			"title": "resolves a selector to every match and names each uniquely",
 			"call": "test",
 			"disposition": "exclude",
-			"reason": "assignViewTransitionNames is the unexported upstream animateView builder registry; Astra owns component-bound view names and already tests their restoration/collision handling.",
+			"reason": "Direct test of the private upstream assignViewTransitionNames helper. Astra exports its own coordinated animateView builder and owns a separate capture registry; public target/name behavior is tracked by the RC fluent coverage group, without claiming this private helper is ported.",
 			"evidence": [],
 			"domain": "presence_layout"
 		},
@@ -16293,7 +16440,7 @@
 			"title": "writes the generated name inline so it's captured",
 			"call": "test",
 			"disposition": "exclude",
-			"reason": "assignViewTransitionNames is the unexported upstream animateView builder registry; Astra owns component-bound view names and already tests their restoration/collision handling.",
+			"reason": "Direct test of the private upstream assignViewTransitionNames helper. Astra exports its own coordinated animateView builder and owns a separate capture registry; public target/name behavior is tracked by the RC fluent coverage group, without claiming this private helper is ported.",
 			"evidence": [],
 			"domain": "presence_layout"
 		},
@@ -16305,7 +16452,7 @@
 			"title": "reuses the same name for the same element across calls",
 			"call": "test",
 			"disposition": "exclude",
-			"reason": "assignViewTransitionNames is the unexported upstream animateView builder registry; Astra owns component-bound view names and already tests their restoration/collision handling.",
+			"reason": "Direct test of the private upstream assignViewTransitionNames helper. Astra exports its own coordinated animateView builder and owns a separate capture registry; public target/name behavior is tracked by the RC fluent coverage group, without claiming this private helper is ported.",
 			"evidence": [],
 			"domain": "presence_layout"
 		},
@@ -16317,7 +16464,7 @@
 			"title": "forces the new end of a pair onto the old end's name",
 			"call": "test",
 			"disposition": "exclude",
-			"reason": "assignViewTransitionNames is the unexported upstream animateView builder registry; Astra owns component-bound view names and already tests their restoration/collision handling.",
+			"reason": "Direct test of the private upstream assignViewTransitionNames helper. Astra exports its own coordinated animateView builder and owns a separate capture registry; public target/name behavior is tracked by the RC fluent coverage group, without claiming this private helper is ported.",
 			"evidence": [],
 			"domain": "presence_layout"
 		},
@@ -16329,7 +16476,7 @@
 			"title": "respects an author-defined view-transition-name",
 			"call": "test",
 			"disposition": "exclude",
-			"reason": "assignViewTransitionNames is the unexported upstream animateView builder registry; Astra owns component-bound view names and already tests their restoration/collision handling.",
+			"reason": "Direct test of the private upstream assignViewTransitionNames helper. Astra exports its own coordinated animateView builder and owns a separate capture registry; public target/name behavior is tracked by the RC fluent coverage group, without claiming this private helper is ported.",
 			"evidence": [],
 			"domain": "presence_layout"
 		},
@@ -16341,7 +16488,7 @@
 			"title": "overrides `%s`, whose generated name is not exposed to script",
 			"call": "test.each()",
 			"disposition": "exclude",
-			"reason": "assignViewTransitionNames is the unexported upstream animateView builder registry; Astra owns component-bound view names and already tests their restoration/collision handling.",
+			"reason": "Direct test of the private upstream assignViewTransitionNames helper. Astra exports its own coordinated animateView builder and owns a separate capture registry; public target/name behavior is tracked by the RC fluent coverage group, without claiming this private helper is ported.",
 			"evidence": [],
 			"domain": "presence_layout"
 		},
@@ -16353,7 +16500,7 @@
 			"title": "release removes every generated name",
 			"call": "test",
 			"disposition": "exclude",
-			"reason": "assignViewTransitionNames is the unexported upstream animateView builder registry; Astra owns component-bound view names and already tests their restoration/collision handling.",
+			"reason": "Direct test of the private upstream assignViewTransitionNames helper. Astra exports its own coordinated animateView builder and owns a separate capture registry; public target/name behavior is tracked by the RC fluent coverage group, without claiming this private helper is ported.",
 			"evidence": [],
 			"domain": "presence_layout"
 		},
@@ -16365,7 +16512,7 @@
 			"title": "gives the new end of a pair a fresh name when it has no old counterpart",
 			"call": "test",
 			"disposition": "exclude",
-			"reason": "assignViewTransitionNames is the unexported upstream animateView builder registry; Astra owns component-bound view names and already tests their restoration/collision handling.",
+			"reason": "Direct test of the private upstream assignViewTransitionNames helper. Astra exports its own coordinated animateView builder and owns a separate capture registry; public target/name behavior is tracked by the RC fluent coverage group, without claiming this private helper is ported.",
 			"evidence": [],
 			"domain": "presence_layout"
 		},
@@ -16377,7 +16524,7 @@
 			"title": "sizes the returned pair names to the new end, dropping unmatched names",
 			"call": "test",
 			"disposition": "exclude",
-			"reason": "assignViewTransitionNames is the unexported upstream animateView builder registry; Astra owns component-bound view names and already tests their restoration/collision handling.",
+			"reason": "Direct test of the private upstream assignViewTransitionNames helper. Astra exports its own coordinated animateView builder and owns a separate capture registry; public target/name behavior is tracked by the RC fluent coverage group, without claiming this private helper is ported.",
 			"evidence": [],
 			"domain": "presence_layout"
 		},
@@ -16389,7 +16536,7 @@
 			"title": "tracks a .class()'d element for class cleanup only, preserving an author name",
 			"call": "test",
 			"disposition": "exclude",
-			"reason": "assignViewTransitionNames is the unexported upstream animateView builder registry; Astra owns component-bound view names and already tests their restoration/collision handling.",
+			"reason": "Direct test of the private upstream assignViewTransitionNames helper. Astra exports its own coordinated animateView builder and owns a separate capture registry; public target/name behavior is tracked by the RC fluent coverage group, without claiming this private helper is ported.",
 			"evidence": [],
 			"domain": "presence_layout"
 		},
@@ -16401,7 +16548,7 @@
 			"title": "re-owns a stale generated name instead of adopting it as an author name",
 			"call": "test",
 			"disposition": "exclude",
-			"reason": "assignViewTransitionNames is the unexported upstream animateView builder registry; Astra owns component-bound view names and already tests their restoration/collision handling.",
+			"reason": "Direct test of the private upstream assignViewTransitionNames helper. Astra exports its own coordinated animateView builder and owns a separate capture registry; public target/name behavior is tracked by the RC fluent coverage group, without claiming this private helper is ported.",
 			"evidence": [],
 			"domain": "presence_layout"
 		},
@@ -16599,7 +16746,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-reorder.svelte.spec.ts \u2014 keeps the dragged element under its pointer when siblings are inserted and removed"
+				"src/lib/motion-lab/parity-reorder.svelte.spec.ts — keeps the dragged element under its pointer when siblings are inserted and removed"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -16873,7 +17020,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts \u2014 uses returned/original measured drag bounds and renders before onDrag"
+				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts — uses returned/original measured drag bounds and renders before onDrag"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -16965,7 +17112,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gestures.svelte.spec.ts \u2014 compensates ancestor scroll during a stationary pointer and removes its frame work"
+				"src/lib/motion-lab/parity-gestures.svelte.spec.ts — compensates ancestor scroll during a stationary pointer and removes its frame work"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -16992,7 +17139,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts \u2014 nested drag allows independent nested axes without propagation and releases both sessions"
+				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts — nested drag allows independent nested axes without propagation and releases both sessions"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -17032,7 +17179,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts \u2014 nested drag allows independent nested axes without propagation and releases both sessions"
+				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts — nested drag allows independent nested axes without propagation and releases both sessions"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -17072,7 +17219,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts \u2014 drags a rendered SVG rect with trusted pointer input through viewBox origin and letterboxing"
+				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts — drags a rendered SVG rect with trusted pointer input through viewBox origin and letterboxing"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -17112,7 +17259,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts \u2014 drags a rendered SVG rect with trusted pointer input through viewBox origin and letterboxing"
+				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts — drags a rendered SVG rect with trusted pointer input through viewBox origin and letterboxing"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -17126,7 +17273,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts \u2014 drags a rendered SVG rect with trusted pointer input through viewBox origin and letterboxing"
+				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts — drags a rendered SVG rect with trusted pointer input through viewBox origin and letterboxing"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -17426,7 +17573,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts \u2014 nested drag allows parent axis / allows independent nested axes and releases both sessions"
+				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts — nested drag allows parent axis / allows independent nested axes and releases both sessions"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -17453,7 +17600,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gestures.svelte.spec.ts \u2014 keeps the distinct direction-lock threshold and reports direction once"
+				"src/lib/motion-lab/parity-gestures.svelte.spec.ts — keeps the distinct direction-lock threshold and reports direction once"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -17545,7 +17692,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gestures.svelte.spec.ts \u2014 measures a getter constraint and preserves relative position when it resizes"
+				"src/lib/motion-lab/parity-gestures.svelte.spec.ts — measures a getter constraint and preserves relative position when it resizes"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -17559,7 +17706,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts \u2014 snaps both axes from the live resized box before the drag threshold and stops with one deferred end"
+				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts — snaps both axes from the live resized box before the drag threshold and stops with one deferred end"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -17677,7 +17824,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gestures.svelte.spec.ts \u2014 uses .35 elasticity by default and returns into bounds with momentum disabled"
+				"src/lib/motion-lab/parity-gestures.svelte.spec.ts — uses .35 elasticity by default and returns into bounds with momentum disabled"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -17717,7 +17864,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-reorder.svelte.spec.ts \u2014 continues edge scrolling for a stationary pointer and stops scrolling on removal"
+				"src/lib/motion-lab/parity-reorder.svelte.spec.ts — continues edge scrolling for a stationary pointer and stops scrolling on removal"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -17770,7 +17917,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-reorder.svelte.spec.ts \u2014 uses controlled list values, native custom tags and a separate drag handle"
+				"src/lib/motion-lab/parity-reorder.svelte.spec.ts — uses controlled list values, native custom tags and a separate drag handle"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -18066,7 +18213,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-values.svelte.spec.ts \u2014 tracks both scroll axes, reactive offsets, content changes and replacement containers"
+				"src/lib/motion-lab/parity-values.svelte.spec.ts — tracks both scroll axes, reactive offsets, content changes and replacement containers"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -18106,7 +18253,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-values.svelte.spec.ts \u2014 tracks both scroll axes, reactive offsets, content changes and replacement containers"
+				"src/lib/motion-lab/parity-values.svelte.spec.ts — tracks both scroll axes, reactive offsets, content changes and replacement containers"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -18120,7 +18267,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-values.svelte.spec.ts \u2014 tracks both scroll axes, reactive offsets, content changes and replacement containers"
+				"src/lib/motion-lab/parity-values.svelte.spec.ts — tracks both scroll axes, reactive offsets, content changes and replacement containers"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -18212,7 +18359,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/upstream-layout-scroll.svelte.spec.ts \u2014 useScroll maps enter/cross target offsets, clamps outside the range, and reverses through it"
+				"src/lib/motion-lab/upstream-layout-scroll.svelte.spec.ts — useScroll maps enter/cross target offsets, clamps outside the range, and reverses through it"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -18226,7 +18373,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/upstream-layout-scroll.svelte.spec.ts \u2014 useScroll maps enter/cross target offsets, clamps outside the range, and reverses through it"
+				"src/lib/motion-lab/upstream-layout-scroll.svelte.spec.ts — useScroll maps enter/cross target offsets, clamps outside the range, and reverses through it"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -18253,7 +18400,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-values.svelte.spec.ts \u2014 tracks both scroll axes, reactive offsets, content changes and replacement containers"
+				"src/lib/motion-lab/parity-values.svelte.spec.ts — tracks both scroll axes, reactive offsets, content changes and replacement containers"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -18280,7 +18427,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts \u2014 keeps a once viewport active after exit and resumes observation when once changes"
+				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts — keeps a once viewport active after exit and resumes observation when once changes"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -18320,7 +18467,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts \u2014 keeps a once viewport active after exit and resumes observation when once changes"
+				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts — keeps a once viewport active after exit and resumes observation when once changes"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -18334,7 +18481,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts \u2014 keeps a once viewport active after exit and resumes observation when once changes"
+				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts — keeps a once viewport active after exit and resumes observation when once changes"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -18361,7 +18508,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts \u2014 keeps a once viewport active after exit and resumes observation when once changes"
+				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts — keeps a once viewport active after exit and resumes observation when once changes"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -18375,7 +18522,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts \u2014 rebinds a getter viewport root without remounting the target and disconnects the old observer"
+				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts — rebinds a getter viewport root without remounting the target and disconnects the old observer"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -18493,7 +18640,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-reorder.spec.ts \u2014 detects empty, horizontal, vertical, wrapped and unequal-size layouts"
+				"src/lib/motion-lab/parity-reorder.spec.ts — detects empty, horizontal, vertical, wrapped and unequal-size layouts"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -18507,7 +18654,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-reorder.spec.ts \u2014 moves across wrapped rows by horizontal insertion and honors RTL"
+				"src/lib/motion-lab/parity-reorder.spec.ts — moves across wrapped rows by horizontal insertion and honors RTL"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -18547,7 +18694,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-reorder.spec.ts \u2014 crosses the adjacent center only in the current direction of movement"
+				"src/lib/motion-lab/parity-reorder.spec.ts — crosses the adjacent center only in the current direction of movement"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -18626,7 +18773,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/upstream-gestures.svelte.spec.ts \u2014 suppresses new hover during a real drag and restores hover after release"
+				"src/lib/motion-lab/upstream-gestures.svelte.spec.ts — suppresses new hover during a real drag and restores hover after release"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -18653,7 +18800,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/upstream-gestures.svelte.spec.ts \u2014 suppresses new hover during a real drag and restores hover after release"
+				"src/lib/motion-lab/upstream-gestures.svelte.spec.ts — suppresses new hover during a real drag and restores hover after release"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -18667,7 +18814,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gestures-docs.svelte.spec.ts \u2014 runs inherited hover variants while keeping native click behavior"
+				"src/lib/motion-lab/parity-gestures-docs.svelte.spec.ts — runs inherited hover variants while keeping native click behavior"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -18720,7 +18867,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/upstream-gestures.svelte.spec.ts \u2014 retains hover during drag and ends it after release outside"
+				"src/lib/motion-lab/upstream-gestures.svelte.spec.ts — retains hover during drag and ends it after release outside"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -18837,7 +18984,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/gestures.svelte.spec.ts \u2014 filters touch hover, supports pointer tap cancellation, and clears states on cleanup"
+				"src/lib/motion-lab/gestures.svelte.spec.ts — filters touch hover, supports pointer tap cancellation, and clears states on cleanup"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -18864,7 +19011,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts \u2014 routes global taps from outside the node, defers current callbacks and removes window listeners"
+				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts — routes global taps from outside the node, defers current callbacks and removes window listeners"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -18878,7 +19025,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/gestures.svelte.spec.ts \u2014 supports keyboard press, restores generated tabindex, and suppresses disabled interaction"
+				"src/lib/motion-lab/gestures.svelte.spec.ts — supports keyboard press, restores generated tabindex, and suppresses disabled interaction"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -19048,7 +19195,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-core-contracts.svelte.spec.ts \u2014 restores hover then animate after a higher-priority tap completes"
+				"src/lib/motion-lab/parity-core-contracts.svelte.spec.ts — restores hover then animate after a higher-priority tap completes"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -19218,7 +19365,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/gestures.svelte.spec.ts \u2014 drags through the existing VisualElement, clamps numeric bounds, ignores other pointers, and releases the global drag lock"
+				"src/lib/motion-lab/gestures.svelte.spec.ts — drags through the existing VisualElement, clamps numeric bounds, ignores other pointers, and releases the global drag lock"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -19229,10 +19376,11 @@
 			"suite": "dragging",
 			"title": "willChange is applied correctly",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "useWillChange/WillChangeMotionValue are not Astra exports; tests assert upstream will-change optimization internals.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "gestures_scroll"
+			"domain": "gestures_scroll",
+			"group": "rc-will-change-edge-coverage"
 		},
 		{
 			"id": "packages/framer-motion/src/gestures/drag/__tests__/index.test.tsx:66",
@@ -19241,10 +19389,11 @@
 			"suite": "dragging",
 			"title": "willChange is applied correctly when other values are animating",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "useWillChange/WillChangeMotionValue are not Astra exports; tests assert upstream will-change optimization internals.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "gestures_scroll"
+			"domain": "gestures_scroll",
+			"group": "rc-will-change-edge-coverage"
 		},
 		{
 			"id": "packages/framer-motion/src/gestures/drag/__tests__/index.test.tsx:103",
@@ -19256,7 +19405,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gestures.svelte.spec.ts \u2014 starts from an external handle, honors its threshold, and separates stop from cancel"
+				"src/lib/motion-lab/parity-gestures.svelte.spec.ts — starts from an external handle, honors its threshold, and separates stop from cancel"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -19270,7 +19419,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/gestures.svelte.spec.ts \u2014 drags through the existing VisualElement, clamps numeric bounds, ignores other pointers, and releases the global drag lock"
+				"src/lib/motion-lab/gestures.svelte.spec.ts — drags through the existing VisualElement, clamps numeric bounds, ignores other pointers, and releases the global drag lock"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -19375,7 +19524,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/gestures.svelte.spec.ts \u2014 hands release velocity to Motion inertia and cancels it on a new drag"
+				"src/lib/motion-lab/gestures.svelte.spec.ts — hands release velocity to Motion inertia and cancels it on a new drag"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -19426,7 +19575,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gestures.svelte.spec.ts \u2014 keeps the distinct direction-lock threshold and reports direction once"
+				"src/lib/motion-lab/parity-gestures.svelte.spec.ts — keeps the distinct direction-lock threshold and reports direction once"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -19440,7 +19589,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts \u2014 nested drag arbitrates the same axis by default / allows parent axis / allows independent nested axes and releases both sessions"
+				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts — nested drag arbitrates the same axis by default / allows parent axis / allows independent nested axes and releases both sessions"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -19493,7 +19642,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts \u2014 nested drag arbitrates the same axis by default / allows parent axis / allows independent nested axes and releases both sessions"
+				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts — nested drag arbitrates the same axis by default / allows parent axis / allows independent nested axes and releases both sessions"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -19507,7 +19656,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts \u2014 nested drag arbitrates the same axis by default / allows parent axis / allows independent nested axes and releases both sessions"
+				"src/lib/motion-lab/parity-gesture-contracts.svelte.spec.ts — nested drag arbitrates the same axis by default / allows parent axis / allows independent nested axes and releases both sessions"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -19534,7 +19683,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/gestures.svelte.spec.ts \u2014 drags through the existing VisualElement, clamps numeric bounds, ignores other pointers, and releases the global drag lock"
+				"src/lib/motion-lab/gestures.svelte.spec.ts — drags through the existing VisualElement, clamps numeric bounds, ignores other pointers, and releases the global drag lock"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -19612,7 +19761,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/gestures.svelte.spec.ts \u2014 hands release velocity to Motion inertia and cancels it on a new drag"
+				"src/lib/motion-lab/gestures.svelte.spec.ts — hands release velocity to Motion inertia and cancels it on a new drag"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -19639,7 +19788,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/gestures.svelte.spec.ts \u2014 cancels an active drag on destruction and restores touch-action"
+				"src/lib/motion-lab/gestures.svelte.spec.ts — cancels an active drag on destruction and restores touch-action"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -19770,7 +19919,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gestures.svelte.spec.ts \u2014 starts from an external handle, honors its threshold, and separates stop from cancel"
+				"src/lib/motion-lab/parity-gestures.svelte.spec.ts — starts from an external handle, honors its threshold, and separates stop from cancel"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -19823,7 +19972,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gestures.spec.ts \u2014 uses the actual Motion 13.4.4 elastic default and resolves individual edges"
+				"src/lib/motion-lab/parity-gestures.spec.ts — uses the actual Motion 13.4.4 elastic default and resolves individual edges"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -19837,7 +19986,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gestures.spec.ts \u2014 uses the actual Motion 13.4.4 elastic default and resolves individual edges"
+				"src/lib/motion-lab/parity-gestures.spec.ts — uses the actual Motion 13.4.4 elastic default and resolves individual edges"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -19864,7 +20013,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gestures.spec.ts \u2014 uses the actual Motion 13.4.4 elastic default and resolves individual edges"
+				"src/lib/motion-lab/parity-gestures.spec.ts — uses the actual Motion 13.4.4 elastic default and resolves individual edges"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -19878,7 +20027,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gestures.spec.ts \u2014 uses the actual Motion 13.4.4 elastic default and resolves individual edges"
+				"src/lib/motion-lab/parity-gestures.spec.ts — uses the actual Motion 13.4.4 elastic default and resolves individual edges"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -19892,7 +20041,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/parity-gestures.spec.ts \u2014 uses the actual Motion 13.4.4 elastic default and resolves individual edges"
+				"src/lib/motion-lab/parity-gestures.spec.ts — uses the actual Motion 13.4.4 elastic default and resolves individual edges"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -20028,7 +20177,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/scroll.svelte.spec.ts \u2014 tracks a container and reverses its linked animation without queued playback / updates the container range after resize and rapid direction changes"
+				"src/lib/motion-lab/scroll.svelte.spec.ts — tracks a container and reverses its linked animation without queued playback / updates the container range after resize and rapid direction changes"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -20042,7 +20191,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/upstream-layout-scroll.svelte.spec.ts \u2014 useScroll maps enter/cross target offsets, clamps outside the range, and reverses through it"
+				"src/lib/motion-lab/upstream-layout-scroll.svelte.spec.ts — useScroll maps enter/cross target offsets, clamps outside the range, and reverses through it"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -20082,7 +20231,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/scroll.svelte.spec.ts \u2014 tracks a container and reverses its linked animation without queued playback / updates the container range after resize and rapid direction changes"
+				"src/lib/motion-lab/scroll.svelte.spec.ts — tracks a container and reverses its linked animation without queued playback / updates the container range after resize and rapid direction changes"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -20146,7 +20295,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/scroll.svelte.spec.ts \u2014 tracks a container and reverses its linked animation without queued playback / updates the container range after resize and rapid direction changes"
+				"src/lib/motion-lab/scroll.svelte.spec.ts — tracks a container and reverses its linked animation without queued playback / updates the container range after resize and rapid direction changes"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -20160,7 +20309,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/upstream-layout-scroll.svelte.spec.ts \u2014 useScroll maps enter/cross target offsets, clamps outside the range, and reverses through it"
+				"src/lib/motion-lab/upstream-layout-scroll.svelte.spec.ts — useScroll maps enter/cross target offsets, clamps outside the range, and reverses through it"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -20200,7 +20349,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/scroll.svelte.spec.ts \u2014 tracks a container and reverses its linked animation without queued playback / updates the container range after resize and rapid direction changes"
+				"src/lib/motion-lab/scroll.svelte.spec.ts — tracks a container and reverses its linked animation without queued playback / updates the container range after resize and rapid direction changes"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -20562,7 +20711,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/in-view.spec.ts \u2014 renders visibility defaults and explicit initial state without browser globals"
+				"src/lib/motion-lab/in-view.spec.ts — renders visibility defaults and explicit initial state without browser globals"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -20576,7 +20725,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/in-view.svelte.spec.ts \u2014 clears initial true on the first outside measurement and reacts to enter and leave"
+				"src/lib/motion-lab/in-view.svelte.spec.ts — clears initial true on the first outside measurement and reacts to enter and leave"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -20590,7 +20739,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/in-view.svelte.spec.ts \u2014 clears initial true on the first outside measurement and reacts to enter and leave"
+				"src/lib/motion-lab/in-view.svelte.spec.ts — clears initial true on the first outside measurement and reacts to enter and leave"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -20604,7 +20753,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/in-view.svelte.spec.ts \u2014 clears initial true on the first outside measurement and reacts to enter and leave"
+				"src/lib/motion-lab/in-view.svelte.spec.ts — clears initial true on the first outside measurement and reacts to enter and leave"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -20618,7 +20767,7 @@
 			"disposition": "covered",
 			"reason": "Existing assertions exercise the shared behavior.",
 			"evidence": [
-				"src/lib/motion-lab/in-view.svelte.spec.ts \u2014 latches once only after a measured entry and starts fresh for a replacement target"
+				"src/lib/motion-lab/in-view.svelte.spec.ts — latches once only after a measured entry and starts fresh for a replacement target"
 			],
 			"domain": "gestures_scroll"
 		},
@@ -24154,10 +24303,11 @@
 			"suite": "useFollowValue types",
 			"title": "can create a motion value from a number",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "useFollowValue is not exposed by Astra; supported useSpring wiring audited separately.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "components_values"
+			"domain": "components_values",
+			"group": "rc-follow-value-edge-coverage"
 		},
 		{
 			"id": "packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:26",
@@ -24166,9 +24316,11 @@
 			"suite": "useFollowValue types",
 			"title": "can create a motion value from a string with a unit",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "useFollowValue is not exposed by Astra; supported useSpring wiring audited separately.",
-			"evidence": [],
+			"disposition": "covered",
+			"reason": "The RC public Svelte API has an assertion for this behavior; this maps the cited scenario only, not the entire upstream suite.",
+			"evidence": [
+				"src/lib/motion-lab/remaining-apis.svelte.spec.ts: retains direct follower intent and reconnects source after Activity suspension"
+			],
 			"domain": "components_values"
 		},
 		{
@@ -24178,9 +24330,11 @@
 			"suite": "useFollowValue types",
 			"title": "can create a motion value from a number motion value",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "useFollowValue is not exposed by Astra; supported useSpring wiring audited separately.",
-			"evidence": [],
+			"disposition": "covered",
+			"reason": "The RC public Svelte API has an assertion for this behavior; this maps the cited scenario only, not the entire upstream suite.",
+			"evidence": [
+				"src/lib/motion-lab/remaining-apis.svelte.spec.ts: retains direct follower intent and reconnects source after Activity suspension"
+			],
 			"domain": "components_values"
 		},
 		{
@@ -24190,10 +24344,11 @@
 			"suite": "useFollowValue types",
 			"title": "can create a motion value from a string motion value with a unit",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "useFollowValue is not exposed by Astra; supported useSpring wiring audited separately.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "components_values"
+			"domain": "components_values",
+			"group": "rc-follow-value-edge-coverage"
 		},
 		{
 			"id": "packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:75",
@@ -24202,10 +24357,11 @@
 			"suite": "`useFollowValue ${unit ? `with ${unit}` : \"with numbers\"}`",
 			"title": "can create a motion value from a number (default spring)",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "useFollowValue is not exposed by Astra; supported useSpring wiring audited separately.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "components_values"
+			"domain": "components_values",
+			"group": "rc-follow-value-edge-coverage"
 		},
 		{
 			"id": "packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:99",
@@ -24214,10 +24370,11 @@
 			"suite": "`useFollowValue ${unit ? `with ${unit}` : \"with numbers\"}`",
 			"title": "can create a MotionValue that responds to changes from another MotionValue",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "useFollowValue is not exposed by Astra; supported useSpring wiring audited separately.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "components_values"
+			"domain": "components_values",
+			"group": "rc-follow-value-edge-coverage"
 		},
 		{
 			"id": "packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:123",
@@ -24226,10 +24383,11 @@
 			"suite": "`useFollowValue ${unit ? `with ${unit}` : \"with numbers\"}`",
 			"title": "creates a spring animation when type is spring",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "useFollowValue is not exposed by Astra; supported useSpring wiring audited separately.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "components_values"
+			"domain": "components_values",
+			"group": "rc-follow-value-edge-coverage"
 		},
 		{
 			"id": "packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:173",
@@ -24238,10 +24396,11 @@
 			"suite": "`useFollowValue ${unit ? `with ${unit}` : \"with numbers\"}`",
 			"title": "will not animate if immediate=true (jump)",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "useFollowValue is not exposed by Astra; supported useSpring wiring audited separately.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "components_values"
+			"domain": "components_values",
+			"group": "rc-follow-value-edge-coverage"
 		},
 		{
 			"id": "packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:211",
@@ -24250,10 +24409,11 @@
 			"suite": "`useFollowValue ${unit ? `with ${unit}` : \"with numbers\"}`",
 			"title": "unsubscribes when attached to a new value",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "useFollowValue is not exposed by Astra; supported useSpring wiring audited separately.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "components_values"
+			"domain": "components_values",
+			"group": "rc-follow-value-edge-coverage"
 		},
 		{
 			"id": "packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:238",
@@ -24262,10 +24422,11 @@
 			"suite": "useFollowValue animation events",
 			"title": "triggers animationStart event when animation begins",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "useFollowValue is not exposed by Astra; supported useSpring wiring audited separately.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "components_values"
+			"domain": "components_values",
+			"group": "rc-follow-value-edge-coverage"
 		},
 		{
 			"id": "packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:265",
@@ -24274,10 +24435,11 @@
 			"suite": "useFollowValue animation events",
 			"title": "triggers animationComplete event when animation finishes",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "useFollowValue is not exposed by Astra; supported useSpring wiring audited separately.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "components_values"
+			"domain": "components_values",
+			"group": "rc-follow-value-edge-coverage"
 		},
 		{
 			"id": "packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:294",
@@ -24286,9 +24448,11 @@
 			"suite": "useFollowValue with different transition types",
 			"title": "accepts spring configuration",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "useFollowValue is not exposed by Astra; supported useSpring wiring audited separately.",
-			"evidence": [],
+			"disposition": "covered",
+			"reason": "The RC public Svelte API has an assertion for this behavior; this maps the cited scenario only, not the entire upstream suite.",
+			"evidence": [
+				"src/lib/motion-lab/remaining-apis.svelte.spec.ts: follows tween targets, replaces sources/settings and preserves borrowed ownership"
+			],
 			"domain": "components_values"
 		},
 		{
@@ -24298,9 +24462,11 @@
 			"suite": "useFollowValue with different transition types",
 			"title": "accepts tween configuration",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "useFollowValue is not exposed by Astra; supported useSpring wiring audited separately.",
-			"evidence": [],
+			"disposition": "covered",
+			"reason": "The RC public Svelte API has an assertion for this behavior; this maps the cited scenario only, not the entire upstream suite.",
+			"evidence": [
+				"src/lib/motion-lab/remaining-apis.svelte.spec.ts: follows tween targets, replaces sources/settings and preserves borrowed ownership"
+			],
 			"domain": "components_values"
 		},
 		{
@@ -24310,10 +24476,11 @@
 			"suite": "useFollowValue with different transition types",
 			"title": "accepts delay configuration",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "useFollowValue is not exposed by Astra; supported useSpring wiring audited separately.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "components_values"
+			"domain": "components_values",
+			"group": "rc-follow-value-edge-coverage"
 		},
 		{
 			"id": "packages/framer-motion/src/value/__tests__/use-motion-template.test.tsx:10",
@@ -24960,7 +25127,7 @@
 			"title": "will-change not set in static mode",
 			"call": "test",
 			"disposition": "exclude",
-			"reason": "MotionConfig isStatic is unsupported.",
+			"reason": "Internal Framer canvas isStatic renderer mode is intentionally not part of Astra public MotionConfig. This React/internal-mode assertion is excluded; zero-duration animation and Activity are not claimed equivalent.",
 			"evidence": [],
 			"domain": "components_values"
 		},
@@ -25037,7 +25204,7 @@
 			"title": "will-change correctly not applied when isStatic",
 			"call": "test",
 			"disposition": "exclude",
-			"reason": "MotionConfig isStatic is unsupported.",
+			"reason": "Internal Framer canvas isStatic renderer mode is intentionally not part of Astra public MotionConfig. This React/internal-mode assertion is excluded; zero-duration animation and Activity are not claimed equivalent.",
 			"evidence": [],
 			"domain": "components_values"
 		},
@@ -25048,10 +25215,11 @@
 			"suite": "WillChangeMotionValue",
 			"title": "Can manage transform alongside independent transforms",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "useWillChange/WillChangeMotionValue/global injection is not exposed by Astra; manual style willChange SSR coverage is added separately.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "components_values"
+			"domain": "components_values",
+			"group": "rc-will-change-edge-coverage"
 		},
 		{
 			"id": "packages/framer-motion/src/value/use-will-change/__tests__/will-change.test.tsx:26",
@@ -25060,10 +25228,11 @@
 			"suite": "willChange",
 			"title": "Renders values defined in animate on initial render",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "useWillChange/WillChangeMotionValue/global injection is not exposed by Astra; manual style willChange SSR coverage is added separately.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "components_values"
+			"domain": "components_values",
+			"group": "rc-will-change-edge-coverage"
 		},
 		{
 			"id": "packages/framer-motion/src/value/use-will-change/__tests__/will-change.test.tsx:46",
@@ -25072,10 +25241,11 @@
 			"suite": "willChange",
 			"title": "Doesn't render CSS variables or non-hardware accelerated values",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "useWillChange/WillChangeMotionValue/global injection is not exposed by Astra; manual style willChange SSR coverage is added separately.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "components_values"
+			"domain": "components_values",
+			"group": "rc-will-change-edge-coverage"
 		},
 		{
 			"id": "packages/framer-motion/src/value/use-will-change/__tests__/will-change.test.tsx:70",
@@ -25084,10 +25254,11 @@
 			"suite": "willChange",
 			"title": "Externally-provided motion values are not added to will-change",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "useWillChange/WillChangeMotionValue/global injection is not exposed by Astra; manual style willChange SSR coverage is added separately.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "components_values"
+			"domain": "components_values",
+			"group": "rc-will-change-edge-coverage"
 		},
 		{
 			"id": "packages/framer-motion/src/value/use-will-change/__tests__/will-change.test.tsx:89",
@@ -25096,10 +25267,11 @@
 			"suite": "willChange",
 			"title": "Don't remove values when they finish animating",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "useWillChange/WillChangeMotionValue/global injection is not exposed by Astra; manual style willChange SSR coverage is added separately.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "components_values"
+			"domain": "components_values",
+			"group": "rc-will-change-edge-coverage"
 		},
 		{
 			"id": "packages/framer-motion/src/value/use-will-change/__tests__/will-change.test.tsx:118",
@@ -25108,10 +25280,11 @@
 			"suite": "willChange",
 			"title": "Add values when they start animating",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "useWillChange/WillChangeMotionValue/global injection is not exposed by Astra; manual style willChange SSR coverage is added separately.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "components_values"
+			"domain": "components_values",
+			"group": "rc-will-change-edge-coverage"
 		},
 		{
 			"id": "packages/framer-motion/src/value/use-will-change/__tests__/will-change.test.tsx:141",
@@ -25120,10 +25293,11 @@
 			"suite": "willChange",
 			"title": "Doesn't remove values when animation interrupted",
 			"call": "test",
-			"disposition": "exclude",
-			"reason": "useWillChange/WillChangeMotionValue/global injection is not exposed by Astra; manual style willChange SSR coverage is added separately.",
+			"disposition": "add",
+			"reason": "The API is now public. This specific upstream scenario is not fully asserted by the focused RC tests; retain it as an explicit coverage gap rather than an unsupported-API exclusion.",
 			"evidence": [],
-			"domain": "components_values"
+			"domain": "components_values",
+			"group": "rc-will-change-edge-coverage"
 		},
 		{
 			"id": "packages/framer-motion/src/value/use-will-change/__tests__/will-change.test.tsx:178",
@@ -25133,7 +25307,7 @@
 			"title": "Renders values defined in animate on initial render",
 			"call": "test",
 			"disposition": "exclude",
-			"reason": "useWillChange/WillChangeMotionValue/global injection is not exposed by Astra; manual style willChange SSR coverage is added separately.",
+			"reason": "React/global MotionGlobalConfig.WillChange injection is not an Astra public API. Explicit useWillChange/WillChangeMotionValue style bindings are supported and tracked separately; this implicit global-injection assertion remains excluded.",
 			"evidence": [],
 			"domain": "components_values"
 		},
@@ -25145,7 +25319,7 @@
 			"title": "Doesn't render CSS variables or non-hardware accelerated values",
 			"call": "test",
 			"disposition": "exclude",
-			"reason": "useWillChange/WillChangeMotionValue/global injection is not exposed by Astra; manual style willChange SSR coverage is added separately.",
+			"reason": "React/global MotionGlobalConfig.WillChange injection is not an Astra public API. Explicit useWillChange/WillChangeMotionValue style bindings are supported and tracked separately; this implicit global-injection assertion remains excluded.",
 			"evidence": [],
 			"domain": "components_values"
 		},
@@ -25157,7 +25331,7 @@
 			"title": "Externally-provided motion values are not added to will-change",
 			"call": "test",
 			"disposition": "exclude",
-			"reason": "useWillChange/WillChangeMotionValue/global injection is not exposed by Astra; manual style willChange SSR coverage is added separately.",
+			"reason": "React/global MotionGlobalConfig.WillChange injection is not an Astra public API. Explicit useWillChange/WillChangeMotionValue style bindings are supported and tracked separately; this implicit global-injection assertion remains excluded.",
 			"evidence": [],
 			"domain": "components_values"
 		},
@@ -25169,7 +25343,7 @@
 			"title": "Don't remove values when they finish animating",
 			"call": "test",
 			"disposition": "exclude",
-			"reason": "useWillChange/WillChangeMotionValue/global injection is not exposed by Astra; manual style willChange SSR coverage is added separately.",
+			"reason": "React/global MotionGlobalConfig.WillChange injection is not an Astra public API. Explicit useWillChange/WillChangeMotionValue style bindings are supported and tracked separately; this implicit global-injection assertion remains excluded.",
 			"evidence": [],
 			"domain": "components_values"
 		},
@@ -25181,7 +25355,7 @@
 			"title": "Add values when they start animating",
 			"call": "test",
 			"disposition": "exclude",
-			"reason": "useWillChange/WillChangeMotionValue/global injection is not exposed by Astra; manual style willChange SSR coverage is added separately.",
+			"reason": "React/global MotionGlobalConfig.WillChange injection is not an Astra public API. Explicit useWillChange/WillChangeMotionValue style bindings are supported and tracked separately; this implicit global-injection assertion remains excluded.",
 			"evidence": [],
 			"domain": "components_values"
 		},
@@ -25193,7 +25367,7 @@
 			"title": "Doesn't remove values when animation interrupted",
 			"call": "test",
 			"disposition": "exclude",
-			"reason": "useWillChange/WillChangeMotionValue/global injection is not exposed by Astra; manual style willChange SSR coverage is added separately.",
+			"reason": "React/global MotionGlobalConfig.WillChange injection is not an Astra public API. Explicit useWillChange/WillChangeMotionValue style bindings are supported and tracked separately; this implicit global-injection assertion remains excluded.",
 			"evidence": [],
 			"domain": "components_values"
 		},
@@ -32116,5 +32290,93 @@
 			"skipped": 0,
 			"status": "passed"
 		}
+	},
+	"rcApiCoverageReview": {
+		"date": "2026-09-29",
+		"sourceDeclarationsPreserved": 1990,
+		"classificationNote": "Historical verification and the original implemented groups remain historical evidence. Added pending groups explicitly track newly public API edge scenarios; supported does not imply fully covered.",
+		"reviewedSourceIds": [
+			"tests/animate/view.spec.ts:4",
+			"tests/view/view-targets.spec.ts:64",
+			"tests/view/view-targets.spec.ts:80",
+			"tests/view/view-targets.spec.ts:91",
+			"tests/view/view-targets.spec.ts:109",
+			"tests/view/view-targets.spec.ts:125",
+			"tests/view/view-targets.spec.ts:137",
+			"tests/view/view-targets.spec.ts:156",
+			"tests/view/view-targets.spec.ts:167",
+			"tests/view/view-targets.spec.ts:184",
+			"tests/view/view-targets.spec.ts:198",
+			"tests/view/view-targets.spec.ts:211",
+			"tests/view/view-targets.spec.ts:224",
+			"tests/view/view-targets.spec.ts:237",
+			"tests/view/view-targets.spec.ts:260",
+			"tests/view/view-targets.spec.ts:279",
+			"tests/view/view-targets.spec.ts:295",
+			"tests/view/view-targets.spec.ts:310",
+			"tests/view/view-targets.spec.ts:332",
+			"tests/view/view-targets.spec.ts:353",
+			"tests/view/view-targets.spec.ts:372",
+			"tests/view/view-targets.spec.ts:388",
+			"tests/view/view-targets.spec.ts:407",
+			"tests/view/view-targets.spec.ts:423",
+			"tests/view/view-targets.spec.ts:440",
+			"tests/view/view-targets.spec.ts:455",
+			"tests/view/view-targets.spec.ts:468",
+			"tests/view/view-targets.spec.ts:482",
+			"tests/view/view-targets.spec.ts:505",
+			"tests/view/view-targets.spec.ts:522",
+			"tests/view/view-targets.spec.ts:538",
+			"packages/framer-motion/src/gestures/drag/__tests__/index.test.tsx:38",
+			"packages/framer-motion/src/gestures/drag/__tests__/index.test.tsx:66",
+			"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:17",
+			"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:26",
+			"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:35",
+			"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:45",
+			"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:75",
+			"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:99",
+			"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:123",
+			"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:173",
+			"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:211",
+			"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:238",
+			"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:265",
+			"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:294",
+			"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:308",
+			"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:321",
+			"packages/framer-motion/src/value/use-will-change/__tests__/will-change.test.tsx:13",
+			"packages/framer-motion/src/value/use-will-change/__tests__/will-change.test.tsx:26",
+			"packages/framer-motion/src/value/use-will-change/__tests__/will-change.test.tsx:46",
+			"packages/framer-motion/src/value/use-will-change/__tests__/will-change.test.tsx:70",
+			"packages/framer-motion/src/value/use-will-change/__tests__/will-change.test.tsx:89",
+			"packages/framer-motion/src/value/use-will-change/__tests__/will-change.test.tsx:118",
+			"packages/framer-motion/src/value/use-will-change/__tests__/will-change.test.tsx:141"
+		],
+		"coveredReclassifications": [
+			"tests/view/view-targets.spec.ts:91",
+			"tests/view/view-targets.spec.ts:109",
+			"tests/view/view-targets.spec.ts:237",
+			"tests/view/view-targets.spec.ts:260",
+			"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:26",
+			"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:35",
+			"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:294",
+			"packages/framer-motion/src/value/__tests__/use-follow-value.test.tsx:308"
+		],
+		"pendingGroups": [
+			"rc-animate-view-edge-coverage",
+			"rc-will-change-edge-coverage",
+			"rc-follow-value-edge-coverage"
+		],
+		"internalExclusions": "Direct private assignViewTransitionNames and internal React isStatic tests remain reasoned exclusions.",
+		"focusedEvidence": {
+			"chromium": {
+				"passed": 34,
+				"log": "/tmp/astra-apis-final-browser.log"
+			},
+			"server": {
+				"passed": 15,
+				"log": "/tmp/astra-apis-server.log"
+			}
+		},
+		"generation": "No maintained inventory generator exists in the repository. Historical one-shot audit generators are under /tmp/astra-upstream-expansion; RC amendment source is /tmp/astra-rc-20260929/update-api-inventory.py."
 	}
 }

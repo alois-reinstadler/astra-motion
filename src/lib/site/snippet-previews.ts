@@ -26,6 +26,13 @@ export const codeOnlySnippets: Record<string, string> = {
 	'animate-view/navigation': 'Root layout navigation hooks require real route changes.'
 };
 
+/** Preserve historical fixtures while current guides select the modern authoring examples. */
+const previewFiles: Record<string, string> = {
+	'reorder/list': 'reorder--list-binding.svelte',
+	'animate-presence/exit-data': 'animate-presence--exit-data-value.svelte',
+	'text-animation/replacement': 'text-animation--replacement-value.svelte'
+};
+
 const childFiles: Record<string, string> = {
 	'animate-presence/manual-removal': 'ManualExit.svelte',
 	'animate-activity/component-sequencing': 'ActivityTab.svelte',
@@ -35,7 +42,7 @@ const childFiles: Record<string, string> = {
 export function getSnippetPreview(doc: DocPage, section: DocSection): LiveExample | undefined {
 	if (!section.code) return;
 	const id = `${doc.slug}/${section.id}`;
-	const path = `./snippet-previews/${doc.slug}--${section.id}.svelte`;
+	const path = `./snippet-previews/${previewFiles[id] ?? `${doc.slug}--${section.id}.svelte`}`;
 	const component = components[path];
 	if (!component) return;
 	const child = childFiles[id];

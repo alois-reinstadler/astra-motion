@@ -21,3 +21,7 @@ export function motionStore<T>(value: MotionValue<T>): Writable<T> {
 		update: (update) => value.set(update(value.get()))
 	};
 }
+
+export { useFollowValue } from './value-hooks.svelte.js';
+export { useWillChange, WillChangeMotionValue } from './will-change.svelte.js';
+export type { FollowValueOptions } from 'motion-dom';

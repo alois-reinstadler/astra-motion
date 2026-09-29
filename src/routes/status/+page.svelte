@@ -4,9 +4,9 @@
 </script>
 
 <ProjectArticle
-	eyebrow="PROJECT STATUS / WORKING BETA"
+	eyebrow="PROJECT STATUS / LOCAL RELEASE CANDIDATE"
 	title="Ready to try. Still being qualified."
-	intro="The repository contains a working Svelte 5 library, documentation and examples. Version 0.0.1 is a local beta; a public registry release has not been announced."
+	intro="The repository contains a working Svelte 5 library, documentation and examples. Version 0.1.0-rc.1 is a local release candidate; a public registry release has not been announced."
 >
 	<section id="supported">
 		<h2>What you can build today</h2>
@@ -37,17 +37,17 @@
 		<h2>Start with one interaction</h2>
 		<div>
 			<p>
-				Build a local package from the repository and install the tarball in your app. Start with a
-				panel, list or dialog you can test in isolation. The getting-started guide includes the
-				commands and entry points.
+				Install the supplied astra-motion-0.1.0-rc.1.tgz archive in your app. Start with a panel,
+				list or dialog you can test in isolation. The getting-started guide includes the commands
+				and entry points.
 			</p>
 			<p>
 				Test interrupted animations, keyboard interaction, reduced motion and navigation in your own
-				layout. Keep the tested dependency versions pinned while evaluating the beta.
+				layout. Keep the tested dependency versions pinned while evaluating the candidate.
 			</p>
 			<p>
 				<a href={resolve('/docs/[slug]', { slug: 'getting-started' })}
-					>Install from the repository
+					>Install the release candidate
 				</a>
 			</p>
 		</div>
@@ -95,10 +95,10 @@
 					> for the workload, results and device limits.
 				</li>
 				<li>
-					AnimatePresence uses explicit keys and snippets. AnimateActivity retains DOM and pauses
-					Astra-owned work; ordinary Svelte effects need the activity-aware helper to pause.
-					AnimateView uses an explicit state-update transaction. These Svelte adaptations are
-					documented on their component pages.
+					AnimatePresence uses explicit forms and snippets, with optional identity selectors.
+					AnimateActivity retains DOM and pauses Astra-owned work; ordinary Svelte effects need the
+					activity-aware helper to pause. AnimateView uses an explicit state-update transaction.
+					These Svelte adaptations are documented on their component pages.
 				</li>
 				<li>
 					Static transformed wrappers, including 3D and perspective ancestors, and nested

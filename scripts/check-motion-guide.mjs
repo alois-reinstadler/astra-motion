@@ -1,5 +1,12 @@
 /** Source-consumer checks only: no application build or package emission. */
-import { mkdtempSync, readFileSync, writeFileSync, rmSync, readdirSync } from 'node:fs';
+import {
+	mkdtempSync,
+	readFileSync,
+	writeFileSync,
+	rmSync,
+	readdirSync,
+	symlinkSync
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -22,6 +29,7 @@ const { publicExampleSource } = await import(
 );
 const directory = mkdtempSync(join(tmpdir(), 'astra-guide-consumer-'));
 try {
+	symlinkSync(resolve('node_modules'), join(directory, 'node_modules'), 'dir');
 	const manifest = JSON.parse(readFileSync('package.json', 'utf8'));
 	const paths = {};
 	for (const [entry, conditions] of Object.entries(manifest.exports)) {

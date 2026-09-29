@@ -16,7 +16,9 @@ it('reorder-contracts: union values and callbacks retain types while invalid nat
 	type Group = ReorderGroupProps<number | string, 'article'>;
 	type Item = ReorderItemProps<number, 'main'>;
 	expectTypeOf<Group['values']>().toEqualTypeOf<(number | string)[]>();
-	expectTypeOf<Group['onReorder']>().toEqualTypeOf<(values: (number | string)[]) => void>();
+	expectTypeOf<Group['onReorder']>().toEqualTypeOf<
+		((values: (number | string)[]) => void) | undefined
+	>();
 	const values: number[] | string[] = [1, 2];
 	const valid: Group = { values, onReorder: () => {}, id: 'group', class: 'list' };
 	expect(valid.values).toEqual([1, 2]);

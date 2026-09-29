@@ -1,4 +1,5 @@
-export type PresenceKey = string | number | symbol;
+/** Presence identity uses Map/SameValueZero semantics; objects compare by reference. */
+export type PresenceKey = string | number | symbol | boolean | bigint | object;
 export type PresenceMode = 'sync' | 'wait' | 'popLayout';
 export interface PresenceInput<T> {
 	key: PresenceKey;

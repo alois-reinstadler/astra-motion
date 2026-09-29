@@ -23,9 +23,9 @@ export const presenceViewDocs: DocPage[] = [
 				id: 'keyed-content',
 				title: 'Replace content and retain list identity',
 				text: [
-					'For a list or keyed replacement, pass items and a key function. The children snippet receives one item. Each key must be a unique string, number, or symbol that stays associated with the same logical item. Use an item ID rather than its array position.',
-					'Changing an item’s data while preserving its key updates the existing instance. Removing the key starts its exit and retains the last item data for that outgoing instance. Adding a different key creates an entering instance. Use items={[selected]} for a single keyed replacement.',
-					'Svelte snippets are functions rather than inspectable child element descriptions. The explicit present or items/key boundary supplies the identity Astra needs to retain content. Do not place an if block inside a permanently present snippet and expect the outer boundary to infer its removal.'
+					'For a list or keyed replacement, pass items and a key function. The children snippet receives one item. Each key must stay unique and associated with the same logical item; strings, numbers, symbols, booleans, bigints and object references are supported. Use an item ID rather than its array position.',
+					'Changing an item’s data while preserving its key updates the existing instance. Removing the key starts its exit and retains the last item data for that outgoing instance. Adding a different key creates an entering instance. Use value={selected} for a single replacement and optionally key={(item) => item.id}. Without a selector, the value itself supplies identity; objects compare by reference. Null and undefined display nothing, while false, zero and the empty string remain present. Outgoing data retains the original item reference, not a deep clone.',
+					'Svelte snippets are functions rather than inspectable child element descriptions. The explicit present, items/key or value boundary supplies the identity Astra needs to retain content. Do not place an if block inside a permanently present snippet and expect the outer boundary to infer its removal.'
 				],
 				code: {
 					label: 'Focused list excerpt',
@@ -70,7 +70,7 @@ export const presenceViewDocs: DocPage[] = [
 				],
 				code: {
 					label: 'Focused directional variant excerpt',
-					source: `<AnimatePresence items={[slide]} key={(item) => item.id} custom={direction}>
+					source: `<AnimatePresence value={slide} key={(item) => item.id} custom={direction}>
   {#snippet children(item)}
     <motion.article
       variants={{
@@ -138,14 +138,21 @@ export const presenceViewDocs: DocPage[] = [
 			{
 				id: 'props',
 				title: 'Props and defaults',
-				text: ['Choose either present or items with key. All other props apply to both forms.'],
+				text: [
+					'Choose exactly one of present, items with key, or value with optional key. Supplying multiple forms is a type and runtime error, including an explicitly supplied undefined prop. All other props apply to every form.'
+				],
 				table: {
 					columns: ['Prop', 'Default', 'Contract'],
 					rows: [
 						[
 							'present',
 							'true',
-							'Boolean visibility request for one retained snippet; mutually exclusive with items.'
+							'Boolean visibility request for one retained snippet; mutually exclusive with items and value.'
+						],
+						[
+							'value',
+							'Not supplied',
+							'One retained item; null and undefined are absent. Mutually exclusive with present and items.'
 						],
 						[
 							'items',
@@ -155,7 +162,7 @@ export const presenceViewDocs: DocPage[] = [
 						[
 							'key',
 							'Required with items',
-							'(item) => string | number | symbol. Duplicate keys throw.'
+							'Select stable identity. Required for items; optional for value, which defaults to identity by value/reference. Duplicate collection keys throw.'
 						],
 						[
 							'children',
@@ -226,7 +233,7 @@ export const presenceViewDocs: DocPage[] = [
 				text: [
 					'If an exit never appears, keep the boundary mounted, put the condition on present or remove a key from items, and confirm the retained subtree contains an exit animation. If removal never finishes, inspect every usePresence registration and release any application-owned work.',
 					'If a list item changes identity unexpectedly, replace index keys with stable IDs. wait with more than one requested item throws rather than silently rendering an ambiguous sequence. For popLayout positioning errors, check the containing block and register the real root of custom children.',
-					'The existing Presence component remains available with its value-based API and wait default. AnimatePresence defaults to sync. A keyed Presence value={value} maps to AnimatePresence items={[value]} key={(item) => item}; its snippet continues to receive that value. Choose mode="wait" explicitly when retaining the older sequencing behavior.'
+					'The existing Presence component remains available with its value-based API and wait default. AnimatePresence defaults to sync. A keyed Presence value={value} maps to AnimatePresence value={value}; its snippet continues to receive that retained value. Null and undefined are absent in the modern form. Choose mode="wait" explicitly when retaining the older sequencing behavior.'
 				],
 				related: ['animate-activity', 'animate-view', 'layout-group']
 			}
@@ -439,6 +446,44 @@ export const presenceViewDocs: DocPage[] = [
 				],
 				example: 'animate-view',
 				related: ['layout', 'animate-presence']
+			},
+			{
+				id: 'imperative-builder',
+				title: 'Use the imperative animateView builder',
+				text: [
+					'animateView(update, options?) captures a Svelte state transaction through the same document coordinator as AnimateView and navigation. Finish its fluent chain synchronously before capture begins. The update runs once, including unsupported-browser fallback and cancellation; async updates are supported and Svelte settles before the new capture.',
+					'The initial target is root. add selects an Element or all matches for a selector; an optional second Element/selector selects its new destination. Selectors run again after the update and pair matches by order. Stable selection is your responsibility. Do not select an AnimateView-owned node; use its existing boundary with startViewTransition instead.',
+					'Awaiting the builder yields playback controls after capture is ready; await those controls.finished for their animation completion. builder.finished is the additive document outcome: "finished", "skipped" or "unsupported". builder.cancel() skips capture/animation while applying the update. Component teardown does not implicitly cancel this document-owned transaction.',
+					'Options include default timing in seconds, document, nonce, reducedMotion and interrupt. Reduction defaults to "user"; interrupt defaults to "wait" (queue), while "immediate" replaces current capture. A cancelled queued builder applies its update immediately without waiting for an active animation; an immediate request takes capture priority over older queued requests. Temporary names/styles are restored on completion or cancellation. Snapshot keyframes use native CSS properties such as transform, translate, rotate and scale; element-only aliases such as x and rotateX are rejected with a correction. The root snapshot is disabled unless the chain selects root. Browser support still bounds grouping and native snapshot features.'
+				],
+				code: {
+					label: 'Complete Svelte example',
+					source:
+						"<script lang=\"ts\">\n  import { animateView } from 'astra-motion';\n  const id = $props.id();\n  let expanded = $state(false);\n  let outcome = $state('Ready');\n  async function toggle() {\n    const transition = animateView(() => { expanded = !expanded; }, { reducedMotion: 'user' })\n      .add(`#${CSS.escape(id)}`)\n      .layout({ duration: 0.3 })\n      .new({ opacity: [0.6, 1] }, { duration: 0.2 });\n    outcome = await transition.finished;\n  }\n</script>\n\n<button onclick={toggle}>Toggle card</button>\n<article {id} class:expanded>Browser snapshot animation</article>\n<p aria-live=\"polite\">{outcome}</p>\n\n<style>\n  article { width: 180px; padding: 24px; background: #def; }\n  article.expanded { width: 280px; }\n</style>"
+				},
+				table: {
+					columns: ['Method', 'Contract'],
+					rows: [
+						[
+							'.add(oldTarget, newTarget?)',
+							'Select one Element or selector matches, optionally pairing old/new matches by order.'
+						],
+						['.layout(options)', 'Configure native geometry timing for the current target.'],
+						[
+							'.enter(keyframes, options) / .exit(keyframes, options)',
+							'Animate snapshots only when the target enters or leaves.'
+						],
+						[
+							'.new(keyframes, options) / .old(keyframes, options)',
+							'Animate the new/old snapshot even when the target survives.'
+						],
+						[
+							'.crop(boolean) / .group(boolean)',
+							'Override aspect-change clipping or supported nested snapshot grouping.'
+						],
+						['.class(identifier)', 'Assign one CSS identifier for view-transition-class styling.']
+					]
+				}
 			},
 			{
 				id: 'animation-types',

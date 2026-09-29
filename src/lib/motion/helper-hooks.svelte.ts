@@ -23,7 +23,12 @@ export interface AnimationFrameOptions {
 	enabled?: boolean;
 }
 
-/** Frame time and delta are milliseconds. The first callback receives time zero. */
+/**
+ * Frame time and delta are milliseconds. The first callback receives time zero.
+ * @param callback A stable callback closure; read live state inside it. This function
+ * is the callback, not a getter. Use options.enabled to reactively pause frame work.
+ * @param options Static settings or a getter, e.g. () => ({ enabled: playing }).
+ */
 export function useAnimationFrame(
 	callback: AnimationFrameCallback | undefined,
 	options: MotionGetter<AnimationFrameOptions> = {}
@@ -88,6 +93,12 @@ export interface UseInViewOptions extends Omit<InViewOptions, 'root'> {
 	root?: MotionGetter<Element | Document | null | undefined>;
 }
 
+/**
+ * Observe an element from component setup and read visibility.current reactively.
+ * @param target Element, reactive getter (e.g. () => node), or a .current reader.
+ * @param options Static options or a getter for changing threshold/root/once options.
+ * @example const visible = useInView(() => section, () => ({ amount: threshold }));
+ */
 export function useInView(
 	target: MotionElementSource,
 	options: MotionGetter<UseInViewOptions> = {}

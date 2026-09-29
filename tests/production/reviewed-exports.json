@@ -3,6 +3,7 @@
 		"AnimateActivity",
 		"AnimatePresence",
 		"AnimateView",
+		"AnimateViewBuilder",
 		"DragControls",
 		"LayoutGroup",
 		"LazyMotion",
@@ -10,6 +11,8 @@
 		"MotionConfig",
 		"Presence",
 		"Reorder",
+		"WillChangeMotionValue",
+		"animateView",
 		"animationControls",
 		"arc",
 		"correctParentTransform",
@@ -45,6 +48,7 @@
 		"useAnimationControls",
 		"useAnimationFrame",
 		"useDragControls",
+		"useFollowValue",
 		"useInView",
 		"useIsPresent",
 		"useMotionTemplate",
@@ -58,7 +62,8 @@
 		"useSpring",
 		"useTime",
 		"useTransform",
-		"useVelocity"
+		"useVelocity",
+		"useWillChange"
 	],
 	"./layout": ["createLayout", "updateLayout"],
 	"./presence": [
@@ -78,12 +83,15 @@
 	"./policy": ["shouldReduceMotion"],
 	"./state": ["createMotion"],
 	"./values": [
+		"WillChangeMotionValue",
 		"mapValue",
 		"motionStore",
 		"motionValue",
 		"springValue",
 		"stagger",
-		"transformValue"
+		"transformValue",
+		"useFollowValue",
+		"useWillChange"
 	],
 	"./animate": ["createAnimate", "useAnimate"],
 	"./scroll": ["createScroll"],
@@ -265,6 +273,6 @@
 	"./lazy": ["LazyMotion"],
 	"./mini": ["useAnimate"],
 	"./reorder": ["Group", "Item"],
-	"./view": ["AnimateView", "startViewTransition"],
+	"./view": ["AnimateView", "AnimateViewBuilder", "animateView", "startViewTransition"],
 	"./view-navigation": ["viewTransitionsForNavigation"]
 }

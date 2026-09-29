@@ -1,0 +1,11 @@
+$ node --test src/*.test.mjs
+✔ real vgpu mock uniforms batch two changing values and detach without later writes (8.020158ms)
+✔ existing threeEffect updates shader uniforms and preserves detached ownership (3.632952ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 226.472124

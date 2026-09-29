@@ -158,3 +158,8 @@ export function applyViewNames(snapshots: ReadonlyMap<string, ViewSnapshot>): ()
 		}
 	};
 }
+
+/** A fluent transaction may not rename an element already owned by AnimateView. */
+export function isRegisteredView(node: Element): boolean {
+	return ownership.has(node);
+}

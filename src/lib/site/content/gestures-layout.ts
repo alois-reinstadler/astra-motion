@@ -531,24 +531,24 @@ export const gesturesLayoutPages: DocPage[] = [
 		title: 'Reorder',
 		group: 'Components',
 		summary:
-			'Build controlled sortable lists and wrapped grids with shared drag and layout behavior.',
+			'Build bound or controlled sortable lists and wrapped grids with shared drag and layout behavior.',
 		sections: [
 			{
 				id: 'list',
-				title: 'Render the controlled order',
+				title: 'Bind or control the order',
 				text: [
-					'Reorder.Group receives the current values and calls onReorder with a new array. Apply that array to your state and render a keyed each block with one Reorder.Item for each value. Values must be unique and keep their identity; objects work when their references remain stable.',
+					'Use Reorder.Group bind:values={items} for automatic Svelte state updates. Render a keyed each block with one Reorder.Item for each value. To validate or reject proposals, supply values and onReorder; assign the proposed array only when accepting it. Values must be unique and keep their identity; objects work when their references remain stable.',
 					'Items measure their layout, move with their drag MotionValues, and animate into their final position. The group infers horizontal, vertical, or wrapped two-dimensional ordering from the measured boxes.'
 				],
 				example: 'reorder-list-grid',
 				code: {
-					label: 'Smallest controlled list',
+					label: 'Complete bound list',
 					source: `<script lang="ts">
   import { Reorder } from 'astra-motion';
   let items = $state(['Research', 'Sketch', 'Review']);
 </script>
 
-<Reorder.Group values={items} onReorder={(next) => items = next}>
+<Reorder.Group bind:values={items}>
   {#each items as item (item)}
     <Reorder.Item value={item} style="position:relative;">{item}</Reorder.Item>
   {/each}
@@ -559,7 +559,7 @@ export const gesturesLayoutPages: DocPage[] = [
 				id: 'group-api',
 				title: 'Reorder.Group props',
 				text: [
-					'The group renders a native ul by default. Change as when another element fits the content and forward ordinary attributes, events, style, and motion props. It does not mutate values; onReorder must commit an accepted order. Unmeasured values retain their slots until measurement is available.'
+					'The group renders a native ul by default. Change as when another element fits the content and forward ordinary attributes, events, style, and motion props. Without onReorder, proposals assign a fresh array through bind:values. With onReorder, the callback owns acceptance even when values is also bound: the group does not auto-assign or notify twice. Rejected proposals deduplicate within a gesture; later gestures may retry. Application updates do not call onReorder. Unmeasured values retain their slots until measurement is available.'
 				],
 				table: {
 					columns: ['Prop', 'Default', 'Contract'],
@@ -567,8 +567,8 @@ export const gesturesLayoutPages: DocPage[] = [
 						['values', 'Required', 'Array of unique values rendered by the items.'],
 						[
 							'onReorder',
-							'Required',
-							'(nextValues: T[]) => void. Commit the requested order to application state.'
+							'Optional',
+							'(nextValues: T[]) => void. Sole proposal authority when supplied, including with bind:values. Assign to accept; leave unchanged to reject.'
 						],
 						[
 							'axis',

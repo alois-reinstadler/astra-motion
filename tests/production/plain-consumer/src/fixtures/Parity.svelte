@@ -1,4 +1,5 @@
 <script lang="ts">
+	import RCPackage from './RCPackage.svelte';
 	import { onMount } from 'svelte';
 	import {
 		AnimateActivity,
@@ -35,6 +36,7 @@
 </script>
 
 <main data-hydrated={hydrated}>
+	<RCPackage />
 	<MotionConfig transition={{ duration: 0.04 }} reducedMotion="never">
 		<button onclick={() => (visible = !visible)}>Toggle presence</button>
 		<output data-exited>{exited}</output>
@@ -85,12 +87,7 @@
 		>
 		<output data-drag-end>{dragEnd}</output>
 		<LayoutGroup id="consumer-list">
-			<Reorder.Group
-				values={items}
-				onReorder={(next) => (items = next)}
-				axis="y"
-				style="width:160px;padding:0;list-style:none"
-			>
+			<Reorder.Group bind:values={items} axis="y" style="width:160px;padding:0;list-style:none">
 				{#each items as item (item)}
 					<Reorder.Item
 						value={item}

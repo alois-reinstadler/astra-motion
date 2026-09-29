@@ -1,3 +1,4 @@
+import { verifyRC } from './verify-rc-package.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, writeFileSync, mkdirSync, existsSync, realpathSync } from 'node:fs';
@@ -185,6 +186,7 @@ try {
 							'true'
 						);
 						if (fixture === 'Parity') {
+							await verifyRC(page);
 							await expect(page.locator('[data-derived]')).toHaveText('4');
 							await expect(page.locator('[data-smil]')).toHaveAttribute('values', '5;10;5');
 							await page.evaluate(() => window.__astra.set(7));
@@ -303,7 +305,7 @@ try {
 									'owner animation/frame/subscription cleanup',
 									'async view fallback',
 									'external constrained drag',
-									'controlled Reorder'
+									'bound Reorder and RC APIs, native/fallback views'
 								],
 								requests
 							});

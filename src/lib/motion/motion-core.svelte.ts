@@ -1,3 +1,4 @@
+import { diagnoseMotionOptions, diagnoseInfiniteExit } from './diagnostics.js';
 import { flushSync, untrack } from 'svelte';
 import { createAttachmentKey, type Attachment } from 'svelte/attachments';
 import {
@@ -384,6 +385,14 @@ function createBinding(
 							frame.postRender(checkIdle, true);
 						})
 					: Promise.resolve();
+				if (process.env.NODE_ENV !== 'production') {
+					const config = options();
+					diagnoseInfiniteExit(
+						visual!,
+						resolved(config, config.exit ?? getVariantContext(visual!.parent)?.exit, visual),
+						config.transition
+					);
+				}
 				await Promise.all([state.setActive('exit', true), projectedExit]);
 				if (
 					disposed ||
@@ -615,6 +624,7 @@ function createBinding(
 	function refresh(config: MotionOptions) {
 		if (!visual || disposed || !activityActive) return;
 		assertFeatures(config);
+		if (process.env.NODE_ENV !== 'production') diagnoseMotionOptions(visual, props(config));
 		assertTransformOwnership(config, visual);
 		if (element) assertMotionTransformOwnership(element, props(config));
 		syncLayout(config);
@@ -947,7 +957,12 @@ function createBinding(
 			};
 		},
 		child(input = {}, childRender = {}) {
-			return createBinding(input, features, source, () => element, childRender);
+			return createBinding(input, features, source, () => element, {
+				component: render.component,
+				defaultReducedMotion: render.defaultReducedMotion,
+				environment: render.environment,
+				...childRender
+			});
 		},
 		get reducedMotion() {
 			void preferenceVersion;

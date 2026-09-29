@@ -1,6 +1,16 @@
 import { onDestroy, untrack } from 'svelte';
 import type { Attachment } from 'svelte/attachments';
-import { createScopedAnimate } from 'motion';
+import {
+	createScopedAnimate,
+	type AnimationSequence,
+	type SequenceOptions,
+	type ObjectTarget
+} from 'motion';
+import type {
+	AnimationSettlement,
+	AnimationCancellationReason,
+	ScopedAnimationControls
+} from './animate.js';
 import {
 	AsyncMotionValueAnimation,
 	addStyleValue,
@@ -13,6 +23,12 @@ import {
 	svgSubjectEffect,
 	visualElementStore,
 	type MotionPath,
+	type MotionValue,
+	type UnresolvedValueKeyframe,
+	type ValueAnimationTransition,
+	type ElementOrSelector,
+	type DOMKeyframesDefinition,
+	type AnimationOptions,
 	type Transition,
 	type TargetAndTransition,
 	type VisualElement,
@@ -33,7 +49,25 @@ import { readMotionGetter, type MotionGetter } from './value-hooks.svelte.js';
 import { animateMotionPath, isMotionPathAnimation } from './animation.js';
 import { animateSequencePaths } from './sequence-path.js';
 
-export type ScopedAnimate = ReturnType<typeof createScopedAnimate>;
+/** Upstream overloads with additive cancellation-aware settlement. finished/then remain upstream. */
+export interface ScopedAnimate {
+	(sequence: AnimationSequence, options?: SequenceOptions): ScopedAnimationControls;
+	<V extends string | number>(
+		value: V | MotionValue<V>,
+		keyframes: V | UnresolvedValueKeyframe<V>[],
+		options?: ValueAnimationTransition<V>
+	): ScopedAnimationControls;
+	(
+		element: ElementOrSelector,
+		keyframes: DOMKeyframesDefinition,
+		options?: AnimationOptions
+	): ScopedAnimationControls;
+	<O extends object>(
+		object: O | O[],
+		keyframes: ObjectTarget<O>,
+		options?: AnimationOptions
+	): ScopedAnimationControls;
+}
 export interface UseAnimateScope<T extends Element = Element> {
 	readonly current: T | undefined;
 	readonly active: number;
@@ -210,7 +244,18 @@ function playPlayback(playback: AnimationPlaybackControls) {
 	});
 }
 
-/** Familiar scoped animation overloads with Svelte attachments and owner cleanup. */
+/**
+ * Scoped animation setup helper. No React call-order rules apply.
+ * @param policy Static policy or a getter observed for live reduced-motion changes.
+ * @returns [scope, animate]. Spread the scope attachment on one root for scoped selectors.
+ * @example
+ * const [scope, animate] = useAnimate(() => ({ reducedMotion: preference }));
+ * const outcome = await animate('.item', { opacity: 1 }).settled;
+ * if (outcome.status === 'finished') advance();
+ * @remarks settled resolves for finished, stopped, cancelled, replaced or detached playback.
+ * Pause/resume retain the pending result. Replay after completion creates a new result.
+ * finished and then retain Motion's completion-only semantics.
+ */
 export function useAnimate<T extends Element = HTMLElement>(
 	policy: MotionGetter<MotionPolicy> = {}
 ): [UseAnimateScope<T>, ScopedAnimate] {
@@ -223,7 +268,7 @@ export function useAnimate<T extends Element = HTMLElement>(
 	type Run = {
 		controls: AnimationPlaybackControlsWithThen;
 		reduceMotion?: boolean;
-		stop(cancel?: boolean): void;
+		stop(reason?: AnimationCancellationReason, cancel?: boolean): void;
 		activityChanged(visible: boolean): void;
 	};
 	let owned: Run[] = [];
@@ -233,8 +278,8 @@ export function useAnimate<T extends Element = HTMLElement>(
 		},
 		animations: [] as AnimationPlaybackControlsWithThen[]
 	};
-	const stop = () => {
-		for (const run of [...owned]) run.stop();
+	const stop = (reason: AnimationCancellationReason = 'stopped') => {
+		for (const run of [...owned]) run.stop(reason);
 		engineScope.animations.length = 0;
 	};
 	const readConfig = () => ({ ...inherited(), ...readMotionGetter(policy) });
@@ -264,7 +309,7 @@ export function useAnimate<T extends Element = HTMLElement>(
 	$effect(observeActivity);
 	onDestroy(() => {
 		alive = false;
-		stop();
+		stop('detached');
 	});
 	const scope: UseAnimateScope<T> = {
 		get current() {
@@ -279,12 +324,12 @@ export function useAnimate<T extends Element = HTMLElement>(
 			current = node;
 			generation++;
 			return () => {
-				stop();
+				stop('detached');
 				current = undefined;
 				generation++;
 			};
 		},
-		stop
+		stop: () => stop()
 	};
 	const animate = ((...args: unknown[]) => {
 		if (!alive) throw new Error('Astra useAnimate: this animation owner has been destroyed.');
@@ -351,12 +396,55 @@ export function useAnimate<T extends Element = HTMLElement>(
 		} else correctSVGGeometry(subject, keyframes, engineScope);
 		const runGeneration = generation;
 		let stopped = false;
+		let settlementPending = true;
+		let resolveSettlement: (result: AnimationSettlement) => void;
+		let settled = new Promise<AnimationSettlement>((resolve) => {
+			resolveSettlement = resolve;
+		});
+		const settle = (result: AnimationSettlement) => {
+			if (!settlementPending) return;
+			settlementPending = false;
+			resolveSettlement(result);
+		};
+		const interrupted: AnimationPlaybackControls[] = [];
+		const removeStopObservers: (() => void)[] = [];
+		// Observe the controls owned by this run, never a consumer's borrowed value.
+		// MotionValue replacement invokes its old animation.stop synchronously.
+		const observeStops = (playback: AnimationPlaybackControls) => {
+			if (playback instanceof GroupAnimation) {
+				playback.animations.forEach(observeStops);
+				return;
+			}
+			const original = playback.stop;
+			const stop = () => {
+				try {
+					original.call(playback);
+				} finally {
+					if (!stopped && settlementPending) {
+						interrupted.push(playback);
+						run.stop('replaced');
+					}
+				}
+			};
+			playback.stop = stop;
+			removeStopObservers.push(() => {
+				if (playback.stop === stop) playback.stop = original;
+			});
+		};
+		const stopOwned = (playback: AnimationPlaybackControls, cancel: boolean) => {
+			if (interrupted.includes(playback)) return;
+			if (playback instanceof GroupAnimation) {
+				playback.animations.forEach((child) => stopOwned(child, cancel));
+			} else if (cancel) playback.cancel();
+			else stopMotionPlayback(playback);
+		};
 		let revision = 0;
 		const resumeOnReveal = [] as AnimationPlaybackControls[];
 		let deferredPlay = false;
 		let detachTimeline: (() => void) | undefined;
 		let timelineObservers: { connect(): void; disconnect(): void }[] = [];
 		const release = () => {
+			removeStopObservers.splice(0).forEach((remove) => remove());
 			owned = owned.filter((entry) => entry !== run);
 			activeCount = owned.length;
 			const index = engineScope.animations.indexOf(controls);
@@ -384,28 +472,43 @@ export function useAnimate<T extends Element = HTMLElement>(
 					});
 				}
 			},
-			stop(cancel = false) {
+			stop(reason = 'stopped', cancel = false) {
 				if (stopped) return;
 				stopped = true;
 				revision++;
 				resumeOnReveal.length = 0;
-				prepareMotionHandoff(controls, { settleFinished: !cancel });
-				detachTimeline?.();
-				detachTimeline = undefined;
-				if (cancel) controls.cancel();
-				else stopMotionPlayback(controls);
-				release();
+				try {
+					prepareMotionHandoff(controls, { settleFinished: !cancel });
+					detachTimeline?.();
+					detachTimeline = undefined;
+					stopOwned(controls, cancel);
+				} finally {
+					release();
+					settle({ status: 'cancelled', reason });
+				}
 			}
 		};
 		const acquire = () => {
-			if (!owned.includes(run)) owned.push(run);
+			if (!owned.includes(run)) {
+				if (!settlementPending) {
+					settlementPending = true;
+					settled = new Promise<AnimationSettlement>((resolve) => {
+						resolveSettlement = resolve;
+					});
+				}
+				observeStops(controls);
+				owned.push(run);
+			}
 			activeCount = owned.length;
 		};
 		const observe = () => {
 			const version = ++revision;
 			acquire();
 			void controls.finished.then(() => {
-				if (version === revision) release();
+				if (version === revision && !stopped) {
+					release();
+					settle({ status: 'finished' });
+				}
 			});
 		};
 		const validate = () => {
@@ -416,11 +519,12 @@ export function useAnimate<T extends Element = HTMLElement>(
 		observe();
 		return new Proxy(controls, {
 			get(target, key) {
+				if (key === 'settled') return settled;
 				const value = Reflect.get(target, key, target);
 				if (['play', 'pause', 'complete', 'attachTimeline'].includes(String(key)))
 					return (...parameters: unknown[]) => {
 						validate();
-						acquire();
+						if (settlementPending || key === 'play' || key === 'attachTimeline') acquire();
 						if (key === 'play' || key === 'pause' || key === 'complete') {
 							resumeOnReveal.length = 0;
 							deferredPlay = false;
@@ -463,29 +567,32 @@ export function useAnimate<T extends Element = HTMLElement>(
 						}
 						const result =
 							key === 'complete'
-								? completeMotionPlayback(target)
+								? detachTimeline
+									? run.stop('cancelled')
+									: completeMotionPlayback(target)
 								: key === 'play'
 									? playPlayback(target)
 									: value.apply(target, parameters);
 						if (key === 'attachTimeline') {
 							detachTimeline = result;
-							return () => run.stop();
+							return () => run.stop('cancelled');
 						}
-						if (key !== 'pause') observe();
+						if (!stopped && settlementPending) observe();
 						return result;
 					};
 				if (key === 'stop' || key === 'cancel')
 					return () => {
 						if (stopped) return;
 						validate();
-						run.stop(key === 'cancel');
+						run.stop(key === 'cancel' ? 'cancelled' : 'stopped', key === 'cancel');
 					};
 				return typeof value === 'function' ? value.bind(target) : value;
 			},
 			set(target, key, value) {
 				validate();
-				acquire();
-				return Reflect.set(target, key, value, target);
+				const result = Reflect.set(target, key, value, target);
+				if (settlementPending) observe();
+				return result;
 			}
 		});
 	}) as ScopedAnimate;

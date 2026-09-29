@@ -1,5 +1,15 @@
 # A tour for hands-on testing
 
+To evaluate inside your own app, install the supplied release candidate directly:
+
+```sh
+pnpm add /absolute/path/to/astra-motion-0.1.0-rc.1.tgz
+```
+
+Match the archive hash to the handoff record. This local artifact requires no checkout
+or library build and does not imply registry publication. Start with the complete
+[authoring recipes](authoring.md), including native markup and custom forwarding.
+
 Start at `/showcase`. Fieldwork contains four working scenes; each has a source
 viewer with the actual component and companion files. The top navigation connects
 the showcase, searchable examples and topic guides.

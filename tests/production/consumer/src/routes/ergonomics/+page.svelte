@@ -1,4 +1,5 @@
 <script lang="ts">
+	import RCPackage from '$lib/RCPackage.svelte';
 	import {
 		motion,
 		Motion,
@@ -102,3 +103,5 @@
 	<button aria-pressed={reduced} onclick={() => (reduced = !reduced)}>Toggle reduced motion</button>
 	<output data-outcome>{JSON.stringify(outcome)}</output>
 </section>
+
+<RCPackage />

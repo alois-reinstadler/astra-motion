@@ -12,8 +12,16 @@
 		onExitComplete?: () => void;
 		children: Snippet<[T]>;
 	} & (
-			| { present?: boolean; items?: never; key?: never }
-			| { items: readonly T[]; key: (item: T) => PresenceKey; present?: never }
+			| { present?: boolean; items?: never; value?: never; key?: never }
+			| { items: readonly T[]; key: (item: T) => PresenceKey; present?: never; value?: never }
+			| {
+					/** Display one retained item. Null and undefined render nothing. */
+					value: T | null | undefined;
+					/** Select stable identity; defaults to the value itself (reference identity for objects). */
+					key?: (item: T) => PresenceKey;
+					present?: never;
+					items?: never;
+			  }
 		);
 </script>
 
@@ -26,8 +34,6 @@
 	import { reconcilePresence, type PresenceInput } from './presence-model.js';
 
 	let {
-		present = true,
-		items,
 		key,
 		initial = true,
 		mode = 'sync',
@@ -39,18 +45,27 @@
 		root,
 		nonce,
 		onExitComplete,
-		children
+		children,
+		...form
 	}: AnimatePresenceProps<T> = $props();
 	const parent = readPresenceScope();
 	const configuration = readMotionConfig();
 	const conditionalKey = Symbol('conditional-presence');
 	function input(): PresenceInput<T>[] {
+		const forms = ['present', 'items', 'value'].filter((name) => name in form);
+		if (forms.length > 1)
+			throw new Error('Astra AnimatePresence: present, items and value are mutually exclusive.');
+		if ('items' in form && (!Array.isArray(form.items) || !key))
+			throw new Error('Astra AnimatePresence: items requires an array and a stable key function.');
+		if (!('items' in form) && !('value' in form) && key)
+			throw new Error('Astra AnimatePresence: key requires items or value.');
 		if (propagate && parent && !parent.snapshot.isPresent) return [];
-		if (items !== undefined) {
-			if (!key) throw new Error('Astra AnimatePresence: items requires a stable key function.');
-			return items.map((value) => ({ value, key: key(value) }));
+		if ('items' in form) return form.items!.map((value) => ({ value, key: key!(value) }));
+		if ('value' in form) {
+			const value = form.value;
+			return value == null ? [] : [{ value, key: key ? key(value) : (value as PresenceKey) }];
 		}
-		return present ? [{ key: conditionalKey, value: undefined as T }] : [];
+		return (form.present ?? true) ? [{ key: conditionalKey, value: undefined as T }] : [];
 	}
 	const requested = $derived(input());
 	let entries = $state.raw(

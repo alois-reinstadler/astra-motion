@@ -13,9 +13,9 @@
 		<div>
 			<p>
 				Start with an ordinary button, section or list item. Use motion.button, motion.section or
-				motion.li to render that same native element. Add a createMotion binding when existing
-				markup owns it. Your CSS still determines its layout. Your Svelte state still determines
-				what appears.
+				motion.li to render that same native element. Add a motion.bind binding when existing markup
+				owns it. Your CSS still determines its layout. Your Svelte state still determines what
+				appears.
 			</p>
 			<p>
 				The adapter handles the work between those two things: initial styles during server

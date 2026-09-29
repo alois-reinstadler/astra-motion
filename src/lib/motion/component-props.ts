@@ -1,3 +1,4 @@
+import { equivalentMotionOption, motionDiagnostic } from './diagnostics.js';
 import type { MotionOptions } from './motion.svelte.js';
 
 /** Component conveniences; native CSS strings remain available alongside Motion style objects. */
@@ -90,7 +91,20 @@ export function componentMotionOptions(
 	for (const key of keys) {
 		if (key === 'style' || key === 'disabled') continue;
 		const value = flat[key];
-		if (value !== undefined) Object.assign(result, { [key]: value });
+		if (value !== undefined) {
+			if (
+				process.env.NODE_ENV !== 'production' &&
+				legacy[key] !== undefined &&
+				!equivalentMotionOption(legacy[key], value)
+			) {
+				motionDiagnostic(
+					flat,
+					`conflicting-${key}`,
+					`Both motion.${key} and the direct ${key} prop are supplied with different values. Keep only the direct prop; it takes precedence.`
+				);
+			}
+			Object.assign(result, { [key]: value });
+		}
 	}
 	if (flat.disabled !== undefined) result.disabled = flat.disabled ?? false;
 	if (style && typeof style === 'object') result.style = { ...legacy.style, ...style };

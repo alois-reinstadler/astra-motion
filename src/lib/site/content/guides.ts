@@ -13,12 +13,12 @@ export const guidesDocs: DocPage[] = [
 				title: 'Install the package',
 				text: [
 					'Astra connects Motion’s animation engine to Svelte 5. Use direct props on motion elements for targets, variants, gestures and layout; use managed helpers when values, scrolling or imperative playback need their own lifecycle.',
-					'This repository is a working beta, version 0.0.1, with no announced public registry release. Build its tarball from the repository, then install that file into your application. Do not assume a similarly named registry package is this project.'
+					'Evaluate the local release candidate by installing the supplied astra-motion-0.1.0-rc.1.tgz artifact into your application. No repository checkout or consumer-side library build is needed. This is a local package artifact, not a registry publication.'
 				],
 				code: {
-					label: 'Build and install the local package',
+					label: 'Install the supplied release-candidate archive',
 					source:
-						'git clone https://github.com/alois-reinstadler/astra-motion.git\ncd astra-motion\npnpm install\npnpm run prepack\npnpm pack\n\n# Run from your application directory, using the generated absolute path:\npnpm add /absolute/path/to/astra-motion/astra-motion-0.0.1.tgz'
+						'# Run from your application directory:\npnpm add /absolute/path/to/astra-motion-0.1.0-rc.1.tgz'
 				}
 			},
 			{
@@ -34,7 +34,7 @@ export const guidesDocs: DocPage[] = [
 				title: 'Animate a notification',
 				text: [
 					'Import the motion namespace and set initial, animate and exit directly on a real element. Reactive props are ordinary Svelte expressions. This example uses a native conditional block: motion.div supplies its own Svelte outro, so removal waits for the exit.',
-					'Use AnimatePresence when you need keyed replacement modes, dynamic exit data, nested removal coordination or manual completion. Its Svelte API owns an explicit present value or keyed items. A native if block remains useful for a simple independent exit.'
+					'Use AnimatePresence when you need keyed replacement modes, dynamic exit data, nested removal coordination or manual completion. Its Svelte API owns explicit present, keyed items, or a single value. A native if block remains useful for a simple independent exit.'
 				],
 				example: 'state',
 				related: ['motion', 'animate-presence']
@@ -52,6 +52,79 @@ export const guidesDocs: DocPage[] = [
 						"<script lang=\"ts\">\n  import { motion } from 'astra-motion';\n  let selected = $state(false);\n</script>\n<motion.button\n  aria-pressed={selected}\n  onclick={() => selected = !selected}\n  animate={{ scale: selected ? 1.1 : 1 }}\n  whileTap={{ scale: 0.95 }}\n>\n  {selected ? 'Selected' : 'Choose item'}\n</motion.button>"
 				},
 				related: ['motion-values', 'gestures']
+			},
+			{
+				id: 'coming-from-react',
+				title: 'Coming from Motion for React',
+				text: [
+					'Keep familiar initial, animate, exit, variants and gesture targets. Replace JSX expressions and React state with ordinary Svelte expressions and $state. Motion helpers named use* are component setup helpers; Svelte runs setup once, so there is no React render call-order model or dependency array.',
+					'AnimatePresence accepts explicit present, keyed items, or one value. Snippets are opaque, so the boundary cannot inspect child element keys. For a selected record, pass value={selected} and render the retained snippet argument. Use Reorder.Group bind:values for automatic Svelte state updates; supply onReorder when your application must validate proposals.',
+					'Choose motion.* for new elements, motion.bind for existing native markup, and motion.create for reusable custom components that forward attachments. Set MotionConfig reducedMotion="user" when the application should follow device preferences.'
+				]
+			},
+			{
+				id: 'native-svelte',
+				title: 'Using Astra with native Svelte',
+				text: [
+					'motion.bind shares the motion.* animation engine, defaults, variants, interruption and reduced-motion contract. Keep native bindings, directives and scoped CSS on the original element. The options getter follows changing Svelte inputs without recreating the binding.',
+					'Spread binding.props: it includes both the SSR style and attachment. Do not add a second attachment. An attachment alone cannot render server styles or retain a Svelte outro; the native transition directive supplies removal retention. Use one binding per simultaneously mounted element.',
+					'Initialize bindings in component setup. Configuration and variant context come from ancestor components at setup; a MotionConfig written around markup in the same component cannot configure an already-created binding. Use explicit options or a provider above that component. Native ancestry uses parent.child(options) when server-rendered child variants depend on a native parent.'
+				],
+				code: {
+					label: 'Complete Svelte example',
+					source:
+						'<script lang="ts">\n  import { motion } from \'astra-motion\';\n  let shown = $state(true);\n  let selected = $state<string[]>([]);\n  const choice = motion.bind(() => ({\n    initial: { opacity: 0 },\n    animate: { opacity: 1, scale: selected.includes(\'news\') ? 1.1 : 1 },\n    exit: { opacity: 0 },\n    transition: { duration: 0.2 },\n    reducedMotion: \'user\'\n  }));\n  const enterExit = choice.transition;\n</script>\n\n<button onclick={() => shown = !shown}>Toggle choices</button>\n{#if shown}\n  <fieldset>\n    <legend>Subscriptions</legend>\n    <label><input class="choice" type="checkbox" value="news" bind:group={selected}\n      {...choice.props} transition:enterExit|global /> News</label>\n    <label><input type="checkbox" value="events" bind:group={selected} /> Events</label>\n  </fieldset>\n{/if}\n<p>Selected: {selected.join(\', \') || \'None\'}</p>\n\n<style>\n  .choice { accent-color: teal; outline-offset: 4px; }\n</style>'
+				}
+			},
+			{
+				id: 'panel-recipes',
+				title: 'Tabs and changing panels',
+				text: [
+					'Keep navigation controls mounted while one selected panel changes. The single-value snippet retains the outgoing record, including its title and text. This example uses ordinary section buttons; when using a headless tabs primitive, preserve its roles, keyboard navigation, IDs and focus handling.',
+					'Use AnimateActivity instead when inactive panels must retain drafts and DOM state. Motion does not supply the tabs interaction semantics.'
+				],
+				code: {
+					label: 'Complete Svelte example',
+					source:
+						"<script lang=\"ts\">\n  import { AnimatePresence, motion } from 'astra-motion';\n  const panels = [\n    { id: 'overview', title: 'Overview', text: 'Your current project.' },\n    { id: 'history', title: 'History', text: 'Your saved changes.' }\n  ];\n  let selected = $state(panels[0]);\n</script>\n\n<nav aria-label=\"Project sections\">\n  {#each panels as panel (panel.id)}\n    <button aria-pressed={selected.id === panel.id} onclick={() => selected = panel}>\n      {panel.title}\n    </button>\n  {/each}\n</nav>\n<AnimatePresence value={selected} key={(panel) => panel.id} mode=\"wait\">\n  {#snippet children(panel)}\n    <motion.section aria-label={panel.title} initial={{ opacity: 0 }} animate={{ opacity: 1 }}\n      exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>\n      <h2>{panel.title}</h2><p>{panel.text}</p>\n    </motion.section>\n  {/snippet}\n</AnimatePresence>"
+				}
+			},
+			{
+				id: 'accordion-recipe',
+				title: 'Reveal an accordion panel',
+				text: [
+					'Preserve the existing trigger and its aria-expanded state. A native binding keeps the component’s scoped styles and conditional markup. The global transition waits for the finite height/opacity exit and can reverse a rapid toggle. For a simple reveal, Svelte’s slide transition is also a suitable choice.'
+				],
+				code: {
+					label: 'Complete Svelte example',
+					source:
+						'<script lang="ts">\n  import { motion } from \'astra-motion\';\n  let open = $state(false);\n  const panel = motion.bind({\n    initial: { height: 0, opacity: 0 },\n    animate: { height: \'auto\', opacity: 1 },\n    exit: { height: 0, opacity: 0 },\n    transition: { duration: 0.2 },\n    reducedMotion: \'user\'\n  });\n  const reveal = panel.transition;\n</script>\n\n<button aria-expanded={open} aria-controls="answer" onclick={() => open = !open}>\n  How does removal work?\n</button>\n{#if open}\n  <div id="answer" class="answer" {...panel.props} transition:reveal|global>\n    <p>The native branch remains mounted until its exit finishes.</p>\n  </div>\n{/if}\n\n<style>\n  .answer { overflow: hidden; }\n</style>'
+				}
+			},
+			{
+				id: 'dialog-recipe',
+				title: 'Close a dialog after a settled exit',
+				text: [
+					'The browser dialog retains modal behavior and focus handling. Animate its close while the dialog is still open; close only after successful completion. settled also resolves when playback is interrupted or its owner detaches, so the close handler cannot wait forever. Preserve the headless primitive’s equivalent lifecycle when using a dialog library.'
+				],
+				code: {
+					label: 'Complete Svelte example',
+					source:
+						'<script lang="ts">\n  import { useAnimate } from \'astra-motion\';\n  const [scope, animate] = useAnimate<HTMLDialogElement>();\n  let closing = $state(false);\n  function open() {\n    scope.current?.showModal();\n  }\n  async function close() {\n    const dialog = scope.current;\n    if (!dialog || closing) return;\n    closing = true;\n    const result = await animate(dialog, { opacity: [1, 0] }, { duration: 0.15 }).settled;\n    if (result.status === \'finished\' && dialog.isConnected) dialog.close();\n    dialog.style.removeProperty(\'opacity\');\n    closing = false;\n  }\n</script>\n\n<button onclick={open}>Edit profile</button>\n<dialog {@attach scope.attach} aria-labelledby="profile-title"\n  oncancel={(event) => { event.preventDefault(); void close(); }}>\n  <h2 id="profile-title">Edit profile</h2>\n  <label>Name <input /></label>\n  <button onclick={close} disabled={closing}>Close</button>\n</dialog>'
+				}
+			},
+			{
+				id: 'headless-recipe',
+				title: 'Keep a headless component’s behavior',
+				text: [
+					'This recipe assumes Bits UI is installed in your application. Its primitive continues to own focus trapping, Escape, IDs, ARIA and return focus. mergeProps preserves its events, refs and attachments while adding the native motion binding.',
+					'forceMount exposes the primitive’s open state to a child snippet; the native if block and transition own the animated removal. Keep that branch when enabling forceMount. The portaled surface has its own binding; do not declare a native visual parent outside the portal. Verify Escape, return focus, rapid reopen and owner removal in your application.'
+				],
+				code: {
+					label: 'Complete Svelte example',
+					source:
+						"<script lang=\"ts\">\n  import { Dialog, mergeProps } from 'bits-ui';\n  import { motion } from 'astra-motion';\n  const panel = motion.bind({\n    initial: { opacity: 0, scale: 0.96 },\n    animate: { opacity: 1, scale: 1 },\n    exit: { opacity: 0, scale: 0.96 },\n    transition: { duration: 0.15 },\n    reducedMotion: 'user'\n  });\n  const enterExit = panel.transition;\n</script>\n\n<Dialog.Root>\n  <Dialog.Trigger>Open settings</Dialog.Trigger>\n  <Dialog.Portal>\n    <Dialog.Content forceMount>\n      {#snippet child({ props, open })}\n        {#if open}\n          <div {...mergeProps(props, panel.props)} class=\"panel\" transition:enterExit|global>\n            <Dialog.Title>Settings</Dialog.Title>\n            <Dialog.Description>Motion preserves this dialog’s interaction contract.</Dialog.Description>\n            <label>Name <input /></label>\n            <Dialog.Close>Close</Dialog.Close>\n          </div>\n        {/if}\n      {/snippet}\n    </Dialog.Content>\n  </Dialog.Portal>\n</Dialog.Root>\n\n<style>\n  .panel { position: fixed; inset: 0; margin: auto; width: min(90vw, 320px); height: fit-content; padding: 24px; background: white; color: black; }\n</style>"
+				}
 			},
 			{
 				id: 'configuration',
@@ -80,7 +153,7 @@ export const guidesDocs: DocPage[] = [
 				title: 'Migrate existing Astra components',
 				text: [
 					'Existing createMotion attachments, createLayout controllers, createAnimate scopes, createScroll and Presence remain supported. Prefer direct motion props in new markup. The legacy motion={{ ... }} prop still works; defined direct props override it. Existing low-level bindings retain their stricter style-ownership rules and user reduced-motion default.',
-					'Presence keeps its historical wait default. AnimatePresence defaults to sync and uses present or items with a stable key. Replace a legacy Presence only when you need the new coordination contract. Reuse real item identity rather than array positions for reorderable collections.',
+					'Presence keeps its historical wait default. AnimatePresence defaults to sync and uses present, items with a stable key, or value with an optional key selector. Replace a legacy Presence only when you need the new coordination contract. Reuse real item identity rather than array positions for reorderable collections.',
 					'HTML and SVG are both supported. Custom Svelte components must forward the attachment props to one native root when wrapped with motion.create. The generic Motion component remains available; native value bindings belong to the generated tag components.'
 				],
 				related: ['animate-presence', 'motion', 'layout-group']
@@ -89,8 +162,8 @@ export const guidesDocs: DocPage[] = [
 				id: 'troubleshooting',
 				title: 'Resolve the first integration issue',
 				text: [
-					'If an import is missing, rebuild and reinstall the packed file, then check the documented public entry. If a helper reports a lifecycle error, move its initialization into component setup and start playback only after mounting. If an exit is missing, check which boundary actually removes the content.',
-					'For CSS selector rules, remember a component does not put its internal native element in the parent’s scoped selector set. Pass a class and use an intentional :global selector, or place styles in a shared stylesheet. Ordinary inline text needs inline-block or block display before transforms can move it.'
+					'If an import is missing, check the documented public entry and reinstall the supplied archive. Package maintainers should rebuild before creating a replacement archive. If a helper reports a lifecycle error, move its initialization into component setup and start playback only after mounting. If an exit is missing, check which boundary actually removes the content.',
+					'For CSS selector rules, motion.bind keeps the actual element in your component’s scoped selector set. A motion.* component root is outside that set; pass a class with an intentional :global selector or use a shared stylesheet. Ordinary inline text needs inline-block or block display before transforms can move it.'
 				]
 			},
 			{
@@ -351,7 +424,7 @@ export const guidesDocs: DocPage[] = [
 				code: {
 					label: 'Label replacement · focused excerpt',
 					source:
-						'<button onclick={advance}>\n  <AnimatePresence items={[label]} key={(item) => item} mode="wait">\n    {#snippet children(text)}\n      <motion.span initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}>\n        {text}\n      </motion.span>\n    {/snippet}\n  </AnimatePresence>\n</button>'
+						'<button onclick={advance}>\n  <AnimatePresence value={label} mode="wait">\n    {#snippet children(text)}\n      <motion.span initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}>\n        {text}\n      </motion.span>\n    {/snippet}\n  </AnimatePresence>\n</button>'
 				},
 				related: ['animate-presence']
 			},

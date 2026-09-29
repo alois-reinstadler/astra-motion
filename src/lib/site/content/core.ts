@@ -553,10 +553,10 @@ export const coreDocs: DocPage[] = [
 			},
 			{
 				id: 'native-bindings',
-				title: 'Compatibility and existing markup',
+				title: 'Native markup and compatibility',
 				text: [
-					'Direct animation props are the primary API. The existing motion={{ ... }} object remains supported; defined direct props take precedence over each matching object option. Native value bindings such as bind:value and bind:checked use the compiled tag components. For bind:group, use native inputs with createMotion so Svelte owns the group in one component. Keep the input type and generic Motion as tag stable while mounted.',
-					'For an existing native element, createMotion(() => options) returns props, transition, animate, stop, update and child. Spread props and add transition:binding.transition|global for native removal. These lower-level bindings retain their earlier finite native-transition and reduced-motion defaults; migration guidance lists the differences from primary motion components.'
+					'Direct animation props are the primary API. The existing motion={{ ... }} object remains supported; defined direct props take precedence over each matching object option. Native value bindings such as bind:value and bind:checked use the compiled tag components. For bind:group, use native inputs with motion.bind so Svelte owns the group in one component. Keep the input type and generic Motion as tag stable while mounted.',
+					'For an existing native element, motion.bind(() => options) returns props, transition, animate, stop, update and child. Spread props, which includes the attachment and SSR styles, and add transition:binding.transition|global for native removal. Do not attach the same binding twice. The modern binding shares motion.* defaults and lifecycle; createMotion remains the explicit compatibility path with its historical finite-transition and reduced-motion defaults.'
 				],
 				aliases: ['component-props', 'components', 'api'],
 				related: ['getting-started']
@@ -567,7 +567,8 @@ export const coreDocs: DocPage[] = [
 				text: [
 					'Initial HTML and SVG styles render on the server. Browser animation and gesture listeners start after attachment. Destruction releases the visual owner, scoped subscriptions and pending callbacks; retained presence descendants release after their exit coordination completes.',
 					'Use MotionConfig reducedMotion="user" for the application policy. The component default is never, matching Motion. Preserve labels, focus indicators and semantic controls. LazyMotion strict mode reports eager motion usage in development; ignoreStrict downgrades it to a warning when intentionally mixing feature scopes.',
-					'A missing animation can be an unsupported CSS value, a higher-priority state, an untransformable inline element or a custom root that did not forward attachments. Keep one motion owner per actual element. See the related topic for the complete gesture, layout or SVG-specific contract.'
+					'A missing animation can be an unsupported CSS value, a higher-priority state, an untransformable inline element or a custom root that did not forward attachments. Keep one motion owner per actual element. See the related topic for the complete gesture, layout or SVG-specific contract.',
+					'Development diagnostics explain concrete corrections: remove a conflicting legacy option when a direct prop wins; clear a nonempty raw transform before animating independent x/y/scale; set exit repeat to 0 instead of Infinity; define a missing local variant label when inherit is false. Messages deduplicate per owner and are disabled in production. Unresolved inherited labels can be valid controllers, so no blanket missing-label warning is promised.'
 				],
 				related: ['accessibility', 'motion-config', 'lazy-motion', 'svg']
 			}
@@ -638,6 +639,13 @@ export const coreDocs: DocPage[] = [
 						]
 					]
 				}
+			},
+			{
+				id: 'internal-static',
+				title: 'Static rendering and upstream internal flags',
+				text: [
+					'MotionConfig.isStatic is an internal upstream implementation flag and is not a supported Astra prop. For a final initial pose, set initial={false}; for accessibility policy, choose reducedMotion="always"; for a static element, omit animation. These choices have distinct behavior and do not claim to emulate the internal flag.'
+				]
 			},
 			{
 				id: 'inheritance',

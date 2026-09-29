@@ -1,3 +1,4 @@
+import { verifyRC } from './verify-rc-package.mjs';
 import assert from 'node:assert/strict';
 import { qualificationOrigin } from './qualification-origin.mjs';
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
@@ -191,6 +192,11 @@ for (const engine of selected) {
 		// The same browser-native assertions can be invoked through Chrome MCP when
 		// local policy permits only the shared browser. They use the packed app only.
 		await ready('/ergonomics');
+		await verifyRC(page);
+		result.browserCases.push({
+			engine,
+			case: 'RC native binding, presence, follow value, settlement and fluent capture'
+		});
 		const ergonomics = await page.evaluate(async () => {
 			const { checkErgonomics } = await import('/ergonomics-regressions.js');
 			return checkErgonomics();

@@ -1,0 +1,28 @@
+{
+	"name": "astra-vgpu-threlte-experiment",
+	"version": "0.0.1",
+	"private": true,
+	"type": "module",
+	"packageManager": "pnpm@11.24.0",
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"check": "svelte-check --tsconfig ./tsconfig.json",
+		"test": "node --test src/*.test.mjs"
+	},
+	"dependencies": {
+		"@threlte/core": "8.6.1",
+		"motion": "13.4.4",
+		"svelte": "5.57.0",
+		"three": "0.186.1",
+		"vgpu": "0.5.0"
+	},
+	"devDependencies": {
+		"@sveltejs/vite-plugin-svelte": "7.1.2",
+		"@types/three": "0.186.0",
+		"@webgpu/types": "0.1.69",
+		"svelte-check": "4.6.0",
+		"typescript": "6.0.3",
+		"vite": "8.0.16"
+	}
+}

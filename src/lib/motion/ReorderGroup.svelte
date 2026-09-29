@@ -10,8 +10,12 @@
 		Omit<ComponentMotionProps, 'values'> & {
 			as?: Tag;
 			axis?: ReorderAxis;
+			/** Ordered item identities. Bind with `bind:values={items}` for automatic updates. */
 			values: T[];
-			onReorder: (values: T[]) => void;
+			/** Receives a proposed order. When supplied, owns acceptance even with `bind:values`:
+			 * assign the proposal to your values to accept it, or leave them unchanged to reject.
+			 */
+			onReorder?: (values: T[]) => void;
 			children?: Snippet;
 			ref?: HTMLElement | null;
 		};
@@ -31,7 +35,7 @@
 	let {
 		as = 'ul' as Tag,
 		axis,
-		values,
+		values = $bindable(),
 		onReorder,
 		children,
 		ref = $bindable(),
@@ -87,12 +91,18 @@
 				reordered[positions[index]] = item.value;
 			});
 			blockedOrder = values.slice();
-			onReorder(reordered);
+			// An explicit callback retains controlled-mode authority, including
+			// when values is bound. Never commit first and notify afterwards.
+			if (onReorder) onReorder(reordered);
+			else values = reordered;
 		},
 		scroll(event, velocity) {
 			scrolling.update(event, velocity, axis ?? detected);
 		},
 		stopScroll() {
+			// Deduplicate a rejected proposal during this gesture, but permit
+			// a later gesture to ask again without an application reorder.
+			blockedOrder = undefined;
 			scrolling.stop();
 		}
 	});

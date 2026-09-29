@@ -1,6 +1,7 @@
 import { flushSync, onDestroy, untrack } from 'svelte';
 import {
-	attachSpring,
+	attachFollow,
+	type FollowValueOptions,
 	cancelFrame,
 	collectMotionValues,
 	frame,
@@ -199,7 +200,7 @@ export interface UseSpringOptions extends SpringOptions {
 	skipInitialAnimation?: boolean;
 }
 
-/** Retains the latest set target across settings changes and hidden Activity. */
+/** Spring follower with reactive source/settings; see useFollowValue for other transitions. */
 export function useSpring(
 	input: MotionGetter<number | MotionValue<number>>,
 	options?: MotionGetter<UseSpringOptions>
@@ -211,6 +212,40 @@ export function useSpring(
 export function useSpring<T extends number | string>(
 	input: MotionGetter<T | MotionValue<T>>,
 	options: MotionGetter<UseSpringOptions> = {}
+): MotionValue<T> {
+	return createFollower(input, () => ({
+		type: 'spring',
+		...readMotionGetter(options)
+	}));
+}
+
+/**
+ * Component setup helper: owns a value that follows a target with spring (default), tween or inertia.
+ * @param input Initial number/unit string, borrowed MotionValue, or reactive getter returning either.
+ * @param options Transition settings or reactive getter. Durations use seconds; repeats are excluded.
+ * @returns Stable owned MotionValue; `.set()` animates, `.jump()` sets immediately, `.stop()` retains position.
+ * @example const x = useFollowValue(() => target, () => ({ type: 'tween', duration }));
+ * Source and option changes preserve output identity. Hidden Activity detaches clocks/subscriptions,
+ * retains direct targets, and reconnects to the latest borrowed source when shown.
+ */
+export function useFollowValue(
+	input: MotionGetter<number | MotionValue<number>>,
+	options?: MotionGetter<FollowValueOptions>
+): MotionValue<number>;
+export function useFollowValue(
+	input: MotionGetter<string | MotionValue<string>>,
+	options?: MotionGetter<FollowValueOptions>
+): MotionValue<string>;
+export function useFollowValue<T extends number | string>(
+	input: MotionGetter<T | MotionValue<T>>,
+	options: MotionGetter<FollowValueOptions> = {}
+): MotionValue<T> {
+	return createFollower(input, options);
+}
+
+function createFollower<T extends number | string>(
+	input: MotionGetter<T | MotionValue<T>>,
+	options: MotionGetter<FollowValueOptions>
 ): MotionValue<T> {
 	const active = readActivityState();
 	const initial = untrack(() => readMotionGetter(input));
@@ -244,7 +279,7 @@ export function useSpring<T extends number | string>(
 		const { skipInitialAnimation = false, ...settings } = readMotionGetter(options);
 		// Own the source subscription to preserve units on the initial jump and
 		// reconnect changing Svelte source identities without replacing the output.
-		const detach = attachSpring(
+		const detach = attachFollow(
 			value,
 			untrack(() => value.get()),
 			{

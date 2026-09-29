@@ -27,6 +27,7 @@ const archive = join(
 	directory,
 	`${manifest.name.replace(/^@/, '').replaceAll('/', '-')}-${manifest.version}.tgz`
 );
+const sha256 = (path) => createHash('sha256').update(readFileSync(path)).digest('hex');
 const info = {
 	archive,
 	sha256: createHash('sha256').update(readFileSync(archive)).digest('hex'),
@@ -37,6 +38,7 @@ const info = {
 		dirty:
 			execFileSync('git', ['status', '--porcelain'], { cwd: root, encoding: 'utf8' }).trim() !== ''
 	},
+	dependencyGraphs: { library: sha256(join(root, 'pnpm-lock.yaml')) },
 	created: new Date().toISOString()
 };
 const setupPath = option('output', '/tmp/astra-motion-production-current.json');
@@ -54,6 +56,10 @@ for (const [name, target] of [
 	cpSync(archive, join(target, 'astra-motion.tgz'));
 	writeFileSync(join(target, '.npmrc'), 'auto-install-peers=false\n');
 	run(['install'], target);
+	info.dependencyGraphs[name] = sha256(join(target, 'pnpm-lock.yaml'));
+	cpSync(join(target, 'pnpm-lock.yaml'), join(directory, `${name}-pnpm-lock.yaml`));
+	writeFileSync(join(directory, 'qualification.json'), JSON.stringify(info, null, 2) + '\n');
+	writeFileSync(setupPath, JSON.stringify(info, null, 2) + '\n');
 	console.log(
 		JSON.stringify({ consumer: name, dependencies: verifyConsumerDependencies(target) }, null, 2)
 	);

@@ -4,7 +4,7 @@ Motion’s animation engine, connected to Svelte 5. Animate native HTML and SVG,
 coordinate presence and layout, add gestures and drag, and compose reactive values
 without a React runtime.
 
-**Working beta, version 0.0.1.** A public registry release has not been announced.
+**Local release candidate: 0.1.0-rc.1.** Registry publication is not implied.
 Astra is [MIT licensed](LICENSE). Start with the
 [documentation](https://alois-reinstadler.github.io/astra-motion/docs/getting-started),
 try the [examples](https://alois-reinstadler.github.io/astra-motion/examples), or explore
@@ -29,24 +29,30 @@ try the [examples](https://alois-reinstadler.github.io/astra-motion/examples), o
 ```
 
 Use direct animation props on `motion.*`. Native attributes, lowercase event handlers,
-form bindings and `bind:ref` retain Svelte’s conventions. `motion.create` adapts custom
-components that forward attachments to one native root. `initial` renders on the server;
+form bindings and `bind:ref` retain Svelte’s conventions. Use `motion.bind` on existing
+native markup to preserve scoped CSS and native directives such as `bind:group`.
+`motion.create` adapts custom components that forward attachments to one native root. `initial` renders on the server;
 browser subscriptions and animation work are disposed with their owners.
+
+## Choose your markup
+
+| Existing component shape                     | Authoring path                                                                                  |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| A new animated element                       | `motion.button`, `motion.div`, or another typed tag                                             |
+| Native markup, scoped CSS, native directives | `motion.bind(() => options)`; spread `.props` and add its transition for native exits           |
+| A reusable custom component                  | `motion.create(Component)`; forward all props, including attachment symbols, to its native root |
+
+See the [complete native recipe](docs/authoring.md#keep-existing-native-markup),
+[custom forwarding](docs/authoring.md#your-own-component), and
+[React migration guidance](docs/migration.md#coming-from-motion-for-react).
 
 ## Install the local package
 
-```sh
-git clone https://github.com/alois-reinstadler/astra-motion.git
-cd astra-motion
-pnpm install
-pnpm run prepack
-pnpm pack
-```
-
-From your application directory, install the generated file:
+Use the supplied versioned archive from the release-candidate handoff. No checkout
+or library build is required. From your application directory:
 
 ```sh
-pnpm add /absolute/path/to/astra-motion/astra-motion-0.0.1.tgz
+pnpm add /absolute/path/to/astra-motion-0.1.0-rc.1.tgz
 ```
 
 Use Svelte 5.57.0 or newer within Svelte 5. SvelteKit 2.70.3 or newer within Kit 2
@@ -77,7 +83,7 @@ observable behavior, evidence and precise differences. The
 
 ## Svelte adaptations
 
-- `AnimatePresence` receives `present` or keyed `items` and a child snippet. It cannot
+- `AnimatePresence` receives `present`, keyed `items`, or one `value` and a child snippet. It cannot
   inspect an opaque Svelte snippet as a React child array. Its default is `sync`;
   legacy `Presence` keeps its `wait` default.
 - `AnimateActivity` retains component and DOM state, coordinates exits and visibility,
@@ -91,6 +97,10 @@ observable behavior, evidence and precise differences. The
 - Managed `use*` helpers initialize in component setup, accept reactive getters where
   arguments may change, and dispose their work automatically. Reactive booleans expose
   `.current`; MotionValue helpers return the shared engine’s actual MotionValues.
+- `Reorder.Group bind:values={items}` updates Svelte state automatically. Supplying
+  `onReorder` preserves controlled acceptance/rejection, even alongside binding.
+- `useAnimate` adds `controls.settled` for completion, cancellation, replacement and
+  detachment. Its upstream completion-only `finished` behavior remains unchanged.
 - A live MotionValue text child uses `children={value}`. An ordinary Svelte `{value}`
   interpolation remains a snippet and does not subscribe to that value.
 
@@ -112,8 +122,9 @@ belong to the bundle-size guide and package qualification record.
 
 Existing `createMotion`, `createLayout`, `createAnimate`, `createScroll`, `createInView`,
 `Presence`, route helpers and the `motion={{ ... }}` component prop remain available.
-Defined direct props override matching legacy motion-object props. Low-level bindings
-retain their previous ownership rules and reduced-motion defaults. See
+Defined direct props override matching legacy motion-object props. `createMotion` compatibility bindings
+retain their previous ownership rules and reduced-motion defaults. Modern `motion.bind`
+uses the same animation contract as `motion.*`. See
 [migration guidance](docs/migration.md) before changing an existing integration.
 
 ## Development and verification

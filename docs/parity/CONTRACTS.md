@@ -13,7 +13,10 @@ the shared implementation boundaries used by the subsystem audits.
 ## Svelte authoring
 
 - `motion.*` direct props remain primary; legacy `motion={{...}}` stays supported.
-- Native bindings and create* helpers remain available and retain their ownership
+- Modern `motion.bind` shares the primary motion component engine/defaults. Its props
+  spread includes attachment and SSR style; native removal also needs its transition.
+  Explicit `.child` establishes native SSR ancestry. Context is captured in setup.
+  `createMotion` and other compatibility create* helpers retain their ownership
   contracts. use* helpers are component-scoped, with automatic disposal, reactive
   getter inputs where re-evaluation is required, and no React hook call-order rules.
 - MotionValue helpers return the shared engine MotionValue. Reactive booleans/data
@@ -26,7 +29,10 @@ the shared implementation boundaries used by the subsystem audits.
 ## Presence
 
 Svelte snippets are opaque, so `AnimatePresence` owns explicit `present` or keyed
-`items` plus `key` and `children(item)` instead of inspecting child arrays. It defaults
+`items` plus `key`, or one `value` with an optional key selector, and
+`children(item)` instead of inspecting child arrays. The three forms are mutually
+exclusive. Single null/undefined values are absent; default identity is the value
+itself, including reference identity for objects. Exits retain item references. It defaults
 to sync; existing `Presence` retains its wait default. Modes include sync/wait/popLayout.
 Nested boundaries shield exits unless propagate is true. Dynamic custom values,
 manual removal and re-entry are generation-scoped.
@@ -118,3 +124,27 @@ external ancestor and nested sticky/scroll regression coverage.
 
 All claims require tests and matrix evidence before completion. Three-browser
 qualification and packed consumer runtime lifecycle coverage are delivery gates.
+
+## Release-candidate ergonomic contracts
+
+- `Reorder.Group bind:values` auto-assigns only without `onReorder`. A supplied callback
+  is the proposal authority even with binding: assign to accept, leave unchanged to
+  reject. No callbacks on application updates; rejected proposals deduplicate per gesture.
+- `useAnimate` adds the existing `AnimationSettlement` promise without altering upstream
+  `finished`/`then`. Outcomes are finished or cancelled with stopped/cancelled/replaced/detached.
+  Paused runs remain pending, replay starts a new cycle, and owned scope cleanup does not
+  cancel borrowed external playback.
+- `useFollowValue` accepts static/getter source and options, defaults to spring, supports
+  tween/inertia, and retains owned value identity while borrowed sources remain external.
+- `useWillChange` is an explicit owned style value; pinned eligible targets register a
+  persistent transform hint. No automatic blanket hint or acceleration promise is implied.
+- `animateView` is an imperative fluent transaction participant in the existing document
+  coordinator. Chaining finishes synchronously; cancellation still applies the update once.
+  Already registered AnimateView roots retain their boundary owner. Consumer teardown does
+  not implicitly cancel document transactions.
+- `MotionConfig.isStatic` remains unsupported: it is an upstream internal implementation
+  flag. The vgpu/Threlte proof of concept remains outside core dependencies and guarantees.
+
+Focused presence/reorder evidence is in [the implementation record](../reviews/2026-09-29-presence-reorder.md).
+Final release qualification must identify the exact integrated commit and package archive;
+source/API review alone is not full-candidate verification.

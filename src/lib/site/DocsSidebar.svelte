@@ -5,7 +5,7 @@
 	let query = $state('');
 	const filtered = $derived(
 		docs.filter((doc) =>
-			`${doc.title} ${doc.summary} ${doc.sections.map((section) => section.title).join(' ')}`
+			`${doc.title} ${doc.summary} ${doc.sections.map((section) => [section.title, section.text?.join(' '), section.code?.source, JSON.stringify(section.table ?? [])].join(' ')).join(' ')}`
 				.toLowerCase()
 				.includes(query.trim().toLowerCase())
 		)

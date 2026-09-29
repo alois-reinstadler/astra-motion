@@ -1,6 +1,6 @@
 {
 	"name": "astra-motion",
-	"version": "0.0.1",
+	"version": "0.1.0-rc.1",
 	"license": "MIT",
 	"packageManager": "pnpm@11.24.0",
 	"scripts": {
@@ -23,7 +23,8 @@
 		"test:motion:e2e": "playwright test --config playwright.motion.config.ts",
 		"test:browsers:install": "playwright install",
 		"check:package": "node scripts/prepare-motion-consumer.mjs",
-		"check:elements": "node scripts/generate-motion-elements.mjs --check"
+		"check:elements": "node scripts/generate-motion-elements.mjs --check",
+		"check:forwarding": "node scripts/check-motion-forwarding.mjs"
 	},
 	"files": [
 		"dist/index.js",

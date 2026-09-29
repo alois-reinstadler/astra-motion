@@ -2,32 +2,32 @@
 
 Current primary API: [34-page documentation](https://alois-reinstadler.github.io/astra-motion/docs),
 [parity matrix](parity/MATRIX.md), and [migration guide](migration.md).
-The native-binding examples below remain supported; their stricter ownership and
-finite-transition rules apply to those compatibility helpers.
+Modern `motion.bind` and `motion.*` share one animation contract. The explicitly
+labelled `createMotion` recipes remain compatible with their historical stricter
+ownership and finite-transition rules.
 
 For simple enter/exit effects, prefer Svelte's native `transition:fade`, `transition:fly`
 or `transition:slide`. When new markup needs Astra capabilities, start with
 `motion.div`, `motion.button` or another tag component from `astra-motion`.
-Use `createMotion` when an existing native element or component owns the markup. These
+Use `motion.bind` when an existing native element or component owns the markup. These
 complete recipes are also available with copy buttons and links to live scenarios
 at [/motion-lab/guide](/motion-lab/guide). This is a beta adapter over pinned Motion
 13.4.4; see the [release checklist](release-checklist.md) for the current engine pins.
 
-## Install a local build
+## Install the supplied release candidate
 
-The repository is an unpublished beta. In a checkout, run `pnpm install`,
-`pnpm run prepack` and `pnpm pack`. From the consuming Svelte app, run
-`pnpm add /absolute/path/to/astra-motion/astra-motion-0.0.1.tgz`, replacing the path
-with the generated archive. The package includes one qualified DOM-only Motion
-engine; no app overrides or separate Motion installation are required, and strict
-declarations are checked with
-`skipLibCheck: false`.
-Svelte 5.57.0 or newer within Svelte 5 is a peer dependency. Only the `routes` and
-`view-navigation` entries require SvelteKit (2.70.3 or newer within Kit 2).
+From your application directory, install the archive supplied in the release-candidate
+handoff. No checkout or consumer-side library build is needed:
 
-Package imports in this guide refer to that local build. The public site’s
-Getting started guide includes the same installation path. See the
-[current project status](https://alois-reinstadler.github.io/astra-motion/status) before adopting it.
+```sh
+pnpm add /absolute/path/to/astra-motion-0.1.0-rc.1.tgz
+```
+
+This artifact is prepared locally; no registry publication is implied. Match its hash
+to the handoff verification record. The package contains one qualified Motion engine;
+no separate Motion installation or dependency overrides are required. Svelte 5.57.0
+or newer within Svelte 5 is required. Only `/routes` and `/view-navigation` require
+SvelteKit 2.70.3 or newer within Kit 2. Strict declarations use `skipLibCheck: false`.
 
 ## Choose an authoring path
 
@@ -36,16 +36,17 @@ recipes. For new code, the primary references also cover `AnimatePresence`,
 `LayoutGroup`, `useAnimate`, `useScroll`, `useInView` and `AnimateView`. See the
 [migration guide](migration.md) when moving between these contracts.
 
-| Need                                                             | Start with                                                             |
-| ---------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| Simple enter/exit fade, fly or intrinsic-height slide            | Native Svelte transitions from `svelte/transition`                     |
-| New HTML markup, state, gestures and optional layout             | `motion.div`, `motion.button`, `motion.input`, etc.                    |
-| Existing native markup, headless components or native directives | `createMotion` and its props/transition                                |
-| Layout only, grouped or shared identities                        | `createLayout` attachments                                             |
-| Exit before replacing a branch                                   | `Presence`; ordinary if/each blocks already support simultaneous exits |
-| Scoped sequences or scroll-linked motion                         | `createAnimate` or `createScroll`                                      |
-| Visibility without an animation owner                            | `createInView`                                                         |
-| Shared content across SvelteKit routes                           | `astra-motion/routes`                                                  |
+| Need                                                             | Start with                                            |
+| ---------------------------------------------------------------- | ----------------------------------------------------- |
+| Simple enter/exit fade, fly or intrinsic-height slide            | Native Svelte transitions from `svelte/transition`    |
+| New HTML markup, state, gestures and optional layout             | `motion.div`, `motion.button`, `motion.input`, etc.   |
+| Existing native markup, headless components or native directives | `motion.bind` and its props/transition                |
+| Reusable custom Svelte components                                | `motion.create(Component)` with attachment forwarding |
+| Layout only, grouped or shared identities                        | `createLayout` attachments                            |
+| Exit before replacing a branch                                   | `AnimatePresence value={selected} mode="wait"`        |
+| Scoped sequences or scroll-linked motion                         | `createAnimate` or `createScroll`                     |
+| Visibility without an animation owner                            | `createInView`                                        |
+| Shared content across SvelteKit routes                           | `astra-motion/routes`                                 |
 
 Use root imports first. Feature entries and `/state/lite` are optional bundle
 optimizations, described below; they should not be the first authoring decision.
@@ -54,7 +55,7 @@ work directly in a keyed list; native bindings belong in a per-item component wh
 each item needs an independent owner.
 
 `presence()` is Astra's small standalone opacity transition. `binding.transition`
-connects a `createMotion` binding's enter/exit targets and live policy to Svelte's
+connects a native binding's enter/exit targets and live policy to Svelte's
 retention lifecycle; tag components wire it up internally. `Presence` coordinates
 branch replacement, including waiting for exits. Use the one the interaction needs.
 
@@ -193,7 +194,7 @@ Motion’s current and initial SSR styles as described above.
 | `motion.details`                       | `open`                                                      |
 
 These are compiled Svelte components, so native directives do not automatically
-become component props. Use native markup with `createMotion` for `bind:group`,
+become component props. Use native markup with `motion.bind` for `bind:group`,
 media bindings, readonly dimensions, `class:`/`style:` directives or parent-scoped
 CSS element selectors. Radio groups especially need their native inputs in the same
 Svelte component. Generated tags now cover HTML and SVG. `motion.create` also supports custom tags and
@@ -233,39 +234,73 @@ space and still needs a native outro. These helpers have different jobs.
 
 ```svelte
 <script lang="ts">
-	import { createMotion } from 'astra-motion';
-	let open = $state(true);
-	const panel = createMotion({
+	import { motion } from 'astra-motion';
+	let shown = $state(true);
+	let selected = $state<string[]>([]);
+	const choice = motion.bind(() => ({
 		initial: { opacity: 0 },
-		animate: { opacity: 1 },
-		exit: { opacity: 0 }
-	});
-	const enterExit = panel.transition;
+		animate: { opacity: 1, scale: selected.includes('news') ? 1.1 : 1 },
+		exit: { opacity: 0 },
+		transition: { duration: 0.2 },
+		reducedMotion: 'user'
+	}));
+	const enterExit = choice.transition;
 </script>
 
-<button onclick={() => (open = !open)}>Toggle</button>
-{#if open}
-	<section {...panel.props} style={'color: steelblue;' + panel.props.style} transition:enterExit>
-		Existing native markup.
-	</section>
+<button onclick={() => (shown = !shown)}>Toggle choices</button>
+{#if shown}
+	<fieldset>
+		<legend>Subscriptions</legend>
+		<label
+			><input
+				class="choice"
+				type="checkbox"
+				value="news"
+				bind:group={selected}
+				{...choice.props}
+				transition:enterExit|global
+			/> News</label
+		>
+		<label><input type="checkbox" value="events" bind:group={selected} /> Events</label>
+	</fieldset>
 {/if}
+<p>Selected: {selected.join(', ') || 'None'}</p>
+
+<style>
+	.choice {
+		accent-color: teal;
+		outline-offset: 4px;
+	}
+</style>
 ```
 
-Spread `binding.props` to install its attachment and SSR style. If the element has
-an authored style string, merge it after the spread as above; either unmerged style
-prop would overwrite the other. Preserve your native attributes, event callbacks,
-`bind:this` and form bindings on that element.
+`motion.bind` uses the component engine: defaults, targets, variants, transform
+composition, reduced-motion policy, callbacks, interruption and cleanup match
+`motion.*`. Its static options or getter belong in component setup. A getter follows
+changing targets and options without recreating the binding.
 
-An `exit` option alone does not retain native markup. Add its bidirectional
-`transition:` directive, with `|global` when it must participate in removal of an
-enclosing block. The alias keeps tooling consistent. Split `in:`/`out:` directives
-have different reversal semantics. Use one transition implementation per element.
+The `.props` spread includes the attachment and server-rendered initial style. Do not
+attach it again. Keep native directives, attributes and events on that same element.
+If supplying a separate native style string, merge the binding’s generated style too;
+a later unmerged style replaces it. Alternatively put authored animation styles in
+the options’ `style` object.
 
-Bindings belong in component initialization so SSR and inherited context are
-available. A getter such as `createMotion(() => ({ animate: { x: offset } }))` reads
-changing state; a plain object containing the primitive `offset` captures its value
-at construction. Reactive options objects can also be passed without replacing
-MotionValues or recreating the binding.
+An attachment cannot retain a Svelte outro. The aliased `transition:` directive above
+supplies retention, with `|global` for removal of an enclosing block. Use one transition
+implementation per element. Managed `AnimatePresence` coordinates registered exits;
+keep its owner mounted while children exit. `initial: false` suppresses initial entry.
+
+Configuration context is captured during setup. A provider around markup in this
+same component cannot retroactively configure its binding; place the provider above
+the component or pass explicit options. For native SSR variant ancestry, create
+`const child = parent.child(options)` and mount it inside the native parent. Tag
+components establish that ancestry themselves. Each binding owns one simultaneous root.
+For SVG metadata, use the optional second argument:
+`motion.bind(options, { namespace: 'svg', tag: 'circle', attributes: { cx: 20, cy: 20, r: 8 } })`.
+
+`createMotion` stays available when an existing integration needs its historical
+finite native transitions, strict transform ownership, and `user` reduced-motion
+default. Modern bindings default to `never`, like `motion.*`; choose `user` explicitly.
 
 ## Automatic layout
 
@@ -492,6 +527,28 @@ Try [Coordinated children, including SSR](/motion-lab/inheritance).
 
 ## Your own component
 
+For reusable components, `motion.create` adapts the component’s existing native root.
+The root component must spread the entire rest object, including symbol-keyed
+attachments. Reconstructing props from string-only keys loses those attachments.
+
+```svelte
+<!-- Card.svelte -->
+<script lang="ts">
+	import type { HTMLAttributes } from 'svelte/elements';
+	let { children, ...props }: HTMLAttributes<HTMLDivElement> = $props();
+</script>
+
+<div {...props}>{@render children?.()}</div>
+```
+
+Create the wrapper once during setup: `const MotionCard = motion.create(Card)`.
+Use `<AnimatePresence present={open}><MotionCard exit={{ opacity: 0 }}>…</MotionCard></AnimatePresence>`
+for managed exit retention. A native Svelte outro directive cannot cross an opaque
+component boundary automatically. If the custom component already owns native
+conditional removal, forward the binding and directive explicitly as below. Existing
+bindable props remain part of the wrapped component’s contract; preserve them in its
+own props and root forwarding.
+
 A custom component accepts a binding and forwards it to its real element. It imports only a type.
 
 ```svelte
@@ -529,7 +586,7 @@ A custom component accepts a binding and forwards it to its real element. It imp
 ```
 
 Save this as `MotionCard.svelte`, then pass `motion={card}` from a parent using
-`createMotion()`. Here `motion` is a binding, whereas a tag component’s `motion`
+`motion.bind()`. Here `motion` is a binding, whereas a tag component’s `motion`
 prop is an options object. `attributes` preserves native props and callbacks,
 `bind:ref` forwards the real element, and the explicit style merge preserves both
 owners. The type-only import does not load the engine for non-animated consumers.
@@ -539,7 +596,7 @@ IDs, ARIA attributes, ref, attachments and composed event handlers on the same r
 node; use its prop merger when available. For Bits UI, `forceMount` plus its child
 snippet’s `open` state lets a native `{#if open}` own the transition. Disabling a
 primitive’s built-in retention without that branch loses exits. Portals still own
-focus and accessibility behavior; create an independent `createMotion` binding inside the
+focus and accessibility behavior; create an independent `motion.bind` binding inside the
 portal. See the complete [Dialog adapter](../src/lib/components/ui/dialog/dialog-content.svelte).
 Test Escape, focus restoration, rapid reversal and removal of the owning component.
 
@@ -694,7 +751,7 @@ contents need an intentional response:
 ## Defaults and reduced motion
 
 Wrap the application’s descendants in `MotionConfig` from `astra-motion` to set
-`transition`, `layoutTransition` and `reducedMotion`. Low-level native bindings follow the OS by default; primary motion components default
+`transition`, `layoutTransition` and `reducedMotion`. `createMotion` compatibility bindings follow the OS by default; modern `motion.bind` and primary motion components default
 to never for upstream compatibility. Set `reducedMotion="user"` explicitly to follow the OS; `'always'` and `'never'` provide explicit overrides. Configuration
 is inherited by bindings created in descendant component initialization. A provider
 rendered around markup in the same component cannot retroactively configure bindings
@@ -732,6 +789,49 @@ external `controls.attachTimeline()` disables Motion's completion callback: its
 cleanup, explicit `complete()` or policy reduction instead detaches and settles
 as cancelled. Use `createScroll` for Astra-owned scroll-linked motion.
 Runtime source HMR intentionally reloads the page.
+
+## Reactive inputs and output shapes
+
+Call `use*` helpers during component setup. These are Svelte lifecycle helpers,
+not React hooks executed on each render; no React call-order model or dependency
+array applies. Inputs that may change accept a static value or a getter returning
+that value. Use getters when replacing sources or options, for example
+`useScroll(() => ({ container }))` or `useFollowValue(() => target, () => ({ type: 'tween', duration }))`.
+`useMotionValue(initial)` deliberately takes only a starting value. Function-valued
+callbacks remain callbacks; they are not automatically evaluated as getters.
+
+| Output                                      | Read and write                                                                                                           |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Reactive state readers, such as `useInView` | Read `.current` in markup/effects; destructuring once loses reactivity                                                   |
+| MotionValue                                 | `.get()` reads; `.set()`/`.jump()` write. Pass the value directly to animated `style` so updates reach the engine        |
+| Ordinary Svelte text, conditions and markup | `const valueStore = motionStore(value)` then use `$valueStore`; the bridge does not take ownership of the borrowed value |
+
+`useAnimate` returns `[scope, animate]`. Attach `scope.attach`; its `.current` is a
+read-only element reader. For interruption-aware application work, await the run’s
+`controls.settled`: `{ status: 'finished' }` or `{ status: 'cancelled', reason }`.
+Reasons are `stopped`, `cancelled`, `replaced` and `detached`. Pause remains pending;
+resuming continues the run; replay after successful completion creates a new promise.
+Sequences settle as one run. Repeated observers see the same cycle’s outcome.
+Upstream `finished`/`then` remain completion-only and can stay pending on interruption.
+Only owned playback is stopped on cleanup; borrowing a MotionValue does not transfer
+its external animation ownership.
+
+## Practical interaction recipes
+
+The existing [Getting started guide](https://alois-reinstadler.github.io/astra-motion/docs/getting-started)
+contains complete native-binding, dialog, changing-panel and accordion components.
+The dialog keeps `showModal`/`close` semantics and awaits `settled`; the panel example
+uses single-value presence while its controls stay mounted; the accordion preserves
+native scoped CSS and aria-expanded. Use a headless tabs/dialog primitive when its
+keyboard navigation and focus management are needed, and preserve that primitive’s
+props and lifecycle instead of recreating its semantics in motion callbacks.
+
+For removable lists, use `AnimatePresence items={items} key={(item) => item.id}`
+with the retained child snippet and each child’s `exit`. Choose `popLayout` when
+siblings should immediately fill the outgoing row’s space, and give the containing
+list `position: relative`. The [presence reference](https://alois-reinstadler.github.io/astra-motion/docs/animate-presence)
+shows the existing list recipe. For pointer sorting, the [Reorder reference](https://alois-reinstadler.github.io/astra-motion/docs/reorder)
+uses `bind:values`; an explicit `onReorder` retains proposal authority even with binding.
 
 ## Lifecycle and measurement
 

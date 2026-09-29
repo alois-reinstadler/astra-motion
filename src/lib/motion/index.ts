@@ -71,6 +71,7 @@ export {
 	useMotionValueEvent,
 	useTransform,
 	useSpring,
+	useFollowValue,
 	useVelocity
 } from './value-hooks.svelte.js';
 export {
@@ -143,3 +144,15 @@ export * as m from './m/index.js';
 export { domAnimation } from './dom-animation.js';
 export { domMax } from './dom-max.js';
 export type { FeatureBundle, LazyFeatureBundle } from './lazy-context.js';
+
+export type { NativeMotionOptions } from './native-motion.js';
+
+export { useWillChange, WillChangeMotionValue } from './will-change.svelte.js';
+export type { FollowValueOptions } from 'motion-dom';
+export {
+	animateView,
+	AnimateViewBuilder,
+	type AnimateViewOptions,
+	type ViewKeyframes,
+	type AnimateViewTarget
+} from './animate-view.js';

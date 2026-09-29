@@ -20,7 +20,7 @@ export interface ViewLayerAnimation {
 	cancel(): void;
 }
 
-class ViewAnimationGroup extends GroupAnimation {
+export class ViewAnimationGroup extends GroupAnimation {
 	override get time() {
 		return this.animations.length ? super.time : 0;
 	}

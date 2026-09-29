@@ -1,0 +1,8 @@
+{
+	"content": [
+		{
+			"type": "text",
+			"text": "Script ran on page and returned:\n```json\n{\"baseline\":{\"vgpu\":{\"status\":\"No WebGPU adapter available\"},\"threlte\":{\"progress\":1,\"intensity\":1,\"draws\":76,\"driver\":\"svelte\",\"backend\":\"Canvas2D reference (not GPU / not Threlte)\"}},\"motion\":{\"vgpu\":{\"status\":\"No WebGPU adapter available\"},\"threlte\":{\"progress\":0,\"intensity\":0.25,\"draws\":149,\"driver\":\"motion\",\"backend\":\"Canvas2D reference (not GPU / not Threlte)\"}},\"stopped\":{\"vgpu\":{\"status\":\"No WebGPU adapter available\"},\"threlte\":{\"progress\":0.001458826387533918,\"intensity\":0.25109411979065044,\"draws\":152,\"driver\":\"motion\",\"backend\":\"Canvas2D reference (not GPU / not Threlte)\"}},\"afterStop\":{\"vgpu\":{\"status\":\"No WebGPU adapter available\"},\"threlte\":{\"progress\":0.001458826387533918,\"intensity\":0.25109411979065044,\"draws\":152,\"driver\":\"motion\",\"backend\":\"Canvas2D reference (not GPU / not Threlte)\"}},\"unmounted\":{\"vgpu\":{\"status\":\"No WebGPU adapter available\"},\"threlte\":{\"status\":\"unmounted\"}},\"reduced\":{\"vgpu\":{\"status\":\"No WebGPU adapter available\"},\"threlte\":{\"progress\":1,\"intensity\":1,\"draws\":3,\"driver\":\"motion\",\"backend\":\"Canvas2D reference (not GPU / not Threlte)\"}},\"viewport\":[1360,1100]}\n```"
+		}
+	]
+}

@@ -1,0 +1,12 @@
+$ vite build
+3:46:23 PM [vite-plugin-svelte] no Svelte config found at /workspace/wt/astra-rc-vgpu/experiments/vgpu-threlte - using default configuration.
+vite v8.0.16 building client environment for production...
+[2Ktransforming...✓ 553 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.42 kB │ gzip:   0.29 kB
+dist/assets/index-DRaq8oiz.css    2.90 kB │ gzip:   1.00 kB
+dist/assets/dist-CDM1NfqL.js    145.14 kB │ gzip:  46.03 kB
+dist/assets/index-CdHhxkYk.js   871.19 kB │ gzip: 235.59 kB
+
+✓ built in 557ms

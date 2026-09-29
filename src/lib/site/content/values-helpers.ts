@@ -40,6 +40,28 @@ export const valuesHelpersDocs: DocPage[] = [
 				'motionStore is a writable view of the same value: set and update write back to it, and its subscriptions are released when the last subscriber leaves. Creating this bridge does not transfer ownership or destroy a borrowed MotionValue.',
 				'Boolean helpers such as useInView have a different return shape: their .current getter is already reactive Svelte state. Read .current inside markup or a reactive computation. Do not replace a live getter with a destructured primitive snapshot.'
 			),
+			{
+				id: 'follow-value',
+				title: 'Follow a changing target',
+				text: [
+					'useFollowValue(source, options?) creates an owned MotionValue following a scalar, unit string or borrowed MotionValue. Source and options accept static values or reactive getters. The default is a spring; choose { type: "tween", duration } for timed interpolation, or supported inertia options. Public durations use seconds and repeated playback is excluded.',
+					'The stable returned value supports get, set, jump and stop. set animates toward a target, jump updates immediately, and stop holds the current position. Replacing source/options through getters preserves output identity. Setup is SSR-safe; hidden Activity holds the latest direct target and reconnects to the latest borrowed source on reveal. Cleanup never destroys the borrowed source.',
+					'Use useSpring for a spring-specific relationship; useFollowValue exposes additional following transition types. Following values own their playback separately: reducedMotion on a consuming element does not stop that borrowed animation. Read useReducedMotion().current and render a fixed transform when reduced motion is requested, as below; a value calculation itself does not infer visual accessibility intent.'
+				],
+				code: {
+					label: 'Complete Svelte example',
+					source:
+						"<script lang=\"ts\">\n  import { motion, motionStore, useFollowValue, useWillChange, useReducedMotion } from 'astra-motion';\n  let target = $state(0);\n  const x = useFollowValue(() => target, { type: 'tween', duration: 0.3 });\n  const position = motionStore(x);\n  const willChange = useWillChange();\n  const reduced = useReducedMotion();\n</script>\n\n<button onclick={() => target = target ? 0 : 120}>Move</button>\n<motion.div style={{ x: reduced.current ? 0 : x, willChange }}>Following target</motion.div>\n<p>Position: {$position.toFixed(0)}</p>"
+				}
+			},
+			{
+				id: 'will-change',
+				title: 'Opt into a persistent will-change hint',
+				text: [
+					'useWillChange() creates a component-owned MotionValue initially set to "auto". Pass it directly as style={{ willChange }} on motion.* or in motion.bind options to opt in. Eligible animated targets register with the value; willChange.add("x") explicitly prewarms the hint.',
+					'The pinned Motion 13.4.4 contract maps eligible independent transforms and accelerated targets to the "transform" hint. The hint remains for the value’s lifetime. Cleanup disposes the owned value; hidden Activity does not discard the persistent hint. This is a rendering hint, not a claim of GPU acceleration or a performance improvement. Avoid applying it indiscriminately.'
+				]
+			},
 			section(
 				'composition',
 				'Build relationships between values',
@@ -682,14 +704,14 @@ export const valuesHelpersDocs: DocPage[] = [
 				[
 					'return from animate',
 					'Thenable playback controls',
-					'Await successful completion directly or read finished; control the same run with the methods below.'
+					'Await successful completion directly or read finished. Observe settled when application cleanup must also handle interruption or owner detachment.'
 				]
 			]),
 			{
 				id: 'controls',
 				title: 'Playback controls',
 				text: [
-					'A completed run can replay while its owner and scope generation still exist. A stopped or cancelled run cannot restart through the managed helper.'
+					'A completed run can replay while its owner and scope generation still exist; replay creates a fresh settled promise. Repeated observers of one playback share its result. Pause leaves settlement pending, and play resumes that cycle. A stopped or cancelled run cannot restart through the managed helper.'
 				],
 				table: {
 					columns: ['Control', 'Contract'],
@@ -712,8 +734,12 @@ export const valuesHelpersDocs: DocPage[] = [
 							'Inspect duration, current playback state, and the engine start timestamp.'
 						],
 						[
+							'settled',
+							'Promise of { status: "finished" } or { status: "cancelled", reason }. Reasons: stopped, cancelled, replaced, detached. Applies to sequences as one owned run. Detaching a scope or destroying its owner settles owned playback; borrowed external MotionValue playback is not cancelled merely because this consumer disappears.'
+						],
+						[
 							'finished / then()',
-							'Observe completion. Cancellation has the underlying engine’s completion semantics; use explicit application cleanup for cancellation.'
+							'Completion-only upstream semantics are unchanged and may remain pending on stop/cancel. Use settled for cancellation-aware application cleanup.'
 						],
 						[
 							'attachTimeline({ timeline?, observe })',
@@ -726,7 +752,7 @@ export const valuesHelpersDocs: DocPage[] = [
 				'composition',
 				'Compose with visibility and presence',
 				'useInView(scope) can trigger an imperative sequence when the root enters the viewport. Start the sequence inside an effect that reads visible.current and cancel or stop work when that effect is replaced.',
-				'For a manual presence exit, use usePresence in the retained child, capture safeToRemove for the current exit, await the scoped exit animation, and call that captured callback. Cancel superseded work when isPresent becomes true again. The AnimatePresence reference shows the generation-safe removal pattern.'
+				'For a manual presence exit, use usePresence in the retained child, capture safeToRemove for the current exit, await controls.settled, and call that captured callback only for the outcome your application accepts. Use result.status === "finished" for a successful exit. Cancel superseded work when isPresent becomes true again. The AnimatePresence reference shows the generation-safe removal pattern.'
 			),
 			section(
 				'mini',

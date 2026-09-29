@@ -21,6 +21,21 @@ can seed a postcommit snapshot. This works through interruption, nested projecti
 shared replacement without relying on an attachment pre-effect. The implementation
 continues to use Motion's projection engine rather than introducing a second FLIP engine.
 
+## Release-candidate contract additions
+
+The modern entry points are `motion.*`, native `motion.bind`, and `motion.create`.
+Native bindings reuse the component engine and captured environment; their explicit
+SSR spread and native outro directive remain Svelte markup requirements. `.child`
+retains the modern contract and declares native SSR variant ancestry. Legacy
+`createMotion` defaults remain unchanged.
+
+`AnimatePresence` adds a retained `value` form through the existing keyed reconciler.
+`Reorder.Group` adds bindable values while explicit callbacks retain proposal authority.
+`controls.settled from useAnimate` reuses the existing settlement status/reason vocabulary without
+changing upstream completion semantics. See [migration](migration.md) for compatibility
+and [authoring](authoring.md) for complete recipes. The vgpu/Threlte experiment does
+not add dependencies or claims of GPU acceleration to the core adapter.
+
 ## What we learned
 
 - **Svelte** already owns DOM retention, transition reversal, and nested outro groups.
@@ -124,9 +139,11 @@ Input value/checkbox/file, textarea/select value and details open bindings are
 implemented explicitly. `Motion as` remains compatible; its dynamic element does
 not gain those form bindings.
 
-Use `createMotion` for existing native markup, native directives such as `bind:group`,
+Use `motion.bind` for existing native markup, native directives such as `bind:group`,
 parent-scoped styles and headless components. Spread its props, merge authored styles,
-and install its native transition. Each binding owns one simultaneously mounted node.
+and install its native transition. Its props include the attachment and SSR styles, so
+do not attach it twice. Modern bindings share the motion.* engine contract;
+`createMotion` preserves historical compatibility behavior. Each binding owns one simultaneously mounted node.
 Nested tag components establish variant ancestry during SSR; native bindings use
 `parent.child()`. Both preserve the DOM containment contract. For portaled content,
 create an independent native binding rather than inheriting an outside visual parent.
@@ -561,7 +578,7 @@ requires current DOM ordering for connected participants.
   context; native bindings use `parent.child()`. Arbitrary DOM ancestry discovered
   after mounting cannot determine server styles. Children must remain inside their
   declared parent; portaled content needs an independent native binding.
-  Native presence targets must be finite; unresolved `auto`/CSS-variable targets and
+  Compatibility createMotion presence targets must be finite; unresolved `auto`/CSS-variable targets and
   repeating exits are diagnosed. Use layout for intrinsic dimensions.
 - **Global coordination costs O(N).** The 500-node compositing cliff improved materially
   with generated 2D translations: measured cold maximum frame from 217 ms to 33 ms, with warm frames around 17 ms.
