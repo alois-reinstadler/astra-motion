@@ -128,7 +128,9 @@ test('desk image and text retain proportions during large interrupted resizes', 
 		.toBeLessThan(0.0001);
 });
 
-test('inspector exit settles when inherited reduced motion changes live', async ({ page }) => {
+test('inspector exit preserves paint timing when inherited reduced motion changes live', async ({
+	page
+}) => {
 	await page.emulateMedia({ reducedMotion: 'no-preference' });
 	await page.goto('/showcase#editing-desk');
 	await expect(
@@ -147,6 +149,13 @@ test('inspector exit settles when inherited reduced motion changes live', async 
 		await new Promise(requestAnimationFrame);
 		await new Promise(requestAnimationFrame);
 		const inspector = document.querySelector<HTMLElement>('.inspector')!;
+		const completedOpacity = new Promise<number>((resolve) => {
+			inspector.addEventListener(
+				'outroend',
+				() => resolve(Number(getComputedStyle(inspector).opacity)),
+				{ once: true }
+			);
+		});
 		let exiting = false;
 		inspector.addEventListener('outrostart', () => (exiting = true), { once: true });
 		document
@@ -179,9 +188,10 @@ test('inspector exit settles when inherited reduced motion changes live', async 
 			if (nativeExit) break;
 		}
 		if (!nativeExit || !activeExit) throw new Error('No running native inspector outro observed');
+		let result;
 		try {
-			// Hold the real retention clock halfway through its authored duration. A slow
-			// frame or a no-op policy handler must not pass by naturally finishing the exit.
+			// Hold the real retention clock halfway through its authored duration.
+			// A policy change must preserve this clock and the opacity track it samples.
 			nativeExit.pause();
 			nativeExit.currentTime = activeExit.duration / 2;
 			await nativeExit.ready;
@@ -194,7 +204,7 @@ test('inspector exit settles when inherited reduced motion changes live', async 
 			document.querySelector<HTMLInputElement>('[data-testid=showcase-reduced]')!.click();
 			await new Promise(requestAnimationFrame);
 			await new Promise(requestAnimationFrame);
-			return {
+			result = {
 				activeExit,
 				before,
 				held,
@@ -203,12 +213,15 @@ test('inspector exit settles when inherited reduced motion changes live', async 
 				after: Number(getComputedStyle(inspector).opacity),
 				afterTime: nativeExit.currentTime,
 				stillPaused: nativeExit.playState === 'paused',
-				retained: inspector.isConnected
+				retained: inspector.isConnected,
+				reducedChecked: document.querySelector<HTMLInputElement>('[data-testid=showcase-reduced]')!
+					.checked
 			};
 		} finally {
 			// Svelte still owns retention; restore its clock even if an assertion fails.
 			nativeExit.play();
 		}
+		return { ...result, completedOpacity: await completedOpacity };
 	});
 	expect(result.before).toBeGreaterThan(0);
 	expect(result.activeExit).toMatchObject({ state: 'running' });
@@ -221,7 +234,10 @@ test('inspector exit settles when inherited reduced motion changes live', async 
 	expect(result.afterTime).toBe(result.pausedTime);
 	expect(result.stillPaused).toBe(true);
 	expect(result.retained).toBe(true);
-	expect(result.after).toBe(0);
+	expect(result.reducedChecked).toBe(true);
+	// Modern reduction preserves paint timing, including a paused native clock.
+	expect(result.after).toBe(result.before);
+	expect(result.completedOpacity).toBe(0);
 	await expect(page.locator('.inspector')).toHaveCount(0);
 	await page.getByTestId('editing-desk').getByRole('button', { name: 'Show inspector' }).click();
 	await expect(page.locator('.inspector')).toHaveCSS('opacity', '1');
