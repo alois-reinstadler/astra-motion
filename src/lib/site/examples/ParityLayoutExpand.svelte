@@ -2,7 +2,7 @@
 	import { AnimatePresence, motion } from '$lib/motion/index.js';
 	let expanded = $state(false);
 	let card = $state<HTMLElement | null>(null);
-	let detail = $state<HTMLElement | null>(null);
+	let detail = $state<HTMLParagraphElement | null>(null);
 	let exitSize = $state<{ width: number; height: number }>();
 	let exitText = $state<{
 		left: number;
