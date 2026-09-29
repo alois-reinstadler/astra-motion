@@ -296,7 +296,7 @@ the component or pass explicit options. For native SSR variant ancestry, create
 `const child = parent.child(options)` to declare its variant parent before rendering. Tag
 components establish that ancestry themselves. Each binding owns one simultaneous root.
 For SVG metadata, use the optional second argument:
-`motion.bind(options, { namespace: 'svg', tag: 'circle', attributes: { cx: 20, cy: 20, r: 8 } })`.
+`motion.bind(options, { namespace: 'svg', tag: 'circle', attributes: () => ({ cx: 20, cy: 20, r: 8 }) })`.
 
 `motion.bind` and `motion.*` default to `reducedMotion: 'never'`, matching Motion.
 Choose `'user'` explicitly to follow the OS. The removed `createMotion` helper is
@@ -926,3 +926,24 @@ through the same DOM resolver as components. Explicit first keyframes are honore
 and finite repeats include their repeat delay and final repeat direction. Native
 outros require a finite total duration; an infinite repeat cannot supply a finite
 Svelte removal clock.
+
+### Resetting a raw transform
+
+A nonempty raw `transform` masks independent targets such as `x` and `scale` in
+both authoring paths. Clear it with `transform: ''` before using independent
+targets again.
+
+The pinned Motion 13.4.4 engine has a matrix-to-`none` interpolation limitation:
+it can normalize the target to an all-zero matrix, which collapses the element.
+Use an explicit identity matrix for a raw-transform reset. To retain the literal
+CSS `none` endpoint, apply it through `transitionEnd`:
+
+```ts
+await binding.animate({
+	transform: 'matrix(1, 0, 0, 1, 0, 0)',
+	transitionEnd: { transform: 'none' }
+});
+```
+
+This limitation also affects `motion.*`; it is not a difference between native
+bindings and components. An independent transform target is usually simpler.

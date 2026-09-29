@@ -1,0 +1,26 @@
+{
+	"name": "astra-threlte-littlest-tokyo",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"packageManager": "pnpm@11.24.0",
+	"scripts": {
+		"dev": "vite",
+		"check": "svelte-check --tsconfig ./tsconfig.json",
+		"build": "vite build",
+		"test": "node --test src/*.test.mjs"
+	},
+	"dependencies": {
+		"@threlte/core": "8.6.1",
+		"astra-motion": "file:vendor/astra-motion-0.1.0-rc.1.tgz",
+		"svelte": "5.57.0",
+		"three": "0.186.1"
+	},
+	"devDependencies": {
+		"@sveltejs/vite-plugin-svelte": "7.1.2",
+		"@types/three": "0.186.0",
+		"svelte-check": "4.6.0",
+		"typescript": "6.0.3",
+		"vite": "8.0.16"
+	}
+}

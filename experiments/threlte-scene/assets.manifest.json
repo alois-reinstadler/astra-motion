@@ -1,0 +1,58 @@
+[
+	{
+		"path": "public/assets/littlest-tokyo.glb",
+		"source": "https://raw.githubusercontent.com/pmndrs/examples/890246ae49f1bf238dd9247795856bda1a35890f/examples/scrollcontrols-gltf/src/LittlestTokyo-transformed.glb",
+		"license": "CC-BY-4.0",
+		"credit": "glenatron / Glen Fox; source model https://sketchfab.com/models/94b24a60dc1b48248de50bf087c0f042",
+		"bytes": 2572612,
+		"sha256": "9e239a3d16bd396d63f09383df08a1de480e30e5fb66314dd313961bfad36549"
+	},
+	{
+		"path": "public/assets/source-poster.webp",
+		"source": "https://raw.githubusercontent.com/pmndrs/examples/890246ae49f1bf238dd9247795856bda1a35890f/examples/scrollcontrols-gltf/thumbnail.webp",
+		"license": "MIT and depicted CC-BY-4.0 model",
+		"credit": "Paul Henschel / pmndrs; static screenshot of original scene, not a render of this port",
+		"bytes": 55858,
+		"sha256": "58448997fb007e645e97b5d8cfbd9ae0e204b726c36c2688309ccdd461e948b8"
+	},
+	{
+		"path": "public/draco/draco_decoder.wasm",
+		"source": "https://github.com/mrdoob/three.js/blob/r186/examples/jsm/libs/draco/gltf/draco_decoder.wasm",
+		"license": "Apache-2.0",
+		"credit": "Google Draco, distributed in three@0.186.1",
+		"bytes": 192420,
+		"sha256": "a680d927bed9cb864ddbd63521868891af2bfbe755092761b4837487618df8ac"
+	},
+	{
+		"path": "public/draco/draco_wasm_wrapper.js",
+		"source": "https://github.com/mrdoob/three.js/blob/r186/examples/jsm/libs/draco/gltf/draco_wasm_wrapper.js",
+		"license": "Apache-2.0",
+		"credit": "Google Draco, distributed in three@0.186.1",
+		"bytes": 58456,
+		"sha256": "8bb2952d2ba7d67e1414f8df819410cb0434a666be53f671fff75f68843d76f6"
+	},
+	{
+		"path": "public/fonts/manrope.ttf",
+		"source": "https://github.com/google/fonts/blob/main/ofl/manrope/Manrope%5Bwght%5D.ttf",
+		"license": "OFL-1.1",
+		"credit": "Manrope font authors; see licenses/manrope-OFL.txt",
+		"bytes": 164700,
+		"sha256": "3ae11c49db0455a3cc33e37d380f20fdb8c7f8b41dc07625c177e3d87a9d6ae6"
+	},
+	{
+		"path": "public/fonts/dmsans.ttf",
+		"source": "https://github.com/google/fonts/blob/main/ofl/dmsans/DMSans%5Bopsz,wght%5D.ttf",
+		"license": "OFL-1.1",
+		"credit": "DM Sans font authors; see licenses/dmsans-OFL.txt",
+		"bytes": 240164,
+		"sha256": "8cd08d97e89c24d0aa92edd2f0f4c8ee6195eee9b7c9f154865a58b02f0c1c0d"
+	},
+	{
+		"path": "vendor/astra-motion-0.1.0-rc.1.tgz",
+		"source": "local release /workspace/releases/astra-motion/0.1.0-rc.1/astra-motion-0.1.0-rc.1.tgz",
+		"license": "MIT",
+		"credit": "Local evaluation artifact; not registry publication",
+		"bytes": 408009,
+		"sha256": "8c001390e0406e5e628873bcd5f4f2a8a026e372aa2037f20ccc6578fe88515f"
+	}
+]

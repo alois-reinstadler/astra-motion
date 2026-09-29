@@ -28,6 +28,14 @@
 		transition: { duration: 0 }
 	});
 
+	const direct = motion.bind({
+		initial: false,
+		animate: 'active',
+		custom,
+		variants: { active: (data) => data },
+		transition: { duration: 0 }
+	});
+
 	export function mutate(x: number) {
 		options.animate.x = x;
 		variants.active.x[1] = x;
@@ -46,3 +54,22 @@
 <Motion data-nested-component motion={options}>Component</Motion>
 <div data-nested-variant {...variant.props}>Variant</div>
 <div data-nested-custom {...dynamic.props}>Custom</div>
+
+<Motion
+	data-nested-custom-component
+	initial={false}
+	animate="active"
+	{custom}
+	variants={{ active: (data) => ({ x: data.x }) }}
+	transition={{ duration: 0 }}
+/>
+
+<div data-nested-direct {...direct.props}>Returned custom object</div>
+<Motion
+	data-nested-direct-component
+	initial={false}
+	animate="active"
+	{custom}
+	variants={{ active: (data) => data }}
+	transition={{ duration: 0 }}
+/>

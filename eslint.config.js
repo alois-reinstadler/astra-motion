@@ -10,6 +10,13 @@ const gitignorePath = path.resolve(import.meta.dirname, '.gitignore');
 
 export default defineConfig(
 	includeIgnoreFile(gitignorePath),
+	{
+		ignores: [
+			'experiments/threlte-scene/public/**',
+			'experiments/threlte-scene/node_modules/**',
+			'experiments/threlte-scene/dist/**'
+		]
+	},
 	js.configs.recommended,
 	ts.configs.recommended,
 	svelte.configs.recommended,

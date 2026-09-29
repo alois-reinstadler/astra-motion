@@ -6,9 +6,16 @@ import TransformBoundary from './TransformBoundary.svelte';
 
 it('tracks nested object/getter/component targets, keyframes and custom reads without replacing MotionValues', async () => {
 	const screen = render(NestedOptions);
-	const nodes = ['object', 'getter', 'component', 'variant', 'custom'].map(
-		(key) => document.querySelector(`[data-nested-${key}]`) as HTMLElement
-	);
+	const nodes = [
+		'object',
+		'getter',
+		'component',
+		'variant',
+		'custom',
+		'custom-component',
+		'direct',
+		'direct-component'
+	].map((key) => document.querySelector(`[data-nested-${key}]`) as HTMLElement);
 	await expect.poll(() => nodes.every((node) => visualElementStore.has(node))).toBe(true);
 	const visuals = nodes.map((node) => visualElementStore.get(node)!);
 	const value = screen.component.external();
@@ -24,7 +31,7 @@ it('tracks nested object/getter/component targets, keyframes and custom reads wi
 	expect(nodes.every((node) => !node.isConnected)).toBe(true);
 });
 
-it('catches deferred transform takeover in the nearest Svelte boundary', async () => {
+it('updates from authored CSS to a Motion transform without detaching the native element', async () => {
 	const sheet = document.createElement('style');
 	sheet.textContent = '[data-transform-owner] { transform: translateX(15px); }';
 	document.head.append(sheet);
@@ -34,25 +41,25 @@ it('catches deferred transform takeover in the nearest Svelte boundary', async (
 		await expect.poll(() => visualElementStore.has(node)).toBe(true);
 		expect(new DOMMatrix(getComputedStyle(node).transform).e).toBe(15);
 		await screen.rerender({ takeover: true });
-		await expect
-			.poll(() => document.querySelector('[data-transform-error]')?.textContent)
-			.toContain('Motion owns');
-		expect(node.isConnected).toBe(false);
+		await expect.poll(() => new DOMMatrix(getComputedStyle(node).transform).e).toBe(20);
+		expect(document.querySelector('[data-transform-error]')).toBeNull();
+		expect(node.isConnected).toBe(true);
 	} finally {
 		sheet.remove();
 	}
 });
 
-it('catches an initial CSS transform conflict before the deferred visual mounts', async () => {
+it('composes independent CSS translate with a native Motion transform', async () => {
 	const sheet = document.createElement('style');
 	sheet.textContent = '[data-transform-owner] { translate: 15px; }';
 	document.head.append(sheet);
 	try {
 		render(TransformBoundary, { takeover: true });
-		await expect
-			.poll(() => document.querySelector('[data-transform-error]')?.textContent)
-			.toContain('Motion owns');
-		expect(document.querySelector('[data-transform-owner]')).toBeNull();
+		const node = document.querySelector('[data-transform-owner]') as HTMLElement;
+		await expect.poll(() => new DOMMatrix(getComputedStyle(node).transform).e).toBe(20);
+		expect(getComputedStyle(node).translate).toBe('15px');
+		expect(document.querySelector('[data-transform-error]')).toBeNull();
+		expect(node.isConnected).toBe(true);
 	} finally {
 		sheet.remove();
 	}

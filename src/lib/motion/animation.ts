@@ -149,15 +149,16 @@ export function animateMotionDefinition(
 			visual.values.forEach((value) =>
 				prepareMotionHandoff(value.animation, { finishedOnly: true })
 			);
-			const effectiveTransition = target.transition
-				? resolveTransition(target.transition, visual.getDefaultTransition())
+			const ownedTarget = pathTransition?.path ? { ...values, transition: pathTransition } : values;
+			const effectiveTransition = ownedTarget.transition
+				? resolveTransition(ownedTarget.transition, visual.getDefaultTransition())
 				: visual.getDefaultTransition();
 			const animations = startOwnedMotionAnimations(
 				visual,
 				() =>
 					animateTarget(
 						visual,
-						pathTransition?.path ? { ...values, transition: pathTransition } : values,
+						ownedTarget,
 						options.transitionOverride && pathTransition?.path
 							? { ...options, transitionOverride: pathTransition }
 							: options

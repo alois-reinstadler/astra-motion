@@ -418,6 +418,10 @@ export function nativeBindingContracts() {
 	lite.child({ animate: { pathLength: 1 } }, { namespace: 'svg', tag: 'path' });
 	// @ts-expect-error The lite entry does not include layout features.
 	liteMotion.bind({ layout: true });
+	// @ts-expect-error Shared layout IDs require the full native boundary.
+	liteMotion.bind({ layoutId: 'shared' });
+	// @ts-expect-error Layout callbacks require the full native boundary.
+	liteMotion.bind({ onLayoutAnimationComplete() {} });
 	// @ts-expect-error The lite entry does not include gestures.
 	liteMotion.bind({ whileHover: { scale: 1.1 } });
 	// @ts-expect-error The removed constructor has no compatibility export.

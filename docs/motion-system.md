@@ -459,14 +459,14 @@ const layout = createLayout(policy);
 // On a native transition: transition:presence={policy}
 ```
 
-Policies are `user`, `always`, or `never`. Compatibility bindings default to `user`;
-primary motion components default to `never`. Set `MotionConfig reducedMotion="user"`
+Policies are `user`, `always`, or `never`. Native `motion.bind` and `motion.*`
+both default to `never`. Set `MotionConfig reducedMotion="user"`
 explicitly for an application that follows the device preference. `MotionConfig` supplies context
 defaults to bindings created in descendant components. Existing layout/state animations
 respond to live OS and configuration changes; nested overrides remain independent.
 The narrow legacy `presence` helper checks its policy when a transition is created.
 Native Svelte's retained-outro clock cannot be shortened after it starts: reduction
-settles the visual target immediately while Svelte finishes its original retention.
+settles positional tracks while paint effects can continue; Svelte finishes its original retention.
 Caller-created MotionValue springs remain owned by their creator. Routes inherit
 ancestor configuration and observe live policy changes; explicit route options win.
 A `MotionConfig` rendered in a component cannot configure bindings already created

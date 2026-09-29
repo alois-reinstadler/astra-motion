@@ -676,7 +676,7 @@ export const coreDocs: DocPage[] = [
 				text: [
 					'Supply the same nonce your server authorizes for style elements. The provider propagates it to owned style injection; your application’s own scripts and styles still use your normal CSP setup. Changing a nonce affects subsequent owned style creation.',
 					'The server cannot inspect the client’s device preference. Render useful initial content and apply user policy once the browser preference is available. For decorative looping video, text or path effects, use useReducedMotion to select an appropriate alternative and provide a pause control.',
-					'The never default is the compatibility baseline, so applications should choose their desired policy explicitly. Native low-level Astra bindings retain their prior user default; configuring the provider removes that ambiguity when migrating.'
+					'motion.* and motion.bind both default to never, matching Motion. Set MotionConfig reducedMotion="user" to follow the device preference, or choose a policy explicitly for each binding.'
 				],
 				related: ['accessibility', 'getting-started', 'lazy-motion']
 			}

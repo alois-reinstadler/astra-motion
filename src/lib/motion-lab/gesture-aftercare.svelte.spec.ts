@@ -134,11 +134,13 @@ it('ignores invalid live bounds before pointerdown and accepts a later valid ses
 	const f = fixture({ drag: 'x', dragMomentum: false, dragConstraints: { left: 0, right: 100 } });
 	f.options.dragConstraints = { left: NaN, right: 100 };
 	pointer(f.node, 'pointerdown');
+	pointer(window, 'pointermove', 30);
 	pointer(window, 'pointerup', 30);
 	expect(f.visual.getValue('x', 0).get()).toBe(0);
 	expect(isDragActive()).toBe(false);
 	f.options.dragConstraints = { left: 0, right: 100 };
 	pointer(f.node, 'pointerdown');
+	pointer(window, 'pointermove', 30);
 	pointer(window, 'pointerup', 30);
 	expect(f.visual.getValue('x', 0).get()).toBe(30);
 	expect(isDragActive()).toBe(false);
@@ -161,6 +163,7 @@ it('cancels invalid mid-drag bounds without a poisoned pose, drag lock or moment
 	f.options.dragConstraints = { left: 0, right: 100 };
 	f.options.dragMomentum = false;
 	pointer(f.node, 'pointerdown');
+	pointer(window, 'pointermove', 10);
 	pointer(window, 'pointerup', 10);
 	expect(f.visual.getValue('x', 0).get()).toBe(Number(lastPose) + 10);
 	expect(isDragActive()).toBe(false);
@@ -172,6 +175,7 @@ it('revalidates drag-start constraints before pose writes and stops inertia afte
 		f.options.dragConstraints = { left: NaN };
 	};
 	pointer(f.node, 'pointerdown');
+	pointer(window, 'pointermove', 30);
 	pointer(window, 'pointerup', 30);
 	expect(f.visual.getValue('x', 0).get()).toBe(0);
 	expect(isDragActive()).toBe(false);
@@ -182,6 +186,7 @@ it('revalidates drag-start constraints before pose writes and stops inertia afte
 		f.options.dragConstraints = { right: NaN };
 	};
 	pointer(f.node, 'pointerdown');
+	pointer(window, 'pointermove', 30);
 	pointer(window, 'pointerup', 30);
 	expect(f.visual.getValue('x', 0).get()).toBe(30);
 	await nextFrame();
@@ -227,6 +232,7 @@ it('restores projection and stops writing when onDragStart disposes the binding'
 	f.options.onPanStart = () => callbacksAfterStop++;
 	f.options.onPan = () => callbacksAfterStop++;
 	pointer(f.node, 'pointerdown');
+	pointer(window, 'pointermove', 30);
 	pointer(window, 'pointerup', 30);
 	expect(projection.isAnimationBlocked).toBe(false);
 	expect(isDragActive()).toBe(false);
@@ -242,6 +248,7 @@ it('does not call drag end or retain inertia after onPanEnd disposes the binding
 	f.options.onPanEnd = () => f.stop();
 	f.options.onDragEnd = () => dragEnds++;
 	pointer(f.node, 'pointerdown');
+	pointer(window, 'pointermove', 30);
 	pointer(window, 'pointerup', 30);
 	await nextFrame();
 	expect(dragEnds).toBe(0);

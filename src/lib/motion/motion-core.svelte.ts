@@ -807,7 +807,20 @@ function createBinding(
 		// Getter refs must be resolved while the owner's effect is tracking.
 		// The queued refresh then replaces the observer when that root changes.
 		resolveElement(current.viewport?.root);
-		// Variant functions can themselves read reactive custom data or state.
+		// Preserve custom object identity while tracking reads inside selected variant
+		// resolvers. Motion consumes these targets later, outside Svelte's effect.
+		const inheritedTargets = source();
+		for (const definition of [
+			current.initial === false ? undefined : (current.initial ?? inheritedTargets.initial),
+			current.animate ?? inheritedTargets.animate,
+			current.exit ?? inheritedTargets.exit,
+			current.whileHover,
+			current.whileTap,
+			current.whileFocus,
+			current.whileDrag,
+			current.whileInView
+		])
+			snapshotMotionOptions({ animate: resolved(current, definition, visual) });
 		assertFeatures(current);
 		const latest = ++revision;
 		const version = generation;

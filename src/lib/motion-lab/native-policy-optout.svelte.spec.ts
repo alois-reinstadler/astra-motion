@@ -1,7 +1,7 @@
 import { flushSync } from 'svelte';
 import { expect, it } from 'vitest';
 import { render } from 'vitest-browser-svelte';
-import { AsyncMotionValueAnimation, visualElementStore } from 'motion-dom';
+import { AsyncMotionValueAnimation, JSAnimation, visualElementStore } from 'motion-dom';
 import Fixture from './NativePolicyOptOut.svelte';
 it('preserves target-level reduction opt-outs in both layout-enabled authoring paths', async () => {
 	const { component } = render(Fixture);
@@ -29,4 +29,41 @@ it('preserves target-level reduction opt-outs in both layout-enabled authoring p
 	expect(controls.map((p) => p.state)).toEqual(['paused', 'paused']);
 	for (const playback of controls) playback.complete();
 	await expect.poll(() => visuals.map((v) => v.getValue('x')!.get())).toEqual([100, 100]);
+});
+
+it('preserves an imperative path override opt-out during a live policy change', async () => {
+	const { component } = render(Fixture);
+	const readVisual = () =>
+		visualElementStore.get(document.querySelector('[data-optout="native"]')!)!;
+	await expect
+		.poll(() => readVisual()?.getValue('x')?.animation instanceof AsyncMotionValueAnimation)
+		.toBe(true);
+	const visual = readVisual();
+	const entrance = visual.getValue('x')!.animation;
+	if (!(entrance instanceof AsyncMotionValueAnimation))
+		throw new Error('Expected entrance controls');
+	entrance.complete();
+	await expect.poll(() => visual.getValue('x')!.get()).toBe(100);
+
+	// The opt-out lives only in the imperative override, which is injected into
+	// animateTarget's target transition when it carries the path adapter.
+	const finished = component.runPath();
+	const playback = visual.getValue('x')!.animation;
+	if (!(playback instanceof JSAnimation)) throw new Error('Expected an engine arc clock');
+	expect(visual.getValue('y')!.animation).toBe(playback);
+	playback.pause();
+	playback.time = 1;
+	const position = () => [visual.getValue('x')!.get(), visual.getValue('y')!.get()];
+	await expect.poll(position).toEqual([125, 18.75]);
+
+	flushSync(() => component.reduce());
+	await expect.poll(() => visual.shouldReduceMotion).toBe(true);
+	expect(visual.getValue('x')!.animation).toBe(playback);
+	expect(visual.getValue('y')!.animation).toBe(playback);
+	expect(playback.state).toBe('paused');
+	expect(position()).toEqual([125, 18.75]);
+
+	playback.complete();
+	await finished;
+	expect(position()).toEqual([200, 0]);
 });

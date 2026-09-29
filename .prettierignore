@@ -10,3 +10,7 @@ bun.lockb
 
 # Immutable experimental verification evidence
 experiments/vgpu-threlte/evidence/
+
+# Immutable, attributed third-party scene assets
+experiments/threlte-scene/public/
+experiments/threlte-scene/licenses/

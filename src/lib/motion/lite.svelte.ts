@@ -10,7 +10,11 @@ import type { GestureOptions } from './gestures.js';
 /** State, native presence, variants and MotionValues without projection/gestures. */
 export type LiteMotionOptions = Omit<
 	MotionOptions,
-	keyof GestureOptions | 'layout' | 'layoutGroup' | 'layoutTransition' | 'automatic'
+	| keyof GestureOptions
+	| `layout${string}`
+	| `onLayout${string}`
+	| 'onBeforeLayoutMeasure'
+	| 'automatic'
 >;
 export interface LiteMotionBinding extends Omit<MotionBinding, 'child'> {
 	child(
