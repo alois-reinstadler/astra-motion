@@ -63,7 +63,7 @@
 		}}
 		transition={{ layout: { type: 'spring', stiffness: 320, damping: 30 } }}
 	>
-		<motion.div layout="position" class="content">
+		<motion.div layout="position" class="content" style={{ width: exitText?.width }}>
 			<p class="eyebrow">FIELD NOTES</p>
 			<h3>Leave room for a new idea.</h3>
 			<button type="button" aria-expanded={expanded} onclick={toggle}>
