@@ -18,3 +18,5 @@ export * as Mini from 'astra-motion/mini';
 export * as Reorder from 'astra-motion/reorder';
 export * as View from 'astra-motion/view';
 export * as ViewNavigation from 'astra-motion/view-navigation';
+export * as Text from 'astra-motion/text';
+export * as Tilt from 'astra-motion/tilt';

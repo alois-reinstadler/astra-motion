@@ -135,6 +135,16 @@
 			"types": "./dist/motion/view-entry.d.ts",
 			"svelte": "./dist/motion/view-entry.js",
 			"default": "./dist/motion/view-entry.js"
+		},
+		"./text": {
+			"types": "./dist/motion/text-entry.d.ts",
+			"svelte": "./dist/motion/text-entry.js",
+			"default": "./dist/motion/text-entry.js"
+		},
+		"./tilt": {
+			"types": "./dist/motion/tilt-entry.d.ts",
+			"svelte": "./dist/motion/tilt-entry.js",
+			"default": "./dist/motion/tilt-entry.js"
 		}
 	},
 	"peerDependencies": {

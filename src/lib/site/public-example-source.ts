@@ -2,6 +2,8 @@
 export function publicExampleSource(source: string): string {
 	return source
 		.replaceAll("'$lib/motion/index.js'", "'astra-motion'")
+		.replaceAll("'$lib/motion/text-entry.js'", "'astra-motion/text'")
+		.replaceAll("'$lib/motion/tilt-entry.js'", "'astra-motion/tilt'")
 		.replaceAll("'$lib/motion/lazy-entry.js'", "'astra-motion/lazy'")
 		.replaceAll("'$lib/motion/m/index.js'", "'astra-motion/m'")
 		.replaceAll("'$lib/motion/dom-animation.js'", "'astra-motion/features/dom-animation'")
