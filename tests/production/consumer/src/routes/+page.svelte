@@ -18,6 +18,8 @@
 	import * as entry16 from 'astra-motion/reorder';
 	import * as entry17 from 'astra-motion/view';
 	import * as entry18 from 'astra-motion/view-navigation';
+	import * as entry19 from 'astra-motion/text';
+	import * as entry20 from 'astra-motion/tilt';
 	const entries = [
 		{ name: '.', exports: Object.keys(entry0).sort() },
 		{ name: './layout', exports: Object.keys(entry1).sort() },
@@ -37,7 +39,9 @@
 		{ name: './mini', exports: Object.keys(entry15).sort() },
 		{ name: './reorder', exports: Object.keys(entry16).sort() },
 		{ name: './view', exports: Object.keys(entry17).sort() },
-		{ name: './view-navigation', exports: Object.keys(entry18).sort() }
+		{ name: './view-navigation', exports: Object.keys(entry18).sort() },
+		{ name: './text', exports: Object.keys(entry19).sort() },
+		{ name: './tilt', exports: Object.keys(entry20).sort() }
 	];
 </script>
 

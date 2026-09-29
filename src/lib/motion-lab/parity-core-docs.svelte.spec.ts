@@ -151,29 +151,29 @@ it('loads features in place while preserving input identity and the newest pendi
 });
 
 it('keeps a complete semantic sentence and replays finite visual words', async () => {
-	render(Text);
+	const screen = render(Text);
 	await tick();
 	const message = 'Make room for a little motion.';
-	expect(document.querySelector('.sr-only')?.textContent).toBe(message);
-	expect(document.querySelector('[aria-hidden="true"]')?.textContent).toBe(message);
-	const old = document.querySelector('.word')!;
+	expect(document.querySelector('.text-stage .semantic')?.textContent).toBe(message);
+	expect(document.querySelector('.text-stage [aria-hidden="true"]')?.textContent).toBe(message);
+	const old = document.querySelector('.text-stage [data-text-fragment]')!;
 	await expect
 		.poll(() =>
-			[...document.querySelectorAll('.word')].every(
+			[...document.querySelectorAll('.text-stage [data-text-fragment]')].every(
 				(node) => getComputedStyle(node).opacity === '1'
 			)
 		)
 		.toBe(true);
-	button('Replay words').click();
+	await screen.getByRole('button', { name: 'Replay words' }).click();
 	await tick();
 	await expect.poll(() => old.isConnected).toBe(false);
-	expect(document.querySelector('.word')).not.toBe(old);
+	expect(document.querySelector('.text-stage [data-text-fragment]')).not.toBe(old);
 	await expect
 		.poll(() =>
-			[...document.querySelectorAll('.word')].every(
+			[...document.querySelectorAll('.text-stage [data-text-fragment]')].every(
 				(node) => getComputedStyle(node).opacity === '1'
 			)
 		)
 		.toBe(true);
-	expect(document.querySelectorAll('.sr-only')).toHaveLength(1);
+	expect(document.querySelectorAll('.text-stage .semantic')).toHaveLength(1);
 });

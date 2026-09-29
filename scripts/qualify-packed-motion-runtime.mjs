@@ -1,4 +1,9 @@
 import { verifyRC } from './verify-rc-package.mjs';
+import {
+	hydrateTextFixture,
+	verifyTextEntry,
+	verifyTiltEntry
+} from './verify-optional-motion-entries.mjs';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { readFileSync, writeFileSync, mkdirSync, existsSync, realpathSync } from 'node:fs';
@@ -180,7 +185,8 @@ try {
 							requests
 						});
 					} else {
-						await page.goto(url);
+						if (fixture === 'Text') await hydrateTextFixture(page, url);
+						else await page.goto(url);
 						await expect(page.locator('main[data-hydrated]')).toHaveAttribute(
 							'data-hydrated',
 							'true'
@@ -309,6 +315,11 @@ try {
 								],
 								requests
 							});
+						} else if (fixture === 'Text' || fixture === 'Tilt') {
+							const assertions = await (fixture === 'Text' ? verifyTextEntry : verifyTiltEntry)(
+								page
+							);
+							cases.push({ fixture, assertions, requests });
 						} else if (fixture === 'Eager') {
 							assert.equal(await translation(page.locator('[data-box]')), 20);
 							await page.getByRole('button', { name: 'Animate', exact: true }).click();

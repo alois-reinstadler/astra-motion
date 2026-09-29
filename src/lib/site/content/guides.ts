@@ -379,9 +379,9 @@ export const guidesDocs: DocPage[] = [
 		sections: [
 			{
 				id: 'words',
-				title: 'Reveal words with variants',
+				title: 'Reveal plain text',
 				text: [
-					'Split a plain message into words and whitespace, render the words as inline-block motion spans, and let a parent variant stagger them. Whitespace remains text so wrapping and punctuation follow the original message. The example is finite and provides a replay button.',
+					'Import TextReveal from astra-motion/text. Choose fade, slide or blur independently from whole, words or graphemes segmentation and a stagger interval in seconds. The unstyled host accepts as="h2", as="p" or the default inline span. Use trigger="mount", trigger="viewport" with once, or trigger="state" with visible. The example provides a replay button.',
 					'A complete visually hidden message supplies the semantic text. The animated duplicate is aria-hidden, which prevents a screen reader from encountering each visual fragment as a separate piece. Keep interactive text such as links in the semantic reading flow instead of putting it in the decorative duplicate.'
 				],
 				example: 'text-animation',
@@ -391,8 +391,8 @@ export const guidesDocs: DocPage[] = [
 				id: 'segments',
 				title: 'Choose the right segmentation',
 				text: [
-					'Word animation is often easier to read than moving each character. For grapheme-level animation, use Intl.Segmenter with granularity="grapheme" rather than splitting UTF-16 strings. That keeps emoji sequences, combining marks and many writing systems intact. Set the correct lang and preserve the source reading order.',
-					'Line animation depends on fonts, container width and wrapping. Use explicit lines when the design permits, or measure after fonts load and update after resize with useActivityEffect cleanup. Astra does not include a DOM text-splitting plugin in this surface; rendering Svelte-owned spans is the supported approach.'
+					'TextReveal and TextSwap use Intl.Segmenter with an explicit locale (default en). If Segmenter is unavailable, the entire message stays intact. SSR and initial hydration render visible unsplit text; segmentation happens after mounting, avoiding server/client ICU differences. Set lang and locale for your content. Fragment boundaries can affect ligatures and complex-script shaping.',
+					'Automatic line splitting is outside this API. Whitespace stays literal text with inherited white-space rules; graphemes remain grouped within words. Choose whole when preserving font shaping matters more than fragment motion.'
 				],
 				code: {
 					label: 'Grapheme segmentation · focused excerpt',
@@ -418,13 +418,13 @@ export const guidesDocs: DocPage[] = [
 				id: 'replacement',
 				title: 'Replace a label with presence',
 				text: [
-					'Use AnimatePresence with a stable label key when old text should leave before its replacement enters. mode="wait" coordinates one replacement at a time; sync overlaps both. Keep the surrounding semantic control mounted so a label animation does not replace its focusable button.',
-					'Short vertical movement and opacity often communicate a label change clearly. Match the inline or block host to the text layout, and reserve enough space so controls do not jump unexpectedly.'
+					'TextSwap reuses AnimatePresence. mode="wait" coalesces requests to the latest string and cancels an exit when the outgoing value returns. The default sync overlaps at most two visual layers; another request during exit snaps to the latest message. Repeated identical strings do nothing, and empty strings are supported. The surrounding native control remains mounted.',
+					'size="content" can resize surrounding layout. Use size="reserve" with all alternatives to reserve the largest rendered string at the current font and width, or size="fixed" with explicit host dimensions. Both keep the reserved region stationary; fixed defaults to clipped overflow. live="polite" opts the single complete semantic message into announcements; the default is off.'
 				],
 				code: {
 					label: 'Label replacement · focused excerpt',
 					source:
-						'<button onclick={advance}>\n  <AnimatePresence value={label} mode="wait">\n    {#snippet children(text)}\n      <motion.span initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}>\n        {text}\n      </motion.span>\n    {/snippet}\n  </AnimatePresence>\n</button>'
+						'<button onclick={advance}>\n  <TextSwap text={label} mode="wait" effect="slide" size="reserve" alternatives={["Continue", "Saving…", "Saved"]} />\n</button>'
 				},
 				related: ['animate-presence']
 			},
@@ -432,8 +432,8 @@ export const guidesDocs: DocPage[] = [
 				id: 'reduced-motion',
 				title: 'Reduce movement and preserve content',
 				text: [
-					'The word example uses MotionConfig reducedMotion="user". Transform travel settles when reduction is requested; its short opacity reveal can continue. For a long stagger, choose one immediate appearance instead. Read useReducedMotion when the whole technique should change.',
-					'On the server, choose initial content that remains useful if scripts fail. Do not animate an entire article from opacity zero without an accessible fallback. For decorative headings, a hidden duplicate can preserve reading semantics while the visible spans enter.'
+					'Both text components honor inherited MotionConfig and live preference changes. Reduced motion immediately settles opacity, blur, travel and every stagger delay. An explicit reducedMotion="never" overrides the device preference; reading useReducedMotion alone would miss that application policy.',
+					'The server-rendered message stays visible if JavaScript fails. Each host exposes one complete semantic message and hides decorative visual layers from assistive technology. Hidden Activity cancels text playback and releases viewport and preference observers. Use these components for plain text, keeping interactive rich text in its native reading flow.'
 				],
 				related: ['motion-config', 'use-reduced-motion']
 			},

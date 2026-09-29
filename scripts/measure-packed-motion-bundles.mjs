@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { digest } from './motion-consumer-provenance.mjs';
 import { verifyConsumerDependencies } from './motion-consumer-dependencies.mjs';
 
-const fixtures = ['Eager', 'LazyBasic', 'LazyFull', 'LazySync', 'Hybrid', 'Mini'];
+const fixtures = ['Eager', 'LazyBasic', 'LazyFull', 'LazySync', 'Hybrid', 'Mini', 'Text', 'Tilt'];
 export function packedBundleEvidence(setup) {
 	const consumer = setup.plainConsumer;
 	assert(consumer, 'Prepare the plain consumer first');
@@ -85,6 +85,26 @@ export function packedBundleEvidence(setup) {
 			/(?:\/\.pnpm\/(?:motion(?:-dom|-utils)?|framer-motion)@|\/@sveltejs\/kit\/|\$app\/)/,
 			'second engine or Kit leaked'
 		);
+		if (fixture === 'Text' || fixture === 'Tilt') {
+			reject(
+				modules,
+				/\/astra-motion\/dist\/(?:index\.js|motion\/(?:index\.js|elements\/index\.js|m\/index\.js|create-(?:lazy-)?motion\.js|routes\.js|view-navigation\.js))$/,
+				'root factory barrel or routing adapter in optional entry'
+			);
+			reject(
+				modules,
+				fixture === 'Text'
+					? /\/motion\/(?:Tilt\.svelte|tilt[^/]*\.js)(?:\?|$)/
+					: /\/motion\/(?:Text(?:Reveal|Swap)\.svelte|text[^/]*\.js)(?:\?|$)/,
+				'unrelated optional entry runtime'
+			);
+			if (fixture === 'Tilt')
+				reject(
+					modules,
+					/(?:\/projection\/node\/|\/motion\/drag-gestures\.js|\/gestures\/drag\/(?!state\/is-active\.mjs$))/,
+					'drag or projection-node runtime in tilt'
+				);
+		}
 		if (fixture === 'LazyBasic' || fixture === 'LazyFull') {
 			reject(
 				initialModules,

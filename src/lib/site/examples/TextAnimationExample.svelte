@@ -1,30 +1,33 @@
 <script lang="ts">
-	import { MotionConfig, motion, stagger } from '$lib/motion/index.js';
+	import { MotionConfig } from '$lib/motion/index.js';
+	import { TextReveal, TextSwap } from '$lib/motion/text-entry.js';
 	const message = 'Make room for a little motion.';
-	const words = message.split(/(\s+)/);
+	const labels = ['Replay words', 'Play it again'];
 	let replay = $state(0);
 </script>
 
 <div class="example">
 	<MotionConfig reducedMotion="user">
 		{#key replay}
-			<motion.p
+			<TextReveal
+				as="p"
 				class="text-stage"
-				initial="hidden"
-				animate="visible"
-				variants={{ hidden: {}, visible: { transition: { delayChildren: stagger(0.055) } } }}
-			>
-				<span class="sr-only">{message}</span><span aria-hidden="true"
-					>{#each words as word, index (index)}{#if word.trim()}<motion.span
-								class="word"
-								variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0 } }}
-								transition={{ duration: 0.3 }}>{word}</motion.span
-							>{:else}{word}{/if}{/each}</span
-				>
-			</motion.p>
+				text={message}
+				split="words"
+				effect="slide"
+				stagger={0.055}
+			/>
 		{/key}
+		<button onclick={() => replay++}>
+			<TextSwap
+				text={labels[replay % labels.length]}
+				size="reserve"
+				alternatives={labels}
+				mode="wait"
+				effect="fade"
+			/>
+		</button>
 	</MotionConfig>
-	<button onclick={() => replay++}>Replay words</button>
 </div>
 
 <style>
@@ -45,20 +48,6 @@
 		line-height: 1.35;
 		letter-spacing: -0.03em;
 		text-align: center;
-	}
-	.example :global(.word) {
-		display: inline-block;
-	}
-	.sr-only {
-		position: absolute;
-		width: 1px;
-		height: 1px;
-		padding: 0;
-		margin: -1px;
-		overflow: hidden;
-		clip-path: inset(50%);
-		white-space: nowrap;
-		border: 0;
 	}
 	button {
 		border: 1px solid var(--site-line, #d8d8cc);

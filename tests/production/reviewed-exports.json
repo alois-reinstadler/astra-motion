@@ -274,5 +274,7 @@
 	"./mini": ["useAnimate"],
 	"./reorder": ["Group", "Item"],
 	"./view": ["AnimateView", "AnimateViewBuilder", "animateView", "startViewTransition"],
-	"./view-navigation": ["viewTransitionsForNavigation"]
+	"./view-navigation": ["viewTransitionsForNavigation"],
+	"./text": ["TextReveal", "TextSwap"],
+	"./tilt": ["Tilt"]
 }

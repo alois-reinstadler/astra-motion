@@ -111,6 +111,15 @@ uses upstream exports that require qualification on every dependency update. Nat
 View Transitions depend on browser support. Physical-device performance, animated
 external 3D transforms and perspective are not general guarantees.
 
+## Text and pointer tilt
+
+`astra-motion/text` provides unstyled `TextReveal` and `TextSwap`: plain text,
+Unicode segmentation, independent reveal effects/stagger, accessible replacement,
+and explicit sizing. `astra-motion/tilt` provides `Tilt` with shared springs and
+separate measurement/perspective/rotation ownership. Both honor MotionConfig and
+Activity lifecycle. See the [text contract](docs/text-motion.md), [tilt contract](docs/tilt.md)
+and `/motion-lab/text-tilt` for interactive compositions.
+
 ## Smaller entries and compatibility
 
 Use `astra-motion/m` with `astra-motion/lazy` and an eager or deferred bundle from
