@@ -1,5 +1,11 @@
 <script lang="ts">
 	import { useAnimate, motionValue } from '$lib/index.js';
+	import { provideActivityState } from '../motion/activity-scope.js';
+	let active = $state(true);
+	provideActivityState(() => active);
+	export function setActivity(visible: boolean) {
+		active = visible;
+	}
 	const [scope, animate] = useAnimate();
 	const value = motionValue(0);
 	let shown = $state(true);

@@ -711,7 +711,7 @@ export const valuesHelpersDocs: DocPage[] = [
 				id: 'controls',
 				title: 'Playback controls',
 				text: [
-					'A completed run can replay while its owner and scope generation still exist; replay creates a fresh settled promise. Repeated observers of one playback share its result. Pause leaves settlement pending, and play resumes that cycle. A stopped or cancelled run cannot restart through the managed helper.'
+					'A completed run can replay while its owner and scope generation still exist; replay creates a fresh settled promise. Repeated observers of one playback share its result. Pause leaves settlement pending, and play resumes that cycle. Explicitly stopped/cancelled controls cannot restart. Partial sequence replacement settles replaced immediately while unaffected channels keep running under the original owner; the replaced group cannot replay or mutate playback, but stop/cancel can still clean up its remaining channels. Seeking completed controls reacquires cleanup ownership without changing their completed settlement; play starts the next settlement cycle.'
 				],
 				table: {
 					columns: ['Control', 'Contract'],

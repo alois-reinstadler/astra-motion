@@ -9,6 +9,33 @@ import {
 	type MotionValueAnimation
 } from 'motion-dom';
 
+// Only Astra's known facade registers here; arbitrary external proxies stay opaque.
+const playbackDrivers = new WeakMap<AnimationPlaybackControls, AnimationPlaybackControls>();
+
+export function registerMotionPlaybackFacade(
+	facade: AnimationPlaybackControls,
+	driver: AnimationPlaybackControls
+): void {
+	playbackDrivers.set(facade, driver);
+}
+
+/** Observe the clock without replacing a facade's cleanup-bearing method. */
+export function motionPlaybackDriver(
+	playback: AnimationPlaybackControls
+): AnimationPlaybackControls {
+	return playbackDrivers.get(playback) ?? playback;
+}
+
+/** Read an existing leaf identity without flushing unrelated pending keyframes. */
+export function resolvedMotionPlaybackDriver(
+	playback: AnimationPlaybackControls
+): AnimationPlaybackControls {
+	const driver = motionPlaybackDriver(playback);
+	return driver instanceof AsyncMotionValueAnimation
+		? ((driver as unknown as { _animation?: AnimationPlaybackControls })._animation ?? driver)
+		: driver;
+}
+
 /** Suspend an owned Activity clock at a synchronously committed pose. */
 export function pauseMotionPlayback(
 	playback: AnimationPlaybackControls | MotionValueAnimation

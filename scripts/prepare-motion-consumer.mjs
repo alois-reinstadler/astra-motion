@@ -1,3 +1,4 @@
+import assert from 'node:assert/strict';
 import { cpSync, mkdtempSync, readFileSync, writeFileSync, renameSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
@@ -63,6 +64,24 @@ for (const [name, target] of [
 	console.log(
 		JSON.stringify({ consumer: name, dependencies: verifyConsumerDependencies(target) }, null, 2)
 	);
+	const brokenRoot = join(directory, `${name}-missing-forwarding.svelte`);
+	const forwardedRoot = join(directory, `${name}-forwarded.svelte`);
+	writeFileSync(brokenRoot, '<button>Missing</button>');
+	writeFileSync(
+		forwardedRoot,
+		'<script>let { children, ...props } = $props()</script><button {...props}>{@render children?.()}</button>'
+	);
+	const checkMissing = spawnSync('pnpm', ['exec', 'astra-check-forwarding', brokenRoot], {
+		cwd: target,
+		encoding: 'utf8'
+	});
+	assert.equal(
+		checkMissing.status,
+		1,
+		'Installed forwarding checker must reject missing forwarding'
+	);
+	assert.match(checkMissing.stderr, /attachment-forwarding/);
+	run(['exec', 'astra-check-forwarding', forwardedRoot], target);
 	run(['run', 'check'], target);
 	run(['run', 'check:declarations'], target);
 	run(['run', 'build'], target);

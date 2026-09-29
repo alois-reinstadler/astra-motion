@@ -5,6 +5,8 @@ import {
 	isMotionValue,
 	isAnimationControls,
 	getVariantContext,
+	getValueTransition,
+	resolveTransition,
 	camelToDash,
 	setTarget,
 	transformProps,
@@ -292,6 +294,7 @@ function createBinding(
 	let visual: MotionVisual | undefined;
 	let timeline: PresenceTimeline | undefined;
 	let transitioning = false;
+	let nativeTransitionVersion = 0;
 	let introTarget: unknown[] = [];
 	let presenceDirection: 'in' | 'out' = 'in';
 	let disposed = false;
@@ -971,6 +974,7 @@ function createBinding(
 		/** Native Svelte retains the real element while Motion supplies the sampled trajectory. */
 		transition(node: MotionElement) {
 			return ({ direction }: { direction: 'in' | 'out' } = { direction: 'in' }) => {
+				const transitionVersion = ++nativeTransitionVersion;
 				visual = ensureMotionVisual(node);
 				if (!visual)
 					throw new Error(
@@ -1031,6 +1035,41 @@ function createBinding(
 					);
 					target = { ...target, transition: { ...transition, ...target.transition, ...reduction } };
 				}
+				if (render.component && direction === 'in') {
+					const effective = resolveTransition(target.transition, transition) ?? transition;
+					const hasInfinitePlayback = Object.entries(target).some(([key, value]) => {
+						if (key === 'transition' || key === 'transitionEnd' || value === undefined)
+							return false;
+						const settings = getValueTransition(effective, key);
+						return (
+							settings?.repeat === Infinity && !settings.skipAnimations && settings.type !== false
+						);
+					});
+					if (hasInfinitePlayback) {
+						// Re-entry ends Svelte's retention clock and returns infinite while-present
+						// playback to the existing Motion owner. Invalidate only animate targets;
+						// a whole state reset would discard active gesture state/initial semantics.
+						transitioning = false;
+						timeline = undefined;
+						ensureMotionAnimationState(visual).getState().animate.prevResolvedValues = {};
+						const version = generation;
+						queueMicrotask(() => {
+							if (
+								disposed ||
+								generation !== version ||
+								nativeTransitionVersion !== transitionVersion ||
+								presenceDirection !== 'in' ||
+								!visual
+							)
+								return;
+							withBoundary(() => {
+								refresh(options());
+								scheduleMotionState(visual!, true);
+							});
+						});
+						return createPresenceTimeline(visual, {}, {}, { duration: 0 }, direction);
+					}
+				}
 				const trajectory = createPresenceTimeline(
 					visual,
 					{ ...visual.latestValues },
@@ -1053,7 +1092,8 @@ function createBinding(
 						}
 					},
 					previousTimeline ? () => previousTimeline.progress : undefined,
-					true
+					true,
+					render.component
 				);
 				timeline = coordinatePresence(
 					visual,

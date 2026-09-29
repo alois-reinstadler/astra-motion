@@ -19,6 +19,10 @@ import { parse } from 'svelte/compiler';
 // downstream tree shaking. This changes import locations, never upstream runtime
 // code. Source development still uses the same locked, unmodified dependencies.
 const root = fileURLToPath(new URL('..', import.meta.url));
+writeFileSync(
+	join(root, 'dist/check-motion-forwarding.mjs'),
+	readFileSync(join(root, 'scripts/check-motion-forwarding.mjs'))
+);
 const output = join(root, 'dist/motion');
 const vendor = join(output, 'vendor');
 const require = createRequire(import.meta.url);

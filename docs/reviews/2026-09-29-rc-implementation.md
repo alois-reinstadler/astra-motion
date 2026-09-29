@@ -25,8 +25,8 @@ verification; historical green checks do not qualify this candidate.
 - Scoped `useAnimate` controls expose additive `settled` results using existing reason
   vocabulary. Upstream `finished` remains completion-only. Pending pause/resume preserves
   one promise; completed inert operations preserve the result; replay creates a new
-  result. Replacement/detachment releases owned work without cancelling its external
-  replacement. Stopped controls cannot restart.
+  result. Partial replacement settles immediately while unaffected sequence channels remain owned;
+  detachment stops only still-owned work and never cancels its external replacement. Stopped controls cannot restart.
 - Development diagnostics check demonstrable option/transform/local-variant/infinite-exit
   mistakes, deduplicate per owner, and avoid inherited/lazy-root heuristics. The static
   forwarding checker finds obvious custom components lacking forwarding; it is not a
@@ -75,3 +75,25 @@ Final qualification uses one committed candidate and frozen sources. The release
 records its exact commit, archive digests, dependency locks, complete suites, production
 consumers, browser evidence and physical-device checks not performed. This document
 records implementation/review scope; it does not claim tests that have not run.
+
+## First complete candidate run and repairs
+
+Candidate `362d676` completed the three-browser matrix with 3,247 passes, 11 failures
+and three unhandled recursion errors. Its static gates and packed Chromium consumers
+passed. It is not the final qualified artifact. The full run exposed sequence facade
+stop recursion and completed-seek ownership regressions, a Firefox same-frame controls
+render defect, two finite-exit test transport races, and an unsupported CSS-property
+assertion. Headed verification additionally found the native intrinsic-size exit defect.
+Repairs preserve assertions, use observable lifecycle/geometry settlement, and retain
+all first-run evidence. Subsequent final qualification must run the complete matrix again.
+
+The modern native repair locally resolves intrinsic dimensions, CSS variables and
+relative units without flushing unrelated measurements. It preserves explicit first
+keyframes and finite-repeat timing/final poses, with legacy behavior gated separately.
+The custom-root static validator ships as `astra-check-forwarding` in the archive.
+
+A subsequent source audit also repaired legacy null-keyframe fill order and instant
+reverse/mirror endpoints. Infinite while-present playback now returns to the existing
+engine owner after native exit reversal, preserving initial and gesture state; a guarded
+handoff prevents stale re-entry from restarting playback after another exit. Focused
+regressions cover these cases across all three engines before the final source freeze.

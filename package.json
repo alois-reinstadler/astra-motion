@@ -31,7 +31,8 @@
 		"dist/index.d.ts",
 		"dist/motion",
 		"!dist/**/*.test.*",
-		"!dist/**/*.spec.*"
+		"!dist/**/*.spec.*",
+		"dist/check-motion-forwarding.mjs"
 	],
 	"sideEffects": [
 		"**/*.css"
@@ -211,5 +212,8 @@
 	},
 	"bugs": {
 		"url": "https://github.com/alois-reinstadler/astra-motion/issues"
+	},
+	"bin": {
+		"astra-check-forwarding": "./dist/check-motion-forwarding.mjs"
 	}
 }

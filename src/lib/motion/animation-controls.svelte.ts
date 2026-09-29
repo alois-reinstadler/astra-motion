@@ -43,6 +43,10 @@ function createControls(startVisual: StartVisual): LegacyAnimationControls {
 				visual.variantChildren?.forEach((child) => setValues(child, labels));
 			}
 		} else setTarget(visual, definition);
+		// set() is an immediate write. Motion's timestamp guard can suppress a
+		// second scheduled render after this visual already painted in the same
+		// frame, so commit the final label/transitionEnd result directly.
+		visual.render();
 	}
 	const controls: LegacyAnimationControls = {
 		subscribe(visual: VisualElement) {

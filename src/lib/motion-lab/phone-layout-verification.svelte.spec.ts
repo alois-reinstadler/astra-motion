@@ -401,27 +401,45 @@ it('closes and reverses the narrow note without an intermediate growth or docume
 		expect(card.getBoundingClientRect().top).toBeGreaterThan(0);
 		expect(card.getBoundingClientRect().bottom).toBeLessThan(window.innerHeight);
 		const sample = () => ({ card: box(card), stage: box(demo), scrollY: window.scrollY });
-		const capture = async (count: number) => {
+		// Sample every painted frame until the actual animation lifecycle settles.
+		// A fixed frame count both assumes a refresh rate and keeps slow engines
+		// waiting long after the spring and presence exit have completed.
+		const captureUntil = async (settled: () => boolean) => {
 			const samples = [sample()];
-			for (let index = 0; index < count; index++) {
+			do {
 				await frame();
 				samples.push(sample());
-			}
+			} while (!settled());
 			return samples;
 		};
 		const collapsed = sample();
 		await screen.getByRole('button', { name: 'Read the note' }).click();
-		await capture(60);
+		await captureUntil(
+			() =>
+				animations(stage.container).length === 0 &&
+				Math.abs(box(card).width - 310) < 0.5 &&
+				Number(getComputedStyle(stage.container.querySelector('.detail')!).opacity) === 1
+		);
 		const expanded = sample();
+		const closed = () =>
+			!stage.container.querySelector('.detail') &&
+			animations(stage.container).length === 0 &&
+			Math.abs(box(card).width - collapsed.card.width) < 0.5 &&
+			Math.abs(box(card).height - collapsed.card.height) < 0.5;
 		await userEvent.keyboard('{Enter}');
-		const close = await capture(90);
+		const close = await captureUntil(closed);
 		await userEvent.keyboard('{Enter}');
-		await capture(6);
+		await expect.poll(() => animations(stage.container).length).toBeGreaterThan(0);
+		for (const animation of animations(stage.container)) {
+			animation.pause();
+			animation.time = 0.09;
+		}
+		await frames();
 		let interrupted = sample();
 		let capturedInterruption = false;
 		const toggle = stage.container.querySelector<HTMLButtonElement>('[aria-expanded]')!;
 		// Capture at the actual trusted activation, before the component handler.
-		// Keyboard transport can advance the opening animation after this test turn.
+		// The paused spring keeps this partial pose stable during keyboard transport.
 		toggle.addEventListener(
 			'click',
 			() => {
@@ -432,7 +450,9 @@ it('closes and reverses the narrow note without an intermediate growth or docume
 		);
 		await userEvent.keyboard('{Enter}');
 		expect(capturedInterruption).toBe(true);
-		const reverse = await capture(90);
+		expect(interrupted.card.width).toBeGreaterThan(collapsed.card.width + 8);
+		expect(interrupted.card.width).toBeLessThan(expanded.card.width - 8);
+		const reverse = await captureUntil(closed);
 		const settled = sample();
 		const diagnostic = JSON.stringify({
 			collapsed,

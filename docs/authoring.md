@@ -887,3 +887,36 @@ Run `node scripts/check-motion-guide.mjs` for a source-consumer TypeScript check
 all guide snippets. It maps public package entries to source in isolated temporary
 fixtures, runs svelte-check, and removes the fixtures. It does not build or emit a
 package, so packaged tarball resolution remains a separate release check.
+
+### Check a custom root before wrapping it
+
+The installed archive includes a conservative static checker:
+
+```sh
+pnpm exec astra-check-forwarding src/lib/Card.svelte
+```
+
+Pass only components intended for `motion.create`. The checker flags native markup
+with no attachment/spread forwarding and explains the minimum correction. It does
+not guess through delegated components or verify arbitrary spread dataflow, so a
+clean result supplements the complete forwarding recipe and runtime tests.
+
+### Partial replacement and completed controls
+
+For `useAnimate`, replacing one sequence channel settles that run as
+`cancelled/replaced`. Unaffected channels continue and remain owned until they finish
+or the scope is removed. The old group cannot replay, seek or mutate those channels
+after replacement; explicit `stop()`/`cancel()` can still stop its remaining work.
+A new external animation remains owned by its caller.
+
+Pausing completed controls keeps their completed settlement. Seeking completed controls
+reacquires cleanup ownership but preserves that same result; `play()` begins a new
+settlement cycle. Pausing a live run or hiding Activity keeps settlement pending without
+polling for completion while playback is suspended. Upstream `finished` is not rewritten.
+
+Modern native exits resolve intrinsic dimensions, CSS variables and relative units
+through the same DOM resolver as components. Explicit first keyframes are honored,
+and finite repeats include their repeat delay and final repeat direction. Native
+outros require a finite total duration; an infinite repeat cannot supply a finite
+Svelte removal clock. Compatibility `createMotion` retains its original stricter
+resolved-target and non-repeating exit rules.

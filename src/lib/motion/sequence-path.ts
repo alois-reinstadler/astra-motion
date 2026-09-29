@@ -16,6 +16,7 @@ import {
 	type Transition,
 	type VisualElement
 } from 'motion-dom';
+import { registerMotionPlaybackFacade } from './motion-compat.js';
 import { ownMotionPathPlayback } from './animation.js';
 import { createScopedAnimate } from 'motion';
 
@@ -374,6 +375,7 @@ export function animateSequencePaths(
 				return Reflect.set(target, key, value, target);
 			}
 		});
+		registerMotionPlaybackFacade(ownedDriver, driver);
 		if (controls instanceof GroupAnimation) {
 			const index = controls.animations.indexOf(driver);
 			if (index !== -1) controls.animations[index] = ownedDriver;

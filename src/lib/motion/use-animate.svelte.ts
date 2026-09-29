@@ -13,6 +13,8 @@ import type {
 } from './animate.js';
 import {
 	AsyncMotionValueAnimation,
+	frame,
+	cancelFrame,
 	addStyleValue,
 	GroupAnimation,
 	GroupAnimationWithThen,
@@ -40,6 +42,8 @@ import { readActivityState } from './activity-scope.js';
 import { observeMotionConfig, observeMotionPreference, readMotionConfig } from './config.js';
 import {
 	completeMotionPlayback,
+	motionPlaybackDriver,
+	resolvedMotionPlaybackDriver,
 	pauseMotionPlayback,
 	prepareMotionHandoff,
 	stopMotionPlayback
@@ -269,6 +273,7 @@ export function useAnimate<T extends Element = HTMLElement>(
 		controls: AnimationPlaybackControlsWithThen;
 		reduceMotion?: boolean;
 		stop(reason?: AnimationCancellationReason, cancel?: boolean): void;
+		finishReduced(): void;
 		activityChanged(visible: boolean): void;
 	};
 	let owned: Run[] = [];
@@ -289,8 +294,7 @@ export function useAnimate<T extends Element = HTMLElement>(
 		const settle = () => {
 			if (reduced())
 				untrack(() => {
-					for (const { controls, reduceMotion } of owned)
-						if (reduceMotion !== false) finishReduced(controls);
+					for (const run of owned) if (run.reduceMotion !== false) run.finishReduced();
 				});
 		};
 		$effect(settle);
@@ -396,6 +400,9 @@ export function useAnimate<T extends Element = HTMLElement>(
 		} else correctSVGGeometry(subject, keyframes, engineScope);
 		const runGeneration = generation;
 		let stopped = false;
+		let replaced = false;
+		let replaying = false;
+		let cancelCompletionCheck: (() => void) | undefined;
 		let settlementPending = true;
 		let resolveSettlement: (result: AnimationSettlement) => void;
 		let settled = new Promise<AnimationSettlement>((resolve) => {
@@ -415,35 +422,57 @@ export function useAnimate<T extends Element = HTMLElement>(
 				playback.animations.forEach(observeStops);
 				return;
 			}
-			const original = playback.stop;
+			const driver = motionPlaybackDriver(playback);
+			const original = driver.stop;
 			const stop = () => {
 				try {
-					original.call(playback);
+					original.call(driver);
 				} finally {
-					if (!stopped && settlementPending) {
+					if (!stopped && !interrupted.includes(playback)) {
 						interrupted.push(playback);
-						run.stop('replaced');
+						const owner = resolvedMotionPlaybackDriver(playback);
+						for (const observer of timelineObservers)
+							if (observer.owner === owner) observer.disconnect();
+						replaced = true;
+						settle({ status: 'cancelled', reason: 'replaced' });
+						observeRemaining();
 					}
 				}
 			};
-			playback.stop = stop;
+			driver.stop = stop;
 			removeStopObservers.push(() => {
-				if (playback.stop === stop) playback.stop = original;
+				if (driver.stop === stop) driver.stop = original;
 			});
 		};
-		const stopOwned = (playback: AnimationPlaybackControls, cancel: boolean) => {
+		// A replaced channel relinquishes ownership independently of its siblings.
+		// Keep the untouched channels managed until completion or owner cleanup.
+		const visitOwned = (
+			playback: AnimationPlaybackControls,
+			visit: (child: AnimationPlaybackControls) => void
+		) => {
 			if (interrupted.includes(playback)) return;
-			if (playback instanceof GroupAnimation) {
-				playback.animations.forEach((child) => stopOwned(child, cancel));
-			} else if (cancel) playback.cancel();
-			else stopMotionPlayback(playback);
+			if (playback instanceof GroupAnimation)
+				playback.animations.forEach((child) => visitOwned(child, visit));
+			else visit(playback);
+		};
+		const stopOwned = (cancel: boolean) => {
+			visitOwned(controls, (playback) => {
+				prepareMotionHandoff(playback, { settleFinished: !cancel });
+				if (cancel) playback.cancel();
+				else stopMotionPlayback(playback);
+			});
 		};
 		let revision = 0;
 		const resumeOnReveal = [] as AnimationPlaybackControls[];
-		let deferredPlay = false;
 		let detachTimeline: (() => void) | undefined;
-		let timelineObservers: { connect(): void; disconnect(): void }[] = [];
+		let timelineObservers: {
+			owner: AnimationPlaybackControls;
+			connect(): void;
+			disconnect(): void;
+		}[] = [];
 		const release = () => {
+			cancelCompletionCheck?.();
+			cancelCompletionCheck = undefined;
 			removeStopObservers.splice(0).forEach((remove) => remove());
 			owned = owned.filter((entry) => entry !== run);
 			activeCount = owned.length;
@@ -453,19 +482,23 @@ export function useAnimate<T extends Element = HTMLElement>(
 		const run: Run = {
 			controls,
 			reduceMotion: (args[optionIndex] as { reduceMotion?: boolean }).reduceMotion,
+			finishReduced() {
+				visitOwned(controls, finishReduced);
+			},
 			activityChanged(visible) {
 				if (stopped) return;
 				if (visible) {
-					for (const child of resumeOnReveal) playPlayback(child);
+					for (const child of resumeOnReveal) if (!interrupted.includes(child)) playPlayback(child);
 					resumeOnReveal.length = 0;
 					for (const observer of timelineObservers) observer.connect();
-					if (deferredPlay) {
-						deferredPlay = false;
-						observe();
-					}
+					if (settlementPending) observe();
+					else if (replaced) observeRemaining();
 				} else {
+					revision++;
+					cancelCompletionCheck?.();
+					cancelCompletionCheck = undefined;
 					for (const observer of timelineObservers) observer.disconnect();
-					visitPlayback(controls, (child) => {
+					visitOwned(controls, (child) => {
 						if (child.state !== 'running') return;
 						resumeOnReveal.push(child);
 						pauseMotionPlayback(child);
@@ -478,10 +511,9 @@ export function useAnimate<T extends Element = HTMLElement>(
 				revision++;
 				resumeOnReveal.length = 0;
 				try {
-					prepareMotionHandoff(controls, { settleFinished: !cancel });
 					detachTimeline?.();
 					detachTimeline = undefined;
-					stopOwned(controls, cancel);
+					stopOwned(cancel);
 				} finally {
 					release();
 					settle({ status: 'cancelled', reason });
@@ -490,31 +522,79 @@ export function useAnimate<T extends Element = HTMLElement>(
 		};
 		const acquire = () => {
 			if (!owned.includes(run)) {
-				if (!settlementPending) {
-					settlementPending = true;
-					settled = new Promise<AnimationSettlement>((resolve) => {
-						resolveSettlement = resolve;
-					});
-				}
 				observeStops(controls);
 				owned.push(run);
 			}
 			activeCount = owned.length;
 		};
-		const observe = () => {
-			const version = ++revision;
-			acquire();
-			void controls.finished.then(() => {
-				if (version === revision && !stopped) {
-					release();
-					settle({ status: 'finished' });
-				}
+		const beginCycle = () => {
+			if (settlementPending) return;
+			replaying = true;
+			settlementPending = true;
+			settled = new Promise<AnimationSettlement>((resolve) => {
+				resolveSettlement = resolve;
 			});
 		};
-		const validate = () => {
+		const watchCompletion = (finished: Promise<unknown>, onComplete: () => void) => {
+			cancelCompletionCheck?.();
+			cancelCompletionCheck = undefined;
+			const version = ++revision;
+			void finished.then(() => {
+				const complete = () => {
+					if (version !== revision || stopped) {
+						cancelFrame(complete);
+						return;
+					}
+					// A completed clock can be paused/sought before replay. Motion
+					// then retains its already-resolved finished promise. Preserve that
+					// upstream promise while settlement waits for the replay's end.
+					let finished = true;
+					let running = false;
+					if (replaying)
+						visitOwned(controls, (owned) =>
+							visitPlayback(owned, (child) => {
+								if (child.state !== 'finished') finished = false;
+								if (child.state === 'running') running = true;
+							})
+						);
+					if (!finished) {
+						// No stale-promise polling for held or suspended playback.
+						// play/reveal observes again when its clock can make progress.
+						if (running && untrack(activity)) {
+							if (!cancelCompletionCheck) {
+								cancelCompletionCheck = () => cancelFrame(complete);
+								frame.postRender(complete, true);
+							}
+						} else {
+							cancelCompletionCheck?.();
+							cancelCompletionCheck = undefined;
+						}
+						return;
+					}
+					onComplete();
+				};
+				if (version !== revision || stopped) return;
+				complete();
+			});
+		};
+		const observeRemaining = () => {
+			const remaining: Promise<unknown>[] = [];
+			visitOwned(controls, (child) => remaining.push(child.finished));
+			watchCompletion(Promise.all(remaining), release);
+		};
+		const observe = () => {
+			acquire();
+			watchCompletion(controls.finished, () => {
+				release();
+				settle({ status: 'finished' });
+			});
+		};
+		const validate = (allowReplaced = false) => {
 			if (!alive || generation !== runGeneration)
 				throw new Error('Astra useAnimate: this playback belongs to a detached animation scope.');
 			if (stopped) throw new Error('Astra useAnimate: stopped playback cannot restart.');
+			if (replaced && !allowReplaced)
+				throw new Error('Astra useAnimate: replaced playback cannot restart.');
 		};
 		observe();
 		return new Proxy(controls, {
@@ -524,15 +604,14 @@ export function useAnimate<T extends Element = HTMLElement>(
 				if (['play', 'pause', 'complete', 'attachTimeline'].includes(String(key)))
 					return (...parameters: unknown[]) => {
 						validate();
+						if (key === 'play' || key === 'attachTimeline') beginCycle();
 						if (settlementPending || key === 'play' || key === 'attachTimeline') acquire();
 						if (key === 'play' || key === 'pause' || key === 'complete') {
 							resumeOnReveal.length = 0;
-							deferredPlay = false;
 						}
 						if (key === 'play' && !untrack(activity)) {
 							revision++;
-							deferredPlay = true;
-							visitPlayback(controls, (child) => resumeOnReveal.push(child));
+							visitOwned(controls, (child) => resumeOnReveal.push(child));
 							return;
 						}
 						if (key === 'attachTimeline' && detachTimeline)
@@ -547,8 +626,12 @@ export function useAnimate<T extends Element = HTMLElement>(
 								observe(animation: AnimationPlaybackControls) {
 									let dispose: (() => void) | undefined;
 									const observer = {
+										owner: resolvedMotionPlaybackDriver(animation),
 										connect() {
-											if (!dispose) dispose = timeline.observe(animation);
+											const revoked = interrupted.some(
+												(playback) => resolvedMotionPlaybackDriver(playback) === observer.owner
+											);
+											if (!dispose && !stopped && !revoked) dispose = timeline.observe(animation);
 										},
 										disconnect() {
 											const cleanup = dispose;
@@ -583,7 +666,7 @@ export function useAnimate<T extends Element = HTMLElement>(
 				if (key === 'stop' || key === 'cancel')
 					return () => {
 						if (stopped) return;
-						validate();
+						validate(true);
 						run.stop(key === 'cancel' ? 'cancelled' : 'stopped', key === 'cancel');
 					};
 				return typeof value === 'function' ? value.bind(target) : value;
@@ -592,6 +675,7 @@ export function useAnimate<T extends Element = HTMLElement>(
 				validate();
 				const result = Reflect.set(target, key, value, target);
 				if (settlementPending) observe();
+				else acquire();
 				return result;
 			}
 		});

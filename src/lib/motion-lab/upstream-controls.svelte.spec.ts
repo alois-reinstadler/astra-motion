@@ -1,5 +1,6 @@
 // Adapted from Motion v13.4.4; sources and MIT notice: tests/motion-baseline/README.md, LICENSE.motion.
 import { tick } from 'svelte';
+import { frame } from 'motion-dom';
 import { expect, it } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import Fixture from './UpstreamControls.svelte';
@@ -63,5 +64,28 @@ it('label arrays merge targets and retain legacy first-label precedence for set'
 	controls.set(['position', 'paint']);
 	expect(component.values().map((value) => value.get())).toEqual([40, 40]);
 	await expect.poll(() => nodes().map(x)).toEqual([40, 40]);
+	expect(nodes().map((node) => node.style.opacity)).toEqual(['0.5', '0.5']);
+});
+
+it('controls.set paints a final variant target after an earlier render in the same frame', async () => {
+	const { component } = render(Fixture);
+	await tick();
+	const controls = component.getControls();
+	let paintedBefore: number[] = [];
+	let immediate: unknown[] = [];
+	await new Promise<void>((resolve) => {
+		frame.update(() => controls.set({ x: 80 }));
+		frame.postRender(() => {
+			paintedBefore = nodes().map(x);
+			// Motion's timestamp guard sees the same frame as the render above.
+			controls.set(['position', 'paint']);
+			immediate = component.values().map((value) => value.get());
+			resolve();
+		});
+	});
+	expect(paintedBefore).toEqual([80, 80]);
+	expect(immediate).toEqual([40, 40]);
+	await frames();
+	expect(nodes().map(x)).toEqual([40, 40]);
 	expect(nodes().map((node) => node.style.opacity)).toEqual(['0.5', '0.5']);
 });

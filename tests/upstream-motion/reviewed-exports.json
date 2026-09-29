@@ -21,6 +21,7 @@
 		],
 		"motion-dom": [
 			"AsyncMotionValueAnimation",
+			"DOMKeyframesResolver",
 			"GroupAnimation",
 			"GroupAnimationWithThen",
 			"HTMLProjectionNode",
@@ -92,6 +93,7 @@
 			"svgSubjectEffect",
 			"time",
 			"transform",
+			"transformPropOrder",
 			"transformProps",
 			"transformValue",
 			"visualElementStore"

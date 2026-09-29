@@ -104,11 +104,13 @@ export async function inspectContracts() {
 			methods(stack, ['remove', 'promote', 'relegate'], 'shared stack');
 			if (!Array.isArray(stack.members)) errors.push('shared stack.members is not an Array');
 		}
+		const animationState = createAnimationState(visual);
 		methods(
-			createAnimationState(visual),
+			animationState,
 			['animateChanges', 'setAnimateFunction', 'setActive', 'getState'],
 			'animationState'
 		);
+		fields(animationState.getState().animate, ['prevResolvedValues'], 'animationState.animate');
 		methods(
 			frame,
 			['read', 'resolveKeyframes', 'update', 'preRender', 'render', 'postRender'],

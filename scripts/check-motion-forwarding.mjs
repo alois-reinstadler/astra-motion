@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+import { realpathSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 import { parse } from 'svelte/compiler';
@@ -27,7 +29,7 @@ export function checkMotionForwarding(source) {
 		: [];
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (process.argv[1] && import.meta.url === pathToFileURL(realpathSync(process.argv[1])).href) {
 	const files = process.argv.slice(2);
 	if (!files.length)
 		throw new Error('Pass the Svelte component files you intend to wrap with motion.create().');

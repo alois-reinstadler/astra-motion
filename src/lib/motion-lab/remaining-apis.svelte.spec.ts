@@ -61,6 +61,10 @@ it('animates fluent selectors with real snapshots, playback control and authored
 	target.className = 'fluent-card';
 	document.body.append(target);
 	const originalName = target.style.viewTransitionName;
+	// Grouping is newer than base View Transitions. Unsupported engines drop
+	// this authored declaration before Astra receives the element.
+	const originalGroup = target.style.getPropertyValue('view-transition-group');
+	expect(originalGroup).toBe(CSS.supports('view-transition-group', 'none') ? 'none' : '');
 	try {
 		const builder = animateView(
 			() => {
@@ -93,7 +97,7 @@ it('animates fluent selectors with real snapshots, playback control and authored
 		expect(target.style.width).toBe('100px');
 		expect(target.style.viewTransitionName).toBe(originalName);
 		expect(target.style.getPropertyValue('view-transition-class')).toBe('authored-class');
-		expect(target.style.getPropertyValue('view-transition-group')).toBe('none');
+		expect(target.style.getPropertyValue('view-transition-group')).toBe(originalGroup);
 		expect(document.querySelector('[data-astra-fluent-view]')).toBeNull();
 	} finally {
 		target.remove();

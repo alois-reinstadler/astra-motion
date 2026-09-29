@@ -1,3 +1,4 @@
+import { tick } from 'svelte';
 import { expect, it } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import { animateTarget, visualElementStore } from 'motion-dom';
@@ -77,9 +78,13 @@ it('lets native Svelte retention reverse a finite Motion spring without replacin
 	await frames();
 	await screen.getByRole('button', { name: 'Move spike' }).click();
 	await screen.getByRole('button', { name: 'Toggle spike' }).click();
-	await frames();
+	await expect.poll(() => Number(getComputedStyle(node).opacity)).toBeLessThan(1);
 	expect(node.isConnected).toBe(true);
-	await screen.getByRole('button', { name: 'Toggle spike' }).click();
+	expect(Number(getComputedStyle(node).opacity)).toBeGreaterThan(0);
+	// Reverse in this browser turn: another automation round-trip can outlast
+	// the finite exit and correctly create a new node instead of reversing it.
+	(screen.getByRole('button', { name: 'Toggle spike' }).element() as HTMLButtonElement).click();
+	await tick();
 	expect(screen.getByTestId('state-node').element()).toBe(node);
 	await expect.poll(() => Number(getComputedStyle(node).opacity)).toBeCloseTo(1, 3);
 	await screen.getByRole('button', { name: 'Toggle spike' }).click();
