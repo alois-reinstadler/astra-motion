@@ -126,6 +126,265 @@ it('keeps reorder labels and controls unscaled while list/grid width animates in
 	}
 }, 15000);
 
+it('has no reachable horizontal scroll during list/grid changes and reversal while retaining vertical scroll and reorder', async () => {
+	const stage = await phoneStage();
+	const screen = await render(Reorder, { target: stage.container });
+	try {
+		await frames();
+		const scroller = stage.container.querySelector<HTMLElement>('.scroll')!;
+		const item = stage.container
+			.querySelector('[aria-label="Drag Outline"]')!
+			.closest<HTMLElement>('.item')!;
+		const samples: {
+			phase: string;
+			time: number;
+			reachableX: number;
+			width: number;
+			client: number;
+		}[] = [];
+		const probe = (phase: string, time: number) => {
+			scroller.scrollLeft = 10000;
+			samples.push({
+				phase,
+				time,
+				reachableX: scroller.scrollLeft,
+				width: scroller.scrollWidth,
+				client: scroller.clientWidth
+			});
+			scroller.scrollLeft = 0;
+		};
+		const change = async (phase: string, finish: boolean, first = false) => {
+			const before = box(item).width;
+			if (first) await screen.getByRole('button', { name: 'Use grid' }).click();
+			else await userEvent.keyboard('{Enter}');
+			await tick();
+			await frames();
+			const running = animations(stage.container);
+			expect(running.length).toBeGreaterThan(0);
+			for (const animation of running) animation.pause();
+			for (const time of [0, 0.04, 0.08, 0.12]) {
+				for (const animation of running) animation.time = time;
+				await frames();
+				probe(phase, time);
+			}
+			const middle = box(item).width;
+			expect(Math.abs(before - item.offsetWidth)).toBeGreaterThan(8);
+			expect(middle).toBeGreaterThan(Math.min(before, item.offsetWidth) + 1);
+			expect(middle).toBeLessThan(Math.max(before, item.offsetWidth) - 1);
+			if (finish) {
+				for (const animation of running) animation.complete();
+				await frames();
+				probe(`${phase}:end`, 1);
+				scroller.scrollTop = 70;
+				expect(scroller.scrollTop).toBeGreaterThan(60);
+				scroller.scrollTop = 0;
+			}
+		};
+		probe('initial', 0);
+		await change('list-grid', true, true);
+		await change('grid-list', false);
+		await change('reversed-list-grid', true);
+		await change('grid-list-settled', true);
+		expect
+			.soft(Math.max(...samples.map(({ reachableX }) => reachableX)), JSON.stringify(samples))
+			.toBe(0);
+		const later = stage.container.querySelector<HTMLButtonElement>(
+			'[aria-label="Move Outline later"]'
+		)!;
+		later.focus();
+		await userEvent.keyboard('{Enter}');
+		await tick();
+		expect(
+			[...stage.container.querySelectorAll('.handle')].slice(0, 2).map((node) => node.textContent)
+		).toEqual(['Research', 'Outline']);
+		expect(document.activeElement).toBe(later);
+		expect(stage.container.querySelector('.announcement')?.textContent).toBe(
+			'Outline moved to position 2'
+		);
+	} finally {
+		await screen.unmount();
+		await stage.dispose();
+	}
+}, 15000);
+
+it('keeps outgoing note text continuous and painted inside the card through its opacity exit and animated close', async () => {
+	const stage = await phoneStage(true);
+	const screen = await render(Layout, { target: stage.container });
+	try {
+		window.scrollTo({ top: 500, behavior: 'instant' });
+		await frames();
+		const card = stage.container.querySelector<HTMLElement>('.card')!;
+		const collapsed = box(card);
+		await screen.getByRole('button', { name: 'Read the note' }).click();
+		await expect.poll(() => box(card).width).toBeCloseTo(310, 1);
+		const detail = stage.container.querySelector<HTMLElement>('.detail')!;
+		await expect.poll(() => Number(getComputedStyle(detail).opacity)).toBe(1);
+		for (const animation of animations(stage.container)) animation.complete();
+		await frames();
+		const expanded = { card: box(card), detail: box(detail) };
+		const toggle = stage.container.querySelector<HTMLButtonElement>('[aria-expanded]')!;
+		toggle.focus();
+		await userEvent.keyboard('{Enter}');
+		await tick();
+		await frames();
+		const running = animations(stage.container);
+		const fade = detail
+			.getAnimations()
+			.find((animation) =>
+				(animation.effect as KeyframeEffect)
+					.getKeyframes()
+					.some((keyframe) => keyframe.opacity !== undefined)
+			)!;
+		expect(fade).toBeDefined();
+		fade.pause();
+		for (const animation of running) {
+			animation.pause();
+			animation.time = 0;
+		}
+		fade.currentTime = 0;
+		await frames();
+		const start = { card: box(card), detail: box(detail) };
+		for (const axis of ['x', 'documentY', 'width', 'height'] as const) {
+			expect
+				.soft(
+					Math.abs(start.card[axis] - expanded.card[axis]),
+					`card ${axis}: ${JSON.stringify({ expanded, start })}`
+				)
+				.toBeLessThan(1.5);
+			expect
+				.soft(
+					Math.abs(start.detail[axis] - expanded.detail[axis]),
+					`detail ${axis}: ${JSON.stringify({ expanded, start })}`
+				)
+				.toBeLessThan(1.5);
+		}
+		const samples: {
+			time: number;
+			opacity: number;
+			card: ReturnType<typeof box>;
+			detail: ReturnType<typeof box>;
+			outsideCharacters: number;
+			visibleInside: number;
+		}[] = [];
+		for (const time of [0.03, 0.06, 0.09, 0.12, 0.15]) {
+			for (const animation of running) animation.time = time;
+			fade.currentTime = time * 1000;
+			await frames();
+			const bounds = card.getBoundingClientRect();
+			const walker = document.createTreeWalker(detail, NodeFilter.SHOW_TEXT);
+			const range = document.createRange();
+			let outsideCharacters = 0;
+			let visibleInside = 0;
+			let text: Node | null;
+			while ((text = walker.nextNode())) {
+				for (let index = 0; index < (text.textContent?.length ?? 0); index++) {
+					if (!text.textContent![index].trim()) continue;
+					range.setStart(text, index);
+					range.setEnd(text, index + 1);
+					const character = range.getBoundingClientRect();
+					const x = character.x + character.width / 2;
+					const y = character.y + character.height / 2;
+					if (
+						!document
+							.elementsFromPoint(x, y)
+							.some((node) => node === detail || detail.contains(node))
+					)
+						continue;
+					if (
+						x < bounds.left - 1.5 ||
+						x > bounds.right + 1.5 ||
+						y < bounds.top - 1.5 ||
+						y > bounds.bottom + 1.5
+					)
+						outsideCharacters++;
+					else visibleInside++;
+				}
+			}
+			samples.push({
+				time,
+				opacity: Number(getComputedStyle(detail).opacity),
+				card: box(card),
+				detail: box(detail),
+				outsideCharacters,
+				visibleInside
+			});
+		}
+		expect
+			.soft(
+				Math.max(...samples.map(({ outsideCharacters }) => outsideCharacters)),
+				JSON.stringify(samples)
+			)
+			.toBe(0);
+		expect(samples.every(({ opacity }) => opacity > 0 && opacity < 1)).toBe(true);
+		expect(samples[0].opacity - samples.at(-1)!.opacity).toBeGreaterThan(0.5);
+		expect
+			.soft(
+				samples.some(({ visibleInside }) => visibleInside > 0),
+				JSON.stringify(samples)
+			)
+			.toBe(true);
+		expect(document.activeElement).toBe(toggle);
+		fade.finish();
+		for (const animation of running) animation.complete();
+		await expect.poll(() => stage.container.querySelector('.detail')).toBeNull();
+		await frames();
+		const closing = animations(stage.container);
+		for (const animation of closing) {
+			animation.pause();
+			animation.time = 0.12;
+		}
+		await frames();
+		const widths = [...samples.map(({ card }) => card.width), box(card).width];
+		expect(
+			widths.some((width) => width < expanded.card.width - 3 && width > collapsed.width + 3)
+		).toBe(true);
+		for (const animation of closing) animation.complete();
+		await frames();
+		expect(toggle.getAttribute('aria-expanded')).toBe('false');
+		expect(document.activeElement).toBe(toggle);
+		expect(Math.abs(box(card).width - collapsed.width)).toBeLessThan(1.5);
+		expect(Math.abs(box(card).height - collapsed.height)).toBeLessThan(1.5);
+
+		// Reopen during a later exit: a stale completion must not collapse the
+		// reserved layout after the same retained paragraph has started entering.
+		await userEvent.keyboard('{Enter}');
+		await expect.poll(() => box(card).width).toBeCloseTo(310, 1);
+		const retained = stage.container.querySelector<HTMLElement>('.detail')!;
+		await expect.poll(() => Number(getComputedStyle(retained).opacity)).toBe(1);
+		for (const animation of animations(stage.container)) animation.complete();
+		await frames();
+		await userEvent.keyboard('{Enter}');
+		await tick();
+		await frames();
+		const interruptedFade = retained
+			.getAnimations()
+			.find((animation) =>
+				(animation.effect as KeyframeEffect)
+					.getKeyframes()
+					.some((keyframe) => keyframe.opacity !== undefined)
+			)!;
+		expect(interruptedFade).toBeDefined();
+		interruptedFade.pause();
+		interruptedFade.currentTime = 90;
+		await frames();
+		expect(Number(getComputedStyle(retained).opacity)).toBeGreaterThan(0);
+		expect(Number(getComputedStyle(retained).opacity)).toBeLessThan(0.8);
+		await userEvent.keyboard('{Enter}');
+		await tick();
+		expect(stage.container.querySelector('.detail')).toBe(retained);
+		await expect.poll(() => Number(getComputedStyle(retained).opacity)).toBe(1);
+		await expect.poll(() => box(card).width).toBeCloseTo(expanded.card.width, 1);
+		for (const animation of animations(stage.container)) animation.complete();
+		await frames();
+		expect(Math.abs(box(card).height - expanded.card.height)).toBeLessThan(1.5);
+		expect(toggle.getAttribute('aria-expanded')).toBe('true');
+		expect(document.activeElement).toBe(toggle);
+	} finally {
+		await screen.unmount();
+		await stage.dispose();
+	}
+}, 15000);
+
 it('closes and reverses the narrow note without an intermediate growth or document-space jump', async () => {
 	const stage = await phoneStage(true);
 	const screen = await render(Layout, { target: stage.container });
