@@ -94,7 +94,9 @@
 		<aside>
 			<div>
 				<h2>Start with one component.</h2>
-				<p>New to Astra? Install the beta and build a notification in Getting started.</p>
+				<p>
+					New to Astra? Install the release candidate and build a notification in Getting started.
+				</p>
 			</div>
 			<a href={resolve('/docs/[slug]', { slug: 'getting-started' })}
 				>Read the getting started guide

@@ -1,5 +1,10 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { motion, createLayout } from '$lib/motion/index.js';
+	let ready = $state(false);
+	onMount(() => {
+		ready = true;
+	});
 	const layout = createLayout({ transition: { type: 'spring', stiffness: 340, damping: 32 } });
 	let mode = $state<'grid' | 'stack'>('grid');
 	let reversed = $state(false);
@@ -26,17 +31,20 @@
 	<div class="playground-controls">
 		<div class="view-switch" role="group" aria-label="Layout mode">
 			<button
+				disabled={!ready}
 				class:active={mode === 'grid'}
 				aria-pressed={mode === 'grid'}
 				onclick={() => (mode = 'grid')}>Grid</button
 			>
 			<button
+				disabled={!ready}
 				class:active={mode === 'stack'}
 				aria-pressed={mode === 'stack'}
 				onclick={() => (mode = 'stack')}>Stack</button
 			>
 		</div>
-		<button class="shuffle" onclick={() => (reversed = !reversed)}>Reorder</button>
+		<button class="shuffle" disabled={!ready} onclick={() => (reversed = !reversed)}>Reorder</button
+		>
 	</div>
 	<p class="playground-caption">Change the layout. Reverse it while it moves.</p>
 </div>

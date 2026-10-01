@@ -74,8 +74,8 @@
 				sequence.
 			</p>
 			<p>
-				The current beta pins Motion because layout projection uses undocumented upstream exports.
-				Check the supported scope and known limits before adopting it.
+				The current release candidate pins Motion because layout projection uses undocumented
+				upstream exports. Check the supported scope and known limits before adopting it.
 			</p>
 			<p><a href={resolve('/status')}>Read the project status </a></p>
 		</div>

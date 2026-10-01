@@ -9,6 +9,9 @@ if (selected && !engines.some((engine) => engine === selected)) {
 }
 export default defineConfig({
 	...base,
+	// Component tests have a different dependency graph from the live site.
+	// Sharing its optimizer cache can invalidate the preview during E2E checks.
+	cacheDir: './.svelte-kit/vite-motion-tests',
 	optimizeDeps: { include: ['bits-ui', 'motion-utils'] },
 	test: {
 		expect: { requireAssertions: true },

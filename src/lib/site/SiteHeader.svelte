@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { release } from '$lib/site/release.js';
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
 	let { compact = false }: { compact?: boolean } = $props();
@@ -29,7 +30,7 @@
 		class="site-version"
 		href={resolve('/status')}
 		aria-current={page.url.pathname === resolve('/status') ? 'page' : undefined}
-		><i></i> WORKING BETA</a
+		><i></i> {release.label}</a
 	>
 </header>
 

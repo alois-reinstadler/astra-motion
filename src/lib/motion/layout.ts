@@ -1,4 +1,5 @@
 import { claimMotionOwnership } from './ownership.js';
+import { diagnoseLayoutDisplay } from './diagnostics.js';
 import { flushSync } from 'svelte';
 import type { Attachment } from 'svelte/attachments';
 import {
@@ -558,6 +559,7 @@ export function createLayout(options: LayoutGroupOptions = {}) {
 					return;
 				}
 				const computed = getComputedStyle(element);
+				diagnoseLayoutDisplay(element, config.measureOnly, computed);
 				if (
 					(computed.transform !== 'none' && !hasMotionVisual(element)) ||
 					computed.translate !== 'none' ||
@@ -720,6 +722,7 @@ export function createLayout(options: LayoutGroupOptions = {}) {
 				projection.mount(element);
 				let authoredStyle = { ...config.style };
 				const update = (next: LayoutOptions, policy: LayoutGroupOptions, namespace: string) => {
+					diagnoseLayoutDisplay(element, next.measureOnly);
 					const id = next.id === undefined ? undefined : JSON.stringify([namespace, next.id]);
 					const previousId = projection.options.layoutId;
 					if (id !== previousId) {

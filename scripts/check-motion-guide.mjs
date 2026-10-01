@@ -1,6 +1,7 @@
 /** Source-consumer checks only: no application build or package emission. */
 import {
 	mkdtempSync,
+	mkdirSync,
 	readFileSync,
 	writeFileSync,
 	rmSync,
@@ -8,7 +9,8 @@ import {
 	symlinkSync
 } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import ts from 'typescript';
 
@@ -31,6 +33,21 @@ const directory = mkdtempSync(join(tmpdir(), 'astra-guide-consumer-'));
 try {
 	symlinkSync(resolve('node_modules'), join(directory, 'node_modules'), 'dir');
 	const manifest = JSON.parse(readFileSync('package.json', 'utf8'));
+	// Keep relative runtime imports intact (including the shared release metadata).
+	// Data URLs only work for modules containing no runtime imports.
+	writeFileSync(join(directory, 'package.json'), JSON.stringify(manifest));
+	function compileModule(filename) {
+		const destination = join(directory, filename.replace(/\.ts$/, '.js'));
+		mkdirSync(dirname(destination), { recursive: true });
+		writeFileSync(
+			destination,
+			ts.transpileModule(readFileSync(filename, 'utf8'), {
+				compilerOptions: { module: ts.ModuleKind.ESNext }
+			}).outputText
+		);
+		return pathToFileURL(destination).href;
+	}
+	compileModule('src/lib/site/release.ts');
 	const paths = {};
 	for (const [entry, conditions] of Object.entries(manifest.exports)) {
 		const target =
@@ -57,13 +74,7 @@ try {
 	for (const filename of readdirSync('src/lib/site/content').filter((name) =>
 		name.endsWith('.ts')
 	)) {
-		const module = ts.transpileModule(
-			readFileSync(join('src/lib/site/content', filename), 'utf8'),
-			{ compilerOptions: { module: ts.ModuleKind.ESNext } }
-		).outputText;
-		const exports = await import(
-			`data:text/javascript;base64,${Buffer.from(module).toString('base64')}`
-		);
+		const exports = await import(compileModule(join('src/lib/site/content', filename)));
 		for (const pages of Object.values(exports))
 			for (const page of pages)
 				for (const section of page.sections) {

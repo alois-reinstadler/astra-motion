@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { release } from '$lib/site/release.js';
 	import { onMount } from 'svelte';
 	import { resolve } from '$app/paths';
 	import { createAnimate } from '$lib/motion/animate.js';
@@ -18,7 +19,7 @@
 		]);
 	});
 	const source = homeSource.replaceAll("'$lib/motion/index.js'", "'astra-motion'");
-	const snippet = `<motion.div layout layoutGroup={layout}>\n  <strong {@attach layout({ mode: 'position' })}>\n    {piece.name}\n  </strong>\n</motion.div>`;
+	const snippet = `<motion.div layout layoutGroup={layout}>\n  <strong style="display: block" {@attach layout({ mode: 'position' })}>\n    {piece.name}\n  </strong>\n</motion.div>`;
 </script>
 
 <SiteFrame>
@@ -99,7 +100,7 @@
 			</div>
 		</section>
 		<aside class="beta-note">
-			<span>WORKING BETA</span>
+			<span>{release.label}</span>
 			<p>
 				Available as a local package from the repository. Review the supported scope before adopting
 				it.

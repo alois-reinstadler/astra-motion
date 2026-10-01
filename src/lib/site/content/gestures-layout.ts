@@ -845,7 +845,7 @@ export const gesturesLayoutPages: DocPage[] = [
 				id: 'troubleshooting',
 				title: 'Troubleshooting',
 				points: [
-					'Use a rendered block, flex, grid, or inline-block box; a non-replaced display:inline element cannot render a transform.',
+					'Use a rendered block, flex, grid, or inline-block box; a non-replaced display:inline element cannot render a transform. Astra warns about inline and display:contents layout hosts in development. It leaves your display styles intact: move layout="position" to a block content wrapper or give the text host display:inline-block.',
 					'If a resize stretches text, give the text wrapper layout="position" or animate a separate surface.',
 					'SVG layout projection is not supported by the upstream layout engine. Animate SVG attributes directly instead.',
 					'Keep shared IDs unique within each intended namespace. Use an explicit LayoutGroup id for reusable controls.',

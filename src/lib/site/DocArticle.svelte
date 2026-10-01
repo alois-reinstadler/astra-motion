@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { release } from '$lib/site/release.js';
 	import { resolve } from '$app/paths';
 	import { docs, type DocPage } from './docs.js';
 	import DocCode from './DocCode.svelte';
@@ -107,7 +108,7 @@
 				>{/each}
 		</nav>
 		<div class="status">
-			<span class="dot"></span> <a href={resolve('/status')}>Working beta</a>
+			<span class="dot"></span> <a href={resolve('/status')}>{release.label}</a>
 			<p>Svelte 5 · Motion 13<br />Native elements throughout.</p>
 		</div>
 	</aside>

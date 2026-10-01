@@ -20,8 +20,9 @@ async function loadComponents(page: Page) {
 			errors.push(message.text());
 	});
 	await page.goto('/motion-lab/components');
-	// The card is opacity 0 in SSR markup; reaching 1 proves the client binding ran.
-	await expect(page.getByTestId('component-card-2')).toHaveCSS('opacity', '1', { timeout: 1000 });
+	// This waits for module loading, hydration and the entrance, not just animation
+	// duration. Keep the tighter timing assertions below for hydrated interactions.
+	await expect(page.getByTestId('component-card-2')).toHaveCSS('opacity', '1');
 	return errors;
 }
 

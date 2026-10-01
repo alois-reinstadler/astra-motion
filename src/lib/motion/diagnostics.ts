@@ -20,6 +20,40 @@ export function motionDiagnostic(owner: object, code: string, message: string) {
 	console.warn(`Astra Motion [${code}]: ${message}`);
 }
 
+/** Advisory only: never change application display semantics to enable projection. */
+export function diagnoseLayoutDisplay(
+	element: HTMLElement,
+	measureOnly = false,
+	computed?: CSSStyleDeclaration
+) {
+	if (process.env.NODE_ENV === 'production' || measureOnly) return;
+	const { display } = computed ?? getComputedStyle(element);
+	// Replaced inline elements accept transforms. Flex/grid items are already
+	// blockified in computed style, even when authored as display: inline.
+	if (
+		display === 'contents' ||
+		(display === 'inline' &&
+			![
+				'IMG',
+				'VIDEO',
+				'AUDIO',
+				'CANVAS',
+				'IFRAME',
+				'EMBED',
+				'OBJECT',
+				'INPUT',
+				'SELECT',
+				'TEXTAREA'
+			].includes(element.tagName))
+	) {
+		motionDiagnostic(
+			element,
+			'layout-display',
+			`Layout projection cannot transform <${element.localName}> with display: ${display}. Use a block or inline-block content wrapper (or a flex/grid item). Text inside a resizing parent needs a transformable layout="position" boundary to avoid stretching.`
+		);
+	}
+}
+
 /** Only locally declared labels are checked: unresolved inherited labels are valid controllers. */
 export function diagnoseMotionOptions(
 	owner: object,

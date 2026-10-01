@@ -10,7 +10,7 @@ export const publicPages: Record<string, PageMetadata> = {
 	'/': {
 		title: 'Astra Motion — Motion for Svelte 5',
 		description:
-			'Motion’s animation engine, connected to Svelte’s lifecycle. Animate native elements, layout changes and exits. Explore the working beta and its examples.'
+			'Motion’s animation engine, connected to Svelte’s lifecycle. Animate native elements, layout changes and exits. Explore the release candidate and its examples.'
 	},
 	'/about': {
 		title: 'Why Astra — Astra Motion',
@@ -20,7 +20,7 @@ export const publicPages: Record<string, PageMetadata> = {
 	'/status': {
 		title: 'Project status — Astra Motion',
 		description:
-			'What the Astra Motion beta supports, how to evaluate it, and what remains before a public release. Browser coverage, compatibility and known limits.'
+			'What the Astra Motion release candidate supports, how to evaluate it, and what remains before a public release. Browser coverage, compatibility and known limits.'
 	},
 	'/examples': {
 		title: 'Interactive examples — Astra Motion',
