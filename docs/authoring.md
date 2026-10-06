@@ -345,6 +345,44 @@ layout.update(() => change()) explicitly captures fresh geometry before a synchr
 
 Try [Automatic layout](/motion-lab/updates).
 
+### Snapshot before publishing related state
+
+For parent layout changes and managed exits in the same update, `createLayoutState`
+keeps the rendered state unchanged until Astra has captured the old geometry.
+Create it during component initialization and replace its immutable value:
+
+```svelte
+<script lang="ts">
+	import { AnimatePresence, createLayoutState, motion } from 'astra-motion';
+	const scene = createLayoutState({ columns: 3, items: [1, 2, 3, 4, 5, 6] });
+</script>
+
+<button onclick={() => scene.update((pending) => ({ columns: 2, items: pending.items.slice(1) }))}
+	>Remove and resize</button
+>
+<div
+	style="display:grid;position:relative"
+	style:grid-template-columns={`repeat(${scene.current.columns},1fr)`}
+>
+	<AnimatePresence items={scene.current.items} key={(id) => id} mode="popLayout">
+		{#snippet children(id)}
+			<motion.div layout="position" exit={{ opacity: 0 }}>{id}</motion.div>
+		{/snippet}
+	</AnimatePresence>
+</div>
+```
+
+`set(value)` replaces a pending request; `update(fn)` receives the latest pending
+value, so consecutive updates accumulate. Rendering reads `current`, which changes
+in one microtask transaction. Updates from effects are supported; destruction
+cancels pending publication. Do not mutate nested values in place.
+
+Every geometry expression that needs this guarantee must read the staged state,
+including ancestor styles. Independent `$state`, external DOM writes and async
+template work remain outside the transaction. This is an opt-in snapshot boundary,
+not a global React lifecycle hook. Explicit `layout.update` remains available for
+synchronous imperative changes.
+
 ## Wait for the outgoing branch
 
 Presence renders the latest requested value after the whole outgoing Svelte transition group finishes.

@@ -1,5 +1,7 @@
 export {
 	createLayout,
+	createLayoutState,
+	type LayoutState,
 	updateLayout,
 	type LayoutController,
 	type LayoutOptions,

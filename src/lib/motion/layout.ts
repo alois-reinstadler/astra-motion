@@ -1,4 +1,5 @@
 import { claimMotionOwnership } from './ownership.js';
+export { createLayoutState, type LayoutState } from './layout-state.svelte.js';
 import { diagnoseLayoutDisplay } from './diagnostics.js';
 import { flushSync } from 'svelte';
 import type { Attachment } from 'svelte/attachments';
@@ -31,7 +32,7 @@ import {
 	preserveAspectMeasurements,
 	correctBoundarySnapshot
 } from './projection-boundaries.js';
-import { beforeCommit, layoutBridge, synchronousMutation } from './commit.js';
+import { beforeCommit, flushLayoutMutations, layoutBridge, synchronousMutation } from './commit.js';
 import { shouldReduceMotion, type MotionPolicy } from './policy.js';
 import {
 	ensureMotionVisual,
@@ -203,8 +204,7 @@ function pruneStack(projection: IProjectionNode, id: string | undefined) {
 /** Native transitions own DOM retention; this only informs Motion's shared-stack protocol. */
 function setPresence(root: HTMLElement, present: boolean) {
 	let changed = false;
-	for (const participant of participants.values()) {
-		if (participant.element !== root && !root.contains(participant.element)) continue;
+	for (const participant of participantsUnder(root)) {
 		if (present) participant.exitingRoots.delete(root);
 		else participant.exitingRoots.add(root);
 		const isPresent = participant.exitingRoots.size === 0;
@@ -219,6 +219,16 @@ function setPresence(root: HTMLElement, present: boolean) {
 		}
 	}
 	if (changed) scheduleRegistration();
+}
+
+/** Lookup by DOM membership: a leaf exit must not scan every registered sibling. */
+function* participantsUnder(root: Element): Generator<Participant> {
+	const own = participants.get(root as HTMLElement);
+	if (own) yield own;
+	for (const element of root.querySelectorAll<HTMLElement>('*')) {
+		const participant = participants.get(element);
+		if (participant) yield participant;
+	}
 }
 
 const intro = (event: Event) => {
@@ -480,6 +490,7 @@ export function updateLayout<Result>(
 	try {
 		snapshot();
 		flushSync(apply);
+		flushSync(flushLayoutMutations);
 	} finally {
 		try {
 			reconcile();
@@ -526,10 +537,7 @@ export function createLayout(options: LayoutGroupOptions = {}) {
 		layoutBridge.invalidate = (roots) => {
 			const elements = new Set<HTMLElement>();
 			for (const root of roots)
-				for (const participant of participants.values()) {
-					if (root === participant.element || root.contains(participant.element))
-						elements.add(participant.element);
-				}
+				for (const participant of participantsUnder(root)) elements.add(participant.element);
 			if (elements.size) scheduleAutomatic(elements);
 		};
 	}

@@ -20,10 +20,10 @@ export function reconcilePresence<T>(
 ): PresenceEntry<T>[] {
 	if (mode === 'wait' && input.length > 1)
 		throw new Error('Astra AnimatePresence: mode="wait" supports one present child at a time.');
-	const keys = new Set<PresenceKey>();
-	for (const { key } of input) {
+	const keys = new Map<PresenceKey, number>();
+	for (const [index, { key }] of input.entries()) {
 		if (keys.has(key)) throw new Error(`Astra AnimatePresence: duplicate key ${String(key)}.`);
-		keys.add(key);
+		keys.set(key, index);
 	}
 	const existing = new Map(previous.map((entry) => [entry.key, entry]));
 	const next = input.map(({ key, value }) => {
@@ -35,10 +35,8 @@ export function reconcilePresence<T>(
 	const outgoing: PresenceEntry<T>[] = [];
 	let insertion = 0;
 	for (const entry of previous) {
-		const presentIndex = input.findIndex(
-			({ key }) => Object.is(key, entry.key) || key === entry.key
-		);
-		if (presentIndex === -1) {
+		const presentIndex = keys.get(entry.key);
+		if (presentIndex === undefined) {
 			const retained = entry.isPresent ? { ...entry, isPresent: false } : entry;
 			next.splice(insertion++, 0, retained);
 			outgoing.push(retained);

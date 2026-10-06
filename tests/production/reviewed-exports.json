@@ -19,6 +19,7 @@
 		"createAnimate",
 		"createInView",
 		"createLayout",
+		"createLayoutState",
 		"createScroll",
 		"domAnimation",
 		"domMax",
@@ -64,7 +65,7 @@
 		"useVelocity",
 		"useWillChange"
 	],
-	"./layout": ["createLayout", "updateLayout"],
+	"./layout": ["createLayout", "createLayoutState", "updateLayout"],
 	"./presence": [
 		"AnimateActivity",
 		"AnimatePresence",

@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+- Add `createLayoutState` for coalesced, immutable render state published inside a
+  layout snapshot transaction. Parent geometry and presence membership can change
+  together without patching Svelte; independent state remains outside this scope.
+- Batch managed exit removals, reject stale completions after reentry, and apply
+  pop styles before an explicit projection commit, including interrupted motion.
+- Replace repeated global presence scans with subtree lookups and isolate errors
+  from independent completion callbacks in the same batch.
+
 ## 0.1.0-rc.2 — local release candidate
 
 This candidate is prepared for local installation; it is not a registry publication.
