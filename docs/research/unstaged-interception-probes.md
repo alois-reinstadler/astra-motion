@@ -1,9 +1,10 @@
 # Unstaged interception probes — 2026-10-06
 
 Both approaches improve outgoing first-pop geometry in the same real managed-component
-control. The compiler probe also suppresses an existing reorder animation and produces large
-survivor displacement during combined updates. Its low outgoing-exit errors are
-**not whole-scene or interrupted-animation parity**. Neither qualifies as a general React-style lifecycle or a default runtime feature. Keep them
+control. The compiler probe also suppresses an existing reorder animation and produces
+large survivor displacement during combined updates. Its low outgoing-exit errors are
+**not whole-scene or interrupted-animation parity**. Neither qualifies as a general
+React-style lifecycle or a default runtime feature. Keep them
 as opt-in research fixtures until the remaining coverage and integration failures
 are addressed. No production source, public export, installed dependency, or library
 configuration is modified.
@@ -142,7 +143,8 @@ next test.
 
 Accept the isolated experiment and its executable negative controls as research
 progress. The compiler probe is currently behavior-breaking even for this simple
-reorder fixture, not merely incomplete for exotic updates. Do not enable either mechanism in the shipping runtime. The supported
+reorder fixture, not merely incomplete for exotic updates. Do not enable either
+mechanism in the shipping runtime. The supported
 production baseline remains explicit `updateLayout` / `createLayoutState` plus the
 existing automatic caches.
 
