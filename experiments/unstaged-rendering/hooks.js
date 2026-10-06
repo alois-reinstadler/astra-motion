@@ -1,4 +1,4 @@
-import { untrack } from 'svelte';
+import { untrack, tick } from 'svelte';
 import { Batch } from 'virtual:probe-batch';
 import { __probeBegin } from '../../src/lib/motion/layout.ts';
 let enabled = false;
@@ -33,16 +33,21 @@ export function end() {
 		active = false;
 	}
 }
+export function captureDeferred(afterTick = false) {
+	if (begin()) {
+		const transaction = finish;
+		const close = () => {
+			if (finish === transaction) end();
+		};
+		if (afterTick) void tick().then(close);
+		else queueMicrotask(close);
+	}
+}
 export function compilerCallback(fn) {
 	if (!fn) return fn;
 	return function (...args) {
 		stats.callbacks++;
-		if (selected === 'compiler' && begin()) {
-			const transaction = finish;
-			queueMicrotask(() => {
-				if (finish === transaction) end();
-			});
-		}
+		if (selected === 'compiler') captureDeferred();
 		return fn.apply(this, args);
 	};
 }

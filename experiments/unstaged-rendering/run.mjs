@@ -5,9 +5,12 @@ import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
 const root = resolve(import.meta.dirname, '../..');
 const require = createRequire(import.meta.url);
+const reactRequire = createRequire(resolve(import.meta.dirname, '../staged-rendering/react.jsx'));
 process.chdir(root);
 function version(name) {
-	let directory = dirname(require.resolve(name));
+	let directory = dirname(
+		(name === 'react' || name === 'react-dom' ? reactRequire : require).resolve(name)
+	);
 	while (directory !== dirname(directory)) {
 		const path = resolve(directory, 'package.json');
 		if (existsSync(path)) {
@@ -44,8 +47,27 @@ const provenance = {
 	createdAt: new Date().toISOString(),
 	commit: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
 	versions: Object.fromEntries(
-		['svelte', 'motion-dom', 'motion-utils', 'vite', 'vitest'].map((name) => [name, version(name)])
+		[
+			'svelte',
+			'motion-dom',
+			'motion-utils',
+			'vite',
+			'vitest',
+			'react',
+			'react-dom',
+			'framer-motion'
+		].map((name) => [name, version(name)])
 	),
+	reactReferenceSha256: createHash('sha256')
+		.update(
+			['react.jsx', 'model.mjs', 'style.css']
+				.map(
+					(file) =>
+						file + readFileSync(resolve(import.meta.dirname, '../staged-rendering', file), 'utf8')
+				)
+				.join('')
+		)
+		.digest('hex'),
 	astraSourceSha256: hashTree(resolve(root, 'src/lib/motion')),
 	experimentSourceSha256: hashTree(import.meta.dirname),
 	bundleSha256: createHash('sha256')

@@ -9,6 +9,8 @@ export function probePlugin() {
 		name: 'unstaged-probe-only',
 		enforce: 'post',
 		resolveId(id) {
+			if (id === 'virtual:probe-effects')
+				return resolve(svelteRoot, 'src/internal/client/reactivity/effects.js');
 			if (id === 'virtual:probe-batch')
 				return resolve(svelteRoot, 'src/internal/client/reactivity/batch.js');
 		},

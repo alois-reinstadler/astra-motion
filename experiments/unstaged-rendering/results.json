@@ -1,18 +1,22 @@
 {
   "status": "passed",
   "provenance": {
-    "createdAt": "2026-10-06T03:54:47.661Z",
-    "commit": "0b4b4da40cbb8908b4a17ea578c6d04696c43af6",
+    "createdAt": "2026-10-06T09:21:10.113Z",
+    "commit": "45fa0b1152cb22dfb2cb94759dc97db298113f27",
     "versions": {
       "svelte": "5.57.0",
       "motion-dom": "13.4.4",
       "motion-utils": "13.3.0",
       "vite": "8.2.2",
-      "vitest": "4.1.11"
+      "vitest": "4.1.11",
+      "react": "18.3.1",
+      "react-dom": "18.3.1",
+      "framer-motion": "13.4.4"
     },
+    "reactReferenceSha256": "ee79c70f2ea679b91ea3b4280982764fe0fa83469259d9d963baba23dbfd74a4",
     "astraSourceSha256": "07e2837802806a9ffa9fd62275cea6a6ec87a0696b63a19048634f55c2c35d4e",
-    "experimentSourceSha256": "d95f79f20c21bd33bcb22e05a7ba8292ed5dc79d9ee74cf0a192a0c4e3289fdd",
-    "bundleSha256": "20f9e57af1add8c990d5c65883678073d0dfa883fdcc70882b1f44b243ea89ae",
+    "experimentSourceSha256": "c0afa8005a122298293a3ea290044f205294656f0fafad6e76af615589cb1959",
+    "bundleSha256": "d793130c88b7867d776abf0489a5f6c1263c74aa493a2364d90a3ba230b723db",
     "browserExecutable": "/usr/bin/google-chrome",
     "browser": "Google Chrome 154.0.8037.97",
     "mode": "production bundle, Chromium geometry diagnostics; not a timing benchmark"
@@ -20,9 +24,75 @@
   "records": [
     {
       "mode": "control",
-      "scenario": "ordinary",
+      "scenario": "write-ordinary",
       "maxErrorPx": 60.390625,
       "reorderAnimated": null,
+      "survivorAnimated": true,
+      "survivorTrajectories": [
+        {
+          "id": 1,
+          "before": {
+            "x": 60.390625,
+            "y": 30,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 90.4185791015625,
+            "y": 53.19999694824219,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 241.59375,
+            "y": 170,
+            "width": 116.796875,
+            "height": 24
+          }
+        },
+        {
+          "id": 10,
+          "before": {
+            "x": 0,
+            "y": 58,
+            "width": 56.390625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 80.07107543945312,
+            "y": 67.27999877929688,
+            "width": 116.8125,
+            "height": 24
+          },
+          "final": {
+            "x": 483.1875,
+            "y": 114,
+            "width": 116.8125,
+            "height": 24
+          }
+        },
+        {
+          "id": 29,
+          "before": {
+            "x": 543.59375,
+            "y": 86,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 453.51251220703125,
+            "y": 76.72000122070312,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 0,
+            "y": 30,
+            "width": 116.796875,
+            "height": 24
+          }
+        }
+      ],
       "interruptionQualified": null,
       "captureOrders": [],
       "survivorSamples": [
@@ -42,18 +112,18 @@
       "survivorFrameSamples": [
         {
           "id": 1,
-          "positionDeltaPx": 16.567138671875,
-          "transform": "translate3d(-164.636px, -127.2px, 0px)"
+          "positionDeltaPx": 10.8721923828125,
+          "transform": "translate3d(-170.331px, -131.6px, 0px)"
         },
         {
           "id": 10,
-          "positionDeltaPx": 44.177154541015625,
-          "transform": "translate3d(-439.01px, -50.88px, 0px)"
+          "positionDeltaPx": 28.991241455078125,
+          "transform": "translate3d(-454.196px, -52.64px, 0px)"
         },
         {
           "id": 29,
-          "positionDeltaPx": 49.70001220703125,
-          "transform": "translate3d(493.894px, 50.88px, 0px)"
+          "positionDeltaPx": 32.615631103515625,
+          "transform": "translate3d(510.978px, 52.64px, 0px)"
         }
       ],
       "samples": [
@@ -68,16 +138,86 @@
       ],
       "stats": {
         "captures": 0,
-        "callbacks": 59,
+        "callbacks": 0,
         "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 0,
+        "mutations": []
       },
       "order": true
     },
     {
       "mode": "control",
-      "scenario": "nested",
+      "scenario": "write-nested",
       "maxErrorPx": 60.390625,
       "reorderAnimated": null,
+      "survivorAnimated": true,
+      "survivorTrajectories": [
+        {
+          "id": 1,
+          "before": {
+            "x": 60.390625,
+            "y": 30,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 95.59580993652344,
+            "y": 57.19999694824219,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 241.59375,
+            "y": 170,
+            "width": 116.796875,
+            "height": 24
+          }
+        },
+        {
+          "id": 10,
+          "before": {
+            "x": 0,
+            "y": 58,
+            "width": 56.390625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 93.87643432617188,
+            "y": 68.8800048828125,
+            "width": 116.8125,
+            "height": 24
+          },
+          "final": {
+            "x": 483.1875,
+            "y": 114,
+            "width": 116.8125,
+            "height": 24
+          }
+        },
+        {
+          "id": 29,
+          "before": {
+            "x": 543.59375,
+            "y": 86,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 437.98126220703125,
+            "y": 75.1199951171875,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 0,
+            "y": 30,
+            "width": 116.796875,
+            "height": 24
+          }
+        }
+      ],
       "interruptionQualified": null,
       "captureOrders": [],
       "survivorSamples": [
@@ -97,18 +237,18 @@
       "survivorFrameSamples": [
         {
           "id": 1,
-          "positionDeltaPx": 11.389907836914062,
-          "transform": "translate3d(-169.813px, -131.2px, 0px)"
+          "positionDeltaPx": 7.7658538818359375,
+          "transform": "translate3d(-173.437px, -134px, 0px)"
         },
         {
           "id": 10,
-          "positionDeltaPx": 30.371795654296875,
-          "transform": "translate3d(-452.816px, -52.48px, 0px)"
+          "positionDeltaPx": 20.708038330078125,
+          "transform": "translate3d(-462.479px, -53.6px, 0px)"
         },
         {
           "id": 29,
-          "positionDeltaPx": 34.16876220703125,
-          "transform": "translate3d(509.425px, 52.48px, 0px)"
+          "positionDeltaPx": 23.296875,
+          "transform": "translate3d(520.297px, 53.6px, 0px)"
         }
       ],
       "samples": [
@@ -123,16 +263,86 @@
       ],
       "stats": {
         "captures": 0,
-        "callbacks": 59,
+        "callbacks": 0,
         "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 0,
+        "mutations": []
       },
       "order": true
     },
     {
       "mode": "control",
-      "scenario": "interrupted",
+      "scenario": "write-interrupted",
       "maxErrorPx": 422.796875,
       "reorderAnimated": true,
+      "survivorAnimated": true,
+      "survivorTrajectories": [
+        {
+          "id": 1,
+          "before": {
+            "x": 144.95001220703125,
+            "y": 41.20000076293945,
+            "width": 56.40625,
+            "height": 23.999996185302734
+          },
+          "midpoint": {
+            "x": 112.64685821533203,
+            "y": 38.704002380371094,
+            "width": 116.79686737060547,
+            "height": 24
+          },
+          "final": {
+            "x": 0,
+            "y": 30,
+            "width": 116.796875,
+            "height": 24
+          }
+        },
+        {
+          "id": 10,
+          "before": {
+            "x": 108.71875,
+            "y": 58,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 165.2513427734375,
+            "y": 58,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 362.390625,
+            "y": 58,
+            "width": 116.796875,
+            "height": 24
+          }
+        },
+        {
+          "id": 29,
+          "before": {
+            "x": 434.875,
+            "y": 74.80000305175781,
+            "width": 56.390625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 391.8009033203125,
+            "y": 96.01599884033203,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 241.59375,
+            "y": 170,
+            "width": 116.796875,
+            "height": 24
+          }
+        }
+      ],
       "interruptionQualified": true,
       "captureOrders": [
         [
@@ -179,30 +389,2935 @@
         },
         {
           "id": 29,
-          "positionErrorPx": 0.000003814697265625
+          "positionErrorPx": 0
         }
       ],
       "survivorFrameSamples": [
         {
           "id": 1,
-          "positionDeltaPx": 8.144805908203125,
-          "transform": "translate3d(134.389px, 10.2583px, 0px)"
+          "positionDeltaPx": 7.040435791015625,
+          "transform": "translate3d(137.91px, 10.656px, 0px)"
         },
         {
           "id": 10,
-          "positionDeltaPx": 14.673049926757812,
-          "transform": "translate3d(-242.105px, 0px, 0px)"
+          "positionDeltaPx": 12.321212768554688,
+          "transform": "translate3d(-241.351px, 0px, 0px)"
         },
         {
           "id": 29,
-          "positionDeltaPx": 11.22216796875,
-          "transform": "translate3d(185.165px, -89.4583px, 0px)"
+          "positionDeltaPx": 9.387939453125,
+          "transform": "translate3d(183.893px, -90.576px, 0px)"
         }
       ],
       "samples": [
         {
           "id": 0,
           "errorPx": 422.796875
+        },
+        {
+          "id": 5,
+          "errorPx": 120.796875
+        }
+      ],
+      "stats": {
+        "captures": 0,
+        "callbacks": 0,
+        "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 0,
+        "mutations": []
+      },
+      "order": true
+    },
+    {
+      "mode": "control",
+      "scenario": "write-unowned-staged",
+      "maxErrorPx": 302,
+      "reorderAnimated": null,
+      "survivorAnimated": true,
+      "survivorTrajectories": [
+        {
+          "id": 1,
+          "before": {
+            "x": 60.390625,
+            "y": 30,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 137.01817321777344,
+            "y": 48.80000305175781,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 241.59375,
+            "y": 170,
+            "width": 116.796875,
+            "height": 24
+          }
+        },
+        {
+          "id": 10,
+          "before": {
+            "x": 0,
+            "y": 58,
+            "width": 56.390625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 64.88519287109375,
+            "y": 89.76000213623047,
+            "width": 116.8125,
+            "height": 24
+          },
+          "final": {
+            "x": 483.1875,
+            "y": 114,
+            "width": 116.8125,
+            "height": 24
+          }
+        },
+        {
+          "id": 29,
+          "before": {
+            "x": 543.59375,
+            "y": 86,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 418.30230712890625,
+            "y": 151.1999969482422,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 0,
+            "y": 30,
+            "width": 116.796875,
+            "height": 24
+          }
+        }
+      ],
+      "interruptionQualified": null,
+      "captureOrders": [],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 181.203125
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 483.1875
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 543.59375
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 60.40625,
+          "transform": "translate3d(-120.797px, -140px, 0px)"
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 28,
+          "transform": "translate3d(-483.188px, -28px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 84,
+          "transform": "translate3d(483.188px, 140px, 0px)"
+        }
+      ],
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 60.40625
+        },
+        {
+          "id": 5,
+          "errorPx": 302
+        }
+      ],
+      "stats": {
+        "captures": 0,
+        "callbacks": 0,
+        "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 0,
+        "mutations": []
+      },
+      "order": true
+    },
+    {
+      "mode": "dom",
+      "scenario": "write-ordinary",
+      "maxErrorPx": 0.015625,
+      "reorderAnimated": null,
+      "survivorAnimated": true,
+      "survivorTrajectories": [
+        {
+          "id": 1,
+          "before": {
+            "x": 60.390625,
+            "y": 30,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 82.13499450683594,
+            "y": 46.80000305175781,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 241.59375,
+            "y": 170,
+            "width": 116.796875,
+            "height": 24
+          }
+        },
+        {
+          "id": 10,
+          "before": {
+            "x": 0,
+            "y": 58,
+            "width": 56.390625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 57.982513427734375,
+            "y": 64.72000122070312,
+            "width": 116.8125,
+            "height": 24
+          },
+          "final": {
+            "x": 483.1875,
+            "y": 114,
+            "width": 116.8125,
+            "height": 24
+          }
+        },
+        {
+          "id": 29,
+          "before": {
+            "x": 543.59375,
+            "y": 86,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 478.36248779296875,
+            "y": 79.27999877929688,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 0,
+            "y": 30,
+            "width": 116.796875,
+            "height": 24
+          }
+        }
+      ],
+      "interruptionQualified": null,
+      "captureOrders": [],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 181.203125
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 483.1875
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 543.59375
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(-181.203px, -140px, 0px)"
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(-483.188px, -56px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(543.594px, 56px, 0px)"
+        }
+      ],
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 0.015625
+        },
+        {
+          "id": 5,
+          "errorPx": 0.015625
+        }
+      ],
+      "stats": {
+        "captures": 1,
+        "callbacks": 0,
+        "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 181,
+        "mutations": [
+          "before",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove"
+        ]
+      },
+      "order": true
+    },
+    {
+      "mode": "dom",
+      "scenario": "write-nested",
+      "maxErrorPx": 0.015625,
+      "reorderAnimated": null,
+      "survivorAnimated": true,
+      "survivorTrajectories": [
+        {
+          "id": 1,
+          "before": {
+            "x": 60.390625,
+            "y": 30,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 100.77304077148438,
+            "y": 61.19999694824219,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 241.59375,
+            "y": 170,
+            "width": 116.796875,
+            "height": 24
+          }
+        },
+        {
+          "id": 10,
+          "before": {
+            "x": 0,
+            "y": 58,
+            "width": 56.390625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 107.68179321289062,
+            "y": 70.47999572753906,
+            "width": 116.8125,
+            "height": 24
+          },
+          "final": {
+            "x": 483.1875,
+            "y": 114,
+            "width": 116.8125,
+            "height": 24
+          }
+        },
+        {
+          "id": 29,
+          "before": {
+            "x": 543.59375,
+            "y": 86,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 422.45001220703125,
+            "y": 73.52000427246094,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 0,
+            "y": 30,
+            "width": 116.796875,
+            "height": 24
+          }
+        }
+      ],
+      "interruptionQualified": null,
+      "captureOrders": [],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 181.203125
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 483.1875
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 543.59375
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(-181.203px, -140px, 0px)"
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(-483.188px, -56px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(543.594px, 56px, 0px)"
+        }
+      ],
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 0.015625
+        },
+        {
+          "id": 5,
+          "errorPx": 0.015625
+        }
+      ],
+      "stats": {
+        "captures": 1,
+        "callbacks": 0,
+        "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 181,
+        "mutations": [
+          "before",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove"
+        ]
+      },
+      "order": true
+    },
+    {
+      "mode": "dom",
+      "scenario": "write-interrupted",
+      "maxErrorPx": 0.40625,
+      "reorderAnimated": true,
+      "survivorAnimated": true,
+      "survivorTrajectories": [
+        {
+          "id": 1,
+          "before": {
+            "x": 177.56576538085938,
+            "y": 45.52000045776367,
+            "width": 56.40625,
+            "height": 24.000003814697266
+          },
+          "midpoint": {
+            "x": 151.69189453125,
+            "y": 43.258514404296875,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 0,
+            "y": 30,
+            "width": 116.796875,
+            "height": 24
+          }
+        },
+        {
+          "id": 10,
+          "before": {
+            "x": 150.65313720703125,
+            "y": 58,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 181.50631713867188,
+            "y": 58,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 362.390625,
+            "y": 58,
+            "width": 116.796875,
+            "height": 24
+          }
+        },
+        {
+          "id": 29,
+          "before": {
+            "x": 392.94061279296875,
+            "y": 70.47999572753906,
+            "width": 56.390625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 370.88720703125,
+            "y": 84.98148345947266,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 241.59375,
+            "y": 170,
+            "width": 116.796875,
+            "height": 24
+          }
+        }
+      ],
+      "interruptionQualified": true,
+      "captureOrders": [
+        [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29
+        ]
+      ],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 483.1877746582031
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 181.20352172851562
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 241.59417724609375
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 3.0439910888671875,
+          "transform": "translate3d(174.522px, 15.2539px, 0px)"
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 3.629791259765625,
+          "transform": "translate3d(-208.108px, 0px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 2.594512939453125,
+          "transform": "translate3d(148.752px, -97.8139px, 0px)"
+        }
+      ],
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 0.405853271484375
+        },
+        {
+          "id": 5,
+          "errorPx": 0.40625
+        }
+      ],
+      "stats": {
+        "captures": 2,
+        "callbacks": 0,
+        "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 361,
+        "mutations": [
+          "before",
+          "before",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove"
+        ]
+      },
+      "order": true
+    },
+    {
+      "mode": "dom",
+      "scenario": "write-unowned-staged",
+      "maxErrorPx": 0.015625,
+      "reorderAnimated": null,
+      "survivorAnimated": true,
+      "survivorTrajectories": [
+        {
+          "id": 1,
+          "before": {
+            "x": 60.390625,
+            "y": 30,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 97.14897155761719,
+            "y": 58.400001525878906,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 241.59375,
+            "y": 170,
+            "width": 116.796875,
+            "height": 24
+          }
+        },
+        {
+          "id": 10,
+          "before": {
+            "x": 0,
+            "y": 58,
+            "width": 56.390625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 98.01803588867188,
+            "y": 69.36000061035156,
+            "width": 116.8125,
+            "height": 24
+          },
+          "final": {
+            "x": 483.1875,
+            "y": 114,
+            "width": 116.8125,
+            "height": 24
+          }
+        },
+        {
+          "id": 29,
+          "before": {
+            "x": 543.59375,
+            "y": 86,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 433.3218688964844,
+            "y": 74.63999938964844,
+            "width": 116.79690551757812,
+            "height": 24
+          },
+          "final": {
+            "x": 0,
+            "y": 30,
+            "width": 116.796875,
+            "height": 24
+          }
+        }
+      ],
+      "interruptionQualified": null,
+      "captureOrders": [],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 181.203125
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 483.1875
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 543.59375
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(-181.203px, -140px, 0px)"
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(-483.188px, -56px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(543.594px, 56px, 0px)"
+        }
+      ],
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 0.015625
+        },
+        {
+          "id": 5,
+          "errorPx": 0.015625
+        }
+      ],
+      "stats": {
+        "captures": 1,
+        "callbacks": 0,
+        "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 181,
+        "mutations": [
+          "setProperty",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove"
+        ]
+      },
+      "order": true
+    },
+    {
+      "mode": "eager",
+      "scenario": "write-ordinary",
+      "maxErrorPx": 0.015625,
+      "reorderAnimated": null,
+      "survivorAnimated": true,
+      "survivorTrajectories": [
+        {
+          "id": 1,
+          "before": {
+            "x": 60.390625,
+            "y": 30,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 101.80848693847656,
+            "y": 62,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 241.59375,
+            "y": 170,
+            "width": 116.796875,
+            "height": 24
+          }
+        },
+        {
+          "id": 10,
+          "before": {
+            "x": 0,
+            "y": 58,
+            "width": 56.390625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 110.44287109375,
+            "y": 70.80000305175781,
+            "width": 116.8125,
+            "height": 24
+          },
+          "final": {
+            "x": 483.1875,
+            "y": 114,
+            "width": 116.8125,
+            "height": 24
+          }
+        },
+        {
+          "id": 29,
+          "before": {
+            "x": 543.59375,
+            "y": 86,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 419.34375,
+            "y": 73.19999694824219,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 0,
+            "y": 30,
+            "width": 116.796875,
+            "height": 24
+          }
+        }
+      ],
+      "interruptionQualified": null,
+      "captureOrders": [],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 181.203125
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 483.1875
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 543.59375
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(-181.203px, -140px, 0px)"
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(-483.188px, -56px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(543.594px, 56px, 0px)"
+        }
+      ],
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 0.015625
+        },
+        {
+          "id": 5,
+          "errorPx": 0.015625
+        }
+      ],
+      "stats": {
+        "captures": 1,
+        "callbacks": 0,
+        "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 1,
+        "mutations": [
+          "eager"
+        ]
+      },
+      "order": true
+    },
+    {
+      "mode": "eager",
+      "scenario": "write-nested",
+      "maxErrorPx": 0.015625,
+      "reorderAnimated": null,
+      "survivorAnimated": true,
+      "survivorTrajectories": [
+        {
+          "id": 1,
+          "before": {
+            "x": 60.390625,
+            "y": 30,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 104.3970947265625,
+            "y": 64,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 241.59375,
+            "y": 170,
+            "width": 116.796875,
+            "height": 24
+          }
+        },
+        {
+          "id": 10,
+          "before": {
+            "x": 0,
+            "y": 58,
+            "width": 56.390625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 117.34555053710938,
+            "y": 71.5999984741211,
+            "width": 116.8125,
+            "height": 24
+          },
+          "final": {
+            "x": 483.1875,
+            "y": 114,
+            "width": 116.8125,
+            "height": 24
+          }
+        },
+        {
+          "id": 29,
+          "before": {
+            "x": 543.59375,
+            "y": 86,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 411.578125,
+            "y": 72.4000015258789,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 0,
+            "y": 30,
+            "width": 116.796875,
+            "height": 24
+          }
+        }
+      ],
+      "interruptionQualified": null,
+      "captureOrders": [],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 181.203125
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 483.1875
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 543.59375
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(-181.203px, -140px, 0px)"
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(-483.188px, -56px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(543.594px, 56px, 0px)"
+        }
+      ],
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 0.015625
+        },
+        {
+          "id": 5,
+          "errorPx": 0.015625
+        }
+      ],
+      "stats": {
+        "captures": 1,
+        "callbacks": 0,
+        "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 1,
+        "mutations": [
+          "eager"
+        ]
+      },
+      "order": true
+    },
+    {
+      "mode": "eager",
+      "scenario": "write-interrupted",
+      "maxErrorPx": 0.40625,
+      "reorderAnimated": true,
+      "survivorAnimated": true,
+      "survivorTrajectories": [
+        {
+          "id": 1,
+          "before": {
+            "x": 146.15798950195312,
+            "y": 41.36000061035156,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 111.49766540527344,
+            "y": 38.66605758666992,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 0,
+            "y": 30,
+            "width": 116.796875,
+            "height": 24
+          }
+        },
+        {
+          "id": 10,
+          "before": {
+            "x": 110.27188110351562,
+            "y": 58,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 170.06004333496094,
+            "y": 58,
+            "width": 116.79689025878906,
+            "height": 24
+          },
+          "final": {
+            "x": 362.390625,
+            "y": 58,
+            "width": 116.796875,
+            "height": 24
+          }
+        },
+        {
+          "id": 29,
+          "before": {
+            "x": 433.3218688964844,
+            "y": 74.63999938964844,
+            "width": 56.390625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 387.85491943359375,
+            "y": 97.25394439697266,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 241.59375,
+            "y": 170,
+            "width": 116.796875,
+            "height": 24
+          }
+        }
+      ],
+      "interruptionQualified": true,
+      "captureOrders": [
+        [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29
+        ]
+      ],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 483.18798828125
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 181.2032470703125
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 241.59390258789062
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 2.0879669189453125,
+          "transform": "translate3d(144.07px, 11.1977px, 0px)"
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 3.6016998291015625,
+          "transform": "translate3d(-248.517px, 0px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 2.738983154296875,
+          "transform": "translate3d(188.989px, -93.9977px, 0px)"
+        }
+      ],
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 0.4061279296875
+        },
+        {
+          "id": 5,
+          "errorPx": 0.40625
+        }
+      ],
+      "stats": {
+        "captures": 2,
+        "callbacks": 0,
+        "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 31,
+        "mutations": [
+          "eager",
+          "eager"
+        ]
+      },
+      "order": true
+    },
+    {
+      "mode": "eager",
+      "scenario": "write-unowned-staged",
+      "maxErrorPx": 302,
+      "reorderAnimated": null,
+      "survivorAnimated": true,
+      "survivorTrajectories": [
+        {
+          "id": 1,
+          "before": {
+            "x": 60.390625,
+            "y": 30,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 94.04263305664062,
+            "y": 56,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 241.59375,
+            "y": 170,
+            "width": 116.796875,
+            "height": 24
+          }
+        },
+        {
+          "id": 10,
+          "before": {
+            "x": 0,
+            "y": 58,
+            "width": 56.390625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 89.73483276367188,
+            "y": 68.4000015258789,
+            "width": 116.8125,
+            "height": 24
+          },
+          "final": {
+            "x": 483.1875,
+            "y": 114,
+            "width": 116.8125,
+            "height": 24
+          }
+        },
+        {
+          "id": 29,
+          "before": {
+            "x": 543.59375,
+            "y": 86,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 442.640625,
+            "y": 75.5999984741211,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 0,
+            "y": 30,
+            "width": 116.796875,
+            "height": 24
+          }
+        }
+      ],
+      "interruptionQualified": null,
+      "captureOrders": [],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 181.203125
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 483.1875
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 543.59375
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(-181.203px, -140px, 0px)"
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(-483.188px, -56px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(543.594px, 56px, 0px)"
+        }
+      ],
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 60.40625
+        },
+        {
+          "id": 5,
+          "errorPx": 302
+        }
+      ],
+      "stats": {
+        "captures": 1,
+        "callbacks": 0,
+        "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 1,
+        "mutations": [
+          "eager"
+        ]
+      },
+      "order": true
+    },
+    {
+      "mode": "eager-tick",
+      "scenario": "write-ordinary",
+      "maxErrorPx": 0.015625,
+      "reorderAnimated": null,
+      "survivorAnimated": true,
+      "survivorTrajectories": [
+        {
+          "id": 1,
+          "before": {
+            "x": 60.390625,
+            "y": 30,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 102.32620239257812,
+            "y": 62.400001525878906,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 241.59375,
+            "y": 170,
+            "width": 116.796875,
+            "height": 24
+          }
+        },
+        {
+          "id": 10,
+          "before": {
+            "x": 0,
+            "y": 58,
+            "width": 56.390625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 111.82339477539062,
+            "y": 70.95999908447266,
+            "width": 116.8125,
+            "height": 24
+          },
+          "final": {
+            "x": 483.1875,
+            "y": 114,
+            "width": 116.8125,
+            "height": 24
+          }
+        },
+        {
+          "id": 29,
+          "before": {
+            "x": 543.59375,
+            "y": 86,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 417.7906188964844,
+            "y": 73.04000091552734,
+            "width": 116.79690551757812,
+            "height": 24
+          },
+          "final": {
+            "x": 0,
+            "y": 30,
+            "width": 116.796875,
+            "height": 24
+          }
+        }
+      ],
+      "interruptionQualified": null,
+      "captureOrders": [],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 181.203125
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 483.1875
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 543.59375
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 0.517730712890625,
+          "transform": "translate3d(-180.685px, -139.6px, 0px)"
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 1.380523681640625,
+          "transform": "translate3d(-481.807px, -55.84px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 1.5531005859375,
+          "transform": "translate3d(542.041px, 55.84px, 0px)"
+        }
+      ],
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 0.015625
+        },
+        {
+          "id": 5,
+          "errorPx": 0.015625
+        }
+      ],
+      "stats": {
+        "captures": 1,
+        "callbacks": 0,
+        "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 1,
+        "mutations": [
+          "eager"
+        ]
+      },
+      "order": true
+    },
+    {
+      "mode": "eager-tick",
+      "scenario": "write-nested",
+      "maxErrorPx": 0.015625,
+      "reorderAnimated": null,
+      "survivorAnimated": true,
+      "survivorTrajectories": [
+        {
+          "id": 1,
+          "before": {
+            "x": 60.390625,
+            "y": 30,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 101.29075622558594,
+            "y": 61.599998474121094,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 241.59375,
+            "y": 170,
+            "width": 116.796875,
+            "height": 24
+          }
+        },
+        {
+          "id": 10,
+          "before": {
+            "x": 0,
+            "y": 58,
+            "width": 56.390625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 109.06231689453125,
+            "y": 70.63999938964844,
+            "width": 116.8125,
+            "height": 24
+          },
+          "final": {
+            "x": 483.1875,
+            "y": 114,
+            "width": 116.8125,
+            "height": 24
+          }
+        },
+        {
+          "id": 29,
+          "before": {
+            "x": 543.59375,
+            "y": 86,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 420.8968811035156,
+            "y": 73.36000061035156,
+            "width": 116.79684448242188,
+            "height": 24
+          },
+          "final": {
+            "x": 0,
+            "y": 30,
+            "width": 116.796875,
+            "height": 24
+          }
+        }
+      ],
+      "interruptionQualified": null,
+      "captureOrders": [],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 181.203125
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 483.1875
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 543.59375
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 1.0354461669921875,
+          "transform": "translate3d(-180.168px, -139.2px, 0px)"
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 2.761077880859375,
+          "transform": "translate3d(-480.426px, -55.68px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 3.10626220703125,
+          "transform": "translate3d(540.487px, 55.68px, 0px)"
+        }
+      ],
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 0.015625
+        },
+        {
+          "id": 5,
+          "errorPx": 0.015625
+        }
+      ],
+      "stats": {
+        "captures": 1,
+        "callbacks": 0,
+        "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 1,
+        "mutations": [
+          "eager"
+        ]
+      },
+      "order": true
+    },
+    {
+      "mode": "eager-tick",
+      "scenario": "write-interrupted",
+      "maxErrorPx": 0.406219482421875,
+      "reorderAnimated": true,
+      "survivorAnimated": true,
+      "survivorTrajectories": [
+        {
+          "id": 1,
+          "before": {
+            "x": 148.573974609375,
+            "y": 41.68000030517578,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 117.16119384765625,
+            "y": 39.210514068603516,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 0,
+            "y": 30,
+            "width": 116.796875,
+            "height": 24
+          }
+        },
+        {
+          "id": 10,
+          "before": {
+            "x": 113.37811279296875,
+            "y": 58,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 166.02647399902344,
+            "y": 58,
+            "width": 116.79689025878906,
+            "height": 24
+          },
+          "final": {
+            "x": 362.390625,
+            "y": 58,
+            "width": 116.796875,
+            "height": 24
+          }
+        },
+        {
+          "id": 29,
+          "before": {
+            "x": 430.21563720703125,
+            "y": 74.31999969482422,
+            "width": 56.390625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 390.3355712890625,
+            "y": 94.54948425292969,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 241.59375,
+            "y": 170,
+            "width": 116.796875,
+            "height": 24
+          }
+        }
+      ],
+      "interruptionQualified": true,
+      "captureOrders": [
+        [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29
+        ]
+      ],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 483.18798828125
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 181.2034912109375
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 241.5941162109375
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 2.1224822998046875,
+          "transform": "translate3d(146.451px, 11.5131px, 0px)"
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 3.5573272705078125,
+          "transform": "translate3d(-245.455px, 0px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 2.694580078125,
+          "transform": "translate3d(185.927px, -94.3131px, 0px)"
+        }
+      ],
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 0.4058837890625
+        },
+        {
+          "id": 5,
+          "errorPx": 0.406219482421875
+        }
+      ],
+      "stats": {
+        "captures": 2,
+        "callbacks": 0,
+        "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 31,
+        "mutations": [
+          "eager",
+          "eager"
+        ]
+      },
+      "order": true
+    },
+    {
+      "mode": "eager-tick",
+      "scenario": "write-unowned-staged",
+      "maxErrorPx": 302,
+      "reorderAnimated": null,
+      "survivorAnimated": true,
+      "survivorTrajectories": [
+        {
+          "id": 1,
+          "before": {
+            "x": 60.390625,
+            "y": 30,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 97.66670227050781,
+            "y": 58.80000305175781,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 241.59375,
+            "y": 170,
+            "width": 116.796875,
+            "height": 24
+          }
+        },
+        {
+          "id": 10,
+          "before": {
+            "x": 0,
+            "y": 58,
+            "width": 56.390625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 99.3985595703125,
+            "y": 69.52000427246094,
+            "width": 116.8125,
+            "height": 24
+          },
+          "final": {
+            "x": 483.1875,
+            "y": 114,
+            "width": 116.8125,
+            "height": 24
+          }
+        },
+        {
+          "id": 29,
+          "before": {
+            "x": 543.59375,
+            "y": 86,
+            "width": 56.40625,
+            "height": 24
+          },
+          "midpoint": {
+            "x": 431.76873779296875,
+            "y": 74.47999572753906,
+            "width": 116.796875,
+            "height": 24
+          },
+          "final": {
+            "x": 0,
+            "y": 30,
+            "width": 116.796875,
+            "height": 24
+          }
+        }
+      ],
+      "interruptionQualified": null,
+      "captureOrders": [],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 181.203125
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 483.1875
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 543.59375
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(-181.203px, -140px, 0px)"
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(-483.188px, -56px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(543.594px, 56px, 0px)"
+        }
+      ],
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 60.40625
+        },
+        {
+          "id": 5,
+          "errorPx": 302
+        }
+      ],
+      "stats": {
+        "captures": 1,
+        "callbacks": 0,
+        "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 1,
+        "mutations": [
+          "eager"
+        ]
+      },
+      "order": true
+    },
+    {
+      "mode": "control",
+      "scenario": "write-splice",
+      "before": {
+        "x": 60.390625,
+        "y": 30,
+        "width": 56.40625,
+        "height": 24
+      },
+      "firstFrameSample": {
+        "rect": {
+          "x": 58.147544860839844,
+          "y": 30,
+          "width": 56.390625,
+          "height": 24
+        },
+        "transform": "translate3d(58.1475px, 0px, 0px)"
+      },
+      "midpoint": {
+        "rect": {
+          "x": 48.3125,
+          "y": 30,
+          "width": 56.390625,
+          "height": 24
+        },
+        "transform": "translate3d(48.3125px, 0px, 0px)"
+      },
+      "final": {
+        "x": 0,
+        "y": 30,
+        "width": 56.390625,
+        "height": 24
+      },
+      "observedState": {
+        "calls": 0,
+        "intermediateDuplicateKeys": false
+      },
+      "stats": {
+        "captures": 0,
+        "callbacks": 0,
+        "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 0,
+        "mutations": []
+      }
+    },
+    {
+      "mode": "control",
+      "scenario": "write-await",
+      "before": {
+        "x": 60.390625,
+        "y": 30,
+        "width": 56.40625,
+        "height": 24
+      },
+      "firstFrameSample": {
+        "rect": {
+          "x": 60.390625,
+          "y": 100,
+          "width": 56.40625,
+          "height": 24
+        },
+        "transform": ""
+      },
+      "midpoint": {
+        "rect": {
+          "x": 60.390625,
+          "y": 45.79999923706055,
+          "width": 56.40625,
+          "height": 24.000003814697266
+        },
+        "transform": "translate3d(0px, -54.2px, 0px)"
+      },
+      "final": {
+        "x": 60.390625,
+        "y": 100,
+        "width": 56.40625,
+        "height": 24
+      },
+      "observedState": {
+        "calls": 0,
+        "intermediateDuplicateKeys": false
+      },
+      "stats": {
+        "captures": 0,
+        "callbacks": 0,
+        "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 0,
+        "mutations": []
+      }
+    },
+    {
+      "mode": "control",
+      "scenario": "write-unrelated",
+      "reads": 0,
+      "stats": {
+        "captures": 0,
+        "callbacks": 0,
+        "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 0,
+        "mutations": []
+      }
+    },
+    {
+      "mode": "dom",
+      "scenario": "write-splice",
+      "before": {
+        "x": 60.390625,
+        "y": 30,
+        "width": 56.40625,
+        "height": 24
+      },
+      "firstFrameSample": {
+        "rect": {
+          "x": 58.83772277832031,
+          "y": 30,
+          "width": 56.390625,
+          "height": 24
+        },
+        "transform": "translate3d(58.8377px, 0px, 0px)"
+      },
+      "midpoint": {
+        "rect": {
+          "x": 48.3125,
+          "y": 30,
+          "width": 56.390625,
+          "height": 24
+        },
+        "transform": "translate3d(48.3125px, 0px, 0px)"
+      },
+      "final": {
+        "x": 0,
+        "y": 30,
+        "width": 56.390625,
+        "height": 24
+      },
+      "observedState": {
+        "calls": 0,
+        "intermediateDuplicateKeys": false
+      },
+      "stats": {
+        "captures": 0,
+        "callbacks": 0,
+        "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 35,
+        "mutations": [
+          "setAttribute",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove"
+        ]
+      }
+    },
+    {
+      "mode": "dom",
+      "scenario": "write-await",
+      "before": {
+        "x": 60.390625,
+        "y": 30,
+        "width": 56.40625,
+        "height": 24
+      },
+      "firstFrameSample": {
+        "rect": {
+          "x": 60.390625,
+          "y": 30,
+          "width": 56.40625,
+          "height": 24
+        },
+        "transform": "translate3d(0px, -70px, 0px)"
+      },
+      "midpoint": {
+        "rect": {
+          "x": 60.390625,
+          "y": 46.400001525878906,
+          "width": 56.40625,
+          "height": 24
+        },
+        "transform": "translate3d(0px, -53.6px, 0px)"
+      },
+      "final": {
+        "x": 60.390625,
+        "y": 100,
+        "width": 56.40625,
+        "height": 24
+      },
+      "observedState": {
+        "calls": 0,
+        "intermediateDuplicateKeys": false
+      },
+      "stats": {
+        "captures": 1,
+        "callbacks": 0,
+        "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 2,
+        "mutations": [
+          "before"
+        ]
+      }
+    },
+    {
+      "mode": "dom",
+      "scenario": "write-unrelated",
+      "reads": 30,
+      "stats": {
+        "captures": 2,
+        "callbacks": 0,
+        "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 182,
+        "mutations": [
+          "nodeValue",
+          "before",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "cssText",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove",
+          "remove"
+        ]
+      }
+    },
+    {
+      "mode": "eager",
+      "scenario": "write-splice",
+      "before": {
+        "x": 60.390625,
+        "y": 30,
+        "width": 56.40625,
+        "height": 24
+      },
+      "firstFrameSample": {
+        "rect": {
+          "x": 59.52790069580078,
+          "y": 30,
+          "width": 56.390625,
+          "height": 24
+        },
+        "transform": "translate3d(59.5279px, 0px, 0px)"
+      },
+      "midpoint": {
+        "rect": {
+          "x": 48.13995361328125,
+          "y": 30,
+          "width": 56.390625,
+          "height": 24
+        },
+        "transform": "translate3d(48.14px, 0px, 0px)"
+      },
+      "final": {
+        "x": 0,
+        "y": 30,
+        "width": 56.390625,
+        "height": 24
+      },
+      "observedState": {
+        "calls": 32,
+        "intermediateDuplicateKeys": true,
+        "final": [
+          10,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29
+        ]
+      },
+      "stats": {
+        "captures": 1,
+        "callbacks": 0,
+        "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 31,
+        "mutations": [
+          "eager"
+        ]
+      }
+    },
+    {
+      "mode": "eager",
+      "scenario": "write-await",
+      "before": {
+        "x": 60.390625,
+        "y": 30,
+        "width": 56.40625,
+        "height": 24
+      },
+      "firstFrameSample": {
+        "rect": {
+          "x": 60.390625,
+          "y": 100,
+          "width": 56.40625,
+          "height": 24
+        },
+        "transform": ""
+      },
+      "midpoint": {
+        "rect": {
+          "x": 60.390625,
+          "y": 42.20000076293945,
+          "width": 56.40625,
+          "height": 23.999996185302734
+        },
+        "transform": "translate3d(0px, -57.8px, 0px)"
+      },
+      "final": {
+        "x": 60.390625,
+        "y": 100,
+        "width": 56.40625,
+        "height": 24
+      },
+      "observedState": {
+        "calls": 1,
+        "intermediateDuplicateKeys": false,
+        "final": [
+          10,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29
+        ]
+      },
+      "stats": {
+        "captures": 0,
+        "callbacks": 0,
+        "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 0,
+        "mutations": []
+      }
+    },
+    {
+      "mode": "eager",
+      "scenario": "write-unrelated",
+      "reads": 0,
+      "stats": {
+        "captures": 1,
+        "callbacks": 0,
+        "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 1,
+        "mutations": [
+          "eager"
+        ]
+      }
+    },
+    {
+      "mode": "eager-tick",
+      "scenario": "write-splice",
+      "before": {
+        "x": 60.390625,
+        "y": 30,
+        "width": 56.40625,
+        "height": 24
+      },
+      "firstFrameSample": {
+        "rect": {
+          "x": 60.045536041259766,
+          "y": 30,
+          "width": 56.390621185302734,
+          "height": 24
+        },
+        "transform": "translate3d(60.0455px, 0px, 0px)"
+      },
+      "midpoint": {
+        "rect": {
+          "x": 46.24196243286133,
+          "y": 30,
+          "width": 56.390621185302734,
+          "height": 24
+        },
+        "transform": "translate3d(46.242px, 0px, 0px)"
+      },
+      "final": {
+        "x": 0,
+        "y": 30,
+        "width": 56.390625,
+        "height": 24
+      },
+      "observedState": {
+        "calls": 32,
+        "intermediateDuplicateKeys": true,
+        "final": [
+          10,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29
+        ]
+      },
+      "stats": {
+        "captures": 1,
+        "callbacks": 0,
+        "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 31,
+        "mutations": [
+          "eager"
+        ]
+      }
+    },
+    {
+      "mode": "eager-tick",
+      "scenario": "write-await",
+      "before": {
+        "x": 60.390625,
+        "y": 30,
+        "width": 56.40625,
+        "height": 24
+      },
+      "firstFrameSample": {
+        "rect": {
+          "x": 60.390625,
+          "y": 100,
+          "width": 56.40625,
+          "height": 24
+        },
+        "transform": ""
+      },
+      "midpoint": {
+        "rect": {
+          "x": 60.390625,
+          "y": 46.400001525878906,
+          "width": 56.40625,
+          "height": 24
+        },
+        "transform": "translate3d(0px, -53.6px, 0px)"
+      },
+      "final": {
+        "x": 60.390625,
+        "y": 100,
+        "width": 56.40625,
+        "height": 24
+      },
+      "observedState": {
+        "calls": 1,
+        "intermediateDuplicateKeys": false,
+        "final": [
+          10,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29
+        ]
+      },
+      "stats": {
+        "captures": 0,
+        "callbacks": 0,
+        "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 0,
+        "mutations": []
+      }
+    },
+    {
+      "mode": "eager-tick",
+      "scenario": "write-unrelated",
+      "reads": 0,
+      "stats": {
+        "captures": 1,
+        "callbacks": 0,
+        "batchCalls": 0
+      },
+      "writeStats": {
+        "callbacks": 1,
+        "mutations": [
+          "eager"
+        ]
+      }
+    },
+    {
+      "mode": "dom",
+      "scenario": "write-unsupported",
+      "captures": [
+        {
+          "name": "direct style.gridTemplateColumns",
+          "captured": false
+        },
+        {
+          "name": "setAttribute style",
+          "captured": false
+        },
+        {
+          "name": "className",
+          "captured": false
+        },
+        {
+          "name": "classList",
+          "captured": false
+        },
+        {
+          "name": "cached appendChild",
+          "captured": false
+        },
+        {
+          "name": "move to outside receiver",
+          "captured": false
+        }
+      ]
+    },
+    {
+      "mode": "dom",
+      "scenario": "write-reentry-unsupported",
+      "calls": 1,
+      "remaining": [
+        28,
+        27,
+        26,
+        25,
+        24,
+        23,
+        22,
+        21,
+        20,
+        19,
+        18,
+        17,
+        16,
+        15,
+        14,
+        13,
+        12,
+        11,
+        10,
+        9,
+        8,
+        7,
+        6,
+        4,
+        5,
+        3,
+        2,
+        29,
+        1
+      ],
+      "stats": {
+        "captures": 1,
+        "callbacks": 0,
+        "batchCalls": 0
+      }
+    },
+    {
+      "mode": "eager",
+      "scenario": "write-reentry-unsupported",
+      "calls": 1,
+      "remaining": [
+        29,
+        28,
+        27,
+        26,
+        25,
+        24,
+        23,
+        22,
+        21,
+        20,
+        19,
+        18,
+        17,
+        16,
+        15,
+        14,
+        13,
+        12,
+        11,
+        10,
+        9,
+        8,
+        7,
+        6,
+        4,
+        3,
+        2,
+        1
+      ],
+      "stats": {
+        "captures": 0,
+        "callbacks": 0,
+        "batchCalls": 0
+      }
+    },
+    {
+      "mode": "eager-tick",
+      "scenario": "write-reentry-unsupported",
+      "calls": 1,
+      "remaining": [
+        29,
+        28,
+        27,
+        26,
+        25,
+        24,
+        23,
+        22,
+        21,
+        20,
+        19,
+        18,
+        17,
+        16,
+        15,
+        14,
+        13,
+        12,
+        11,
+        10,
+        9,
+        8,
+        7,
+        6,
+        4,
+        3,
+        2,
+        1
+      ],
+      "stats": {
+        "captures": 0,
+        "callbacks": 0,
+        "batchCalls": 0
+      }
+    },
+    {
+      "mode": "control",
+      "scenario": "ordinary",
+      "maxErrorPx": 60.390625,
+      "reorderAnimated": null,
+      "interruptionQualified": null,
+      "captureOrders": [],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 0
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 0
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 0
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 7.7658538818359375,
+          "transform": "translate3d(-173.437px, -134px, 0px)"
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 20.708038330078125,
+          "transform": "translate3d(-462.479px, -53.6px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 23.296875,
+          "transform": "translate3d(520.297px, 53.6px, 0px)"
+        }
+      ],
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 0.015625
+        },
+        {
+          "id": 5,
+          "errorPx": 60.390625
+        }
+      ],
+      "stats": {
+        "captures": 0,
+        "callbacks": 59,
+        "batchCalls": 0
+      },
+      "order": true
+    },
+    {
+      "mode": "control",
+      "scenario": "nested",
+      "maxErrorPx": 60.390625,
+      "reorderAnimated": null,
+      "interruptionQualified": null,
+      "captureOrders": [],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 0
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 0
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 0
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 4.14178466796875,
+          "transform": "translate3d(-177.061px, -136.8px, 0px)"
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 11.044281005859375,
+          "transform": "translate3d(-472.143px, -54.72px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 12.42498779296875,
+          "transform": "translate3d(531.169px, 54.72px, 0px)"
+        }
+      ],
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 0.015625
+        },
+        {
+          "id": 5,
+          "errorPx": 60.390625
+        }
+      ],
+      "stats": {
+        "captures": 0,
+        "callbacks": 59,
+        "batchCalls": 0
+      },
+      "order": true
+    },
+    {
+      "mode": "control",
+      "scenario": "interrupted",
+      "maxErrorPx": 422.7968444824219,
+      "reorderAnimated": true,
+      "interruptionQualified": true,
+      "captureOrders": [
+        [
+          29,
+          28,
+          27,
+          26,
+          25,
+          24,
+          23,
+          22,
+          21,
+          20,
+          19,
+          18,
+          17,
+          16,
+          15,
+          14,
+          13,
+          12,
+          11,
+          10,
+          9,
+          8,
+          7,
+          6,
+          5,
+          4,
+          3,
+          2,
+          1,
+          0
+        ]
+      ],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 9.5367431640625e-7
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 0
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 0
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 5.0111236572265625,
+          "transform": "translate3d(141.147px, 10.9705px, 0px)"
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 8.644058227539062,
+          "transform": "translate3d(-243.475px, 0px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 6.573516845703125,
+          "transform": "translate3d(185.155px, -92.0905px, 0px)"
+        }
+      ],
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 422.7968444824219
         },
         {
           "id": 5,
@@ -420,7 +3535,7 @@
     {
       "mode": "batch",
       "scenario": "interrupted",
-      "maxErrorPx": 0.406646728515625,
+      "maxErrorPx": 0.4066162109375,
       "reorderAnimated": true,
       "interruptionQualified": true,
       "captureOrders": [
@@ -460,42 +3575,42 @@
       "survivorSamples": [
         {
           "id": 1,
-          "positionErrorPx": 483.1872253417969
+          "positionErrorPx": 483.1879577636719
         },
         {
           "id": 10,
-          "positionErrorPx": 181.20272827148438
+          "positionErrorPx": 181.2027587890625
         },
         {
           "id": 29,
-          "positionErrorPx": 241.59332275390625
+          "positionErrorPx": 241.5933837890625
         }
       ],
       "survivorFrameSamples": [
         {
           "id": 1,
-          "positionDeltaPx": 2.8885955810546875,
-          "transform": "translate3d(109.446px, 6.70309px, 0px)"
+          "positionDeltaPx": 3.451202392578125,
+          "transform": "translate3d(147.539px, 11.7257px, 0px)"
         },
         {
           "id": 10,
-          "positionDeltaPx": 7.601318359375,
-          "transform": "translate3d(-288.005px, 0px, 0px)"
+          "positionDeltaPx": 5.6207122802734375,
+          "transform": "translate3d(-240.286px, 0px, 0px)"
         },
         {
           "id": 29,
-          "positionDeltaPx": 6.04840087890625,
-          "transform": "translate3d(229.167px, -88.5431px, 0px)"
+          "positionDeltaPx": 4.2403564453125,
+          "transform": "translate3d(181.275px, -93.8057px, 0px)"
         }
       ],
       "samples": [
         {
           "id": 0,
-          "errorPx": 0.406646728515625
+          "errorPx": 0.4066162109375
         },
         {
           "id": 5,
-          "errorPx": 0.406219482421875
+          "errorPx": 0.406280517578125
         }
       ],
       "stats": {
@@ -620,18 +3735,18 @@
       "survivorFrameSamples": [
         {
           "id": 1,
-          "positionDeltaPx": 478.8887939453125,
-          "transform": "translate3d(297.686px, -82.8px, 0px)"
+          "positionDeltaPx": 481.4774169921875,
+          "transform": "translate3d(300.274px, -83.52px, 0px)"
         },
         {
           "id": 10,
-          "positionDeltaPx": 28.400001525878906,
-          "transform": "translate3d(-476.285px, -27.6px, 0px)"
+          "positionDeltaPx": 28.15999984741211,
+          "transform": "translate3d(-480.426px, -27.84px, 0px)"
         },
         {
           "id": 29,
-          "positionDeltaPx": 484.0658493041992,
-          "transform": "translate3d(59.5279px, 0px, 0px)"
+          "positionDeltaPx": 483.54821395874023,
+          "transform": "translate3d(60.0455px, 0px, 0px)"
         }
       ],
       "samples": [
@@ -675,18 +3790,18 @@
       "survivorFrameSamples": [
         {
           "id": 1,
-          "positionDeltaPx": 477.1630859375,
-          "transform": "translate3d(295.96px, -82.32px, 0px)"
+          "positionDeltaPx": 481.4774169921875,
+          "transform": "translate3d(300.274px, -83.52px, 0px)"
         },
         {
           "id": 10,
-          "positionDeltaPx": 28.55999755859375,
-          "transform": "translate3d(-473.524px, -27.44px, 0px)"
+          "positionDeltaPx": 28.15999984741211,
+          "transform": "translate3d(-480.426px, -27.84px, 0px)"
         },
         {
           "id": 29,
-          "positionDeltaPx": 484.41093826293945,
-          "transform": "translate3d(59.1828px, 0px, 0px)"
+          "positionDeltaPx": 483.54821395874023,
+          "transform": "translate3d(60.0455px, 0px, 0px)"
         }
       ],
       "samples": [
@@ -768,13 +3883,13 @@
         },
         {
           "id": 10,
-          "positionDeltaPx": 502.17767333984375,
-          "transform": "translate3d(-320.975px, 0px, 0px)"
+          "positionDeltaPx": 539.4521484375,
+          "transform": "translate3d(-358.249px, 0px, 0px)"
         },
         {
           "id": 29,
-          "positionDeltaPx": 509.0794677734375,
-          "transform": "translate3d(267.486px, -74.4px, 0px)"
+          "positionDeltaPx": 540.142333984375,
+          "transform": "translate3d(298.549px, -83.04px, 0px)"
         }
       ],
       "samples": [

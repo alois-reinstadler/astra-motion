@@ -6,7 +6,13 @@ await build({
 	configFile: false,
 	root: import.meta.dirname,
 	plugins: [svelte({ configFile: false, compilerOptions: { dev: false } }), probePlugin()],
-	resolve: { dedupe: ['svelte', 'motion-dom', 'motion-utils'] },
+	resolve: {
+		alias: {
+			react: resolve(import.meta.dirname, '../staged-rendering/node_modules/react'),
+			'react-dom': resolve(import.meta.dirname, '../staged-rendering/node_modules/react-dom')
+		},
+		dedupe: ['svelte', 'motion-dom', 'motion-utils']
+	},
 	build: {
 		outDir: '.generated',
 		emptyOutDir: true,
