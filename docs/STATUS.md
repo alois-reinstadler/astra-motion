@@ -75,6 +75,13 @@ real React Motion reference traces, a dependency-read assertion script, and zero
 Svelte diagnostics. Source/bundle/version fingerprints are in the experiment results.
 The prior library integration baseline above is unchanged; these checks qualify
 research evidence, not universal lifecycle or frame-by-frame React parity.
+The same 66 checks also pass on main with its preexisting native-presence/site work;
+the tracked user diff and all 50 untracked files were preserved byte-for-byte.
+
+The React reference additionally requires the existing fixture's pinned dependencies.
+For a fresh checkout, `pnpm --dir experiments/staged-rendering install --frozen-lockfile`
+selects that fixture package and forbids lockfile changes. This container reuses the
+already installed React 18.3.1 dependency set through an ignored node_modules link.
 
 The next implementation candidate is explicit ownership of presence snapshots:
 observational caches must not replace a transaction's captured origin. Qualify that
