@@ -1,8 +1,8 @@
 {
   "status": "passed",
   "provenance": {
-    "createdAt": "2026-10-06T03:46:47.047Z",
-    "commit": "ffcff2921f34d3495f80e188c3952d542773b2dc",
+    "createdAt": "2026-10-06T03:54:47.661Z",
+    "commit": "0b4b4da40cbb8908b4a17ea578c6d04696c43af6",
     "versions": {
       "svelte": "5.57.0",
       "motion-dom": "13.4.4",
@@ -11,7 +11,7 @@
       "vitest": "4.1.11"
     },
     "astraSourceSha256": "07e2837802806a9ffa9fd62275cea6a6ec87a0696b63a19048634f55c2c35d4e",
-    "experimentSourceSha256": "a94f1efeec9c01d6be2934f482a2f0a02295b8d381050fd3f34f6a2f100e2b8b",
+    "experimentSourceSha256": "d95f79f20c21bd33bcb22e05a7ba8292ed5dc79d9ee74cf0a192a0c4e3289fdd",
     "bundleSha256": "20f9e57af1add8c990d5c65883678073d0dfa883fdcc70882b1f44b243ea89ae",
     "browserExecutable": "/usr/bin/google-chrome",
     "browser": "Google Chrome 154.0.8037.97",
@@ -22,6 +22,40 @@
       "mode": "control",
       "scenario": "ordinary",
       "maxErrorPx": 60.390625,
+      "reorderAnimated": null,
+      "interruptionQualified": null,
+      "captureOrders": [],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 0
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 0
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 0
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 16.567138671875,
+          "transform": "translate3d(-164.636px, -127.2px, 0px)"
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 44.177154541015625,
+          "transform": "translate3d(-439.01px, -50.88px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 49.70001220703125,
+          "transform": "translate3d(493.894px, 50.88px, 0px)"
+        }
+      ],
       "samples": [
         {
           "id": 0,
@@ -43,6 +77,40 @@
       "mode": "control",
       "scenario": "nested",
       "maxErrorPx": 60.390625,
+      "reorderAnimated": null,
+      "interruptionQualified": null,
+      "captureOrders": [],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 0
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 0
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 0
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 11.389907836914062,
+          "transform": "translate3d(-169.813px, -131.2px, 0px)"
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 30.371795654296875,
+          "transform": "translate3d(-452.816px, -52.48px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 34.16876220703125,
+          "transform": "translate3d(509.425px, 52.48px, 0px)"
+        }
+      ],
       "samples": [
         {
           "id": 0,
@@ -63,11 +131,78 @@
     {
       "mode": "control",
       "scenario": "interrupted",
-      "maxErrorPx": 422.7968444824219,
+      "maxErrorPx": 422.796875,
+      "reorderAnimated": true,
+      "interruptionQualified": true,
+      "captureOrders": [
+        [
+          29,
+          28,
+          27,
+          26,
+          25,
+          24,
+          23,
+          22,
+          21,
+          20,
+          19,
+          18,
+          17,
+          16,
+          15,
+          14,
+          13,
+          12,
+          11,
+          10,
+          9,
+          8,
+          7,
+          6,
+          5,
+          4,
+          3,
+          2,
+          1,
+          0
+        ]
+      ],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 0.0000152587890625
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 0
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 0.000003814697265625
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 8.144805908203125,
+          "transform": "translate3d(134.389px, 10.2583px, 0px)"
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 14.673049926757812,
+          "transform": "translate3d(-242.105px, 0px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 11.22216796875,
+          "transform": "translate3d(185.165px, -89.4583px, 0px)"
+        }
+      ],
       "samples": [
         {
           "id": 0,
-          "errorPx": 422.7968444824219
+          "errorPx": 422.796875
         },
         {
           "id": 5,
@@ -85,6 +220,40 @@
       "mode": "control",
       "scenario": "unowned-staged",
       "maxErrorPx": 302,
+      "reorderAnimated": null,
+      "interruptionQualified": null,
+      "captureOrders": [],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 181.203125
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 483.1875
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 543.59375
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 60.40625,
+          "transform": "translate3d(-120.797px, -140px, 0px)"
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 28,
+          "transform": "translate3d(-483.188px, -28px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 84,
+          "transform": "translate3d(483.188px, 140px, 0px)"
+        }
+      ],
       "samples": [
         {
           "id": 0,
@@ -142,6 +311,40 @@
       "mode": "batch",
       "scenario": "ordinary",
       "maxErrorPx": 0.015625,
+      "reorderAnimated": null,
+      "interruptionQualified": null,
+      "captureOrders": [],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 181.203125
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 483.1875
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 543.59375
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(-181.203px, -140px, 0px)"
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(-483.188px, -56px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(543.594px, 56px, 0px)"
+        }
+      ],
       "samples": [
         {
           "id": 0,
@@ -163,6 +366,40 @@
       "mode": "batch",
       "scenario": "nested",
       "maxErrorPx": 0.015625,
+      "reorderAnimated": null,
+      "interruptionQualified": null,
+      "captureOrders": [],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 181.203125
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 483.1875
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 543.59375
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(-181.203px, -140px, 0px)"
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(-483.188px, -56px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(543.594px, 56px, 0px)"
+        }
+      ],
       "samples": [
         {
           "id": 0,
@@ -183,11 +420,78 @@
     {
       "mode": "batch",
       "scenario": "interrupted",
-      "maxErrorPx": 0.4063720703125,
+      "maxErrorPx": 0.406646728515625,
+      "reorderAnimated": true,
+      "interruptionQualified": true,
+      "captureOrders": [
+        [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29
+        ]
+      ],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 483.1872253417969
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 181.20272827148438
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 241.59332275390625
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 2.8885955810546875,
+          "transform": "translate3d(109.446px, 6.70309px, 0px)"
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 7.601318359375,
+          "transform": "translate3d(-288.005px, 0px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 6.04840087890625,
+          "transform": "translate3d(229.167px, -88.5431px, 0px)"
+        }
+      ],
       "samples": [
         {
           "id": 0,
-          "errorPx": 0.4063720703125
+          "errorPx": 0.406646728515625
         },
         {
           "id": 5,
@@ -205,6 +509,40 @@
       "mode": "batch",
       "scenario": "unowned-staged",
       "maxErrorPx": 302,
+      "reorderAnimated": null,
+      "interruptionQualified": null,
+      "captureOrders": [],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 181.203125
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 483.1875
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 543.59375
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(-181.203px, -140px, 0px)"
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(-483.188px, -56px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(543.594px, 56px, 0px)"
+        }
+      ],
       "samples": [
         {
           "id": 0,
@@ -262,6 +600,40 @@
       "mode": "compiler",
       "scenario": "ordinary",
       "maxErrorPx": 0.015625,
+      "reorderAnimated": null,
+      "interruptionQualified": null,
+      "captureOrders": [],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 181.203125
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 483.1875
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 543.59375
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 478.8887939453125,
+          "transform": "translate3d(297.686px, -82.8px, 0px)"
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 28.400001525878906,
+          "transform": "translate3d(-476.285px, -27.6px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 484.0658493041992,
+          "transform": "translate3d(59.5279px, 0px, 0px)"
+        }
+      ],
       "samples": [
         {
           "id": 0,
@@ -283,6 +655,40 @@
       "mode": "compiler",
       "scenario": "nested",
       "maxErrorPx": 0.015625,
+      "reorderAnimated": null,
+      "interruptionQualified": null,
+      "captureOrders": [],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 181.203125
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 483.1875
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 543.59375
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 477.1630859375,
+          "transform": "translate3d(295.96px, -82.32px, 0px)"
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 28.55999755859375,
+          "transform": "translate3d(-473.524px, -27.44px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 484.41093826293945,
+          "transform": "translate3d(59.1828px, 0px, 0px)"
+        }
+      ],
       "samples": [
         {
           "id": 0,
@@ -304,6 +710,73 @@
       "mode": "compiler",
       "scenario": "interrupted",
       "maxErrorPx": 0.40625,
+      "reorderAnimated": false,
+      "interruptionQualified": false,
+      "captureOrders": [
+        [
+          29,
+          28,
+          27,
+          26,
+          25,
+          24,
+          23,
+          22,
+          21,
+          20,
+          19,
+          18,
+          17,
+          16,
+          15,
+          14,
+          13,
+          12,
+          11,
+          10,
+          9,
+          8,
+          7,
+          6,
+          5,
+          4,
+          3,
+          2,
+          1,
+          0
+        ]
+      ],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 483.1875
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 181.203125
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 241.59375
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 483.1875,
+          "transform": ""
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 502.17767333984375,
+          "transform": "translate3d(-320.975px, 0px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 509.0794677734375,
+          "transform": "translate3d(267.486px, -74.4px, 0px)"
+        }
+      ],
       "samples": [
         {
           "id": 0,
@@ -325,6 +798,40 @@
       "mode": "compiler",
       "scenario": "unowned-staged",
       "maxErrorPx": 0.015625,
+      "reorderAnimated": null,
+      "interruptionQualified": null,
+      "captureOrders": [],
+      "survivorSamples": [
+        {
+          "id": 1,
+          "positionErrorPx": 181.203125
+        },
+        {
+          "id": 10,
+          "positionErrorPx": 483.1875
+        },
+        {
+          "id": 29,
+          "positionErrorPx": 543.59375
+        }
+      ],
+      "survivorFrameSamples": [
+        {
+          "id": 1,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(-181.203px, -140px, 0px)"
+        },
+        {
+          "id": 10,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(-483.188px, -56px, 0px)"
+        },
+        {
+          "id": 29,
+          "positionDeltaPx": 0,
+          "transform": "translate3d(543.594px, 56px, 0px)"
+        }
+      ],
       "samples": [
         {
           "id": 0,

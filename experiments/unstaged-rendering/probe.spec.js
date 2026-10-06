@@ -43,14 +43,64 @@ for (const mode of ['control', 'batch', 'compiler']) {
 			const restore = install(mode);
 			const find = (id) => f.host.querySelector(`[data-cell="${id}"]`);
 			let observer;
+			let firstFrame;
 			try {
+				let reorderAnimated = null;
+				const captureOrders = [];
 				if (scenario === 'interrupted') {
-					f.app.reverse();
-					await sleep(90);
+					const recordOrder = () =>
+						captureOrders.push(
+							[...f.host.querySelectorAll('[data-cell]')].map((node) => +node.dataset.cell)
+						);
+					beforeCommit.add(recordOrder);
+					try {
+						f.app.reverse();
+						await sleep(90);
+						reorderAnimated = [...f.host.querySelectorAll('[data-cell]')].some(
+							(node) => node.style.transform && node.style.transform !== 'none'
+						);
+					} finally {
+						beforeCommit.delete(recordOrder);
+					}
 				}
+
 				const before = new Map([0, 5].map((id) => [id, rect(find(id))]));
 				const samples = [];
+				const survivorBefore = new Map([1, 10, 29].map((id) => [id, rect(find(id))]));
+				const survivorSamples = [];
+				const survivorFrameSamples = [];
 				observer = new MutationObserver(() => {
+					if (
+						find(0) &&
+						getComputedStyle(find(0)).position === 'absolute' &&
+						!survivorSamples.length
+					) {
+						firstFrame = requestAnimationFrame(() => {
+							for (const [id, before] of survivorBefore) {
+								const node = find(id);
+								if (!node) continue;
+								const after = rect(node);
+								survivorFrameSamples.push({
+									id,
+									positionDeltaPx: Math.max(
+										Math.abs(before.x - after.x),
+										Math.abs(before.y - after.y)
+									),
+									transform: node.style.transform
+								});
+							}
+						});
+						for (const [id, before] of survivorBefore) {
+							const after = rect(find(id));
+							survivorSamples.push({
+								id,
+								positionErrorPx: Math.max(
+									Math.abs(before.x - after.x),
+									Math.abs(before.y - after.y)
+								)
+							});
+						}
+					}
 					for (const id of [0, 5]) {
 						const node = find(id);
 						if (
@@ -74,20 +124,36 @@ for (const mode of ['control', 'batch', 'compiler']) {
 					mode,
 					scenario,
 					maxErrorPx,
+					reorderAnimated,
+					interruptionQualified: scenario === 'interrupted' ? reorderAnimated : null,
+					captureOrders,
+					survivorSamples,
+					survivorFrameSamples,
 					samples,
 					stats: { ...stats },
 					order: JSON.stringify(actual) === JSON.stringify(wanted)
 				};
 				await commands.recordResult(report);
 				expect(samples).toHaveLength(2);
+				expect(survivorSamples).toHaveLength(3);
 				expect(actual).toEqual(wanted);
 				if (mode === 'control' || (mode === 'batch' && scenario === 'unowned-staged')) {
 					expect(maxErrorPx).toBeGreaterThan(50);
 					if (scenario === 'unowned-staged') expect(maxErrorPx).toBeCloseTo(302, 1);
 				} else expect(maxErrorPx).toBeLessThanOrEqual(0.75);
 				if (mode === 'batch') expect(stats.batchCalls).toBeGreaterThan(0);
+				if (scenario === 'interrupted') {
+					// Retained failure: the scoped compiler hook captures after the child reordered.
+					// Small exit error is not interruption parity when the prior animation vanished.
+					expect(reorderAnimated).toBe(mode !== 'compiler');
+					const initialOrder = Array.from({ length: 30 }, (_, id) => id);
+					expect(captureOrders[0]).toEqual(
+						mode === 'batch' ? initialOrder : initialOrder.toReversed()
+					);
+				}
 			} finally {
 				observer?.disconnect();
+				if (firstFrame) cancelAnimationFrame(firstFrame);
 				restore();
 				await f.dispose();
 			}

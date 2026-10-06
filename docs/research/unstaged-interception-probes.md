@@ -1,7 +1,9 @@
 # Unstaged interception probes — 2026-10-06
 
-Both approaches improve the same real managed-component geometry control, but neither
-qualifies as a general React-style lifecycle or a default runtime feature. Keep them
+Both approaches improve outgoing first-pop geometry in the same real managed-component
+control. The compiler probe also suppresses an existing reorder animation and produces large
+survivor displacement during combined updates. Its low outgoing-exit errors are
+**not whole-scene or interrupted-animation parity**. Neither qualifies as a general React-style lifecycle or a default runtime feature. Keep them
 as opt-in research fixtures until the remaining coverage and integration failures
 are addressed. No production source, public export, installed dependency, or library
 configuration is modified.
@@ -37,22 +39,38 @@ control intentionally publishes the ancestor columns immediately and the item li
 through `createLayoutState` afterward. Ordinary mode uses one ordinary `$state.raw`
 publication. Interrupted mode reverses, waits 90ms, then performs the combined update.
 
-| Probe                                    |         Control | Batch interception | Compiler instrumentation |
-| ---------------------------------------- | --------------: | -----------------: | -----------------------: |
-| Ordinary combined first-pop error        |        60.391px |            0.016px |                  0.016px |
-| Nested `flushSync` first-pop error       |        60.391px |            0.016px |                  0.016px |
-| Interrupted first-pop error              | about 422.797px |      below 0.407px |            below 0.407px |
-| Mixed staged/unstaged parent             |           302px |          **302px** |                  0.016px |
-| Unrelated text update rectangle reads    |               0 |                 64 |                       30 |
-| Await branch insertion captured          |              no |             **no** | yes, instrumented branch |
-| Native outro completion removal captured |              no |             **no** |                   **no** |
+| Probe                                    |         Control | Batch interception |                    Compiler instrumentation |
+| ---------------------------------------- | --------------: | -----------------: | ------------------------------------------: |
+| Ordinary outgoing first-pop error        |        60.391px |            0.016px |                                     0.016px |
+| Nested `flushSync` outgoing error        |        60.391px |            0.016px |                                     0.016px |
+| Interrupted first-pop error              | about 422.797px |      below 0.407px | **Unqualified: prior animation suppressed** |
+| Reorder animation present at 90ms        |             yes |                yes |                                      **no** |
+| Mixed staged/unstaged parent             |           302px |          **302px** |                                     0.016px |
+| Unrelated text update rectangle reads    |               0 |                 64 |                                          30 |
+| Await branch insertion captured          |              no |             **no** |                    yes, instrumented branch |
+| Native outro completion removal captured |              no |             **no** |                                      **no** |
 
-The mixed-publication failure is deliberately asserted as a negative control. It is
+The mixed-publication failure and compiler reorder suppression are deliberately
+asserted as negative controls. The interruption prerequisite checks an active cell
+transform after 90ms, before requesting exits. `interruptionQualified: false` records
+why the compiler exit error cannot count as an interrupted-animation success. It is
 not reported as an animation success just because the test command passes. Similarly,
 async/native tests assert the exact uncovered mutation trace. These traces establish
 missing interception boundaries; they are not claims of matching motion curves for
 async or native transitions. The read counts measure synchronous work and its first
 microtask only; they do not include later frame cache maintenance.
+
+Survivor diagnostics expose another blind spot in the original exit-only acceptance.
+At the first MutationObserver callback, batch and compiler ordinary updates can both
+show about 543.6px displacement for a surviving cell. This alone is not a displayed
+jump: by the first sampled requestAnimationFrame callback, batch ordinary/nested cells
+have their projection transforms and return to 0px displacement in the recorded run.
+The compiler survivors still show roughly 477–484px displacement at that frame. Its
+late snapshot can therefore preserve outgoing exit boxes while starting survivor
+projection from the wrong reordered positions. The report records both sampling
+phases; rAF displacement is diagnostic because animation time advances, not an asserted
+per-frame React parity metric. **The compiler combined update is not a whole-scene
+success.**
 
 ## Approach 1: private batch interception
 
@@ -94,6 +112,18 @@ wrappers. It targets **only Fixture.svelte**; Astra and all third-party componen
 uninstrumented. The wrappers preserve arguments, return values, and callback `this`.
 Snapshots run untracked so geometry policy reads cannot add reactive dependencies.
 
+A stronger review falsified the initial compiler interruption claim. Snapshot-time DOM
+order proves the hook is too late for reorder-only work: batch interception sees
+`[0, 1, 2, ...]`, but the compiler hook sees `[29, 28, 27, ...]`. AnimatePresence's
+uninstrumented child effects have already reordered the nodes before the instrumented
+parent grid-style effect runs. The new snapshot measures those new positions, and the
+transaction's observer acknowledgement suppresses the automatic cache-based fallback.
+The unchanged control also snapshots after reordering, but its automatic path seeds
+previous cached geometry first and still animates. At 90ms control and batch have
+active transforms; the compiler has none. The previous small exit error was measured
+after a snap, not during an animation. This failure is retained, not patched by quietly
+expanding instrumentation to more cooperating components.
+
 The first instrumented callback captures once, and an identity-checked microtask closes
 the transaction after the remaining synchronous callbacks. That wider boundary is why
 it also captures the mixed staged-parent update. Wrapping the await branch callback
@@ -111,7 +141,8 @@ next test.
 ## Decision and next stable baseline
 
 Accept the isolated experiment and its executable negative controls as research
-progress. Do not enable either mechanism in the shipping runtime. The supported
+progress. The compiler probe is currently behavior-breaking even for this simple
+reorder fixture, not merely incomplete for exotic updates. Do not enable either mechanism in the shipping runtime. The supported
 production baseline remains explicit `updateLayout` / `createLayoutState` plus the
 existing automatic caches.
 

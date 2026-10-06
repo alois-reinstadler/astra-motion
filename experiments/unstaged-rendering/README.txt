@@ -9,6 +9,6 @@ Set PROBE_RESULTS=/absolute/path/results.json to preserve committed evidence.
 
 24 Chromium tests compare unchanged managed components, a private Batch.flush
 hook, and post-compile callback instrumentation. Tests explicitly assert retained
-302px and mutation-capture failures; a passing suite is not universal parity.
+302px, reorder suppression, and mutation-capture failures; a passing suite is not universal parity.
 
 See docs/research/unstaged-interception-probes.md for findings and limitations.

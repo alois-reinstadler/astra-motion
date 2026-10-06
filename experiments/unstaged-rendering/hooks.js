@@ -8,6 +8,7 @@ let active = false;
 let finish;
 export const stats = { captures: 0, callbacks: 0, batchCalls: 0 };
 export const inCapture = () => active;
+// ponytail: snapshots all participants (O(n)); qualify dirty-set selection before optimizing.
 export function begin() {
 	if (!enabled || active) return false;
 	active = true; // Must precede snapshot policy getters and user callbacks.
