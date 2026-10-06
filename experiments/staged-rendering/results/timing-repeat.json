@@ -1,0 +1,635 @@
+[
+  {
+    "schemaVersion": 1,
+    "createdAt": "2026-10-06T02:13:13.534Z",
+    "provenance": {
+      "builtAt": "2026-10-06T02:07:50.660Z",
+      "commit": "e1e645563e0403621d37ab603492d9e0958ce861",
+      "harnessSourceSha256": "f9e682d6038062ec3810314d6bf4b4de5c3137c9c3c1ac045bb917a9a845ef2b",
+      "astraSourceSha256": "70b9519b623a968aa783645e623da9705a029db50db49236eda091d4a4829fea",
+      "versions": {
+        "react": "18.3.1",
+        "react-dom": "18.3.1",
+        "framer-motion": "13.4.4",
+        "motion-dom": "13.4.4",
+        "motion-utils": "13.3.0",
+        "svelte": "5.57.0",
+        "vite": "8.2.2"
+      },
+      "production": true
+    },
+    "environment": {
+      "idleRafCadence": {
+        "gaps": [
+          16.70000000001164,
+          16.70000000001164,
+          16.599999999976717,
+          16.70000000001164,
+          16.70000000001164,
+          16.699999999982538,
+          16.60000000000582,
+          16.70000000001164
+        ],
+        "medianMs": 16.70000000001164,
+        "valid": true
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+      "width": 1280,
+      "height": 800,
+      "dpr": 1,
+      "visibility": "visible",
+      "hardwareConcurrency": 8,
+      "cpuThrottle": 1
+    },
+    "options": {
+      "mode": "astra-managed",
+      "workload": "remove100",
+      "count": 500,
+      "warmups": 1,
+      "trials": 3,
+      "diagnostic": false,
+      "observationMs": 3000
+    },
+    "validTiming": true,
+    "passed": true,
+    "rows": [
+      {
+        "passed": true,
+        "mutationMs": 100.5,
+        "elapsedMs": 10765.699999809265,
+        "exitCompleteMs": 10718.099999427795,
+        "frames": 9,
+        "p95RafGapMs": 10249.600000000035,
+        "maxRafGapMs": 10249.600000000035,
+        "over25Ms": 8,
+        "movingFrames": 7,
+        "entries": [
+          {
+            "type": "longtask",
+            "duration": 291,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 282.3999996185303,
+            "forcedStyleAndLayoutMs": 26.4
+          },
+          {
+            "type": "longtask",
+            "duration": 10262,
+            "forcedStyleAndLayoutMs": 0
+          }
+        ],
+        "correctness": {
+          "passed": true,
+          "count": 400,
+          "orderMatches": true,
+          "residual": 0,
+          "animations": 0
+        },
+        "exitGeometry": null,
+        "reads": null
+      },
+      {
+        "passed": true,
+        "mutationMs": 199.89999961853027,
+        "elapsedMs": 11544.29999923706,
+        "exitCompleteMs": 11498.699999809265,
+        "frames": 5,
+        "p95RafGapMs": 10849.5,
+        "maxRafGapMs": 10849.5,
+        "over25Ms": 5,
+        "movingFrames": 3,
+        "entries": [
+          {
+            "type": "longtask",
+            "duration": 498,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "longtask",
+            "duration": 55,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 490,
+            "forcedStyleAndLayoutMs": 41.7
+          },
+          {
+            "type": "longtask",
+            "duration": 59,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "longtask",
+            "duration": 10836,
+            "forcedStyleAndLayoutMs": 0
+          }
+        ],
+        "correctness": {
+          "passed": true,
+          "count": 400,
+          "orderMatches": true,
+          "residual": 0,
+          "animations": 0
+        },
+        "exitGeometry": null,
+        "reads": null
+      },
+      {
+        "passed": true,
+        "mutationMs": 66.80000019073486,
+        "elapsedMs": 10716.39999961853,
+        "exitCompleteMs": 10648.800000190735,
+        "frames": 8,
+        "p95RafGapMs": 10232.900000000023,
+        "maxRafGapMs": 10232.900000000023,
+        "over25Ms": 6,
+        "movingFrames": 6,
+        "entries": [
+          {
+            "type": "longtask",
+            "duration": 283,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 276.69999980926514,
+            "forcedStyleAndLayoutMs": 31.2
+          },
+          {
+            "type": "longtask",
+            "duration": 10230,
+            "forcedStyleAndLayoutMs": 0
+          }
+        ],
+        "correctness": {
+          "passed": true,
+          "count": 400,
+          "orderMatches": true,
+          "residual": 0,
+          "animations": 0
+        },
+        "exitGeometry": null,
+        "reads": null
+      }
+    ]
+  },
+  {
+    "schemaVersion": 1,
+    "createdAt": "2026-10-06T02:13:28.031Z",
+    "provenance": {
+      "builtAt": "2026-10-06T02:07:50.660Z",
+      "commit": "e1e645563e0403621d37ab603492d9e0958ce861",
+      "harnessSourceSha256": "f9e682d6038062ec3810314d6bf4b4de5c3137c9c3c1ac045bb917a9a845ef2b",
+      "astraSourceSha256": "70b9519b623a968aa783645e623da9705a029db50db49236eda091d4a4829fea",
+      "versions": {
+        "react": "18.3.1",
+        "react-dom": "18.3.1",
+        "framer-motion": "13.4.4",
+        "motion-dom": "13.4.4",
+        "motion-utils": "13.3.0",
+        "svelte": "5.57.0",
+        "vite": "8.2.2"
+      },
+      "production": true
+    },
+    "environment": {
+      "idleRafCadence": {
+        "gaps": [
+          16.79999999998836,
+          16.600000000034925,
+          16.699999999953434,
+          16.600000000034925,
+          16.70000000001164,
+          16.599999999976717,
+          16.70000000001164,
+          16.599999999976717
+        ],
+        "medianMs": 16.699999999953434,
+        "valid": true
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+      "width": 1280,
+      "height": 800,
+      "dpr": 1,
+      "visibility": "visible",
+      "hardwareConcurrency": 8,
+      "cpuThrottle": 1
+    },
+    "options": {
+      "mode": "astra-staged",
+      "workload": "remove100",
+      "count": 500,
+      "warmups": 1,
+      "trials": 3,
+      "diagnostic": false,
+      "observationMs": 3000
+    },
+    "validTiming": true,
+    "passed": true,
+    "rows": [
+      {
+        "passed": true,
+        "mutationMs": 0.10000038146972656,
+        "elapsedMs": 3000.1000003814697,
+        "exitCompleteMs": 335.20000076293945,
+        "frames": 164,
+        "p95RafGapMs": 16.800000000046566,
+        "maxRafGapMs": 116.59999999997672,
+        "over25Ms": 6,
+        "movingFrames": 7,
+        "entries": [
+          {
+            "type": "longtask",
+            "duration": 71,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 60.5,
+            "forcedStyleAndLayoutMs": 4.2
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 57.10000038146973,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "longtask",
+            "duration": 115,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 50.40000057220459,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 107.30000019073486,
+            "forcedStyleAndLayoutMs": 13
+          }
+        ],
+        "correctness": {
+          "passed": true,
+          "count": 400,
+          "orderMatches": true,
+          "residual": 0,
+          "animations": 0,
+          "stats": {
+            "participants": 400,
+            "active": 0,
+            "commits": 1,
+            "removalCommits": 1,
+            "exitCaptures": 100,
+            "cancellations": 0,
+            "exiting": 0
+          }
+        },
+        "exitGeometry": null,
+        "reads": null
+      },
+      {
+        "passed": true,
+        "mutationMs": 0,
+        "elapsedMs": 3000.199999809265,
+        "exitCompleteMs": 231.80000019073486,
+        "frames": 171,
+        "p95RafGapMs": 16.79999999998836,
+        "maxRafGapMs": 50,
+        "over25Ms": 6,
+        "movingFrames": 15,
+        "entries": [
+          {
+            "type": "longtask",
+            "duration": 55,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 51.09999942779541,
+            "forcedStyleAndLayoutMs": 4.2
+          },
+          {
+            "type": "longtask",
+            "duration": 62,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 57.90000057220459,
+            "forcedStyleAndLayoutMs": 12.3
+          }
+        ],
+        "correctness": {
+          "passed": true,
+          "count": 400,
+          "orderMatches": true,
+          "residual": 0,
+          "animations": 0,
+          "stats": {
+            "participants": 400,
+            "active": 0,
+            "commits": 1,
+            "removalCommits": 1,
+            "exitCaptures": 100,
+            "cancellations": 0,
+            "exiting": 0
+          }
+        },
+        "exitGeometry": null,
+        "reads": null
+      },
+      {
+        "passed": true,
+        "mutationMs": 0.19999980926513672,
+        "elapsedMs": 3004,
+        "exitCompleteMs": 327.1000003814697,
+        "frames": 164,
+        "p95RafGapMs": 16.800000000046566,
+        "maxRafGapMs": 116.69999999995343,
+        "over25Ms": 8,
+        "movingFrames": 8,
+        "entries": [
+          {
+            "type": "longtask",
+            "duration": 58,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 53.39999961853027,
+            "forcedStyleAndLayoutMs": 3.8
+          },
+          {
+            "type": "longtask",
+            "duration": 123,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 57,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 115.5,
+            "forcedStyleAndLayoutMs": 20.5
+          }
+        ],
+        "correctness": {
+          "passed": true,
+          "count": 400,
+          "orderMatches": true,
+          "residual": 0,
+          "animations": 0,
+          "stats": {
+            "participants": 400,
+            "active": 0,
+            "commits": 1,
+            "removalCommits": 1,
+            "exitCaptures": 100,
+            "cancellations": 0,
+            "exiting": 0
+          }
+        },
+        "exitGeometry": null,
+        "reads": null
+      }
+    ]
+  },
+  {
+    "schemaVersion": 1,
+    "createdAt": "2026-10-06T02:13:42.889Z",
+    "provenance": {
+      "builtAt": "2026-10-06T02:07:50.660Z",
+      "commit": "e1e645563e0403621d37ab603492d9e0958ce861",
+      "harnessSourceSha256": "f9e682d6038062ec3810314d6bf4b4de5c3137c9c3c1ac045bb917a9a845ef2b",
+      "astraSourceSha256": "70b9519b623a968aa783645e623da9705a029db50db49236eda091d4a4829fea",
+      "versions": {
+        "react": "18.3.1",
+        "react-dom": "18.3.1",
+        "framer-motion": "13.4.4",
+        "motion-dom": "13.4.4",
+        "motion-utils": "13.3.0",
+        "svelte": "5.57.0",
+        "vite": "8.2.2"
+      },
+      "production": true
+    },
+    "environment": {
+      "idleRafCadence": {
+        "gaps": [
+          16.599999999976717,
+          16.70000000001164,
+          16.70000000001164,
+          16.599999999976717,
+          16.70000000001164,
+          16.70000000001164,
+          16.599999999976717,
+          16.70000000001164
+        ],
+        "medianMs": 16.70000000001164,
+        "valid": true
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+      "width": 1280,
+      "height": 800,
+      "dpr": 1,
+      "visibility": "visible",
+      "hardwareConcurrency": 8,
+      "cpuThrottle": 1
+    },
+    "options": {
+      "mode": "react",
+      "workload": "remove100",
+      "count": 500,
+      "warmups": 1,
+      "trials": 3,
+      "diagnostic": false,
+      "observationMs": 3000
+    },
+    "validTiming": true,
+    "passed": true,
+    "rows": [
+      {
+        "passed": true,
+        "mutationMs": 66,
+        "elapsedMs": 3066.300000190735,
+        "exitCompleteMs": 481.19999980926514,
+        "frames": 162,
+        "p95RafGapMs": 16.800000000046566,
+        "maxRafGapMs": 133.30000000004657,
+        "over25Ms": 7,
+        "movingFrames": 6,
+        "entries": [
+          {
+            "type": "longtask",
+            "duration": 137,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 122.19999980926514,
+            "forcedStyleAndLayoutMs": 11.9
+          },
+          {
+            "type": "longtask",
+            "duration": 61,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "longtask",
+            "duration": 59,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "longtask",
+            "duration": 53,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 61.69999980926514,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 71.10000038146973,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 59.60000038146973,
+            "forcedStyleAndLayoutMs": 4.2
+          }
+        ],
+        "correctness": {
+          "passed": true,
+          "count": 400,
+          "orderMatches": true,
+          "residual": 0,
+          "animations": 0
+        },
+        "exitGeometry": null,
+        "reads": null
+      },
+      {
+        "passed": true,
+        "mutationMs": 82.30000019073486,
+        "elapsedMs": 3082.699999809265,
+        "exitCompleteMs": 551.1000003814697,
+        "frames": 158,
+        "p95RafGapMs": 16.79999999998836,
+        "maxRafGapMs": 149.89999999996508,
+        "over25Ms": 6,
+        "movingFrames": 6,
+        "entries": [
+          {
+            "type": "longtask",
+            "duration": 151,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 134.30000019073486,
+            "forcedStyleAndLayoutMs": 10.9
+          },
+          {
+            "type": "longtask",
+            "duration": 84,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "longtask",
+            "duration": 66,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "longtask",
+            "duration": 59,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 81.19999980926514,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 65.30000019073486,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 79.80000019073486,
+            "forcedStyleAndLayoutMs": 0
+          }
+        ],
+        "correctness": {
+          "passed": true,
+          "count": 400,
+          "orderMatches": true,
+          "residual": 0,
+          "animations": 0
+        },
+        "exitGeometry": null,
+        "reads": null
+      },
+      {
+        "passed": true,
+        "mutationMs": 68.29999923706055,
+        "elapsedMs": 3069.2999992370605,
+        "exitCompleteMs": 481,
+        "frames": 163,
+        "p95RafGapMs": 33.29999999998836,
+        "maxRafGapMs": 133.40000000002328,
+        "over25Ms": 9,
+        "movingFrames": 7,
+        "entries": [
+          {
+            "type": "longtask",
+            "duration": 139,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 121.89999961853027,
+            "forcedStyleAndLayoutMs": 13.5
+          },
+          {
+            "type": "longtask",
+            "duration": 57,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 57.60000038146973,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 69.19999980926514,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 52.60000038146973,
+            "forcedStyleAndLayoutMs": 5.9
+          }
+        ],
+        "correctness": {
+          "passed": true,
+          "count": 400,
+          "orderMatches": true,
+          "residual": 0,
+          "animations": 0
+        },
+        "exitGeometry": null,
+        "reads": null
+      }
+    ]
+  }
+]

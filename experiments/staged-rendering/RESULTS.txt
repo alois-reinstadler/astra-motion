@@ -1,0 +1,110 @@
+HISTORICAL PROTOTYPE RESULTS. Production follow-up: ../../docs/research/staged-layout-lifecycle.md
+
+Staged lifecycle test — 2026-10-06
+
+Conclusion
+
+The manually implemented staged scope can supply old DOM plus new presence intent
+and avoids the managed-presence mass-exit storm in the tested grid. It is evidence
+for continuing with an opt-in compiler design. It is NOT proof of universal 1:1
+React Motion behavior, nor a finished compiler integration.
+
+The strongest counterexample is a single reactive parent expression left unstaged:
+first-pop geometry moved by 302 px in the prototype, while the React control stayed
+within 0.016 px. A wrapper around arbitrary Svelte content is therefore insufficient.
+Any compiler proposal must account for relevant parent, sibling and descendant
+updates, mutable aliases, retained snippet ownership and async commits. Those are
+requirements still to prove, not implementation details this test has solved.
+
+Fresh matched performance measurement
+
+500 cells; remove 100 distributed cells; 180 ms opacity / 350 ms layout animation.
+Each run: one warmup, three measured trials, 3000 ms observation window. The second
+run reverses framework order for this workload. Completion includes scheduled work.
+
+Mode                         First median       Repeat median
+React Motion                    359.3 ms            481.2 ms
+Staged prototype                284.4 ms            327.1 ms
+Current managed Astra        11,624.0 ms         10,718.1 ms
+
+All 15 timing cases / 45 measured trials passed final order, count, settlement and
+exit-completion checks. React and staged also ran reverse, resize, single exit and
+all-500 exit. Only remove100 was repeated in reverse framework order; current
+managed ran reverse and remove100. Do not interpret this as a full repeated matrix.
+
+Shared-host variation is large. Do not claim the prototype is faster than React.
+The repeatable result is removal of the multi-second managed-exit delay for this
+subset. The prototype omits managed features and uses Motion DOM animate directly
+for opacity; these timings cannot predict feature-complete implementation cost.
+
+Geometry and lifecycle
+
+Both React and staged pass combined parent column change/reorder/removal, interrupted
+projection, a scaled ancestor with fixed transform origin, coalesced updates,
+cancellation, reentry, and disposal probes. Staged traces record the old 10-column
+DOM at snapshot and the new 5-column DOM only after commit. Reentry preserves the
+element identity and cancels stale removal. The prototype restores opacity instantly
+on reentry; full reentry trajectory equivalence is NOT asserted.
+
+Two deliberate external-layout stress cases fail identically in both controls:
+a center-origin scaled ancestor shifts as its height changes (10.5 px); a direct
+DOM width write before the framework transaction loses the earlier box (90 px).
+These failures are retained rather than turned into passing geometry results.
+The unstaged reactive-parent case is different: React passes and staged fails.
+
+The raw probe matrix has 20 outcomes: 15 pass and 5 fail, comprising the four shared
+external-layout failures and the one staged-only ownership failure. The experiment
+therefore verifies a bounded mechanism and documents a real limit; it does not
+report all geometry tests passing.
+
+Diagnostics
+
+Initial independent diagnostics for React/staged passed all ten plain-grid cases,
+including first-pop checks for every outgoing root. Maximum exit error: 0.40625 px,
+within the unchanged 0.75 px tolerance. Staged counters showed zero exit captures
+on reverse/resize, 1 for single exit, 100 for remove100, and 500 for remove500.
+Each staged exit workload used one publication and one completion-removal batch.
+All seven final staged diagnostic cases passed. With one exit and 100, 500, or
+1000 mounted items, exit captures stayed at one; projection reads grew with n.
+
+Exit capture is O(k) in the fixture, not total work. Projection still measures
+affected survivors; the reused keyed reconciliation also has an O(n^2) search.
+Removing all 500 in an instrumented run still blocks substantially. Instrumented
+timings are excluded from the timing comparison.
+
+Verification and environment
+
+Production build; six harness/scheduler unit tests; scoped Svelte type checks with
+zero errors/warnings; Svelte autofixer clean. Browser console/network were inspected.
+The original T3 attempt had ~1-second RAF cadence and was rejected as timing evidence.
+Tests used the previously authorized shared local Chrome, 1280x800, DPR1, CPU rate1,
+with idle RAF cadence checked per case. Other host jobs were active. This is not
+a physical-device or cross-browser performance qualification.
+
+Svelte 5.57.0, React/React DOM 18.3.1, Framer Motion/Motion DOM 13.4.4,
+Motion Utils 13.3.0, Vite 8.2.2, Chrome 154.0.8037.97.
+The experiment imports this worktree's runtime, not the dirty main-worktree runtime
+from the October 5 measurements. Every JSON run records actual source hashes.
+The final diagnostic build follows formatting and test/config additions; its harness
+hash differs from timing runs, while the measured runtime/prototype behavior is the
+same. Production src/lib/motion and the root lockfile were not changed.
+
+Files
+
+README.txt: scope, implementation choices, reproduction and browser API.
+Staged.svelte / schedule-latest.mjs: prototype, including explicit negative control.
+correctness.mjs: reproducible browser probes against React and staged.
+results/timing.json: 12 first-run cases.
+results/timing-repeat.json: three remove100 cases in reversed framework order.
+results/probes-final.json: all positive probes and retained failures.
+results/diagnostics-initial.json: initial ten diagnostic cases.
+results/diagnostics-final.json: final staged diagnostics and fixed-k scaling checks.
+results/summary.json: machine-readable timing summary.
+
+Next engineering step
+
+Build a narrow opt-in compiler proof that rewrites the unowned-parent example into
+the same committed scope, then require that negative control to pass. Extend coverage
+to independent child state and async boundaries before claiming drop-in parity.
+Separately port prepared exit batches into real managed presence and repeat these
+controls with its full retention and shared-layout semantics enabled.

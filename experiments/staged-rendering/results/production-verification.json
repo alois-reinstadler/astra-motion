@@ -1,0 +1,133 @@
+{
+	"verifiedAt": "2026-10-06T03:19:47.189960+00:00",
+	"runtimeSourceSha256": "07e2837802806a9ffa9fd62275cea6a6ec87a0696b63a19048634f55c2c35d4e",
+	"runtimeHashMatchesFinalTiming": true,
+	"server": {
+		"fullSuite": {
+			"files": 58,
+			"tests": 250,
+			"passed": true
+		},
+		"finalFocusedCommitAndSSR": {
+			"files": 2,
+			"tests": 5,
+			"passed": true
+		}
+	},
+	"browser": {
+		"engine": "Chromium system Chrome154",
+		"broaderFiles": 21,
+		"broaderTests": 207,
+		"finalStateTests": 9,
+		"passed": true
+	},
+	"harnessUnitTests": 6,
+	"svelteCheck": {
+		"errors": 0,
+		"warnings": 0
+	},
+	"lint": "passed focused files",
+	"formatting": "passed focused files and experiment",
+	"autofixer": "clean changed Svelte modules/components",
+	"package": {
+		"passed": true,
+		"warnings": ["Lab/site declaration inference warnings", "import.meta.env advisory"],
+		"publicLayoutStateDeclarations": "generated"
+	},
+	"browserConsole": {
+		"errors": 0,
+		"warnings": 0
+	},
+	"browserNetwork": {
+		"requests": 12,
+		"allStatus200": true
+	},
+	"cleanup": {
+		"cells": 0,
+		"animations": 0,
+		"ownedChromePageClosed": true
+	},
+	"preview": "https://astra-staged-test.dev.alrein.casa:8444/",
+	"finalTiming": [
+		{
+			"mode": "astra-managed-staged",
+			"count": 500,
+			"workload": "remove100",
+			"trials": 3,
+			"passed": true,
+			"validTiming": true,
+			"medianExitCompleteMs": 531
+		},
+		{
+			"mode": "react",
+			"count": 500,
+			"workload": "remove100",
+			"trials": 3,
+			"passed": true,
+			"validTiming": true,
+			"medianExitCompleteMs": 332
+		},
+		{
+			"mode": "astra-managed",
+			"count": 500,
+			"workload": "remove100",
+			"trials": 3,
+			"passed": true,
+			"validTiming": true,
+			"medianExitCompleteMs": 499.0999994277954
+		}
+	],
+	"probes": {
+		"cases": 20,
+		"passed": 15,
+		"expectedFailures": [
+			{
+				"name": "unowned-parent",
+				"mode": "astra-managed-staged",
+				"maxErrorPx": 302
+			},
+			{
+				"name": "transformed",
+				"mode": "react",
+				"maxErrorPx": 10.5
+			},
+			{
+				"name": "transformed",
+				"mode": "astra-managed-staged",
+				"maxErrorPx": 10.5
+			},
+			{
+				"name": "external-write",
+				"mode": "react",
+				"maxErrorPx": 90
+			},
+			{
+				"name": "external-write",
+				"mode": "astra-managed-staged",
+				"maxErrorPx": 90
+			}
+		]
+	},
+	"diagnosticWorkloads": [
+		{
+			"workload": "reverse",
+			"passed": true
+		},
+		{
+			"workload": "resize",
+			"passed": true
+		},
+		{
+			"workload": "single-exit",
+			"passed": true
+		},
+		{
+			"workload": "remove100",
+			"passed": true
+		},
+		{
+			"workload": "remove500",
+			"passed": true
+		}
+	]
+}

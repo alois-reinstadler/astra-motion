@@ -1,0 +1,37 @@
+body {
+	margin: 0;
+	background: #fff;
+}
+#app {
+	padding: 20px;
+}
+.grid {
+	position: relative;
+	display: grid;
+	grid-template-columns: repeat(10, minmax(0, 1fr));
+	width: 600px;
+	gap: 4px;
+}
+.cell {
+	box-sizing: border-box;
+	height: 24px;
+	background: #e8ebdf;
+	font: 12px/24px sans-serif;
+}
+header {
+	padding: 12px 20px;
+	font: 14px/1.5 system-ui;
+}
+h1 {
+	font-size: 20px;
+	margin: 0;
+}
+pre {
+	font: 12px/1.5 monospace;
+	white-space: pre-wrap;
+	padding: 20px;
+}
+button,
+select {
+	font: inherit;
+}
