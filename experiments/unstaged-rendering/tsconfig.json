@@ -1,0 +1,5 @@
+{
+	"extends": "../../tsconfig.json",
+	"compilerOptions": { "checkJs": false, "types": ["node", "vite/client"] },
+	"include": ["*.svelte", "../../src/app.d.ts"]
+}

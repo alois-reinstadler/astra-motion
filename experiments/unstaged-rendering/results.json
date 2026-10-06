@@ -1,0 +1,382 @@
+{
+  "status": "passed",
+  "provenance": {
+    "createdAt": "2026-10-06T03:46:47.047Z",
+    "commit": "ffcff2921f34d3495f80e188c3952d542773b2dc",
+    "versions": {
+      "svelte": "5.57.0",
+      "motion-dom": "13.4.4",
+      "motion-utils": "13.3.0",
+      "vite": "8.2.2",
+      "vitest": "4.1.11"
+    },
+    "astraSourceSha256": "07e2837802806a9ffa9fd62275cea6a6ec87a0696b63a19048634f55c2c35d4e",
+    "experimentSourceSha256": "a94f1efeec9c01d6be2934f482a2f0a02295b8d381050fd3f34f6a2f100e2b8b",
+    "bundleSha256": "20f9e57af1add8c990d5c65883678073d0dfa883fdcc70882b1f44b243ea89ae",
+    "browserExecutable": "/usr/bin/google-chrome",
+    "browser": "Google Chrome 154.0.8037.97",
+    "mode": "production bundle, Chromium geometry diagnostics; not a timing benchmark"
+  },
+  "records": [
+    {
+      "mode": "control",
+      "scenario": "ordinary",
+      "maxErrorPx": 60.390625,
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 0.015625
+        },
+        {
+          "id": 5,
+          "errorPx": 60.390625
+        }
+      ],
+      "stats": {
+        "captures": 0,
+        "callbacks": 59,
+        "batchCalls": 0
+      },
+      "order": true
+    },
+    {
+      "mode": "control",
+      "scenario": "nested",
+      "maxErrorPx": 60.390625,
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 0.015625
+        },
+        {
+          "id": 5,
+          "errorPx": 60.390625
+        }
+      ],
+      "stats": {
+        "captures": 0,
+        "callbacks": 59,
+        "batchCalls": 0
+      },
+      "order": true
+    },
+    {
+      "mode": "control",
+      "scenario": "interrupted",
+      "maxErrorPx": 422.7968444824219,
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 422.7968444824219
+        },
+        {
+          "id": 5,
+          "errorPx": 120.796875
+        }
+      ],
+      "stats": {
+        "captures": 0,
+        "callbacks": 90,
+        "batchCalls": 0
+      },
+      "order": true
+    },
+    {
+      "mode": "control",
+      "scenario": "unowned-staged",
+      "maxErrorPx": 302,
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 60.40625
+        },
+        {
+          "id": 5,
+          "errorPx": 302
+        }
+      ],
+      "stats": {
+        "captures": 0,
+        "callbacks": 59,
+        "batchCalls": 0
+      },
+      "order": true
+    },
+    {
+      "mode": "control",
+      "scenario": "escapes",
+      "mutations": [
+        {
+          "area": "await",
+          "method": "before",
+          "captured": false
+        },
+        {
+          "area": "await",
+          "method": "remove",
+          "captured": false
+        },
+        {
+          "area": "native",
+          "method": "remove",
+          "captured": false
+        }
+      ],
+      "stats": {
+        "captures": 0,
+        "callbacks": 2,
+        "batchCalls": 0
+      }
+    },
+    {
+      "mode": "control",
+      "scenario": "unrelated",
+      "reads": 0,
+      "stats": {
+        "captures": 0,
+        "callbacks": 1,
+        "batchCalls": 0
+      }
+    },
+    {
+      "mode": "batch",
+      "scenario": "ordinary",
+      "maxErrorPx": 0.015625,
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 0.015625
+        },
+        {
+          "id": 5,
+          "errorPx": 0.015625
+        }
+      ],
+      "stats": {
+        "captures": 5,
+        "callbacks": 59,
+        "batchCalls": 7
+      },
+      "order": true
+    },
+    {
+      "mode": "batch",
+      "scenario": "nested",
+      "maxErrorPx": 0.015625,
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 0.015625
+        },
+        {
+          "id": 5,
+          "errorPx": 0.015625
+        }
+      ],
+      "stats": {
+        "captures": 5,
+        "callbacks": 59,
+        "batchCalls": 7
+      },
+      "order": true
+    },
+    {
+      "mode": "batch",
+      "scenario": "interrupted",
+      "maxErrorPx": 0.4063720703125,
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 0.4063720703125
+        },
+        {
+          "id": 5,
+          "errorPx": 0.406219482421875
+        }
+      ],
+      "stats": {
+        "captures": 6,
+        "callbacks": 90,
+        "batchCalls": 8
+      },
+      "order": true
+    },
+    {
+      "mode": "batch",
+      "scenario": "unowned-staged",
+      "maxErrorPx": 302,
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 60.40625
+        },
+        {
+          "id": 5,
+          "errorPx": 302
+        }
+      ],
+      "stats": {
+        "captures": 5,
+        "callbacks": 59,
+        "batchCalls": 9
+      },
+      "order": true
+    },
+    {
+      "mode": "batch",
+      "scenario": "escapes",
+      "mutations": [
+        {
+          "area": "await",
+          "method": "before",
+          "captured": false
+        },
+        {
+          "area": "await",
+          "method": "remove",
+          "captured": false
+        },
+        {
+          "area": "native",
+          "method": "remove",
+          "captured": false
+        }
+      ],
+      "stats": {
+        "captures": 2,
+        "callbacks": 2,
+        "batchCalls": 2
+      }
+    },
+    {
+      "mode": "batch",
+      "scenario": "unrelated",
+      "reads": 64,
+      "stats": {
+        "captures": 1,
+        "callbacks": 1,
+        "batchCalls": 1
+      }
+    },
+    {
+      "mode": "compiler",
+      "scenario": "ordinary",
+      "maxErrorPx": 0.015625,
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 0.015625
+        },
+        {
+          "id": 5,
+          "errorPx": 0.015625
+        }
+      ],
+      "stats": {
+        "captures": 1,
+        "callbacks": 59,
+        "batchCalls": 0
+      },
+      "order": true
+    },
+    {
+      "mode": "compiler",
+      "scenario": "nested",
+      "maxErrorPx": 0.015625,
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 0.015625
+        },
+        {
+          "id": 5,
+          "errorPx": 0.015625
+        }
+      ],
+      "stats": {
+        "captures": 1,
+        "callbacks": 59,
+        "batchCalls": 0
+      },
+      "order": true
+    },
+    {
+      "mode": "compiler",
+      "scenario": "interrupted",
+      "maxErrorPx": 0.40625,
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 0.40625
+        },
+        {
+          "id": 5,
+          "errorPx": 0.40625
+        }
+      ],
+      "stats": {
+        "captures": 2,
+        "callbacks": 90,
+        "batchCalls": 0
+      },
+      "order": true
+    },
+    {
+      "mode": "compiler",
+      "scenario": "unowned-staged",
+      "maxErrorPx": 0.015625,
+      "samples": [
+        {
+          "id": 0,
+          "errorPx": 0.015625
+        },
+        {
+          "id": 5,
+          "errorPx": 0.015625
+        }
+      ],
+      "stats": {
+        "captures": 1,
+        "callbacks": 59,
+        "batchCalls": 0
+      },
+      "order": true
+    },
+    {
+      "mode": "compiler",
+      "scenario": "escapes",
+      "mutations": [
+        {
+          "area": "await",
+          "method": "before",
+          "captured": true
+        },
+        {
+          "area": "await",
+          "method": "remove",
+          "captured": true
+        },
+        {
+          "area": "native",
+          "method": "remove",
+          "captured": false
+        }
+      ],
+      "stats": {
+        "captures": 2,
+        "callbacks": 2,
+        "batchCalls": 0
+      }
+    },
+    {
+      "mode": "compiler",
+      "scenario": "unrelated",
+      "reads": 30,
+      "stats": {
+        "captures": 1,
+        "callbacks": 1,
+        "batchCalls": 0
+      }
+    }
+  ]
+}
