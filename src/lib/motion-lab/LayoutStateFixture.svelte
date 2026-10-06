@@ -6,13 +6,17 @@
 	let {
 		initialCount = 0,
 		initializeCount,
+		initializeScene = false,
 		mountWrite = false,
+		onMountWrite,
 		onRender,
 		onExitComplete
 	}: {
 		initialCount?: number;
 		initializeCount?: number;
+		initializeScene?: boolean;
 		mountWrite?: boolean;
+		onMountWrite?: (before: number, after: number) => void;
 		onRender?: (count: number, columns: number) => void;
 		onExitComplete?: () => void;
 	} = $props();
@@ -20,10 +24,19 @@
 	const counter = createLayoutState(untrack(() => initialCount));
 	untrack(() => {
 		if (initializeCount !== undefined) counter.set(initializeCount);
+		if (initializeScene)
+			scene.update((value) => ({
+				columns: 5,
+				items: value.items.filter((id) => id !== 0 && id !== 5)
+			}));
 	});
 	let effectRequest = $state(0);
 	onMount(() => {
-		if (mountWrite) counter.update((value) => value + 1);
+		if (mountWrite) {
+			const before = counter.current;
+			counter.update((value) => value + 1);
+			onMountWrite?.(before, counter.current);
+		}
 	});
 	function applyEffectRequest() {
 		if (effectRequest) counter.update((value) => value + 1);

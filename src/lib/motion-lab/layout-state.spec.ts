@@ -1,6 +1,7 @@
 import { render } from 'svelte/server';
 import { expect, it, vi } from 'vitest';
 import Fixture from './LayoutStateFixture.svelte';
+import { layoutStateHTML } from './layout-state-ssr.js';
 
 it('publishes initialization writes synchronously during SSR without browser work', () => {
 	const onRender = vi.fn();
@@ -19,4 +20,10 @@ it('publishes initialization writes synchronously during SSR without browser wor
 	} finally {
 		microtask.mockRestore();
 	}
+});
+
+it('renders initialization geometry and membership for the hydration fixture', () => {
+	const { body } = render(Fixture, { props: { initializeScene: true } });
+	expect(body).toBe(layoutStateHTML);
+	expect(body.match(/data-layout-state-item=/g)).toHaveLength(28);
 });

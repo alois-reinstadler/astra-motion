@@ -1,7 +1,8 @@
-import { flushSync, tick } from 'svelte';
+import { flushSync, hydrate, tick, unmount as unmountSvelte } from 'svelte';
 import { expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import Fixture from './LayoutStateFixture.svelte';
+import { layoutStateHTML } from './layout-state-ssr.js';
 
 const frame = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
 const item = (id: number) =>
@@ -42,11 +43,42 @@ it('publishes multiple state objects in one observable render', async () => {
 });
 
 it('accepts mount and effect writes outside Svelte lifecycle flushing', async () => {
-	const { component } = render(Fixture, { mountWrite: true });
+	const onMountWrite = vi.fn();
+	const { component } = render(Fixture, { mountWrite: true, onMountWrite });
 	await expect.poll(() => component.states().counter.current).toBe(1);
+	expect(onMountWrite).toHaveBeenCalledExactlyOnceWith(0, 0);
 	flushSync(() => component.requestFromEffect());
 	await expect.poll(() => component.states().counter.current).toBe(2);
 	expect(document.querySelector('[data-layout-state-count]')?.textContent).toBe('2');
+});
+
+it('hydrates initialization changes without replacing server nodes or producing mismatch warnings', async () => {
+	const container = document.createElement('div');
+	container.innerHTML = layoutStateHTML;
+	document.body.append(container);
+	const original = [...container.querySelectorAll('[data-layout-state-item]')];
+	const grid = container.querySelector<HTMLElement>('[data-layout-state-grid]')!;
+	const warn = vi.spyOn(console, 'warn');
+	const error = vi.spyOn(console, 'error');
+	let component: Record<string, unknown> | undefined;
+	try {
+		component = hydrate(Fixture, { target: container, props: { initializeScene: true } });
+		await tick();
+		await frame();
+		expect(original).toHaveLength(28);
+		expect(container.querySelector('[data-layout-state-grid]')).toBe(grid);
+		expect(grid.style.gridTemplateColumns).toBe('repeat(5, minmax(0px, 1fr))');
+		const hydrated = [...container.querySelectorAll('[data-layout-state-item]')];
+		expect(hydrated).toHaveLength(original.length);
+		for (let index = 0; index < original.length; index++)
+			expect(hydrated[index]).toBe(original[index]);
+		expect([...warn.mock.calls, ...error.mock.calls].flat().join(' ')).not.toContain('hydration');
+	} finally {
+		if (component) await unmountSvelte(component);
+		container.remove();
+		warn.mockRestore();
+		error.mockRestore();
+	}
 });
 
 it('initialization requests publish before subsequent interaction', async () => {
