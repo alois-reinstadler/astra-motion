@@ -50,3 +50,33 @@ Next qualification gates: uninstrumented parents and precompiled components, dev
 runtime identity, native removal and async cancellation, then selective measurement
 cost. Keep the explicit state API as the supported publication boundary while those
 gates remain open.
+
+## Motion-only follow-up experiments
+
+The [DOM-write and synchronous-subscription report](../experiments/unstaged-rendering/WRITE-PROBES.md)
+extends the isolated harness. All new animation paths use Motion projection and
+managed presence. No Svelte/CSS animation substitute or production hook was added.
+
+- Native-write interception preserves the tested combined update, interruption,
+  mixed publication, and promise-driven sibling reflow. Explicit negatives retain
+  uncovered setters, outside-scope mutations, and adversarial callback reentry.
+- Private eager subscriptions preserve ordinary/interrupted motion, but miss await
+  reflow and retain a 302px mixed-publication error, including with a tick closer.
+- A cache-write diagnostic identifies a concrete cause of that mixed error:
+  later measurements overwrite the saved presence boxes during the open transaction.
+  Preserving the original boxes reduces the error to 0.016px while a retained cell
+  continues moving. The test's global cache wrapper is diagnostic only.
+- Synchronous deep observation has a separate cost: reversing 500 proxied items
+  causes 500 getter calls and 250,000 item reads; array replacement needs one call
+  and 500 reads. Snapshot coalescing does not remove that work.
+
+The expanded verification has 66 Chromium checks (including retained failures),
+real React Motion reference traces, a dependency-read assertion script, and zero
+Svelte diagnostics. Source/bundle/version fingerprints are in the experiment results.
+The prior library integration baseline above is unchanged; these checks qualify
+research evidence, not universal lifecycle or frame-by-frame React parity.
+
+The next implementation candidate is explicit ownership of presence snapshots:
+observational caches must not replace a transaction's captured origin. Qualify that
+with cancellation and nested ownership before combining it with a broader lifecycle
+adapter. Keep both experimental interception mechanisms disabled in production.

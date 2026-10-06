@@ -42,6 +42,7 @@ function hashTree(directory) {
 	return hash.digest('hex');
 }
 run(['node_modules/@sveltejs/kit/svelte-kit.js', 'sync']);
+run(['experiments/unstaged-rendering/eager-cost.mjs']);
 run(['experiments/unstaged-rendering/build.mjs']);
 const provenance = {
 	createdAt: new Date().toISOString(),

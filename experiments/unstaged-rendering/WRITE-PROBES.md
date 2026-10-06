@@ -62,9 +62,8 @@ until a microtask. `eager-tick` retains the same snapshot but closes through pub
 
 Both variants preserve ordinary, nested, and interrupted exits and retain the
 initial reorder animation. Both still reproduce the mixed staged-parent 302px
-outgoing error. The extra tick does not solve it. The precise interleaving of the
-presence cache and staged publication needs further tracing; transaction closure
-alone is not established as the cause.
+outgoing error. The extra tick does not solve it. The cache diagnostic below
+identifies a second requirement: preserve the captured presence boxes until commit.
 
 Both also miss promise-driven branch reflow because the registered getter does not
 read its internal branch state. Existing automatic cache projection eventually
@@ -73,6 +72,9 @@ They avoid unrelated text-only measurements. Deep array operations synchronously
 notify for intermediate duplicate keys; the fixture verifies final DOM order and
 coalesced capture, not intermediate array validity. Reading every index after every
 proxy write has an O(n²) ceiling, even when geometry snapshot work is coalesced.
+The runnable `eager-cost.mjs` check counts 500 synchronous callbacks and 250,000
+item reads for an in-place 500-item reverse, versus one callback and 500 reads for
+array replacement. These are dependency-read counts, not browser timings.
 
 `untrack` does not remove the surrounding eager effect's mutation restriction:
 an adversarial internal `beforeCommit` callback that writes Svelte state throws `state_unsafe_mutation`.
@@ -80,6 +82,34 @@ Initial getter exceptions, native mutation exceptions, normal cleanup and reinst
 and an outstanding tick closer after disposal have explicit tests. Experimental
 async compiler mode, forks, deferred batches, hydration, dev/HMR, multiple Svelte
 copies and arbitrary dependencies are unqualified.
+
+## Presence-cache overwrite diagnostic
+
+`cache-trace.spec.js` observes writes of presence-box records while the eager-tick
+transaction is open. Both outgoing nodes first receive the correct old width
+(56.39px); later writes replace it with 116.80px. Key 5's left offset changes from
+302px to 0. This occurs while `inCapture()` is still true, so simply extending the
+transaction lifetime cannot preserve those measurements.
+
+A diagnostic variant preserves each first captured presence box during that
+transaction. The mixed-publication outgoing error falls from 302px to 0.016px,
+and a retained cell still moves through an intermediate position. This isolates
+cache overwrite as a cause of this specific failure. The intervention is a
+shape-filtered `WeakMap.set` wrapper in the test, **not a proposed library API**.
+A maintainable implementation would give presence snapshots explicit ownership
+and prevent later observational measurements from replacing a transaction's origin.
+That implementation still needs cancellation, nested ownership, reentry, and async
+commit tests. It would not make unobserved updates interceptable.
+
+## React reference and interpretation
+
+`react-reference.spec.js` runs the same combined reorder/resize/removal against
+React 18.3.1 and Motion 13.4.4, including interruption after 90ms. It checks outgoing
+geometry, active motion, final order, and records per-frame retained-cell positions.
+The prototypes independently require numeric intermediate retained-cell positions;
+an identity transform string is insufficient. Real-time traces are not synchronized
+cross-framework curves. Full frame-by-frame, spring, shared-layout, and cross-browser
+parity remain unproven.
 
 ## Integration
 

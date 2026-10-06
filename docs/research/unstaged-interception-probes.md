@@ -1,5 +1,9 @@
 # Unstaged interception probes — 2026-10-06
 
+Follow-up: [Motion-only DOM-write and eager-state experiments](../../experiments/unstaged-rendering/WRITE-PROBES.md)
+test two additional boundaries and isolate a presence-cache overwrite. The results
+below remain the historical batch/compiler comparison, including its failures.
+
 Both approaches improve outgoing first-pop geometry in the same real managed-component
 control. The compiler probe also suppresses an existing reorder animation and produces
 large survivor displacement during combined updates. Its low outgoing-exit errors are
