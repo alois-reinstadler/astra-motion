@@ -453,7 +453,7 @@
 		}
 	},
 	"limitations": [
-		"Two derived_inert warnings per engine in the retained shared-layout dependency fixture; independent ownership review pending.",
+		"Two derived_inert warnings per engine originate in deferred native transition reads of retained derived style. Independent three-engine replacement/unmount probes found released owned work and no late completions; advisory, not universal leak-freedom proof.",
 		"Arbitrary unstaged parity remains unproven.",
 		"Firefox/WebKit touch emulation case remains skipped; no native touch-device coverage is claimed.",
 		"Native-button WebKit glyph rounding uses an unanimated native-button reference, unchanged 0.5px tolerance and 150 frames; scaleX(1.15) negative controls fail as required."

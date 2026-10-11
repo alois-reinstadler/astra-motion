@@ -38,14 +38,22 @@ keeps rollback and ownership recovery independently covered in WebKit.
 
 ## Existing derived ownership warning
 
-The focused shared-layout suite still produces the two documented `derived_inert`
-warnings in its dependency fixture. Svelte 5.57's `deriveds.js` warns for a parent
-flagged either `DESTROYED` or `INERT`: a native retained subtree can be inert before
-its attachment teardown sets Astra's `disposed` flag. The queued initial
-`refresh(options())` path therefore remains a real lifetime caveat. Silencing the
-warning or moving getters without qualifying retained policy/reactivity would not
-prove a fix. No broad lifecycle rewrite is included. The existing geometry and
-cleanup assertions pass; this is not a universally clean-console claim.
+The focused shared-layout suite produces two `derived_inert` warnings in its
+dependency fixture. The initial integration review attributed them to queued
+`refresh(options())`; that was a hypothesis, not a captured stack. The
+[independent final runtime review](../reviews/2026-10-11-final-runtime-review.md)
+supersedes that attribution: reproduced Firefox stacks pass through Svelte's
+deferred native transition, `createBinding.transition`, `options()` and the
+outgoing fixture's derived style getter. Svelte returns the cached value while
+its retained parent is inert.
+
+Twelve mount/unmount cycles with four keyed replacements each passed in all three
+engines. Astra registrations, value subscriptions, projection participants/shared
+stacks and transition listeners were released, with no late completions during
+the probe's observation window. This is an advisory diagnostic with bounded
+cleanup evidence, not a warning-free-console or universal leak-freedom claim.
+Silencing the warning alone would not prove a lifecycle fix. Original diagnostic
+evidence remains unchanged.
 
 ## Focused verification
 

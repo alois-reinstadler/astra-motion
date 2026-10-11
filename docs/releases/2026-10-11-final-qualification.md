@@ -85,8 +85,12 @@ skips were introduced.
 ## Limits requiring owner attention
 
 The shared-layout dependency fixture emits two nonfatal `derived_inert` warnings
-per engine. Their lifecycle implications remain assigned to independent review;
-this qualification does not claim universally warning-free browser consoles.
+per engine. Independent review traced the reproduced warning through Svelte's
+deferred native transition to the outgoing derived style getter. Repeated
+replacement/unmount probes in all three engines released Astra registrations,
+subscriptions, projection participants/shared stacks and transition listeners,
+with no late completions in the observation window. This remains an advisory,
+not a warning-free-console or universal leak-freedom claim.
 Arbitrary unstaged parity remains unproven. Firefox and WebKit each skip the
 existing case that requires Chromium CDP touch emulation; no real-device touch
 coverage is claimed. The native-button glyph oracle retains its 0.5px tolerance

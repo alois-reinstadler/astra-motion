@@ -83,12 +83,16 @@ Details, retained failures and scope limits are in the
 [qualification report](releases/2026-10-11-rc3-qualification.md). This is not a
 universal unstaged-parity claim and has not been published.
 
-Known existing nonfatal development warning: the shared-layout dependency fixture
-can queue attachment initialization after its component's derived ownership ends
-while its DOM is retained (`motion-core.svelte.ts`, queued `refresh(options())`).
-The disposed-dirty-set fix does not cover that path. Its two warnings reproduce
-with the original presence hooks. No exception or packed-consumer failure has
-been attributed to it; do not describe browser consoles as universally warning-free.
+The earlier causal explanation of the shared-layout dependency fixture's two
+`derived_inert` warnings was superseded by the
+[independent final runtime review](reviews/2026-10-11-final-runtime-review.md).
+Captured stacks identify Svelte's deferred native transition reading the outgoing
+derived style while its retained parent is inert, not the previously hypothesized
+queued initial refresh. Repeated replacement/unmount probes in all three engines
+released Astra registrations, subscriptions, projection participants/shared stacks
+and transition listeners without late completion callbacks. The diagnostic
+remains an advisory; this is neither a warning-free-console nor a universal
+leak-freedom claim.
 
 ## Consolidation and previous attempts
 
