@@ -69,41 +69,57 @@ describe('independent adversarial layout and presence tests', () => {
 		const exiting = node('tile-0');
 		const sibling = node('tile-1');
 		let before: DOMRect | undefined;
-		let captured = false;
-		let sample: (box: DOMRect) => void = () => {};
-		const sampled = new Promise<DOMRect>((resolve) => {
-			sample = resolve;
-		});
-		const capture = () => {
-			if (!before) return;
-			// Observe the actual flow transaction after Motion's measurement microtask,
-			// before another animation frame. Polling position can discover an active
-			// spring several frames later and mistake normal travel for a jump.
-			queueMicrotask(() =>
-				queueMicrotask(() => {
-					if (!captured && getComputedStyle(exiting).position === 'absolute') {
+		const sampled = new Promise<{
+			box: DOMRect;
+			position: string;
+			siblingLeft: number;
+			exitingLeft: number;
+		}>((resolve, reject) => {
+			let active = true;
+			let captured = false;
+			const capture = () => {
+				if (!before) return;
+				// Observe the owned flow write after Motion's measurement microtask,
+				// before another animation frame. Validate computed style and geometry
+				// explicitly instead of leaving the sample pending when they disagree.
+				queueMicrotask(() =>
+					queueMicrotask(() => {
+						if (!active || captured || exiting.style.position !== 'absolute') return;
 						captured = true;
 						beforeCommit.delete(capture);
-						sample(sibling.getBoundingClientRect());
-					}
-				})
-			);
-		};
-		beforeCommit.add(capture);
-		cleanups.push(() => beforeCommit.delete(capture));
-		exiting.addEventListener(
-			'outrostart',
-			() => {
+						resolve({
+							position: getComputedStyle(exiting).position,
+							siblingLeft: sibling.offsetLeft,
+							exitingLeft: exiting.offsetLeft,
+							box: sibling.getBoundingClientRect()
+						});
+					})
+				);
+			};
+			const start = () => {
 				before = sibling.getBoundingClientRect();
-			},
-			{ once: true, capture: true }
-		);
-		node('remove-0').click();
+			};
+			const finish = () => {
+				if (active && !captured)
+					reject(new Error('Native outro ended before the projected flow sample.'));
+			};
+			beforeCommit.add(capture);
+			exiting.addEventListener('outrostart', start, { once: true, capture: true });
+			exiting.addEventListener('outroend', finish, { once: true });
+			cleanups.push(() => {
+				active = false;
+				beforeCommit.delete(capture);
+				exiting.removeEventListener('outrostart', start, true);
+				exiting.removeEventListener('outroend', finish);
+			});
+			node('remove-0').click();
+		});
 		const first = await sampled;
 		expect(before).toBeDefined();
-		expect(sibling.offsetLeft).toBe(exiting.offsetLeft);
+		expect(first.position).toBe('absolute');
+		expect(first.siblingLeft).toBe(first.exitingLeft);
 		const projection = visualElementStore.get(sibling)?.projection;
-		expect(distance(first, before!)).toBeLessThan(20);
+		expect(distance(first.box, before!)).toBeLessThan(20);
 		// Keep natural playback coverage: no seek, pause or controlled frame clock.
 		const finalLeft = exiting.getBoundingClientRect().left;
 		const travel = Math.abs(before!.left - finalLeft);
@@ -115,6 +131,7 @@ describe('independent adversarial layout and presence tests', () => {
 			})
 			.toBeLessThan(1);
 		await expect.poll(() => projection?.currentAnimation, { timeout: 2000 }).toBeUndefined();
+		await expect.poll(() => exiting.isConnected, { timeout: 2000 }).toBe(false);
 	});
 
 	it('preserves a paused intermediate projection when an exiting node leaves flow', async () => {
