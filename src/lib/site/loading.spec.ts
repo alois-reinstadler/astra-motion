@@ -39,6 +39,8 @@ describe('selective documentation loading', () => {
 			}
 		}
 	});
+	// Includes cold Shiki grammar/tokenization work, measured at 1.2–9.3s across
+	// loaded CI-like runs. This checks payload correctness, not an animation deadline.
 	it('serializes only examples owned by the requested article', () => {
 		const doc = docs.find((entry) => entry.slug === 'quick-start')!;
 		const data = prepareDocPage(doc);
@@ -50,7 +52,7 @@ describe('selective documentation loading', () => {
 			'./examples/StateExample.svelte'
 		);
 		expect(JSON.stringify(data)).not.toContain('Compare motion timing');
-	});
+	}, 15000);
 	it('can resolve every registered lazy demo and snippet, including legacy overrides', async () => {
 		const paths = new Set(Object.values(liveExamples).map((example) => example.component));
 		for (const doc of docs)
