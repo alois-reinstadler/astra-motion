@@ -97,3 +97,18 @@ The archive contains `pre-retirement-verification.json`,
 `retired-original-worktrees.json`, `primary-retirement.json`, and separate
 retirement hash manifests. Original archive files and earlier release evidence
 remain unchanged.
+
+## Consolidated qualification
+
+The [fresh qualification record](2026-10-11-final-qualification.md) identifies
+source commit `6328100`, the actual package and complete three-engine source
+matrix. Production, server and packed-consumer evidence is fresh, with exact
+input and archive equivalence verified after test-only corrections. The final
+independent review is pending; nothing has been published.
+
+Two detached qualification-fix checkouts were retired after clean status,
+verified Git bundles and hashed diagnostic evidence. Restoration is recorded in
+`qualification-fix-retirement.json` and
+`qualification-cleanup-followup-retirement.json` in the durable archive. The
+later evidence explicitly corrects the earlier unsupported sampler-stall
+inference and proves the thenable-poll timeout and false-positive mechanisms.

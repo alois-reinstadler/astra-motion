@@ -5,13 +5,17 @@ work is integrated on `main` in `t3code-fbadf1d5`. Original worktrees and worker
 tips are durably preserved, with restoration tested. Obsolete linked worktrees
 and non-main local branches are retired; the primary repository remains intact.
 
-The fresh packed archive passes nine plain-Svelte fixtures and 15 SvelteKit
-scenarios in each of Chromium, Firefox and WebKit. Complete production E2E passes
-253 cases with two existing Chromium-only touch-emulation skips; all 283 server
-cases pass. Complete source qualification remains blocked by an intermittent
-WebKit timeout in the delayed-native-outro regression. The final independent
-review has not started. Earlier failed or interrupted runs are preserved, not
-counted as successful qualification.
+Fresh qualification passes all 1,193 source browser tests in each of Chromium,
+Firefox and WebKit, all 283 server tests, and 253 production E2E cases with two
+existing Chromium-only touch-emulation skips. The actual packed archive passes
+nine plain-Svelte fixtures and 15 SvelteKit scenarios per engine. Svelte check,
+formatting, ESLint, snippets, build, prepack and strict publint pass. See the
+[final qualification record](releases/2026-10-11-final-qualification.md).
+
+The independent final review is starting. Earlier failed or interrupted runs are
+preserved and excluded from successful qualification. The delayed-outro timeout
+was traced to polling a thenable animation; the corrected boolean cleanup oracle
+passes the complete matrix and rejects deliberately retained animation references.
 See the [consolidation ledger](releases/2026-10-11-consolidation.md). No push,
 publication or release has occurred.
 

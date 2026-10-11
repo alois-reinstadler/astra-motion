@@ -1,0 +1,464 @@
+{
+	"status": "qualification-passed-independent-review-pending",
+	"qualifiedSourceCommit": "63281005d2aa855ef4a22073f3f379b8e10d018d",
+	"qualifiedTree": "9ff009b1f667a39af5ab20c00a2b2b427c50f963",
+	"version": "0.1.0-rc.3",
+	"engine": "Motion 13.4.4",
+	"package": {
+		"candidateCommit": "63281005d2aa855ef4a22073f3f379b8e10d018d",
+		"archive": "/workspace/releases/astra-motion/main-2026-10-11/qualified/astra-motion-0.1.0-rc.3.tgz",
+		"sha256": "a24a314c3ad5e27ad8207c53ef5fb66e642bd274177eddedbfdf5b436088259f",
+		"consumerQualifiedArchive": "/workspace/releases/astra-motion/main-2026-10-11/astra-motion-0.1.0-rc.3.tgz",
+		"consumerQualifiedSha256": "a24a314c3ad5e27ad8207c53ef5fb66e642bd274177eddedbfdf5b436088259f",
+		"byteIdentical": true
+	},
+	"supersedes": {
+		"record": "2026-10-11-rc3-qualification.json",
+		"sha256": "7514976ccaebe59547edce057d404d3771737e5d8a9fd4898103e496b061eaeb"
+	},
+	"evidenceDirectory": "/workspace/releases/astra-motion/main-2026-10-11",
+	"source": {
+		"chromium": {
+			"files": 141,
+			"passed": 1193,
+			"failed": 0,
+			"skipped": 0
+		},
+		"firefox": {
+			"files": 141,
+			"passed": 1193,
+			"failed": 0,
+			"skipped": 0
+		},
+		"webkit": {
+			"files": 141,
+			"passed": 1193,
+			"failed": 0,
+			"skipped": 0
+		}
+	},
+	"server": {
+		"files": 61,
+		"passed": 283,
+		"failed": 0
+	},
+	"production": {
+		"passed": 253,
+		"failed": 0,
+		"skipped": 2,
+		"skipReason": "Firefox/WebKit case requires Chromium CDP touch emulation"
+	},
+	"packedConsumers": {
+		"plainPerEngine": 9,
+		"kitPerEngine": 15,
+		"engines": 3,
+		"allPassed": true,
+		"exactArchiveByteIdentityVerified": true
+	},
+	"pinnedUpstream": {
+		"passed": 12,
+		"engines": 3
+	},
+	"static": {
+		"svelteErrors": 0,
+		"svelteWarnings": 0,
+		"prettier": true,
+		"eslint": true,
+		"guideSnippets": true,
+		"strictPublint": true
+	},
+	"inputApplicability": [
+		{
+			"gate": "production-fresh",
+			"testedCommit": "1c7b38fb77a45445e68fcbc2164f501a821b1317",
+			"candidateCommit": "63281005d2aa855ef4a22073f3f379b8e10d018d",
+			"changedPathsSinceGate": [
+				"docs/STATUS.md",
+				"docs/releases/2026-10-11-consolidation.md",
+				"src/lib/motion-lab/parity-core-docs.svelte.spec.ts",
+				"src/lib/motion-lab/review-stress.svelte.spec.ts",
+				"src/lib/site/loading.spec.ts"
+			],
+			"changedQualificationInputs": [],
+			"applicable": true
+		},
+		{
+			"gate": "build-final",
+			"testedCommit": "34e7600d561ec4ae1cfd2203d421bc710f25ce91",
+			"candidateCommit": "63281005d2aa855ef4a22073f3f379b8e10d018d",
+			"changedPathsSinceGate": [
+				"docs/STATUS.md",
+				"docs/releases/2026-10-11-consolidation.md",
+				"src/lib/motion-lab/parity-core-docs.svelte.spec.ts",
+				"src/lib/motion-lab/parity-gestures-docs.spec.ts",
+				"src/lib/motion-lab/review-stress.svelte.spec.ts",
+				"src/lib/site/loading.spec.ts"
+			],
+			"changedQualificationInputs": [],
+			"applicable": true
+		},
+		{
+			"gate": "server-final-qualified",
+			"testedCommit": "e963ccbf736d14a3fac0e20762fbb3bcdc85a941",
+			"candidateCommit": "63281005d2aa855ef4a22073f3f379b8e10d018d",
+			"changedPathsSinceGate": [
+				"docs/STATUS.md",
+				"src/lib/motion-lab/parity-core-docs.svelte.spec.ts",
+				"src/lib/motion-lab/review-stress.svelte.spec.ts"
+			],
+			"changedQualificationInputs": [],
+			"applicable": true
+		},
+		{
+			"gate": "pinned-upstream",
+			"testedCommit": "8336ce7610a8a7be4785f1f3619e9e6a0e248fb5",
+			"candidateCommit": "63281005d2aa855ef4a22073f3f379b8e10d018d",
+			"changedPathsSinceGate": [
+				".github/workflows/ci.yml",
+				"docs/STATUS.md",
+				"docs/parity/MATRIX.md",
+				"docs/releases/2026-10-11-consolidation.md",
+				"docs/releases/2026-10-11-docs-integration.md",
+				"docs/releases/2026-10-11-runtime-integration.md",
+				"docs/text-motion.md",
+				"scripts/check-site-bundles.mjs",
+				"src/app.d.ts",
+				"src/lib/motion-lab/NativePopBatch.svelte",
+				"src/lib/motion-lab/native-pop-batch.svelte.spec.ts",
+				"src/lib/motion-lab/parity-core-docs.svelte.spec.ts",
+				"src/lib/motion-lab/parity-gestures-docs.spec.ts",
+				"src/lib/motion-lab/parity-values-docs.spec.ts",
+				"src/lib/motion-lab/review-stress.svelte.spec.ts",
+				"src/lib/motion-lab/text-motion.svelte.spec.ts",
+				"src/lib/motion/commit.ts",
+				"src/lib/motion/layout.ts",
+				"src/lib/motion/presence.spec.ts",
+				"src/lib/motion/presence.ts",
+				"src/lib/motion/projection-boundaries.spec.ts",
+				"src/lib/motion/projection-boundaries.ts",
+				"src/lib/motion/text-segments.spec.ts",
+				"src/lib/motion/text-segments.ts",
+				"src/lib/server/doc-page.ts",
+				"src/lib/site/CodeText.svelte",
+				"src/lib/site/DocArticle.svelte",
+				"src/lib/site/DocsSidebar.svelte",
+				"src/lib/site/ExamplePreview.svelte",
+				"src/lib/site/content/gestures-layout.ts",
+				"src/lib/site/docs.ts",
+				"src/lib/site/example-components.ts",
+				"src/lib/site/examples.ts",
+				"src/lib/site/examples/composition-examples.ts",
+				"src/lib/site/examples/core-examples.ts",
+				"src/lib/site/examples/gestures-layout-examples.ts",
+				"src/lib/site/examples/learning-examples.ts",
+				"src/lib/site/examples/presence-view-examples.ts",
+				"src/lib/site/examples/values-helpers-examples.ts",
+				"src/lib/site/highlight-runtime.ts",
+				"src/lib/site/highlight.server.ts",
+				"src/lib/site/highlight.spec.ts",
+				"src/lib/site/highlight.ts",
+				"src/lib/site/home-code.ts",
+				"src/lib/site/loading.spec.ts",
+				"src/lib/site/snippet-previews.spec.ts",
+				"src/lib/site/snippet-previews.ts",
+				"src/routes/+page.server.ts",
+				"src/routes/+page.svelte",
+				"src/routes/docs/+layout.server.ts",
+				"src/routes/docs/+layout.svelte",
+				"src/routes/docs/+page.server.ts",
+				"src/routes/docs/+page.svelte",
+				"src/routes/docs/[slug]/+page.server.ts",
+				"src/routes/docs/[slug]/+page.svelte",
+				"src/routes/docs/search.json/+server.ts",
+				"src/routes/examples/+page.server.ts",
+				"src/routes/examples/+page.svelte",
+				"src/routes/examples/[slug]/+page.server.ts",
+				"src/routes/examples/[slug]/+page.svelte",
+				"tests/motion/code-polish.spec.ts",
+				"tests/motion/content-proportions.spec.ts",
+				"tests/motion/docs-site.spec.ts",
+				"tests/motion/layout-player.spec.ts",
+				"tests/motion/site.spec.ts"
+			],
+			"changedQualificationInputs": [],
+			"applicable": true
+		}
+	],
+	"gates": {
+		"source-webkit-cleanup-corrected": {
+			"name": "source-webkit-cleanup-corrected",
+			"command": [
+				"pnpm",
+				"exec",
+				"vitest",
+				"run",
+				"--config",
+				"vitest.release.config.ts",
+				"--reporter=default",
+				"--reporter=json",
+				"--outputFile=/workspace/releases/astra-motion/main-2026-10-11/source-webkit-cleanup-corrected-results.json"
+			],
+			"cwd": "/home/node/.t3/worktrees/astra-motion/t3code-fbadf1d5",
+			"started": "2026-10-11T22:10:32.494810+00:00",
+			"commit": "63281005d2aa855ef4a22073f3f379b8e10d018d",
+			"tree": "9ff009b1f667a39af5ab20c00a2b2b427c50f963",
+			"dirty": false,
+			"status": "passed",
+			"browser": "webkit",
+			"exitCode": 0,
+			"finished": "2026-10-11T22:19:26.465519+00:00"
+		},
+		"source-firefox-cleanup-corrected": {
+			"name": "source-firefox-cleanup-corrected",
+			"command": [
+				"pnpm",
+				"exec",
+				"vitest",
+				"run",
+				"--config",
+				"vitest.release.config.ts",
+				"--reporter=default",
+				"--reporter=json",
+				"--outputFile=/workspace/releases/astra-motion/main-2026-10-11/source-firefox-cleanup-corrected-results.json"
+			],
+			"cwd": "/home/node/.t3/worktrees/astra-motion/t3code-fbadf1d5",
+			"started": "2026-10-11T22:19:26.503199+00:00",
+			"commit": "63281005d2aa855ef4a22073f3f379b8e10d018d",
+			"tree": "9ff009b1f667a39af5ab20c00a2b2b427c50f963",
+			"dirty": false,
+			"status": "passed",
+			"browser": "firefox",
+			"exitCode": 0,
+			"finished": "2026-10-11T22:28:18.155236+00:00"
+		},
+		"source-chromium-cleanup-corrected": {
+			"name": "source-chromium-cleanup-corrected",
+			"command": [
+				"pnpm",
+				"exec",
+				"vitest",
+				"run",
+				"--config",
+				"vitest.release.config.ts",
+				"--reporter=default",
+				"--reporter=json",
+				"--outputFile=/workspace/releases/astra-motion/main-2026-10-11/source-chromium-cleanup-corrected-results.json"
+			],
+			"cwd": "/home/node/.t3/worktrees/astra-motion/t3code-fbadf1d5",
+			"started": "2026-10-11T22:28:18.190581+00:00",
+			"commit": "63281005d2aa855ef4a22073f3f379b8e10d018d",
+			"tree": "9ff009b1f667a39af5ab20c00a2b2b427c50f963",
+			"dirty": false,
+			"status": "passed",
+			"browser": "chromium",
+			"exitCode": 0,
+			"finished": "2026-10-11T22:36:01.263457+00:00"
+		},
+		"check-cleanup-corrected": {
+			"name": "check-cleanup-corrected",
+			"command": ["pnpm", "check"],
+			"cwd": "/home/node/.t3/worktrees/astra-motion/t3code-fbadf1d5",
+			"started": "2026-10-11T22:36:01.331044+00:00",
+			"commit": "63281005d2aa855ef4a22073f3f379b8e10d018d",
+			"tree": "9ff009b1f667a39af5ab20c00a2b2b427c50f963",
+			"dirty": false,
+			"status": "passed",
+			"browser": null,
+			"exitCode": 0,
+			"finished": "2026-10-11T22:36:32.155253+00:00"
+		},
+		"lint-cleanup-corrected": {
+			"name": "lint-cleanup-corrected",
+			"command": ["pnpm", "lint"],
+			"cwd": "/home/node/.t3/worktrees/astra-motion/t3code-fbadf1d5",
+			"started": "2026-10-11T22:36:32.191384+00:00",
+			"commit": "63281005d2aa855ef4a22073f3f379b8e10d018d",
+			"tree": "9ff009b1f667a39af5ab20c00a2b2b427c50f963",
+			"dirty": false,
+			"status": "passed",
+			"browser": null,
+			"exitCode": 0,
+			"finished": "2026-10-11T22:39:27.387314+00:00"
+		},
+		"qualified-pack": {
+			"name": "qualified-pack",
+			"command": [
+				"pnpm",
+				"pack",
+				"--pack-destination",
+				"/workspace/releases/astra-motion/main-2026-10-11/qualified"
+			],
+			"cwd": "/home/node/.t3/worktrees/astra-motion/t3code-fbadf1d5",
+			"started": "2026-10-11T22:39:27.423330+00:00",
+			"commit": "63281005d2aa855ef4a22073f3f379b8e10d018d",
+			"tree": "9ff009b1f667a39af5ab20c00a2b2b427c50f963",
+			"dirty": false,
+			"status": "passed",
+			"browser": null,
+			"exitCode": 0,
+			"finished": "2026-10-11T22:40:05.709634+00:00"
+		},
+		"production-fresh": {
+			"name": "production-fresh",
+			"command": [
+				"pnpm",
+				"exec",
+				"playwright",
+				"test",
+				"--config",
+				"playwright.motion.config.ts",
+				"--workers=1",
+				"--reporter=line",
+				"--output=/workspace/releases/astra-motion/main-2026-10-11/production-fresh-results"
+			],
+			"cwd": "/home/node/.t3/worktrees/astra-motion/t3code-fbadf1d5",
+			"started": "2026-10-11T20:55:35.655279+00:00",
+			"commit": "1c7b38fb77a45445e68fcbc2164f501a821b1317",
+			"tree": "0d6a41e1cbd9dfd914b14a87890ddc4d28518bf5",
+			"dirty": false,
+			"exitCode": 0,
+			"finished": "2026-10-11T21:12:40.964639+00:00"
+		},
+		"server-final-qualified": {
+			"name": "server-final-qualified",
+			"command": ["pnpm", "exec", "vitest", "run", "--project", "server", "--maxWorkers=2"],
+			"cwd": "/home/node/.t3/worktrees/astra-motion/t3code-fbadf1d5",
+			"started": "2026-10-11T21:12:45.895419+00:00",
+			"commit": "e963ccbf736d14a3fac0e20762fbb3bcdc85a941",
+			"tree": "26c380935fa861ba5735e0fd654c10f83e079641",
+			"dirty": false,
+			"exitCode": 0,
+			"finished": "2026-10-11T21:13:14.601287+00:00"
+		},
+		"build-final": {
+			"name": "build-final",
+			"command": ["pnpm", "build"],
+			"cwd": "/home/node/.t3/worktrees/astra-motion/t3code-fbadf1d5",
+			"started": "2026-10-11T20:44:31.475960+00:00",
+			"commit": "34e7600d561ec4ae1cfd2203d421bc710f25ce91",
+			"tree": "14fce43682dd58ab8a1d2377c92e5b945eb35355",
+			"dirty": false,
+			"exitCode": 0,
+			"finished": "2026-10-11T20:49:08.797299+00:00"
+		},
+		"guide-final": {
+			"name": "guide-final",
+			"command": ["pnpm", "check:guide"],
+			"cwd": "/home/node/.t3/worktrees/astra-motion/t3code-fbadf1d5",
+			"started": "2026-10-11T21:32:52.079091+00:00",
+			"commit": "13999d217c1f7b53f9b474e5d55b71fe29567602",
+			"tree": "c28de880ee127b13d60e805ce2b0d629b69accb8",
+			"dirty": false,
+			"exitCode": 0,
+			"finished": "2026-10-11T21:33:15.328961+00:00"
+		},
+		"prepare-consumers": {
+			"name": "prepare-consumers",
+			"command": [
+				"node",
+				"scripts/prepare-motion-consumer.mjs",
+				"--output=/workspace/releases/astra-motion/main-2026-10-11/consumer.json"
+			],
+			"cwd": "/home/node/.t3/worktrees/astra-motion/t3code-fbadf1d5",
+			"started": "2026-10-11T20:33:39.044383+00:00",
+			"commit": "7212c73c422c772f1b36e8c7d8eb14bec0523799",
+			"tree": "5651d97d64cfdd7c557e83a8c0e3497811e01ee8",
+			"dirty": false,
+			"exitCode": 0,
+			"finished": "2026-10-11T20:44:16.345853+00:00"
+		},
+		"packed-consumers": {
+			"name": "packed-consumers",
+			"command": [
+				"node",
+				"scripts/qualify-packed-motion-ci.mjs",
+				"/workspace/releases/astra-motion/main-2026-10-11/consumer.json",
+				"/workspace/releases/astra-motion/main-2026-10-11/packed"
+			],
+			"cwd": "/home/node/.t3/worktrees/astra-motion/t3code-fbadf1d5",
+			"started": "2026-10-11T20:45:01.219849+00:00",
+			"commit": "34e7600d561ec4ae1cfd2203d421bc710f25ce91",
+			"tree": "14fce43682dd58ab8a1d2377c92e5b945eb35355",
+			"dirty": false,
+			"exitCode": 0,
+			"finished": "2026-10-11T20:48:48.901710+00:00"
+		},
+		"archive-publint": {
+			"name": "archive-publint",
+			"command": [
+				"pnpm",
+				"exec",
+				"publint",
+				"/tmp/astra-motion-production-3dMq4p/plain-consumer/node_modules/astra-motion",
+				"--pack",
+				"false",
+				"--strict"
+			],
+			"cwd": "/home/node/.t3/worktrees/astra-motion/t3code-fbadf1d5",
+			"started": "2026-10-11T20:50:54.193421+00:00",
+			"commit": "1c7b38fb77a45445e68fcbc2164f501a821b1317",
+			"tree": "0d6a41e1cbd9dfd914b14a87890ddc4d28518bf5",
+			"dirty": false,
+			"exitCode": 0,
+			"finished": "2026-10-11T20:50:58.569055+00:00"
+		},
+		"pinned-upstream": {
+			"name": "pinned-upstream",
+			"command": [
+				"pnpm",
+				"exec",
+				"playwright",
+				"test",
+				"--config",
+				"tests/upstream-motion/playwright.config.ts",
+				"--reporter=line"
+			],
+			"cwd": "/home/node/.t3/worktrees/astra-motion/t3code-fbadf1d5",
+			"started": "2026-10-11T20:22:08.959045+00:00",
+			"commit": "8336ce7610a8a7be4785f1f3619e9e6a0e248fb5",
+			"tree": "c4fc58f299164c864dc0d4916196fe2b9ed5c523",
+			"dirty": false,
+			"exitCode": 0,
+			"finished": "2026-10-11T20:22:27.578813+00:00"
+		},
+		"tooling": {
+			"name": "tooling",
+			"command": [
+				"sh",
+				"-c",
+				"node --test scripts/*.test.mjs && node scripts/check-motion-upgrade.mjs && pnpm check:forwarding src/lib/motion-lab/ParityCustomButton.svelte"
+			],
+			"cwd": "/home/node/.t3/worktrees/astra-motion/t3code-fbadf1d5",
+			"started": "2026-10-11T20:28:11.362596+00:00",
+			"commit": "7212c73c422c772f1b36e8c7d8eb14bec0523799",
+			"tree": "5651d97d64cfdd7c557e83a8c0e3497811e01ee8",
+			"dirty": false,
+			"exitCode": 0,
+			"finished": "2026-10-11T20:28:31.006534+00:00"
+		},
+		"bundles": {
+			"name": "bundles",
+			"command": [
+				"sh",
+				"-c",
+				"node scripts/check-site-bundles.mjs && node scripts/measure-motion-bundles.mjs"
+			],
+			"cwd": "/home/node/.t3/worktrees/astra-motion/t3code-fbadf1d5",
+			"started": "2026-10-11T20:33:40.152628+00:00",
+			"commit": "7212c73c422c772f1b36e8c7d8eb14bec0523799",
+			"tree": "5651d97d64cfdd7c557e83a8c0e3497811e01ee8",
+			"dirty": false,
+			"exitCode": 0,
+			"finished": "2026-10-11T20:34:17.434658+00:00"
+		}
+	},
+	"limitations": [
+		"Two derived_inert warnings per engine in the retained shared-layout dependency fixture; independent ownership review pending.",
+		"Arbitrary unstaged parity remains unproven.",
+		"Firefox/WebKit touch emulation case remains skipped; no native touch-device coverage is claimed.",
+		"Native-button WebKit glyph rounding uses an unanimated native-button reference, unchanged 0.5px tolerance and 150 frames; scaleX(1.15) negative controls fail as required."
+	],
+	"published": false,
+	"pushed": false,
+	"released": false
+}
