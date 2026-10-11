@@ -87,7 +87,7 @@ test('example discovery filters, searches, and opens a dedicated live example', 
 	await page.getByRole('searchbox', { name: 'Search examples' }).fill('no-such-example');
 	await expect(page.getByRole('heading', { name: 'No examples found.' })).toBeVisible();
 	await page.getByRole('button', { name: 'Show all examples' }).click();
-	await expect(page.locator('.example-grid > .example')).toHaveCount(40);
+	await expect(page.locator('.example-grid > .example')).toHaveCount(41);
 	await page.getByRole('searchbox', { name: 'Search examples' }).fill('hover, press');
 	await expect(page.locator('.example-grid > .example')).toHaveCount(1);
 	await page.locator('.example-grid > .example').click();
@@ -192,7 +192,7 @@ test('a preserved presence composition can be tried and inspected on a narrow sc
 test('the first lesson exposes runnable code and every catalog entry opens its promised destination', async ({
 	page
 }) => {
-	// The expanded catalogue deliberately opens all 40 demos and their reference anchors.
+	// The expanded catalogue deliberately opens all 41 demos and their reference anchors.
 	test.setTimeout(240_000);
 	const errors: string[] = [];
 	page.on('pageerror', (error) => errors.push(error.message));
@@ -251,7 +251,7 @@ test('the first lesson exposes runnable code and every catalog entry opens its p
 			title: node.querySelector('h2')!.textContent!
 		}))
 	);
-	expect(destinations).toHaveLength(40);
+	expect(destinations).toHaveLength(41);
 	for (const destination of destinations) {
 		// Keep the pointer off document links between independently loaded destinations.
 		await page.mouse.move(0, 0);

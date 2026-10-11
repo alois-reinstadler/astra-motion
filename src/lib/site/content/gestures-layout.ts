@@ -876,6 +876,16 @@ export const gesturesLayoutPages: DocPage[] = [
 				}
 			},
 			{
+				id: 'readable-collapse',
+				title: 'Keep outgoing text readable',
+				text: [
+					'When an exit must keep every character inside a shrinking card, fade the text before collapsing its container. This note captures the currently painted card size and paragraph geometry on close, including during an interrupted expansion.',
+					'The held text keeps its wrapping, position and proportions until the fade completes. onExitComplete releases the held geometry; reopening clears it and reverses the exit. These are application-owned containment choices, while Astra owns projection and presence cleanup.'
+				],
+				example: 'layout-note',
+				related: ['animate-presence']
+			},
+			{
 				id: 'where-next',
 				title: 'Where next',
 				text: [

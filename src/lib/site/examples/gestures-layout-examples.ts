@@ -6,6 +6,7 @@ import HoverSource from './ParityGestureHover.svelte?raw';
 import ControlsSource from './ParityGestureControls.svelte?raw';
 import ReorderSource from './ParityGestureReorder.svelte?raw';
 import LayoutSource from './SessionCards.svelte?raw';
+import LayoutNoteSource from './ParityLayoutExpand.svelte?raw';
 import GroupSource from './ParityLayoutGroup.svelte?raw';
 import NamespacesSource from './ParityLayoutNamespaces.svelte?raw';
 import ArcSource from './ParityLayoutArc.svelte?raw';
@@ -77,6 +78,18 @@ export const gesturesLayoutExamples = {
 		anchor: 'automatic',
 		component: './examples/SessionCards.svelte',
 		source: publicExampleSource(LayoutSource)
+	},
+	'layout-note': {
+		id: 'layout-note',
+		title: 'Keep a note readable through collapse',
+		filename: 'ExpandableNote.svelte',
+		description:
+			'Hold the painted card and text geometry while an interrupted exit fades, then collapse.',
+		category: 'Layout',
+		guide: 'layout',
+		anchor: 'readable-collapse',
+		component: './examples/ParityLayoutExpand.svelte',
+		source: publicExampleSource(LayoutNoteSource)
 	},
 	'layout-curved-path': {
 		id: 'layout-curved-path',

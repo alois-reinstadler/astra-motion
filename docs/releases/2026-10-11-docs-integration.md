@@ -87,3 +87,22 @@ cleanup. A separate T3 collaborative-browser check exercised Quick start search
 for text in a collapsed layout note, client navigation to that result, and expansion
 of both session cards (240 to 380 pixels). The page loaded without console errors;
 a screenshot was inspected. The full release matrix remains the consolidator's gate.
+
+## Review correction: preserve the readable-note oracle
+
+Consolidator review found that `content-proportions.spec.ts` still targeted the old
+`layout-expand` note, while the editorial work reused that slug for SessionCards
+(which intentionally shows distorted unprotected text). The original
+`ParityLayoutExpand.svelte` is now exposed separately as `layout-note`, with its
+own `layout#readable-collapse` guide section. The catalog contains **41** canonical
+demos. The glyph regression changes only the note scene's route and root selector;
+its 150-frame sampling, 0.5px threshold, text containment, interruption/reversal,
+exit completion and return-to-original-size assertions are unchanged.
+
+The 22 site server tests pass, and the rebuilt site/prepack/strict publint pass.
+Both desktop and mobile note-glyph cases pass in Chromium, Firefox and WebKit.
+WebKit initially stopped in OS preflight before executing tests; rerunning with the
+consolidator's extracted-library/EGL/software-rendering environment executes both
+cases successfully. The two focused Chromium catalog scenarios pass, including
+all 41 destinations and their reference anchors. Changed files pass ESLint and
+Prettier. Evidence is preserved alongside the earlier worker logs.

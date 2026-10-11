@@ -19,8 +19,8 @@ const scenes = [
 	},
 	{
 		name: 'note',
-		route: '/examples/layout-expand',
-		root: '[data-example="layout-expand"] .demo',
+		route: '/examples/layout-note',
+		root: '[data-example="layout-note"] .demo',
 		trigger: 'Read the note',
 		reverse: 'Close the note',
 		text: '.card h3, .card p, .card button'
