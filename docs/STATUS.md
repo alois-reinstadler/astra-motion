@@ -1,9 +1,14 @@
-# Main consolidation in progress — 2026-10-11
+# Main consolidation qualification — 2026-10-11
 
-The active release baseline is `main` in `t3code-fbadf1d5`. Original branch tips,
-working patches and untracked files have been durably archived and restoration
-tested. The documentation overhaul is integrated; runtime and site-loading work
-is being reconciled before complete qualification and independent final review.
+The selected documentation, site-loading, Unicode, sticky-scroll and native-pop
+work is integrated on `main` in `t3code-fbadf1d5`. Original worktrees and worker
+tips are durably preserved, with restoration tested. Obsolete linked worktrees
+and non-main local branches are retired; the primary repository remains intact.
+
+The fresh packed archive passes nine plain-Svelte fixtures and 15 SvelteKit
+scenarios in each of Chromium, Firefox and WebKit. Complete source and production
+qualification and the independent final review are still in progress. Earlier
+failed or interrupted runs are preserved, not counted as successful qualification.
 See the [consolidation ledger](releases/2026-10-11-consolidation.md). No push,
 publication or release has occurred.
 

@@ -34,7 +34,7 @@ not merely successful archive creation. Original historical artifacts are unchan
 | `t3code/improve-motion-documentation`                                   | Integrate learning path, canonical examples, navigation and source-backed documentation; retain corrected RC3 manual presence semantics.                                                     |
 | `t3code/18cf2510`                                                       | Selectively compared; superseded disconnected onboarding, duplicate examples and older prose. Reject obsolete public completion semantics. Originals archived.                               |
 | `archive/main-in-progress-2026-10-11`: site                             | Integrate server-prepared highlighting, selective article data, lazy demos and searchable metadata after reconciling the docs overhaul.                                                      |
-| `archive/main-in-progress-2026-10-11`: runtime/text                     | Selectively review native mutation batching, sticky measurement caching and Unicode punctuation against RC3 ownership; qualification required.                                               |
+| `archive/main-in-progress-2026-10-11`: runtime/text                     | Integrated selected native mutation batching, sticky measurement caching and Unicode punctuation against RC3 ownership; final qualification remains required.                                |
 | Archived primary: research/benchmarks                                   | Preserve lifecycle proposal, scheduler/site measurements, React benchmark source and results, and maintenance review as historical evidence. No old performance number qualifies this tree.  |
 | `t3code/10ab3c8f`                                                       | Runtime fixes incorporated or corrected in RC3; distinct ownership research and original review/probes archived with provenance. Do not restore staged-state experiments into active source. |
 | `t3code/05596d3d`                                                       | Incorporated history; unique performance JSON and viewport screenshots archived.                                                                                                             |
@@ -47,7 +47,8 @@ not merely successful archive creation. Original historical artifacts are unchan
 | Consolidation worker branches                                           | Integrate reviewed commits; preserve final worker tips before retirement.                                                                                                                    |
 
 Detailed source decisions and validation are in the
-[documentation integration](2026-10-11-docs-integration.md) and
+[documentation integration](2026-10-11-docs-integration.md),
+[runtime integration](2026-10-11-runtime-integration.md), and
 [older-workstream audit](2026-10-11-older-workstream-audit.md).
 The original worktree inventory remains in the external archive; final retirement
 will verify preserved contents and record every removed local ref.
@@ -73,3 +74,26 @@ baseline/noise/diagnostic records are retained together in that archive. They us
 historical dirty-source hashes and do not establish current performance or React
 19 parity. Final release comparisons use fresh pinned-engine checks and source
 regressions; no historical timing ratio is claimed as a new optimization result.
+
+## Retirement verification
+
+Immediately before retirement, all original changed-file hashes and exact Git
+statuses were checked again against the archive. Thirteen original linked
+worktrees were removed. The primary repository was retained, cleaned only after
+verification, and detached at the consolidated candidate. Its exposed generated
+benchmark `dist` directory was disposable output; benchmark sources and evidence
+remain in the original archive. This session remains on main.
+
+All 16 original non-main local branches were retired with their tips recorded in
+`retired-original-branches.json`. The three consolidation worker tips were then
+preserved in verified `final-worker-tips.bundle` and recorded in
+`retired-worker-branches.json` before retiring their branches. The audit checkout
+is retained detached for the independent final review. Remote-tracking refs were
+compared with the original inventory and remain unchanged. T3 checkpoint refs
+were not altered. The final handoff will recheck that `refs/heads` contains only
+`main` and that all retained working trees are clean.
+
+The archive contains `pre-retirement-verification.json`,
+`retired-original-worktrees.json`, `primary-retirement.json`, and separate
+retirement hash manifests. Original archive files and earlier release evidence
+remain unchanged.
