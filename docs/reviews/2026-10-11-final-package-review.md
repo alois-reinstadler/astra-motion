@@ -120,3 +120,38 @@ isolation, not every cross-root shared-layout configuration. Native View support
 and fallback behavior remain browser-dependent. Existing touch-emulation skips,
 unstaged-parity uncertainty and native-button glyph qualification limits remain
 explicitly applicable.
+
+## Replacement artifact after public-review correction
+
+The public reviewer identified stale RC2 instructions in active documentation.
+Root corrected the README, authoring guide and try-it guide in `d7d366e`, then
+packed the replacement archive:
+
+`/workspace/releases/astra-motion/main-2026-10-11/reviewed/astra-motion-0.1.0-rc.3.tgz`
+
+SHA-256: `719b4424df6d4c047d20b76a9429636378f600f9e9abec665ae96e364992542e`
+
+This supersedes the `a24a314c...` archive reviewed above; the earlier archive and
+review evidence remain unchanged. I independently recomputed both hashes and
+compared all 1,223 archive members. **Only `package/README.md` changed; the other
+1,222 members are byte-identical**, including runtime, declarations, metadata and
+vendor provenance. The new archive is 416,357 bytes. Its README identifies the
+local RC3 candidate, explicitly avoids implying registry publication, and gives
+the RC3 local archive installation command. Thus the runtime/declaration and
+independent multi-root findings above apply to the replacement's identical code.
+
+I additionally compared all 1,223 installed files in each newly prepared isolated
+consumer with this replacement archive and verified copied tarball identity and
+installation-directory containment. Evidence is preserved separately as
+`replacement-artifact-audit.json`, `replacement-installed-audit.json` and
+`replacement-README.md` in this review's evidence directory. This identity check
+is distinct from the fresh full consumer runtime qualification run by root.
+
+I inspected the completed fresh consumer gate after preparation: root's
+`packed-reviewed-consumers.json` records exit 0 on clean commit
+`251bca404f50791b591627673c40985d7d8ba286`, finishing at 22:53:35 UTC. The
+replacement-hash result files record **27 plain-Svelte cases and 45 SvelteKit
+cases across Chromium, Firefox and WebKit**, all passing, with installed archive
+and served build/asset identity verified. These are fresh results for the
+replacement artifact, in addition to the earlier independent focused review.
+The reviewed replacement has no newly confirmed package blocker.
