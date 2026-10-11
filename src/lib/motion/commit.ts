@@ -24,7 +24,16 @@ export const layoutBridge: {
 	presence?: (element: HTMLElement, present: boolean) => void;
 	invalidate?: (roots: Iterable<Element>) => void;
 } = {};
-const mutations = new Set<() => void>();
+/** Independent sibling writes can share reads; other mutations are ordering barriers. */
+export interface PreparedLayoutMutation {
+	element: HTMLElement;
+	prepare: () => void;
+	apply: () => void;
+	validate: () => void;
+	rollback: () => void;
+}
+type LayoutMutation = (() => void) | PreparedLayoutMutation;
+const mutations = new Set<LayoutMutation>();
 let scheduled = false;
 let beforePaintScheduled = false;
 let scheduleVersion = 0;
@@ -36,7 +45,7 @@ export function flushLayoutMutations(): void {
 }
 
 /** Batch flow changes outside Svelte's flush; managed exits cannot wait for a frame read. */
-export function queueLayoutMutation(change: () => void, beforePaint = false): void {
+export function queueLayoutMutation(change: LayoutMutation, beforePaint = false): void {
 	mutations.add(change);
 	if (scheduled && (!beforePaint || beforePaintScheduled)) return;
 	scheduled = true;
@@ -52,12 +61,39 @@ export function queueLayoutMutation(change: () => void, beforePaint = false): vo
 		mutations.clear();
 		const apply = () => {
 			const errors: unknown[] = [];
-			for (const mutation of pending) {
+			for (let index = 0; index < pending.length;) {
+				const mutation = pending[index++];
+				if (typeof mutation === 'function') {
+					try {
+						mutation();
+					} catch (error) {
+						errors.push(error);
+					}
+					continue;
+				}
+				const parent = mutation.element.parentElement;
+				const siblings = [mutation];
+				while (index < pending.length) {
+					const next = pending[index];
+					if (typeof next === 'function' || next.element.parentElement !== parent) break;
+					siblings.push(next);
+					index++;
+				}
 				try {
-					mutation();
+					for (const sibling of siblings) sibling.prepare();
+					for (const sibling of siblings) sibling.apply();
+					// Relational CSS can change the containing block after sibling writes.
+					// Check the entire batch after writing, without interleaving reads/writes.
+					for (const sibling of siblings) sibling.validate();
 				} catch (error) {
-					// One boundary's callback must not discard another boundary's removal.
 					errors.push(error);
+					for (const sibling of siblings.toReversed()) {
+						try {
+							sibling.rollback();
+						} catch (rollbackError) {
+							errors.push(rollbackError);
+						}
+					}
 				}
 			}
 			if (errors.length === 1) throw errors[0];

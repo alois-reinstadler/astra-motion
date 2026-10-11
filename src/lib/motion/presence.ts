@@ -1,7 +1,7 @@
 import type { Attachment } from 'svelte/attachments';
 import { cubicOut } from 'svelte/easing';
 import type { TransitionConfig } from 'svelte/transition';
-import { beforeCommit, queueLayoutMutation } from './commit.js';
+import { queueLayoutMutation } from './commit.js';
 import { shouldReduceMotion, type MotionPolicy } from './policy.js';
 
 export interface PresenceOptions extends MotionPolicy {
@@ -24,7 +24,7 @@ export function presence(node: Element, options: PresenceOptions = {}): Transiti
 /**
  * Remove an outgoing native element from flow while Svelte retains it.
  * Use on a direct child of a positioned container, with transition:presence.
- * layout.update() captures every outgoing box before any flow write.
+ * Sibling exits are measured together before their flow writes.
  */
 export function popLayout(): Attachment<HTMLElement> {
 	return (node) => {
@@ -42,16 +42,11 @@ export function popLayout(): Attachment<HTMLElement> {
 		let restore: Map<string, { value: string; priority: string }> | undefined;
 		let alive = true;
 		let present = true;
-		let geometry: { left: number; top: number; width: number; height: number };
-		const capture = () => {
-			if (restore || !node.isConnected) return;
-			const computed = getComputedStyle(node);
-			geometry = {
-				left: node.offsetLeft - parseFloat(computed.marginLeft),
-				top: node.offsetTop - parseFloat(computed.marginTop),
-				width: node.offsetWidth,
-				height: node.offsetHeight
-			};
+		const validateParent = (parent: HTMLElement | null) => {
+			if (node.parentElement !== parent || node.offsetParent !== parent)
+				throw new Error(
+					'Astra popLayout: the direct parent must establish a positioning context (position: relative).'
+				);
 		};
 		const reset = () => {
 			if (!restore) return;
@@ -64,33 +59,55 @@ export function popLayout(): Attachment<HTMLElement> {
 		const pop = (event: Event) => {
 			if (event.target !== node) return;
 			present = false;
-			queueLayoutMutation(() => {
-				if (!alive || present || restore) return;
-				if (!geometry) capture();
-				if (node.offsetParent !== node.parentElement)
-					throw new Error(
-						'Astra popLayout: the direct parent must establish a positioning context (position: relative).'
+			let geometry:
+				| { parent: HTMLElement | null; left: number; top: number; width: number; height: number }
+				| undefined;
+			let applied = false;
+			queueLayoutMutation({
+				element: node,
+				prepare() {
+					if (!alive || present || restore || !node.isConnected) return;
+					const parent = node.parentElement;
+					validateParent(parent);
+					const computed = getComputedStyle(node);
+					geometry = {
+						parent,
+						left: node.offsetLeft - parseFloat(computed.marginLeft),
+						top: node.offsetTop - parseFloat(computed.marginTop),
+						width: node.offsetWidth,
+						height: node.offsetHeight
+					};
+				},
+				apply() {
+					if (!alive || present || restore || !geometry) return;
+					restore = new Map(
+						properties.map((property) => [
+							property,
+							{
+								value: node.style.getPropertyValue(property),
+								priority: node.style.getPropertyPriority(property)
+							}
+						])
 					);
-				restore = new Map(
-					properties.map((property) => [
-						property,
-						{
-							value: node.style.getPropertyValue(property),
-							priority: node.style.getPropertyPriority(property)
-						}
-					])
-				);
-				Object.assign(node.style, {
-					position: 'absolute',
-					left: `${geometry.left}px`,
-					top: `${geometry.top}px`,
-					width: `${geometry.width}px`,
-					height: `${geometry.height}px`,
-					boxSizing: 'border-box',
-					pointerEvents: 'none',
-					right: 'auto',
-					bottom: 'auto'
-				});
+					applied = true;
+					Object.assign(node.style, {
+						position: 'absolute',
+						left: `${geometry.left}px`,
+						top: `${geometry.top}px`,
+						width: `${geometry.width}px`,
+						height: `${geometry.height}px`,
+						boxSizing: 'border-box',
+						pointerEvents: 'none',
+						right: 'auto',
+						bottom: 'auto'
+					});
+				},
+				validate() {
+					if (applied) validateParent(geometry!.parent);
+				},
+				rollback() {
+					if (applied) reset();
+				}
 			});
 		};
 		const intro = (event: Event) => {
@@ -100,12 +117,10 @@ export function popLayout(): Attachment<HTMLElement> {
 				if (alive && present) reset();
 			});
 		};
-		beforeCommit.add(capture);
 		node.addEventListener('outrostart', pop);
 		node.addEventListener('introstart', intro);
 		return () => {
 			alive = false;
-			beforeCommit.delete(capture);
 			node.removeEventListener('outrostart', pop);
 			node.removeEventListener('introstart', intro);
 			reset();

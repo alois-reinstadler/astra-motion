@@ -36,6 +36,7 @@ import {
 	beginPresenceSnapshot,
 	flushLayoutMutations,
 	layoutBridge,
+	queueLayoutMutation,
 	synchronousMutation
 } from './commit.js';
 import { shouldReduceMotion, type MotionPolicy } from './policy.js';
@@ -207,7 +208,7 @@ function pruneStack(projection: IProjectionNode, id: string | undefined) {
 }
 
 /** Native transitions own DOM retention; this only informs Motion's shared-stack protocol. */
-function setPresence(root: HTMLElement, present: boolean) {
+function setPresence(root: HTMLElement, present: boolean, native = false) {
 	let changed = false;
 	for (const participant of participantsUnder(root)) {
 		if (present) participant.exitingRoots.delete(root);
@@ -226,7 +227,14 @@ function setPresence(root: HTMLElement, present: boolean) {
 			else projection.relegate();
 		}
 	}
-	if (changed) scheduleRegistration();
+	if (changed) {
+		// Native transition events can arrive in separate tasks. Share their
+		// frame transaction while updating shared-stack membership immediately.
+		// Managed presence retains its before-paint scheduling.
+		if (native) {
+			if (!transactionDepth) queueLayoutMutation(commitNativePresence);
+		} else scheduleRegistration();
+	}
 }
 
 /** Lookup by DOM membership: a leaf exit must not scan every registered sibling. */
@@ -239,11 +247,13 @@ function* participantsUnder(root: Element): Generator<Participant> {
 	}
 }
 
+const commitNativePresence = () => {};
+
 const intro = (event: Event) => {
-	if (event.target instanceof HTMLElement) setPresence(event.target, true);
+	if (event.target instanceof HTMLElement) setPresence(event.target, true, true);
 };
 const outro = (event: Event) => {
-	if (event.target instanceof HTMLElement) setPresence(event.target, false);
+	if (event.target instanceof HTMLElement) setPresence(event.target, false, true);
 };
 
 function listenForPresence(document: Document) {
