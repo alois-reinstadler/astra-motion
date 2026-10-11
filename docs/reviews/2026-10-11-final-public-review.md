@@ -11,7 +11,7 @@ SHA-256 `a24a314c3ad5e27ad8207c53ef5fb66e642bd274177eddedbfdf5b436088259f`.
 
 ## Finding P1 — current install instructions name the superseded RC2 archive
 
-**Classification: release-documentation blocker. Status: correction requested.**
+**Classification: release-documentation blocker. Status: resolved and verified.**
 
 `README.md:7` names the local candidate as `0.1.0-rc.2`; `README.md:55`,
 `docs/authoring.md:22` and `docs/try-it.md:6` instruct users to install
@@ -31,6 +31,32 @@ Regression check: compare the current candidate label and the archive names in
 all three active guides against `package.json.version`, then verify the corrected
 README inside the actual replacement archive. Preserve historical RC2 reports.
 Pre-fix evidence is `P1-install-version-before.json` in the evidence directory.
+
+Resolution: commit `d7d366e1aaf06c22d81a1754d23a4aa35a6017c6` corrects all four
+active version references to RC3, removes the obsolete hardcoded preview address
+and removes the stale documentation page count. Historical RC2 records remain
+unchanged. Independently reviewed the focused diff and verified that the regression
+finds four mismatches before the fix and zero afterward, including the packed README.
+
+The replacement artifact is
+`/workspace/releases/astra-motion/main-2026-10-11/reviewed/astra-motion-0.1.0-rc.3.tgz`,
+SHA-256 `719b4424df6d4c047d20b76a9429636378f600f9e9abec665ae96e364992542e`.
+Independent unpacked comparison found 1,223 files: only `package/README.md` changed;
+the other 1,222 files are byte-identical to the initial artifact. The replacement
+supersedes the initial artifact above for owner review.
+
+Fresh isolated consumer qualification finished successfully on 11 October at
+22:53:35 UTC. Independently inspected the raw reports and matching replacement
+archive hashes: plain Svelte passed nine cases per engine (27 total), and SvelteKit
+completed fifteen per engine (45 total), across Chromium, Firefox and WebKit.
+The qualification command exited zero; bundle evidence also names the replacement
+hash. These checks were run by the consolidator and independently inspected here.
+Fix verification and raw-result hashes are preserved in
+`P1-source-fix-verification.json`, `P1-package-fix-verification.json`,
+`P1-independent-package-diff.json` and `P1-final-consumer-verification.json`.
+
+**Final public-review verdict: no open confirmed release blockers.** Advisory A1
+below remains a bounded editorial follow-up for the owner.
 
 ## Advisory A1 — historical timing provenance could be closer to the numbers
 
