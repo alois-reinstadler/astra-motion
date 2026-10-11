@@ -1,6 +1,6 @@
 # Authoring Astra motion
 
-Current primary API: [34-page documentation](https://alois-reinstadler.github.io/astra-motion/docs),
+Current primary API: [documentation](https://alois-reinstadler.github.io/astra-motion/docs),
 [parity matrix](parity/MATRIX.md), and [migration guide](migration.md).
 `motion.bind` and `motion.*` share one animation contract. `createMotion` has been
 removed; migrate native bindings to `motion.bind` using the migration guide.
@@ -19,7 +19,7 @@ From your application directory, install the archive supplied in the release-can
 handoff. No checkout or consumer-side library build is needed:
 
 ```sh
-pnpm add /absolute/path/to/astra-motion-0.1.0-rc.2.tgz
+pnpm add /absolute/path/to/astra-motion-0.1.0-rc.3.tgz
 ```
 
 This artifact is prepared locally; no registry publication is implied. Match its hash
