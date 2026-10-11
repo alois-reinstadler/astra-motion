@@ -306,13 +306,34 @@ describe('independent adversarial layout and presence tests', () => {
 		await render(SharedPresenceSpike);
 		const source = document.querySelector<HTMLElement>('[data-shared-presence="card"]')!;
 		const start = source.getBoundingClientRect();
+		const introStarted = new Promise<void>((resolve) => {
+			const started = (event: Event) => {
+				if (
+					!(event.target instanceof HTMLElement) ||
+					event.target.dataset.sharedPresence !== 'detail'
+				)
+					return;
+				document.removeEventListener('introstart', started, true);
+				resolve();
+			};
+			document.addEventListener('introstart', started, true);
+			cleanups.push(() => document.removeEventListener('introstart', started, true));
+		});
 		node('shared-presence-toggle').click();
 		await tick();
 		const destination = document.querySelector<HTMLElement>('[data-shared-presence="detail"]')!;
 		expect(source.isConnected).toBe(true);
 		expect(document.querySelectorAll('[data-shared-presence]')).toHaveLength(2);
 		expect(distance(destination.getBoundingClientRect(), start)).toBeLessThan(20);
-		// WebKit starts the native WAAPI effect asynchronously after Svelte's dummy animation.
+		// DOM readiness precedes Svelte's dummy animation and the actual WAAPI
+		// playback readiness. Keep the opacity deadline relative to real playback;
+		// missing introstart or a never-ready animation still fails the test timeout.
+		await introStarted;
+		const animation = destination
+			.getAnimations()
+			.find((animation) => animation.effect?.getTiming().duration === 350);
+		expect(animation, 'Svelte must create the real 350ms native intro').toBeDefined();
+		await animation!.ready;
 		await expect
 			.poll(() => Number(getComputedStyle(destination).opacity), { timeout: 250, interval: 16 })
 			.toBeGreaterThan(0);
