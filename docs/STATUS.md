@@ -6,9 +6,12 @@ tips are durably preserved, with restoration tested. Obsolete linked worktrees
 and non-main local branches are retired; the primary repository remains intact.
 
 The fresh packed archive passes nine plain-Svelte fixtures and 15 SvelteKit
-scenarios in each of Chromium, Firefox and WebKit. Complete source and production
-qualification and the independent final review are still in progress. Earlier
-failed or interrupted runs are preserved, not counted as successful qualification.
+scenarios in each of Chromium, Firefox and WebKit. Complete production E2E passes
+253 cases with two existing Chromium-only touch-emulation skips; all 283 server
+cases pass. Complete source qualification remains blocked by an intermittent
+WebKit timeout in the delayed-native-outro regression. The final independent
+review has not started. Earlier failed or interrupted runs are preserved, not
+counted as successful qualification.
 See the [consolidation ledger](releases/2026-10-11-consolidation.md). No push,
 publication or release has occurred.
 
