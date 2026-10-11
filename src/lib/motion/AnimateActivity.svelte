@@ -45,7 +45,7 @@
 	import { provideActivityState, readActivityState } from './activity-scope.js';
 	import { popPresenceNodes } from './presence-pop.js';
 	import { readMotionConfig } from './config.js';
-	import { observePresenceBoxes, type PresenceBox } from './presence-measure.js';
+	import { createPresenceBoxes, observePresenceBoxes } from './presence-measure.js';
 
 	let {
 		mode = 'visible',
@@ -113,7 +113,7 @@
 		}
 	);
 	providePresenceScope(scope);
-	const boxes = new WeakMap<HTMLElement, PresenceBox>();
+	const boxes = createPresenceBoxes();
 	function trackPopBoxes() {
 		if (layoutMode !== 'pop' || !present) return;
 		// Reading the registrations also refreshes display:contents roots as children mount.

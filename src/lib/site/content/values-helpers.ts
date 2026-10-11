@@ -752,7 +752,7 @@ export const valuesHelpersDocs: DocPage[] = [
 				'composition',
 				'Compose with visibility and presence',
 				'useInView(scope) can trigger an imperative sequence when the root enters the viewport. Start the sequence inside an effect that reads visible.current and cancel or stop work when that effect is replaced.',
-				'For a manual presence exit, use usePresence in the retained child, capture safeToRemove for the current exit, await controls.settled, and call that captured callback only for the outcome your application accepts. Use result.status === "finished" for a successful exit. Cancel superseded work when isPresent becomes true again. The AnimatePresence reference shows the generation-safe removal pattern.'
+				'For a manual presence exit, use usePresence in the retained child, capture the stable safeToRemove method during initialization, await controls.settled, and call it only for the outcome your application accepts while that exit work remains active. Use result.status === "finished" for a successful exit. Cancel superseded work when isPresent becomes true again or its effect is destroyed, and ignore continuations after cleanup. The AnimatePresence reference shows this cancellation-aware removal pattern.'
 			),
 			section(
 				'mini',

@@ -27,11 +27,12 @@
 
 <script lang="ts" generics="T = undefined">
 	import { onDestroy, untrack } from 'svelte';
-	import { SvelteSet } from 'svelte/reactivity';
+	import { SvelteMap, SvelteSet } from 'svelte/reactivity';
 	import AnimatePresenceItem from './AnimatePresenceItem.svelte';
 	import { readMotionConfig } from './config.js';
 	import { readPresenceScope, type PresenceRegistration } from './presence-context.svelte.js';
 	import { reconcilePresence, type PresenceInput } from './presence-model.js';
+	import { queueLayoutMutation } from './commit.js';
 
 	let {
 		key,
@@ -73,6 +74,7 @@
 	);
 	const exiting = new SvelteSet<symbol>();
 	let alive = true;
+	const completed = new SvelteMap<symbol, (typeof entries)[number]>();
 	let parentRegistration: PresenceRegistration | undefined;
 
 	function releaseParent() {
@@ -106,9 +108,26 @@
 	}
 	$effect.pre(updateRecords);
 	function complete(token: symbol) {
-		if (!alive || !entries.some((entry) => entry.token === token && !entry.isPresent)) return;
-		entries = entries.filter((entry) => entry.token !== token);
-		exiting.delete(token);
+		if (!alive) return;
+		const entry = entries.find((entry) => entry.token === token && !entry.isPresent);
+		if (!entry) return;
+		completed.set(token, entry);
+		queueLayoutMutation(removeCompleted);
+	}
+	function removeCompleted() {
+		if (!alive) return;
+		// A request can revive a key before Svelte has flushed its presence effect.
+		reconcile(input());
+		let removed = false;
+		entries = entries.filter((entry) => {
+			// A revived record keeps its token; a later exit needs its own completion.
+			if (completed.get(entry.token) !== entry) return true;
+			removed = true;
+			exiting.delete(entry.token);
+			return false;
+		});
+		completed.clear();
+		if (!removed) return;
 		if (exiting.size === 0) {
 			onExitComplete?.();
 			if (!alive) return;
@@ -124,6 +143,7 @@
 	});
 	onDestroy(() => {
 		alive = false;
+		completed.clear();
 		exiting.clear();
 	});
 </script>

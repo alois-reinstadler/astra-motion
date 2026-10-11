@@ -37,7 +37,7 @@ exclusive. Single null/undefined values are absent; default identity is the valu
 itself, including reference identity for objects. Exits retain item references. It defaults
 to sync; existing `Presence` retains its wait default. Modes include sync/wait/popLayout.
 Nested boundaries shield exits unless propagate is true. Dynamic custom values,
-manual removal and re-entry are generation-scoped.
+engine-owned exits and re-entry are generation-scoped.
 
 `AnimatePresence` popLayout and `AnimateActivity` pop exits retain the last
 observed present box. A synchronous `updateLayout` captures it immediately before
@@ -71,8 +71,13 @@ Subscribe invokes immediately. Acknowledgements from old generations are ignored
 Core registers after mounting, passes custom/initial/isPresent to the visual, drives
 exit state, and suppresses a second native outro after managed exit completion.
 Native conditional removal within a still-present boundary keeps native outros.
-`usePresence` exposes `{isPresent, safeToRemove}` with a generation-captured callback;
-`useIsPresent` and `usePresenceData<T>` expose `.current`.
+`usePresence` exposes reactive `isPresent` and a stable `safeToRemove` method that
+completes the current exit when invoked. Capturing the method during initialization
+is safe. Application-owned timers, animations and asynchronous work must be cancelled
+on re-entry or destruction; the public method does not identify historical work.
+Internal animation acknowledgements remain generation-scoped. `useIsPresent` and
+`usePresenceData<T>` expose `.current`; field selectors prevent custom-only changes
+from restarting effects that depend only on presence.
 
 ## Activity: explicitly agreed adaptation
 

@@ -81,10 +81,11 @@ for (const width of [1280, 393]) {
 			await expect(trigger).toBeEnabled();
 			const originalCard = scene.name === 'note' ? await root.locator('.card').boundingBox() : null;
 			const result = await root.evaluate(async (root, scene) => {
-				const reference = document.createElement('span');
-				reference.style.cssText =
+				const referenceSpan = document.createElement('span');
+				const buttonReferences = new Map<HTMLButtonElement, HTMLButtonElement>();
+				referenceSpan.style.cssText =
 					'all:initial;position:fixed;left:-10000px;top:0;white-space:pre;visibility:hidden;';
-				document.body.append(reference);
+				document.body.append(referenceSpan);
 				const range = document.createRange();
 				const errors: string[] = [];
 				let samples = 0;
@@ -123,7 +124,49 @@ for (const width of [1280, 393]) {
 							while ((text = walker.nextNode())) {
 								const offset = text.textContent!.search(/\S/);
 								if (offset < 0) continue;
-								const style = getComputedStyle(text.parentElement!);
+								const parent = text.parentElement!;
+								const style = getComputedStyle(parent);
+								let reference: HTMLElement = referenceSpan;
+								if (parent instanceof HTMLButtonElement) {
+									let button = buttonReferences.get(parent);
+									if (!button) {
+										button = document.createElement('button');
+										button.type = 'button';
+										button.disabled = true;
+										button.tabIndex = -1;
+										button.inert = true;
+										button.setAttribute('aria-hidden', 'true');
+										for (const property of Array.from(style))
+											button.style.setProperty(property, style.getPropertyValue(property));
+										buttonReferences.set(parent, button);
+										document.body.append(button);
+									}
+									// WebKit rounds button text in its centered line box. Match that
+									// viewport geometry while leaving the reference untransformed.
+									const rect = parent.getBoundingClientRect();
+									Object.assign(button.style, {
+										position: 'fixed',
+										left: `${rect.left}px`,
+										top: `${rect.top}px`,
+										width: `${rect.width}px`,
+										height: `${rect.height}px`,
+										margin: '0',
+										boxSizing: 'border-box',
+										minWidth: '0',
+										maxWidth: 'none',
+										minHeight: '0',
+										maxHeight: 'none',
+										visibility: 'hidden',
+										pointerEvents: 'none',
+										transform: 'none',
+										translate: 'none',
+										rotate: 'none',
+										scale: 'none',
+										transition: 'none',
+										animation: 'none'
+									});
+									reference = button;
+								}
 								for (const property of [
 									'font-family',
 									'font-size',
@@ -165,7 +208,8 @@ for (const width of [1280, 393]) {
 						}
 					}
 				} finally {
-					reference.remove();
+					referenceSpan.remove();
+					for (const button of buttonReferences.values()) button.remove();
 				}
 				return { errors, samples, projectedFrames, detailFrames };
 			}, scene);

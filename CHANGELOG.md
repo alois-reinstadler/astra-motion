@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.1.0-rc.3 — local release candidate
+
+Prepared for local installation; not published to a registry.
+
+- Preserve cached projection origins before ordinary Svelte presence updates,
+  including combined keyed removal, reordering, resizing and interruption.
+- Keep presence snapshot origins owned through synchronous transactions and nested
+  publication; release ownership and queued mutation work correctly on errors.
+- Retain ancestor transform normalization until deferred Motion measurements finish.
+  Restore on blocked updates, abandonment and unmount without replacing newer styles.
+- Make initialization-captured `safeToRemove` usable for the current exit; isolate
+  presence and custom-data subscriptions. Manual examples cancel owned work on re-entry.
+- Batch managed removals and reject completions queued before revival or destruction.
+  Avoid policy reads from projection participants disposed during reconciliation.
+- Accept always-throwing synchronous `updateLayout` callbacks in TypeScript.
+
+No public exports are added. `updateLayout` remains available for explicit
+transactions; ordinary reactive updates do not require a new wrapper or staged API.
+Qualification and preserved branch inventory are recorded in [Status](docs/STATUS.md).
+
 ## 0.1.0-rc.2 — local release candidate
 
 This candidate is prepared for local installation; it is not a registry publication.

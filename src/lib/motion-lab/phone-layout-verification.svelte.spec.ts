@@ -2,9 +2,12 @@ import { expect, it } from 'vitest';
 import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-svelte';
 import { tick } from 'svelte';
+import { MotionGlobalConfig } from 'motion-utils';
 import {
 	visualElementStore,
 	frame as motionFrame,
+	time as motionTime,
+	frameData,
 	cancelFrame,
 	type AnimationPlaybackControls
 } from 'motion-dom';
@@ -65,6 +68,60 @@ const animations = (root: HTMLElement) => [
 		})
 	)
 ];
+
+async function interruptPartialOpacity(
+	node: HTMLElement,
+	animation: AnimationPlaybackControls,
+	interrupt: () => void
+) {
+	const natives = node
+		.getAnimations()
+		.filter((native) =>
+			(native.effect as KeyframeEffect)
+				.getKeyframes()
+				.some((keyframe) => keyframe.opacity !== undefined)
+		);
+	// Wait while paused so native readiness cannot finish the short entry.
+	await Promise.all(natives.map((native) => native.ready));
+	const value = visualElementStore.get(node)!.getValue('opacity')!;
+	// Capture the replacement before a slow frame can finish its short exit.
+	const unsubscribe = value.on('animationStart', () => {
+		const replacement = value.animation as AnimationPlaybackControls | undefined;
+		if (!replacement || replacement === animation) return;
+		replacement.pause();
+		replacement.time = 0;
+	});
+	const wasManual = MotionGlobalConfig.useManualTiming;
+	const previousTimestamp = frameData.timestamp;
+	try {
+		await new Promise<void>((resolve, reject) => {
+			requestAnimationFrame((timestamp) => {
+				try {
+					// Sample the painted native pose and Motion's interruption at the
+					// same frame time, then close synchronously while entry is running.
+					animation.play();
+					for (const native of natives) native.startTime = timestamp - 90;
+					MotionGlobalConfig.useManualTiming = true;
+					frameData.timestamp = timestamp;
+					motionTime.set(timestamp);
+					interrupt();
+					// Keep the frame sample alive through the already queued Svelte
+					// publication, whose presence effect stops the native animation.
+					motionTime.set(timestamp);
+					resolve();
+				} catch (error) {
+					reject(error);
+				}
+			});
+		});
+		await tick();
+	} finally {
+		MotionGlobalConfig.useManualTiming = wasManual;
+		frameData.timestamp = wasManual ? previousTimestamp : performance.now();
+		motionTime.set(frameData.timestamp);
+		unsubscribe();
+	}
+}
 
 async function captureProjectionAnimations(root: HTMLElement, trigger: () => Promise<unknown>) {
 	const previous = new Set(animations(root));
@@ -555,6 +612,14 @@ it('keeps partially entered text continuous and visibly fading inside a note clo
 		// Match the settled open/close cycle used by the existing interruption
 		// regression before sampling the next opening at an exact active time.
 		await screen.getByRole('button', { name: 'Read the note' }).click();
+		await tick();
+		await frames();
+		await Promise.all([
+			...animations(stage.container).map((animation) => animation.finished),
+			visualElementStore.get(stage.container.querySelector('.detail')!)?.getValue('opacity')
+				?.animation?.finished
+		]);
+		await frames();
 		await expect.poll(() => box(card).width).toBeCloseTo(310, 1);
 		await expect
 			.poll(() => Number(getComputedStyle(stage.container.querySelector('.detail')!).opacity))
@@ -589,25 +654,29 @@ it('keeps partially entered text continuous and visibly fading inside a note clo
 		entering.time = 0.09;
 		for (const animation of opening) animation.time = 0.09;
 		await frames();
-		// Close a live partial entry. Motion samples native interruption from its
-		// start time, so resume the seeked opacity and await the browser's clock
-		// before capturing it; a raw paused WAAPI seek leaves those clocks apart.
-		entering.play();
-		await Promise.all(detail.getAnimations().map((animation) => animation.ready));
-		const before = {
-			card: box(card),
-			detail: box(detail),
-			opacity: Number(getComputedStyle(detail).opacity),
-			...paintedText(detail, card)
+		let before!: {
+			card: ReturnType<typeof box>;
+			detail: ReturnType<typeof box>;
+			opacity: number;
+			outsideCharacters: number;
+			visibleInside: number;
 		};
-		expect(before.card.width).toBeGreaterThan(collapsed.width + 8);
-		expect(before.card.width).toBeLessThan(302);
-		expect(before.opacity).toBeGreaterThan(0);
-		expect(before.opacity).toBeLessThan(1);
-		expect(before.outsideCharacters).toBe(0);
-		expect(before.visibleInside).toBeGreaterThan(0);
-		toggle.focus();
-		toggle.click();
+		await interruptPartialOpacity(detail, entering, () => {
+			before = {
+				card: box(card),
+				detail: box(detail),
+				opacity: Number(getComputedStyle(detail).opacity),
+				...paintedText(detail, card)
+			};
+			expect(before.card.width).toBeGreaterThan(collapsed.width + 8);
+			expect(before.card.width).toBeLessThan(302);
+			expect(before.opacity).toBeGreaterThan(0);
+			expect(before.opacity).toBeLessThan(1);
+			expect(before.outsideCharacters).toBe(0);
+			expect(before.visibleInside).toBeGreaterThan(0);
+			toggle.focus();
+			toggle.click();
+		});
 		await tick();
 		await frames();
 		await expect.poll(() => Boolean(opacityAnimation())).toBe(true);
@@ -704,9 +773,7 @@ it('keeps partially entered text continuous and visibly fading inside a note clo
 		await frames();
 		expect(box(card).width).toBeGreaterThan(collapsed.width + 8);
 		expect(box(card).width).toBeLessThan(302);
-		retainedOpacity()!.play();
-		await Promise.all(retained.getAnimations().map((animation) => animation.ready));
-		toggle.click();
+		await interruptPartialOpacity(retained, retainedOpacity()!, () => toggle.click());
 		await tick();
 		await expect.poll(() => Boolean(retainedOpacity())).toBe(true);
 		retainedOpacity()!.pause();

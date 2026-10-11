@@ -161,7 +161,16 @@ for (const repetitions of [1, 5]) {
 				expect(progressing.opacity).toBeGreaterThan(restored.opacity);
 				expect(progressing.opacity).toBeLessThan(0.95);
 				expect(node.inert).toBe(false);
-			} else clocks.release(intro);
+			} else {
+				// Opacity can settle before the spring's positional tracks. Wait for
+				// native completion before checking the exact final transform.
+				await new Promise<void>((resolve) => {
+					const complete = () => resolve();
+					node.addEventListener('introend', complete, { once: true });
+					onTestFinished(() => node.removeEventListener('introend', complete));
+					clocks.release(intro);
+				});
+			}
 		}
 		await expect.poll(() => pose(node).opacity).toBeCloseTo(1, 3);
 		await expect.poll(() => pose(node).y).toBeCloseTo(0, 2);

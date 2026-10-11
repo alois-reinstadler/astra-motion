@@ -1,6 +1,11 @@
 import { tick } from 'svelte';
-import { visualElementStore } from 'motion-dom';
-import { describe, expect, it } from 'vitest';
+import {
+	visualElementStore,
+	frame as motionFrame,
+	cancelFrame,
+	type AnimationPlaybackControls
+} from 'motion-dom';
+import { describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import ExtendedLab from './ExtendedLab.svelte';
 
@@ -101,19 +106,30 @@ describe('extended laboratory composition', () => {
 
 	it('cancels delayed content and lets only the latest request reflow the following receipt', async () => {
 		await ready();
-		await click('load');
-		await wait(100);
-		await click('cancel-load');
-		await wait(700);
-		expect(document.querySelector('[data-extra="loaded"]')).toBeNull();
-		expect(node('receipt').textContent).toContain('Ready');
-		await click('load');
-		await wait(400);
-		await click('load');
-		await wait(300);
-		expect(document.querySelector('[data-extra="loaded"]')).toBeNull();
-		const oldHeight = node('note').offsetHeight;
-		const oldReceipt = node('receipt').getBoundingClientRect().top;
+		let oldHeight: number;
+		let oldReceipt: number;
+		// Control request deadlines independently of delayed real animation frames.
+		// RAF, performance.now and browser animations retain their natural clocks.
+		vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+		try {
+			await click('load');
+			await vi.advanceTimersByTimeAsync(100);
+			await click('cancel-load');
+			await vi.advanceTimersByTimeAsync(700);
+			expect(document.querySelector('[data-extra="loaded"]')).toBeNull();
+			expect(node('receipt').textContent).toContain('Ready');
+			await click('load');
+			await vi.advanceTimersByTimeAsync(400);
+			await click('load');
+			await vi.advanceTimersByTimeAsync(300);
+			expect(document.querySelector('[data-extra="loaded"]')).toBeNull();
+			oldHeight = node('note').offsetHeight;
+			oldReceipt = node('receipt').getBoundingClientRect().top;
+			await vi.advanceTimersByTimeAsync(350);
+			await tick();
+		} finally {
+			vi.useRealTimers();
+		}
 		await expect.poll(() => document.querySelector('[data-extra="loaded"]')).not.toBeNull();
 		await settled();
 		expect(node('note').offsetHeight).toBeGreaterThan(oldHeight + 20);
@@ -125,14 +141,35 @@ describe('extended laboratory composition', () => {
 		await ready();
 		const scroller = node('scroller');
 		const previous = node('shelf-marker');
-		await click('shelf-3');
-		expect(node('shelf-marker')).not.toBe(previous);
-		expect(
-			visualElementStore.get(node('shelf-marker'))?.projection?.currentAnimation
-		).toBeDefined();
-		scroller.scrollLeft = 220;
-		await click('shelf-4');
-		await settled();
+		const captured = new Set<AnimationPlaybackControls>();
+		const capture = () => {
+			const marker = document.querySelector<HTMLElement>('[data-extra="shelf-marker"]');
+			if (!marker || marker === previous) return;
+			const animation = visualElementStore.get(marker)?.projection?.currentAnimation;
+			if (!animation || captured.has(animation)) return;
+			animation.pause();
+			animation.time = 0.035;
+			captured.add(animation);
+		};
+		// Capture before delayed browser frames can finish the shared handoff.
+		// The active-animation assertion must inspect an intermediate phase.
+		motionFrame.preRender(capture, true);
+		try {
+			await click('shelf-3');
+			cancelFrame(capture);
+			expect(captured.size).toBeGreaterThan(0);
+			expect(node('shelf-marker')).not.toBe(previous);
+			expect(
+				visualElementStore.get(node('shelf-marker'))?.projection?.currentAnimation
+			).toBeDefined();
+			scroller.scrollLeft = 220;
+			for (const animation of captured) animation.play();
+			await click('shelf-4');
+			await settled();
+		} finally {
+			cancelFrame(capture);
+			for (const animation of captured) animation.complete();
+		}
 		const marker = node('shelf-marker');
 		const shelf = node('shelf-4');
 		expect(document.querySelectorAll('[data-extra="shelf-marker"]')).toHaveLength(1);
@@ -204,7 +241,20 @@ describe('extended laboratory composition', () => {
 
 	it('settles all twenty overlapping changes without a stale shared marker or wait branch', async () => {
 		await ready();
-		await click('stress');
+		// Publish all twenty requests on their actual recursive 80ms schedule.
+		// Await real frames between publications, then settle on natural clocks.
+		vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+		try {
+			await click('stress');
+			for (let step = 1; step < 20; step++) {
+				await vi.advanceTimersByTimeAsync(80);
+				await tick();
+				await frame();
+				await frame();
+			}
+		} finally {
+			vi.useRealTimers();
+		}
 		await expect.poll(() => node('stress-count').textContent, { timeout: 4000 }).toBe('20 / 20');
 		await expect.poll(() => node('wait-child').textContent, { timeout: 3000 }).toBe('21');
 		await settled();

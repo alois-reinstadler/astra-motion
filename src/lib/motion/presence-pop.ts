@@ -1,5 +1,5 @@
 import { queueLayoutMutation } from './commit.js';
-import { measurePresenceBox, presenceRoots, type PresenceBox } from './presence-measure.js';
+import { measurePresenceBox, presenceRoots, type PresenceBoxes } from './presence-measure.js';
 
 export interface PresencePopOptions {
 	anchorX?: 'left' | 'right';
@@ -15,7 +15,7 @@ const popOwners = new WeakMap<HTMLElement, { original: string | null; ids: strin
 export function popPresenceNodes(
 	nodes: Iterable<HTMLElement | SVGElement>,
 	options: PresencePopOptions,
-	boxes?: WeakMap<HTMLElement, PresenceBox>
+	boxes?: Pick<PresenceBoxes, 'get'>
 ): () => void {
 	const captures = presenceRoots(nodes).map((element) => {
 		const saved = boxes?.get(element);

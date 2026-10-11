@@ -1,0 +1,36 @@
+{
+	"baseline": {
+		"isolatedPercentage": "pass",
+		"translationThenPercentage": {
+			"passed": 1,
+			"failed": 1,
+			"startupErrorPx": 75
+		},
+		"sharedFileAndOwnership": {
+			"passed": 40,
+			"failed": 1,
+			"ownershipTestsPassed": 4
+		}
+	},
+	"diagnosticImmediateCommit": {
+		"translationThenPercentage": {
+			"passed": 2,
+			"failed": 0
+		},
+		"sharedFileAndOwnership": {
+			"passed": 41,
+			"failed": 0
+		},
+		"sourceLeft": 150,
+		"parentLeft": 150,
+		"sourceLogicalLeft": 0,
+		"unintendedAnimation": false
+	},
+	"crossRootExistingRuntime": {
+		"passed": 5,
+		"failed": 0,
+		"newDiagnosticCheck": "two mounted PopResize roots; A resize and nested B exit under same outer owner; B pinned old width and A not popped"
+	},
+	"sourceEdits": false,
+	"scope": "Chromium focused component tests; not production package/browser matrix or universal parity"
+}

@@ -20,20 +20,25 @@
 		onExit?: (id: string) => void;
 	} = $props();
 	const presence = usePresence();
+	const remove = presence.safeToRemove;
 	const present = useIsPresent();
 	const data = usePresenceData<number>();
 	const root = presenceRoot();
-	const exiting = $derived(!presence.isPresent);
 	function waitForExit() {
-		if (!exiting) return;
-		const done = untrack(() => presence.safeToRemove);
+		if (presence.isPresent) return;
+		let active = true;
+		const done = () => {
+			if (active) remove();
+		};
 		untrack(() => {
 			capture?.(id, done);
 			onExit?.(id);
 		});
-		if (hold === null) return;
-		const timer = setTimeout(done, hold);
-		return () => clearTimeout(timer);
+		const timer = hold === null ? undefined : setTimeout(done, hold);
+		return () => {
+			active = false;
+			clearTimeout(timer);
+		};
 	}
 	$effect(waitForExit);
 </script>

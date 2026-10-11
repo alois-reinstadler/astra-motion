@@ -1,0 +1,206 @@
+{
+	"main": "14ae1cb2cc912d205f79dfdbec4ef122821c132d",
+	"retire": [
+		{
+			"branch": "agent/astra-comparison",
+			"head": "e1e645563e0403621d37ab603492d9e0958ce861"
+		},
+		{
+			"branch": "agent/astra-components",
+			"head": "ab801d65283e55b4cd34d509960805995cd81b0f"
+		},
+		{
+			"branch": "agent/astra-ergonomics",
+			"head": "3aca30e1c6896d508800643f179d430a12d74df0"
+		},
+		{
+			"branch": "agent/astra-lifecycle-merge",
+			"head": "ffcff2921f34d3495f80e188c3952d542773b2dc"
+		},
+		{
+			"branch": "agent/astra-lifecycle-proposal",
+			"head": "e1e645563e0403621d37ab603492d9e0958ce861"
+		},
+		{
+			"branch": "agent/astra-motion-text-package",
+			"head": "cc59b8f4759f2be86d3a0b3b90a44d83781f337d"
+		},
+		{
+			"branch": "agent/astra-motion-tilt",
+			"head": "cc59b8f4759f2be86d3a0b3b90a44d83781f337d"
+		},
+		{
+			"branch": "agent/astra-motion-write-probes",
+			"head": "d518cb8278556b0f387a1dde656b5dda592e45e5"
+		},
+		{
+			"branch": "agent/astra-package",
+			"head": "ab801d65283e55b4cd34d509960805995cd81b0f"
+		},
+		{
+			"branch": "agent/astra-perf-docs",
+			"head": "e1e645563e0403621d37ab603492d9e0958ce861"
+		},
+		{
+			"branch": "agent/astra-perf-highlight",
+			"head": "e1e645563e0403621d37ab603492d9e0958ce861"
+		},
+		{
+			"branch": "agent/astra-perf-layout",
+			"head": "e1e645563e0403621d37ab603492d9e0958ce861"
+		},
+		{
+			"branch": "agent/astra-polish-integration",
+			"head": "4c7609539abc02b59d77558440e8ead70981caff"
+		},
+		{
+			"branch": "agent/astra-polish-package",
+			"head": "4c7609539abc02b59d77558440e8ead70981caff"
+		},
+		{
+			"branch": "agent/astra-polish-perf",
+			"head": "4c7609539abc02b59d77558440e8ead70981caff"
+		},
+		{
+			"branch": "agent/astra-polish-runtime",
+			"head": "4c7609539abc02b59d77558440e8ead70981caff"
+		},
+		{
+			"branch": "agent/astra-reactivity",
+			"head": "ab801d65283e55b4cd34d509960805995cd81b0f"
+		},
+		{
+			"branch": "agent/astra-scheduler-investigation",
+			"head": "e1e645563e0403621d37ab603492d9e0958ce861"
+		},
+		{
+			"branch": "agent/astra-tests-interactions",
+			"head": "1a5fc5ca63aeaeaed00b5432c7b9d87025d22a5c"
+		},
+		{
+			"branch": "agent/astra-tests-state",
+			"head": "1a5fc5ca63aeaeaed00b5432c7b9d87025d22a5c"
+		},
+		{
+			"branch": "agent/astra-unstaged-probes",
+			"head": "0e6ba7e00d9f24f12f0b6a08469f0734434a2f09"
+		},
+		{
+			"branch": "agent/astra-upstream-animation",
+			"head": "4c7609539abc02b59d77558440e8ead70981caff"
+		},
+		{
+			"branch": "agent/astra-upstream-components",
+			"head": "4c7609539abc02b59d77558440e8ead70981caff"
+		},
+		{
+			"branch": "agent/astra-upstream-gestures",
+			"head": "4c7609539abc02b59d77558440e8ead70981caff"
+		},
+		{
+			"branch": "agent/astra-upstream-presence",
+			"head": "4c7609539abc02b59d77558440e8ead70981caff"
+		},
+		{
+			"branch": "agent/astra-upstream-resize-drag",
+			"head": "4c7609539abc02b59d77558440e8ead70981caff"
+		},
+		{
+			"branch": "agent/astra-upstream-timing-fix",
+			"head": "4c7609539abc02b59d77558440e8ead70981caff"
+		},
+		{
+			"branch": "agent/astra-upstream-webkit-fix",
+			"head": "4c7609539abc02b59d77558440e8ead70981caff"
+		},
+		{
+			"branch": "release/motion-beta-readiness",
+			"head": "ab801d65283e55b4cd34d509960805995cd81b0f"
+		}
+	],
+	"keep": [
+		{
+			"branch": "agent/astra-layout-state-tests",
+			"attached": false,
+			"ancestorOfMain": false
+		},
+		{
+			"branch": "agent/astra-presence-tests",
+			"attached": false,
+			"ancestorOfMain": false
+		},
+		{
+			"branch": "agent/astra-rc",
+			"attached": true,
+			"ancestorOfMain": true
+		},
+		{
+			"branch": "agent/astra-rc-apis",
+			"attached": true,
+			"ancestorOfMain": true
+		},
+		{
+			"branch": "agent/astra-rc-presence",
+			"attached": true,
+			"ancestorOfMain": true
+		},
+		{
+			"branch": "agent/astra-rc-refinement-one",
+			"attached": true,
+			"ancestorOfMain": true
+		},
+		{
+			"branch": "agent/astra-rc-refinement-two",
+			"attached": true,
+			"ancestorOfMain": true
+		},
+		{
+			"branch": "agent/astra-rc-vgpu",
+			"attached": true,
+			"ancestorOfMain": true
+		},
+		{
+			"branch": "agent/astra-word-qualification",
+			"attached": true,
+			"ancestorOfMain": true
+		},
+		{
+			"branch": "main",
+			"attached": true,
+			"ancestorOfMain": true
+		},
+		{
+			"branch": "t3code/05596d3d",
+			"attached": true,
+			"ancestorOfMain": true
+		},
+		{
+			"branch": "t3code/10ab3c8f",
+			"attached": true,
+			"ancestorOfMain": true
+		},
+		{
+			"branch": "t3code/18cf2510",
+			"attached": true,
+			"ancestorOfMain": true
+		},
+		{
+			"branch": "t3code/improve-motion-documentation",
+			"attached": true,
+			"ancestorOfMain": true
+		},
+		{
+			"branch": "t3code/svelte-motion-lifecycles",
+			"attached": true,
+			"ancestorOfMain": true
+		},
+		{
+			"branch": "t3code/svelte-motion-parity-review",
+			"attached": true,
+			"ancestorOfMain": true
+		}
+	],
+	"mainAtRemoval": "14ae1cb2cc912d205f79dfdbec4ef122821c132d",
+	"removedAt": "2026-10-11T19:22:59.843164+00:00",
+	"restore": "For each retired record, git branch <branch> <head> recreates its local ref. No remote refs were changed."
+}

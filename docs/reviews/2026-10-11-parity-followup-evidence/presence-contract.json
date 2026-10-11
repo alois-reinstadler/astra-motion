@@ -1,0 +1,48 @@
+{
+	"pinnedReact": {
+		"version": "13.4.4",
+		"initial": {
+			"present": "true",
+			"callbackType": "undefined"
+		},
+		"before": {
+			"connected": true,
+			"completions": 0,
+			"sameCallback": false
+		},
+		"after": {
+			"connected": false,
+			"completions": 1
+		},
+		"errors": []
+	},
+	"publicCompletion": [
+		{
+			"stable": false,
+			"connected": true,
+			"completions": 0,
+			"errors": []
+		},
+		{
+			"stable": true,
+			"connected": false,
+			"completions": 1,
+			"errors": []
+		}
+	],
+	"reactiveSelector": [
+		{
+			"stable": false,
+			"before": 1,
+			"effects": 2,
+			"errors": []
+		},
+		{
+			"stable": true,
+			"before": 1,
+			"effects": 1,
+			"errors": []
+		}
+	],
+	"qualification": "Primary-agent rerun of isolated browser prototypes; all page errors empty; source unchanged."
+}

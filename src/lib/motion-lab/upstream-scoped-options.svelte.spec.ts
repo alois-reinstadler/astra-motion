@@ -158,6 +158,16 @@ it.each([1, 100])(
 						[node(), { opacity: 0.5 }, { duration: 0.05 }],
 						[callback, [0, endpoint], { duration: 0.1, ease: 'linear' }]
 					]);
+		// Sample explicit sequence phases: a busy browser can skip the whole
+		// callback's 100 ms playback span before its first natural frame.
+		run.pause();
+		await frames();
+		for (const time of [0.075, 0.1]) {
+			run.time = time;
+			await frames(1);
+			expect(values.at(-1)).toBeCloseTo(((time - 0.05) / 0.1) * endpoint, 6);
+		}
+		run.complete();
 		await run;
 		expect(values.length).toBeGreaterThan(1);
 		expect(values.every((value) => value >= 0 && value <= endpoint)).toBe(true);

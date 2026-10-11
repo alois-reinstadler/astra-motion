@@ -1,0 +1,82 @@
+# Release stabilization — 2026-10-11
+
+The sole active release candidate is `t3code/svelte-motion-parity-review`.
+This pass keeps Motion 13.4.4 as the animation/projection engine and Svelte 5 as
+lifecycle owner. No compatibility API, staged-state API, compiler instrumentation,
+DOM interception or eager subscriptions are being introduced. `updateLayout`
+remains an existing optional explicit transaction; ordinary reactive correctness
+must not depend on it.
+
+## Incorporated fixes
+
+- Seed the cached projected origin before late presence publication can overwrite
+  it with reflowed DOM geometry. Ordinary and interrupted combined keyed updates
+  now pass six direct-state regression checks (unchanged runtime fails two).
+- Preserve first-owned presence boxes for the lifetime of a synchronous transaction;
+  drain managed pop writes inside it, release ownership on errors, reject mutation
+  during snapshot capture and prevent stale queued work replay.
+- Keep normalized ancestor transforms until Motion consumes its deferred measurement.
+  Release on skipped updates and unmount; preserve newer authored declarations.
+- Make initialization-captured `safeToRemove` complete the current exit. Internal
+  animation completions retain generation guards. Manual work cancels on re-entry
+  and destruction. Field selectors prevent custom-only updates restarting exits.
+- Batch independently completed exits, reconcile pending revival before removal,
+  discard old record completions and release destroyed boundaries. These four
+  regressions fail against the older runtime and pass with the existing internal
+  batching change; no staged API is included.
+- Skip obsolete affected participants after reconciliation, avoiding destroyed
+  policy getters during queued shared-layout work (12 warnings before, zero after).
+- Allow always-throwing synchronous transaction callbacks in the TypeScript API.
+
+## Qualification
+
+Completed preliminary gates: direct-state regression 6/6; presence/docs 25/25;
+server 251/251; Svelte diagnostics 0 errors and 0 warnings. Presence negative
+control fails four of five new cases. Exact-baseline measurement-lifetime negative
+control fails premature transform restoration.
+
+The preliminary complete Chromium run passes 136 files / 1,173 tests. The later
+batching/disposal changes pass the affected 105-test gate. Focused release cases
+pass 22/22 in Firefox and WebKit. The exact final RC3 archive passes nine
+plain-Svelte SSR/hydration fixtures plus 15 SvelteKit cases in each of three
+engines; pinned upstream contracts pass 12/12. Original full Firefox / WebKit
+runs report four / seven timing and deadline failures; all eight corrected test
+files now pass 66 distinct cases per engine. Entire source suites were not rerun
+after those test-only corrections. Full production E2E reports 248 passes, two
+existing touch-input skips and two WebKit glyph-reference failures, reproduced
+on unanimated native buttons. The corrected reference keeps the 0.5px tolerance;
+the complete corrected glyph file passes 42/42 across three engines, with
+6/6 independent reorder rechecks and deliberate scale distortion rejected. The
+full production suite was not rerun after that test-only correction.
+Details, retained failures and scope limits are in the
+[qualification report](releases/2026-10-11-rc3-qualification.md). This is not a
+universal unstaged-parity claim and has not been published.
+
+Known existing nonfatal development warning: the shared-layout dependency fixture
+can queue attachment initialization after its component's derived ownership ends
+while its DOM is retained (`motion-core.svelte.ts`, queued `refresh(options())`).
+The disposed-dirty-set fix does not cover that path. Its two warnings reproduce
+with the original presence hooks. No exception or packed-consumer failure has
+been attributed to it; do not describe browser consoles as universally warning-free.
+
+## Consolidation and previous attempts
+
+[Branch and worktree inventory](releases/2026-10-11-worktree-inventory.json) records
+45 local branch refs before this pass: their committed changes were already in `main` or patch
+equivalent to changes in `main`. Uncommitted work in the documentation, lifecycle,
+RC and main worktrees is distinct and preserved. The three disposable worktrees
+created for this stabilization pass were removed after their selected changes
+and diagnostic evidence were retained. No preexisting worktree was removed.
+Twenty-nine unattached local branches whose tips are ancestors of `main` were
+retired; fourteen attached branches and two branches with distinct history remain.
+[Saved names and tips](releases/2026-10-11-retired-local-branches.json) allow restoration.
+Remote refs were not changed.
+Do not merge parked branches wholesale: several introduce staged APIs or older
+runtime experiments that conflict with this candidate's public contract.
+
+The [verified attempted-approaches ledger](reviews/2026-10-11-parity-architecture-followup.md#attempted-approaches-ledger-updated-before-choosing-fixes)
+explains the release choice. Cache-promotion delay alone failed; seed-before-presence
+passed. Synchronous commit proved the ancestor timing cause but is not the chosen
+production fix. Public `$effect.pre` failed parent/sibling/deep-mutation ordering
+assumptions. A symbol-to-object owner conversion does not change transaction scope
+or fix an observed root defect. Those approaches are not being retried for release.

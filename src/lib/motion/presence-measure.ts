@@ -1,4 +1,4 @@
-import { beforeCommit } from './commit.js';
+import { beforeCommit, currentPresenceSnapshot } from './commit.js';
 import { observeLayout } from './observe.js';
 
 export interface PresenceBox {
@@ -12,6 +12,30 @@ export interface PresenceBox {
 	bottom: number;
 	direction: string;
 }
+
+/** Observation can advance without replacing an open transaction's origin. */
+export function createPresenceBoxes() {
+	const observed = new WeakMap<HTMLElement, PresenceBox>();
+	const captured = new WeakMap<HTMLElement, { owner: symbol; box: PresenceBox }>();
+	return {
+		get(node: HTMLElement): PresenceBox | undefined {
+			const origin = captured.get(node);
+			return origin && origin.owner === currentPresenceSnapshot() ? origin.box : observed.get(node);
+		},
+		observe(node: HTMLElement) {
+			observed.set(node, measurePresenceBox(node));
+		},
+		capture(node: HTMLElement) {
+			const owner = currentPresenceSnapshot();
+			if (owner && captured.get(node)?.owner === owner) return;
+			const box = measurePresenceBox(node);
+			observed.set(node, box);
+			if (owner) captured.set(node, { owner, box });
+		}
+	};
+}
+
+export type PresenceBoxes = ReturnType<typeof createPresenceBoxes>;
 
 export function presenceRoots(nodes: Iterable<HTMLElement | SVGElement>): HTMLElement[] {
 	const flatten = (node: Element): Element[] =>
@@ -93,16 +117,19 @@ function observe(node: HTMLElement, capture: Capture): () => void {
 /** Keep the last present layout. Exit must never replace it with already-reflowed geometry. */
 export function observePresenceBoxes(
 	nodes: Iterable<HTMLElement | SVGElement>,
-	boxes: WeakMap<HTMLElement, PresenceBox>,
+	boxes: PresenceBoxes,
 	isPresent: () => boolean
 ): () => void {
 	const releases = presenceRoots(nodes).map((node) => {
 		const capture = () => {
-			if (node.isConnected && isPresent()) boxes.set(node, measurePresenceBox(node));
+			if (node.isConnected && isPresent()) boxes.capture(node);
+		};
+		const refresh = () => {
+			if (node.isConnected && isPresent()) boxes.observe(node);
 		};
 		capture();
 		beforeCommit.add(capture);
-		const release = observe(node, capture);
+		const release = observe(node, refresh);
 		return () => {
 			beforeCommit.delete(capture);
 			release();

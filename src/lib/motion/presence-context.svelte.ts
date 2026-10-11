@@ -153,7 +153,7 @@ export function createPresenceScope(
 
 export interface PresenceState {
 	readonly isPresent: boolean;
-	/** Read this callback when scheduling the current exit; stale callbacks cannot remove a later exit. */
+	/** Completes the current exit. Cancel application-owned work on re-entry or destruction. */
 	readonly safeToRemove: () => void;
 }
 
@@ -162,33 +162,34 @@ export function usePresence(): PresenceState {
 	const scope = readPresenceScope();
 	const registration = scope?.register();
 	if (registration) onDestroy(registration.unregister);
+	const isPresent = $derived(scope?.snapshot.isPresent ?? true);
 	return {
 		get isPresent() {
-			return scope?.snapshot.isPresent ?? true;
+			return isPresent;
 		},
-		get safeToRemove() {
+		safeToRemove: () => {
 			const generation = scope?.snapshot.generation;
-			return () => {
-				if (generation !== undefined) registration?.complete(generation);
-			};
+			if (generation !== undefined) registration?.complete(generation);
 		}
 	};
 }
 
 export function useIsPresent(): { readonly current: boolean } {
 	const scope = readPresenceScope();
+	const current = $derived(scope?.snapshot.isPresent ?? true);
 	return {
 		get current() {
-			return scope?.snapshot.isPresent ?? true;
+			return current;
 		}
 	};
 }
 
 export function usePresenceData<T = unknown>(): { readonly current: T | undefined } {
 	const scope = readPresenceScope();
+	const current = $derived(scope?.snapshot.custom as T | undefined);
 	return {
 		get current() {
-			return scope?.snapshot.custom as T | undefined;
+			return current;
 		}
 	};
 }

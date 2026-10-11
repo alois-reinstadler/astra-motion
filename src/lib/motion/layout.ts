@@ -31,7 +31,13 @@ import {
 	preserveAspectMeasurements,
 	correctBoundarySnapshot
 } from './projection-boundaries.js';
-import { beforeCommit, layoutBridge, synchronousMutation } from './commit.js';
+import {
+	beforeCommit,
+	beginPresenceSnapshot,
+	flushLayoutMutations,
+	layoutBridge,
+	synchronousMutation
+} from './commit.js';
 import { shouldReduceMotion, type MotionPolicy } from './policy.js';
 import {
 	ensureMotionVisual,
@@ -203,14 +209,16 @@ function pruneStack(projection: IProjectionNode, id: string | undefined) {
 /** Native transitions own DOM retention; this only informs Motion's shared-stack protocol. */
 function setPresence(root: HTMLElement, present: boolean) {
 	let changed = false;
-	for (const participant of participants.values()) {
-		if (participant.element !== root && !root.contains(participant.element)) continue;
+	for (const participant of participantsUnder(root)) {
 		if (present) participant.exitingRoots.delete(root);
 		else participant.exitingRoots.add(root);
 		const isPresent = participant.exitingRoots.size === 0;
 		const { projection } = participant;
 		if (projection.isPresent === isPresent) continue;
 		changed = true;
+		// Presence is published after ancestor DOM writes. Seed the current projected
+		// origin before willUpdate can capture that already-reflowed geometry.
+		seedCachedSnapshots([participant]);
 		projection.willUpdate();
 		projection.isPresent = isPresent;
 		if (projection.options.layoutId) {
@@ -219,6 +227,16 @@ function setPresence(root: HTMLElement, present: boolean) {
 		}
 	}
 	if (changed) scheduleRegistration();
+}
+
+/** Lookup by DOM membership: a leaf exit must not scan every registered sibling. */
+function* participantsUnder(root: Element): Generator<Participant> {
+	const own = participants.get(root as HTMLElement);
+	if (own) yield own;
+	for (const element of root.querySelectorAll<HTMLElement>('*')) {
+		const participant = participants.get(element);
+		if (participant) yield participant;
+	}
 }
 
 const intro = (event: Event) => {
@@ -422,13 +440,21 @@ function scheduleRegistration() {
 	});
 }
 
+let capturingSnapshot = false;
 function snapshot(affected?: Set<Participant>) {
-	reconcile();
-	for (const boundary of boundaries.values()) boundary.captureOffset();
-	for (const capture of beforeCommit) capture();
-	for (const participant of affected ?? participants.values()) {
-		refreshPolicy(participant);
-		participant.projection.willUpdate();
+	capturingSnapshot = true;
+	try {
+		reconcile();
+		for (const boundary of boundaries.values()) boundary.captureOffset();
+		for (const capture of beforeCommit) capture();
+		for (const participant of affected ?? participants.values()) {
+			// Reconciliation can dispose or replace members of an earlier dirty set.
+			if (participants.get(participant.element) !== participant) continue;
+			refreshPolicy(participant);
+			participant.projection.willUpdate();
+		}
+	} finally {
+		capturingSnapshot = false;
 	}
 }
 
@@ -465,7 +491,8 @@ function commit(immediate = false) {
  * All registered groups are snapshotted so cross-component reflow stays coordinated.
  */
 export function updateLayout<Result>(
-	change: (() => Result) & (Result extends PromiseLike<unknown> ? never : unknown)
+	change: (() => Result) &
+		([Result] extends [never] ? unknown : Result extends PromiseLike<unknown> ? never : unknown)
 ): void {
 	const apply = synchronousMutation(change);
 	if (typeof window === 'undefined') {
@@ -473,20 +500,28 @@ export function updateLayout<Result>(
 		return;
 	}
 	if (transactionDepth) {
+		if (capturingSnapshot)
+			throw new Error('Astra layout.update cannot mutate state while capturing layout snapshots.');
 		apply();
 		return;
 	}
 	transactionDepth++;
+	const releaseSnapshot = beginPresenceSnapshot();
 	try {
 		snapshot();
 		flushSync(apply);
+		flushSync(flushLayoutMutations);
 	} finally {
 		try {
 			reconcile();
 		} finally {
 			transactionDepth--;
-			commit();
-			observer?.acknowledge();
+			try {
+				commit();
+				observer?.acknowledge();
+			} finally {
+				releaseSnapshot();
+			}
 		}
 	}
 }
@@ -526,10 +561,7 @@ export function createLayout(options: LayoutGroupOptions = {}) {
 		layoutBridge.invalidate = (roots) => {
 			const elements = new Set<HTMLElement>();
 			for (const root of roots)
-				for (const participant of participants.values()) {
-					if (root === participant.element || root.contains(participant.element))
-						elements.add(participant.element);
-				}
+				for (const participant of participantsUnder(root)) elements.add(participant.element);
 			if (elements.size) scheduleAutomatic(elements);
 		};
 	}

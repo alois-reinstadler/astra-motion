@@ -1,4 +1,4 @@
-import { expect, it, onTestFinished } from 'vitest';
+import { expect, it, onTestFinished, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import { flushSync } from 'svelte';
 import { visualElementStore, AsyncMotionValueAnimation } from 'motion-dom';
@@ -9,6 +9,80 @@ const microtasks = async () => {
 	for (let i = 0; i < 12; i++) await Promise.resolve();
 };
 const delay = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+
+function controlNativeClocks(node: HTMLElement) {
+	const animate = node.animate.bind(node);
+	const owned = new Map<Animation, number>();
+	let controlled = true;
+	let receive: ((animation: Animation) => void) | undefined;
+	const spy = vi.spyOn(node, 'animate').mockImplementation((keyframes, options) => {
+		const animation = animate(keyframes, options);
+		const duration = animation.effect?.getTiming().duration;
+		if (controlled && typeof duration === 'number' && duration > 0) {
+			// Svelte ticks only running animations. Rate zero holds the real
+			// native clock without ending that loop as pause() would.
+			owned.set(animation, animation.playbackRate);
+			animation.playbackRate = 0;
+			animation.currentTime = 0;
+			const ready = receive;
+			receive = undefined;
+			ready?.(animation);
+		}
+		return animation;
+	});
+	onTestFinished(() => {
+		spy.mockRestore();
+		for (const animation of owned.keys()) animation.cancel();
+	});
+	return {
+		next(action: () => void) {
+			return new Promise<Animation>((resolve, reject) => {
+				receive = (animation) => {
+					void animation.ready.then(() => resolve(animation), reject);
+				};
+				flushSync(action);
+			});
+		},
+		release(animation: Animation) {
+			controlled = false;
+			animation.playbackRate = owned.get(animation)!;
+			animation.play();
+		}
+	};
+}
+
+function sampleNativeX(node: HTMLElement, animation: Animation, time: number) {
+	const value = visualElementStore.get(node)!.getValue('x')!;
+	return new Promise<number>((resolve, reject) => {
+		let active = true;
+		let queued = false;
+		let heldTime = animation.currentTime;
+		const cleanup = () => {
+			active = false;
+			stop();
+		};
+		const stop = value.on('change', () => {
+			if (queued) return;
+			queued = true;
+			// The native tick renders after its MotionValue changes. Read that
+			// render, rather than an earlier unrelated style mutation.
+			queueMicrotask(() => {
+				if (!active) return;
+				cleanup();
+				try {
+					expect(node.isConnected).toBe(true);
+					expect(animation.currentTime).toBe(heldTime);
+					resolve(new DOMMatrix(getComputedStyle(node).transform).e);
+				} catch (error) {
+					reject(error);
+				}
+			});
+		});
+		onTestFinished(cleanup);
+		animation.currentTime = Math.round(time);
+		heldTime = animation.currentTime;
+	});
+}
 
 it.each(['object', 'custom', 'labels'] as const)(
 	'interrupts native intros immediately when %s targets change without a pose jump',
@@ -127,47 +201,15 @@ it('hands a still-running retarget to native exit and reentry without resetting 
 	expect(renderedX()).toBeGreaterThan(0);
 	expect(renderedX()).toBeLessThan(100);
 
-	let afterExit: number | undefined;
+	const clocks = controlNativeClocks(node);
 	let reversing = false;
-	let finishReentry: () => void;
+	let finishReentry!: () => void;
 	const reentered = new Promise<void>((resolve) => (finishReentry = resolve));
 	const onIntroEnd = () => {
 		if (reversing) finishReentry();
 	};
-	let observer: MutationObserver;
-	const reversal = new Promise<{ before: number; after: number; sameNode: boolean }>(
-		(resolve, reject) => {
-			observer = new MutationObserver(() => {
-				try {
-					if (afterExit === undefined || reversing) return;
-					if (!node.isConnected) throw new Error('Native exit detached before reversal');
-					const before = renderedX();
-					if (before >= afterExit) return;
-					if (before <= -160) throw new Error('Native exit completed before reversal');
-					// Reverse at a rendered partial exit, in this microtask checkpoint.
-					// Two awaited frames can outlast the entire 300ms native outro.
-					reversing = true;
-					observer.disconnect();
-					flushSync(() => screen.component.toggle());
-					void microtasks()
-						.then(() => ({
-							before,
-							after: renderedX(),
-							sameNode: screen.getByTestId('intro-retarget').element() === node
-						}))
-						.then(resolve, reject);
-				} catch (error) {
-					reject(error);
-				}
-			});
-		}
-	);
-	const cleanup = () => {
-		observer.disconnect();
-		node.removeEventListener('introend', onIntroEnd);
-	};
+	const cleanup = () => node.removeEventListener('introend', onIntroEnd);
 	onTestFinished(cleanup);
-	observer!.observe(node, { attributes: true, attributeFilter: ['style'] });
 	node.addEventListener('introend', onIntroEnd);
 	try {
 		// Resume immediately before handoff: this must exercise a running driver,
@@ -178,20 +220,29 @@ it('hands a still-running retarget to native exit and reentry without resetting 
 		const sampledAt = performance.now();
 		const beforeExit = renderedX();
 		expect(beforeExit).toBeLessThan(100);
-		flushSync(() => screen.component.toggle());
+		const exitReady = clocks.next(() => screen.component.toggle());
 		await microtasks();
 		expect(node.isConnected).toBe(true);
-		afterExit = renderedX();
+		const afterExit = renderedX();
 		// Stopping Motion samples playback between rendered frames. Allow that small
 		// linear advancement, but reject resetting to initial, animate, or exit poses.
 		const speed = 280 / replacementDuration;
 		const samplingAllowance = 20 + (speed * (performance.now() - sampledAt)) / 1000;
 		expect(Math.abs(afterExit - beforeExit)).toBeLessThan(samplingAllowance);
-		const reversed = await reversal;
-		expect(reversed.before).toBeLessThan(afterExit);
-		expect(reversed.before).toBeGreaterThan(-160);
-		expect(reversed.sameNode).toBe(true);
-		expect(reversed.after).toBeCloseTo(reversed.before, 1);
+		const exit = await exitReady;
+		const duration = exit.effect!.getTiming().duration as number;
+		expect(duration).toBeGreaterThan(0);
+		const beforeReentry = await sampleNativeX(node, exit, duration / 2);
+		expect(beforeReentry).toBeLessThan(afterExit);
+		expect(beforeReentry).toBeGreaterThan(-160);
+		expect(exit.playState).toBe('running');
+		reversing = true;
+		const intro = await clocks.next(() => screen.component.toggle());
+		await frame();
+		await frame();
+		expect(screen.getByTestId('intro-retarget').element()).toBe(node);
+		expect(renderedX()).toBeCloseTo(beforeReentry, 1);
+		clocks.release(intro);
 		await reentered;
 		await expect.poll(renderedX).toBeCloseTo(180, 2);
 		// Preserve the original stale-clock check: the cancelled intro lasts 1.2s,

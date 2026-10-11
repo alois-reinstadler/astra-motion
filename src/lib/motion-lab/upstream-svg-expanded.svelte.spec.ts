@@ -3,6 +3,8 @@
 import { tick } from 'svelte';
 import { expect, it } from 'vitest';
 import { render } from 'vitest-browser-svelte';
+import { frameData, time } from 'motion-dom';
+import { MotionGlobalConfig } from 'motion-utils';
 import Fixture from './UpstreamSvgExpanded.svelte';
 const node = (name: string) => document.querySelector<SVGElement>(`[data-case="${name}"]`)!;
 const frames = async (count = 3) => {
@@ -137,14 +139,51 @@ it('svg-new-attributes: animates previously unseen dash attributes under a rotat
 });
 
 it('svg-viewbox-delay: preserves the authored viewBox during delay then reaches target', async () => {
-	const screen = render(Fixture, { mode: 'viewbox' });
-	await tick();
-	expect(node('viewbox').getAttribute('viewBox')).toBe('0 0 100 100');
-	screen.component.change();
-	await tick();
-	await frames(2);
-	expect(node('viewbox').getAttribute('viewBox')).toBe('0 0 100 100');
-	await expect.poll(() => node('viewbox').getAttribute('viewBox')).toBe('100 100 200 200');
+	const previousManualTiming = MotionGlobalConfig.useManualTiming;
+	const previousTimestamp = frameData.timestamp;
+	const startedAt = performance.now();
+	MotionGlobalConfig.useManualTiming = true;
+	frameData.timestamp = startedAt;
+	time.set(startedAt);
+	let screen: ReturnType<typeof render<typeof Fixture>> | undefined;
+	try {
+		screen = render(Fixture, { mode: 'viewbox' });
+		await tick();
+		await frames();
+		expect(node('viewbox').getAttribute('viewBox')).toBe('0 0 100 100');
+		screen.component.change();
+		await tick();
+		await frames();
+		// Hold Motion's clock while resolving the changed target, then sample
+		// the real 250 ms delay and 150 ms interpolation independently of RAF rate.
+		frameData.timestamp = startedAt + 249;
+		time.set(frameData.timestamp);
+		await frames(1);
+		expect(node('viewbox').getAttribute('viewBox')).toBe('0 0 100 100');
+		frameData.timestamp = startedAt + 325;
+		time.set(frameData.timestamp);
+		await frames(1);
+		const intermediate = node('viewbox').getAttribute('viewBox')!.split(/\s+/).map(Number);
+		expect(intermediate).toHaveLength(4);
+		expect(intermediate[0]).toBeGreaterThan(0);
+		expect(intermediate[0]).toBeLessThan(100);
+		expect(intermediate[1]).toBe(intermediate[0]);
+		expect(intermediate[2]).toBeGreaterThan(100);
+		expect(intermediate[2]).toBeLessThan(200);
+		expect(intermediate[3]).toBe(intermediate[2]);
+		frameData.timestamp = startedAt + 400;
+		time.set(frameData.timestamp);
+		await frames(1);
+		expect(node('viewbox').getAttribute('viewBox')).toBe('100 100 200 200');
+	} finally {
+		try {
+			await screen?.unmount();
+		} finally {
+			MotionGlobalConfig.useManualTiming = previousManualTiming;
+			frameData.timestamp = previousManualTiming ? previousTimestamp : performance.now();
+			time.set(frameData.timestamp);
+		}
+	}
 });
 
 it('svg-transform-value: renders and updates a group transform MotionValue', async () => {

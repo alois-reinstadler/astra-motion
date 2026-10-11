@@ -1,0 +1,779 @@
+{
+	"created": "2026-10-11T18:33:47.695595+00:00",
+	"branches": [
+		{
+			"branch": "agent/astra-comparison",
+			"head": "e1e645563e0403621d37ab603492d9e0958ce861",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-components",
+			"head": "ab801d65283e55b4cd34d509960805995cd81b0f",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-ergonomics",
+			"head": "3aca30e1c6896d508800643f179d430a12d74df0",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-layout-state-tests",
+			"head": "0c5790c037647347a3be65a1c02489cb81994763",
+			"alreadyInMain": false,
+			"equivalentChangesInMain": false
+		},
+		{
+			"branch": "agent/astra-lifecycle-merge",
+			"head": "ffcff2921f34d3495f80e188c3952d542773b2dc",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-lifecycle-proposal",
+			"head": "e1e645563e0403621d37ab603492d9e0958ce861",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-motion-text-package",
+			"head": "cc59b8f4759f2be86d3a0b3b90a44d83781f337d",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-motion-tilt",
+			"head": "cc59b8f4759f2be86d3a0b3b90a44d83781f337d",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-motion-write-probes",
+			"head": "d518cb8278556b0f387a1dde656b5dda592e45e5",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-package",
+			"head": "ab801d65283e55b4cd34d509960805995cd81b0f",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-perf-docs",
+			"head": "e1e645563e0403621d37ab603492d9e0958ce861",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-perf-highlight",
+			"head": "e1e645563e0403621d37ab603492d9e0958ce861",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-perf-layout",
+			"head": "e1e645563e0403621d37ab603492d9e0958ce861",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-polish-integration",
+			"head": "4c7609539abc02b59d77558440e8ead70981caff",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-polish-package",
+			"head": "4c7609539abc02b59d77558440e8ead70981caff",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-polish-perf",
+			"head": "4c7609539abc02b59d77558440e8ead70981caff",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-polish-runtime",
+			"head": "4c7609539abc02b59d77558440e8ead70981caff",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-presence-tests",
+			"head": "b9947dee6fa529031f41b6e70b5fcad47a56092c",
+			"alreadyInMain": false,
+			"equivalentChangesInMain": false
+		},
+		{
+			"branch": "agent/astra-rc",
+			"head": "4f609394089684fa287402852f23d04503ff12ac",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-rc-apis",
+			"head": "c2f1795b69945be93613bc21b5f3eece7615119e",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-rc-presence",
+			"head": "c2f1795b69945be93613bc21b5f3eece7615119e",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-rc-refinement-one",
+			"head": "4f609394089684fa287402852f23d04503ff12ac",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-rc-refinement-two",
+			"head": "4f609394089684fa287402852f23d04503ff12ac",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-rc-vgpu",
+			"head": "c2f1795b69945be93613bc21b5f3eece7615119e",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-reactivity",
+			"head": "ab801d65283e55b4cd34d509960805995cd81b0f",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-scheduler-investigation",
+			"head": "e1e645563e0403621d37ab603492d9e0958ce861",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-tests-interactions",
+			"head": "1a5fc5ca63aeaeaed00b5432c7b9d87025d22a5c",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-tests-state",
+			"head": "1a5fc5ca63aeaeaed00b5432c7b9d87025d22a5c",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-unstaged-probes",
+			"head": "0e6ba7e00d9f24f12f0b6a08469f0734434a2f09",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-upstream-animation",
+			"head": "4c7609539abc02b59d77558440e8ead70981caff",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-upstream-components",
+			"head": "4c7609539abc02b59d77558440e8ead70981caff",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-upstream-gestures",
+			"head": "4c7609539abc02b59d77558440e8ead70981caff",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-upstream-presence",
+			"head": "4c7609539abc02b59d77558440e8ead70981caff",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-upstream-resize-drag",
+			"head": "4c7609539abc02b59d77558440e8ead70981caff",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-upstream-timing-fix",
+			"head": "4c7609539abc02b59d77558440e8ead70981caff",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-upstream-webkit-fix",
+			"head": "4c7609539abc02b59d77558440e8ead70981caff",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "agent/astra-word-qualification",
+			"head": "4f609394089684fa287402852f23d04503ff12ac",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "main",
+			"head": "14ae1cb2cc912d205f79dfdbec4ef122821c132d",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "release/motion-beta-readiness",
+			"head": "ab801d65283e55b4cd34d509960805995cd81b0f",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "t3code/05596d3d",
+			"head": "e1e645563e0403621d37ab603492d9e0958ce861",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "t3code/10ab3c8f",
+			"head": "14ae1cb2cc912d205f79dfdbec4ef122821c132d",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "t3code/18cf2510",
+			"head": "e1e645563e0403621d37ab603492d9e0958ce861",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "t3code/improve-motion-documentation",
+			"head": "e1e645563e0403621d37ab603492d9e0958ce861",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "t3code/svelte-motion-lifecycles",
+			"head": "14ae1cb2cc912d205f79dfdbec4ef122821c132d",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		},
+		{
+			"branch": "t3code/svelte-motion-parity-review",
+			"head": "e1e645563e0403621d37ab603492d9e0958ce861",
+			"alreadyInMain": true,
+			"equivalentChangesInMain": true
+		}
+	],
+	"worktrees": [
+		{
+			"path": "/home/node/repos/astra-motion",
+			"status": [
+				" M .github/workflows/ci.yml",
+				" M docs/text-motion.md",
+				" M package.json",
+				" M src/app.d.ts",
+				" M src/lib/motion-lab/parity-values-docs.spec.ts",
+				" M src/lib/motion-lab/resize-content.svelte.spec.ts",
+				" M src/lib/motion-lab/text-motion.svelte.spec.ts",
+				" M src/lib/motion/commit.ts",
+				" M src/lib/motion/layout.ts",
+				" M src/lib/motion/presence.ts",
+				" M src/lib/motion/projection-boundaries.ts",
+				" M src/lib/motion/text-segments.spec.ts",
+				" M src/lib/motion/text-segments.ts",
+				" M src/lib/site/CodeText.svelte",
+				" M src/lib/site/DocArticle.svelte",
+				" M src/lib/site/DocsSidebar.svelte",
+				" M src/lib/site/ExamplePreview.svelte",
+				" M src/lib/site/docs.ts",
+				" M src/lib/site/examples.ts",
+				" M src/lib/site/examples/core-examples.ts",
+				" M src/lib/site/examples/gestures-layout-examples.ts",
+				" M src/lib/site/examples/legacy-examples.ts",
+				" M src/lib/site/examples/presence-view-examples.ts",
+				" M src/lib/site/examples/values-helpers-examples.ts",
+				" M src/lib/site/highlight.spec.ts",
+				" M src/lib/site/highlight.ts",
+				" M src/lib/site/snippet-previews.spec.ts",
+				" M src/lib/site/snippet-previews.ts",
+				" M src/routes/+page.svelte",
+				" M src/routes/docs/+layout.svelte",
+				" M src/routes/docs/+page.svelte",
+				" M src/routes/docs/[slug]/+page.svelte",
+				" D src/routes/docs/[slug]/+page.ts",
+				" M src/routes/examples/+page.svelte",
+				" M src/routes/examples/[slug]/+page.svelte",
+				" D src/routes/examples/[slug]/+page.ts",
+				" M src/routes/motion-lab/+page.svelte",
+				"?? .astra-webkit-verification.config.ts",
+				"?? docs/research/lifecycle-exit-proposal.md",
+				"?? docs/research/performance-site-2026-10-01.json",
+				"?? docs/research/react-astra-baseline/",
+				"?? docs/research/react-astra-benchmark-verification.md",
+				"?? docs/research/scheduler-comparison-2026-10-02.json",
+				"?? docs/research/scheduler-investigation-2026-10-01.json",
+				"?? docs/research/scheduler-investigation-2026-10-02.json",
+				"?? docs/research/scheduler-mass-exit-2026-10-02.json",
+				"?? docs/reviews/2026-10-03-maintenance-review.json",
+				"?? experiments/react-astra-benchmark/",
+				"?? scripts/check-site-bundles.mjs",
+				"?? src/lib/motion-lab/NativePopBatch.svelte",
+				"?? src/lib/motion-lab/native-pop-batch.svelte.spec.ts",
+				"?? src/lib/motion/presence.spec.ts",
+				"?? src/lib/motion/projection-boundaries.spec.ts",
+				"?? src/lib/server/",
+				"?? src/lib/site/example-components.ts",
+				"?? src/lib/site/highlight-runtime.ts",
+				"?? src/lib/site/highlight.server.ts",
+				"?? src/lib/site/home-code.ts",
+				"?? src/lib/site/loading.spec.ts",
+				"?? src/routes/+page.server.ts",
+				"?? src/routes/docs/+layout.server.ts",
+				"?? src/routes/docs/+page.server.ts",
+				"?? src/routes/docs/[slug]/+page.server.ts",
+				"?? src/routes/docs/search.json/",
+				"?? src/routes/examples/+page.server.ts",
+				"?? src/routes/examples/[slug]/+page.server.ts"
+			]
+		},
+		{
+			"path": "/home/node/.t3/worktrees/astra-motion/t3code-05596d3d",
+			"status": [
+				" M docs/research/performance-chromium.json",
+				"?? src/lib/motion-lab/__screenshots__/"
+			]
+		},
+		{
+			"path": "/home/node/.t3/worktrees/astra-motion/t3code-10ab3c8f",
+			"status": [
+				" M docs/STATUS.md",
+				" M docs/research/performance-chromium.json",
+				" M experiments/unstaged-rendering/WRITE-PROBES.md",
+				" M experiments/unstaged-rendering/WriteFixture.svelte",
+				" M experiments/unstaged-rendering/build.mjs",
+				" M experiments/unstaged-rendering/cache-trace.spec.js",
+				" M experiments/unstaged-rendering/probe-plugin.mjs",
+				" M experiments/unstaged-rendering/write.spec.js",
+				" M src/lib/motion/AnimateActivity.svelte",
+				" M src/lib/motion/AnimatePresenceItem.svelte",
+				" M src/lib/motion/commit.ts",
+				" M src/lib/motion/layout.ts",
+				" M src/lib/motion/presence-measure.ts",
+				" M src/lib/motion/presence-pop.ts",
+				"?? docs/research/presence-snapshot-ownership.md",
+				"?? docs/reviews/2026-10-07-adversarial-engine-review.md",
+				"?? src/lib/motion-lab/__screenshots__/",
+				"?? src/lib/motion-lab/presence-snapshot.svelte.spec.ts",
+				"?? src/lib/motion-lab/review-probes/"
+			]
+		},
+		{
+			"path": "/home/node/.t3/worktrees/astra-motion/t3code-16d45be6",
+			"status": [
+				" M src/lib/motion-lab/parity-core-docs.svelte.spec.ts",
+				" M src/lib/motion-lab/parity-gestures-docs.spec.ts",
+				" M src/lib/motion-lab/parity-gestures-docs.svelte.spec.ts",
+				" M src/lib/motion-lab/parity-values-docs.svelte.spec.ts",
+				" M src/lib/site/DocArticle.svelte",
+				" M src/lib/site/DocExample.svelte",
+				" M src/lib/site/DocsSidebar.svelte",
+				" M src/lib/site/ExamplePreview.svelte",
+				" M src/lib/site/content/core.ts",
+				" M src/lib/site/content/gestures-layout.ts",
+				" M src/lib/site/content/guides.ts",
+				" M src/lib/site/content/presence-view.ts",
+				" M src/lib/site/content/values-helpers.ts",
+				" M src/lib/site/doc-types.ts",
+				" M src/lib/site/docs.spec.ts",
+				" M src/lib/site/docs.ts",
+				" M src/lib/site/examples.ts",
+				" M src/lib/site/examples/AnimatePresenceListExample.svelte",
+				" M src/lib/site/examples/InViewExample.svelte",
+				" M src/lib/site/examples/LayoutExample.svelte",
+				" M src/lib/site/examples/MotionValueEventExample.svelte",
+				" M src/lib/site/examples/ParityLayoutArc.svelte",
+				" M src/lib/site/examples/ParityLayoutGroup.svelte",
+				" M src/lib/site/examples/SVGExample.svelte",
+				" M src/lib/site/examples/ScrollExample.svelte",
+				" M src/lib/site/examples/SharedExample.svelte",
+				" M src/lib/site/examples/TransitionExample.svelte",
+				" M src/lib/site/examples/VariantsExample.svelte",
+				" M src/lib/site/examples/VelocityValueExample.svelte",
+				" M src/lib/site/examples/core-examples.ts",
+				" M src/lib/site/examples/gestures-layout-examples.ts",
+				" D src/lib/site/examples/legacy-examples.ts",
+				" M src/lib/site/examples/presence-view-examples.ts",
+				" M src/lib/site/examples/values-helpers-examples.ts",
+				" M src/lib/site/seo.spec.ts",
+				" M src/lib/site/seo.ts",
+				" M src/lib/site/snippet-previews.ts",
+				" M src/routes/+page.svelte",
+				" M src/routes/docs/+page.svelte",
+				" M src/routes/examples/+page.svelte",
+				" M src/routes/examples/[slug]/+page.ts",
+				" M src/routes/motion-lab/+layout.svelte",
+				" M tests/motion/docs-site.spec.ts",
+				" M tests/motion/parity-docs.spec.ts",
+				" M tests/motion/site.spec.ts",
+				" M vite.config.ts",
+				"?? docs/reviews/2026-10-07-docs-examples-review.md",
+				"?? docs/reviews/2026-10-07-session-cards-draft.svelte.txt",
+				"?? src/lib/motion-lab/site-editorial.svelte.spec.ts",
+				"?? src/lib/site/ExampleHint.svelte",
+				"?? src/lib/site/content/presence.ts",
+				"?? src/lib/site/content/start.ts",
+				"?? src/lib/site/examples/SessionCards.svelte",
+				"?? src/lib/site/examples/composition-examples.ts",
+				"?? src/lib/site/examples/learning-examples.ts",
+				"?? src/lib/site/snippet-previews/quick-start--make-it-yours.svelte"
+			]
+		},
+		{
+			"path": "/home/node/.t3/worktrees/astra-motion/t3code-18cf2510",
+			"status": [
+				" M src/lib/site/DocExample.svelte",
+				" M src/lib/site/ExamplePreview.svelte",
+				" M src/lib/site/content/core.ts",
+				" M src/lib/site/content/gestures-layout.ts",
+				" M src/lib/site/content/guides.ts",
+				" M src/lib/site/content/presence-view.ts",
+				" M src/lib/site/content/values-helpers.ts",
+				" M src/lib/site/doc-types.ts",
+				" M src/lib/site/docs.spec.ts",
+				" M src/lib/site/docs.ts",
+				" M src/lib/site/examples/VariantsExample.svelte",
+				" M src/lib/site/examples/legacy-examples.ts",
+				"?? docs/reviews/2026-10-07-docs-examples-review.md",
+				"?? docs/reviews/2026-10-07-session-cards-draft.svelte.txt",
+				"?? src/lib/site/content/start.ts"
+			]
+		},
+		{
+			"path": "/home/node/.t3/worktrees/astra-motion/t3code-d450d647",
+			"status": [
+				" M src/lib/motion/AnimateActivity.svelte",
+				" M src/lib/motion/AnimatePresenceItem.svelte",
+				" M src/lib/motion/commit.spec.ts",
+				" M src/lib/motion/commit.ts",
+				" M src/lib/motion/layout.ts",
+				" M src/lib/motion/presence-measure.ts",
+				" M src/lib/motion/presence-pop.ts",
+				"?? docs/reviews/2026-10-11-parity-architecture-followup.md",
+				"?? docs/reviews/2026-10-11-parity-followup-evidence/",
+				"?? src/lib/motion-lab/ReleaseLayout.svelte",
+				"?? src/lib/motion-lab/presence-snapshot.svelte.spec.ts",
+				"?? src/lib/motion-lab/release-layout.svelte.spec.ts"
+			]
+		},
+		{
+			"path": "/home/node/.t3/worktrees/astra-motion/t3code-d57d1898",
+			"status": []
+		},
+		{
+			"path": "/workspace/wt/astra-rc",
+			"status": []
+		},
+		{
+			"path": "/workspace/wt/astra-rc-apis",
+			"status": [
+				" M src/lib/motion-lab/ParityManagedPresence.svelte",
+				" M src/lib/motion-lab/intro-retarget.svelte.spec.ts",
+				" M src/lib/motion-lab/parity-managed-presence.svelte.spec.ts",
+				" M src/lib/motion-lab/phone-layout-verification.svelte.spec.ts",
+				" M src/lib/motion-lab/projection-policy.svelte.spec.ts",
+				" M src/lib/motion-lab/state-engine-spike.svelte.spec.ts",
+				" M src/lib/motion-lab/upstream-controls.svelte.spec.ts",
+				" M src/lib/motion-lab/upstream-layout-expanded.svelte.spec.ts",
+				" M src/lib/motion-lab/upstream-reorder-expanded.spec.ts",
+				" M src/lib/motion-lab/upstream-reorder-expanded.svelte.spec.ts",
+				" M src/lib/motion/AnimatePresence.svelte",
+				" M src/lib/motion/ReorderGroup.svelte",
+				" M src/lib/motion/animation-controls.svelte.ts",
+				" M src/lib/motion/component-motion.ts",
+				" M src/lib/motion/component-props.ts",
+				" M src/lib/motion/elements/index.ts",
+				" M src/lib/motion/helper-hooks.svelte.ts",
+				" M src/lib/motion/index.ts",
+				" M src/lib/motion/motion-compat.ts",
+				" M src/lib/motion/motion-core.svelte.ts",
+				" M src/lib/motion/presence-model.ts",
+				" M src/lib/motion/presence-state.ts",
+				" M src/lib/motion/sequence-path.ts",
+				" M src/lib/motion/use-animate.svelte.ts",
+				" M src/lib/motion/value-hooks.svelte.ts",
+				" M src/lib/motion/values.ts",
+				" M src/lib/motion/view-animation.ts",
+				" M src/lib/motion/view-entry.ts",
+				" M src/lib/motion/view-registry.ts",
+				" M src/lib/motion/view-transitions.ts",
+				" M src/lib/site/DocsSidebar.svelte",
+				" M src/lib/site/content/core.ts",
+				" M src/lib/site/content/gestures-layout.ts",
+				" M src/lib/site/content/guides.ts",
+				" M src/lib/site/content/presence-view.ts",
+				" M src/lib/site/content/values-helpers.ts",
+				" M src/lib/site/snippet-previews.ts",
+				" M src/routes/about/+page.svelte",
+				" M src/routes/status/+page.svelte",
+				" M tests/motion-baseline/upstream-inventory.json",
+				" M vite.config.ts",
+				"?? docs/reviews/2026-09-29-remaining-apis.md",
+				"?? src/lib/motion-lab/RCNativeContract.svelte",
+				"?? src/lib/motion-lab/RCNativeExitOptions.svelte",
+				"?? src/lib/motion-lab/RCNativeInfiniteReentry.svelte",
+				"?? src/lib/motion-lab/RCNativeIntrinsic.svelte",
+				"?? src/lib/motion-lab/RCPresence.svelte",
+				"?? src/lib/motion-lab/RCReorder.svelte",
+				"?? src/lib/motion-lab/RCSettlement.svelte",
+				"?? src/lib/motion-lab/rc-native-contract.spec.ts",
+				"?? src/lib/motion-lab/rc-native-contract.svelte.spec.ts",
+				"?? src/lib/motion-lab/rc-native-intrinsic.svelte.spec.ts",
+				"?? src/lib/motion-lab/rc-presence.spec.ts",
+				"?? src/lib/motion-lab/rc-presence.svelte.spec.ts",
+				"?? src/lib/motion-lab/rc-reorder.svelte.spec.ts",
+				"?? src/lib/motion-lab/rc-settlement.svelte.spec.ts",
+				"?? src/lib/motion-lab/remaining-apis-harness.svelte",
+				"?? src/lib/motion-lab/remaining-apis.spec.ts",
+				"?? src/lib/motion-lab/remaining-apis.svelte.spec.ts",
+				"?? src/lib/motion/animate-view.ts",
+				"?? src/lib/motion/diagnostics.spec.ts",
+				"?? src/lib/motion/diagnostics.ts",
+				"?? src/lib/motion/native-motion.ts",
+				"?? src/lib/motion/will-change.svelte.ts",
+				"?? src/lib/site/snippet-previews/animate-presence--exit-data-value.svelte",
+				"?? src/lib/site/snippet-previews/animate-view--imperative-builder.svelte",
+				"?? src/lib/site/snippet-previews/getting-started--accordion-recipe.svelte",
+				"?? src/lib/site/snippet-previews/getting-started--dialog-recipe.svelte",
+				"?? src/lib/site/snippet-previews/getting-started--headless-recipe.svelte",
+				"?? src/lib/site/snippet-previews/getting-started--native-svelte.svelte",
+				"?? src/lib/site/snippet-previews/getting-started--panel-recipes.svelte",
+				"?? src/lib/site/snippet-previews/motion-values--follow-value.svelte",
+				"?? src/lib/site/snippet-previews/reorder--list-binding.svelte",
+				"?? src/lib/site/snippet-previews/text-animation--replacement-value.svelte"
+			]
+		},
+		{
+			"path": "/workspace/wt/astra-rc-presence",
+			"status": [
+				" M README.md",
+				" M docs/authoring.md",
+				" M docs/migration.md",
+				" M docs/motion-system.md",
+				" M docs/parity/CONTRACTS.md",
+				" M docs/parity/MATRIX.md",
+				" M docs/try-it.md",
+				" M scripts/motion-consumer-provenance.mjs",
+				" M scripts/qualify-motion-package.mjs",
+				" M scripts/qualify-packed-motion-runtime.mjs",
+				" M src/lib/motion-lab/pop-resize.svelte.spec.ts",
+				" M src/lib/motion-lab/resize-content.svelte.spec.ts",
+				" M src/lib/motion-lab/upstream-reorder-expanded.spec.ts",
+				" M src/lib/motion-lab/upstream-target-rendering.svelte.spec.ts",
+				" M src/lib/motion-lab/upstream-transition-options.svelte.spec.ts",
+				" M src/lib/motion/AnimatePresence.svelte",
+				" M src/lib/motion/ReorderGroup.svelte",
+				" M src/lib/motion/component-motion.ts",
+				" M src/lib/motion/component-props.ts",
+				" M src/lib/motion/elements/index.ts",
+				" M src/lib/motion/helper-hooks.svelte.ts",
+				" M src/lib/motion/index.ts",
+				" M src/lib/motion/motion-compat.ts",
+				" M src/lib/motion/motion-core.svelte.ts",
+				" M src/lib/motion/presence-model.ts",
+				" M src/lib/motion/sequence-path.ts",
+				" M src/lib/motion/use-animate.svelte.ts",
+				" M src/lib/motion/value-hooks.svelte.ts",
+				" M src/lib/motion/values.ts",
+				" M src/lib/motion/view-animation.ts",
+				" M src/lib/motion/view-entry.ts",
+				" M src/lib/motion/view-registry.ts",
+				" M src/lib/motion/view-transitions.ts",
+				" M src/lib/site/content/core.ts",
+				" M src/lib/site/content/gestures-layout.ts",
+				" M src/lib/site/content/guides.ts",
+				" M src/lib/site/content/presence-view.ts",
+				" M src/lib/site/content/values-helpers.ts",
+				" M tests/production/reviewed-exports.json",
+				" M tests/upstream-motion/reviewed-exports.json",
+				" M vite.config.ts",
+				"?? docs/reviews/2026-09-29-adoption.md",
+				"?? docs/reviews/2026-09-29-presence-reorder.md",
+				"?? scripts/motion-consumer-provenance.test.mjs",
+				"?? scripts/verify-rc-package.mjs",
+				"?? src/lib/motion-lab/RCPresence.svelte",
+				"?? src/lib/motion-lab/RCReorder.svelte",
+				"?? src/lib/motion-lab/RCSettlement.svelte",
+				"?? src/lib/motion-lab/rc-presence.spec.ts",
+				"?? src/lib/motion-lab/rc-presence.svelte.spec.ts",
+				"?? src/lib/motion-lab/rc-reorder.svelte.spec.ts",
+				"?? src/lib/motion-lab/rc-settlement.svelte.spec.ts",
+				"?? src/lib/motion-lab/remaining-apis-harness.svelte",
+				"?? src/lib/motion-lab/remaining-apis.spec.ts",
+				"?? src/lib/motion-lab/remaining-apis.svelte.spec.ts",
+				"?? src/lib/motion/animate-view.ts",
+				"?? src/lib/motion/diagnostics.spec.ts",
+				"?? src/lib/motion/diagnostics.ts",
+				"?? src/lib/motion/native-motion.ts",
+				"?? src/lib/motion/will-change.svelte.ts"
+			]
+		},
+		{
+			"path": "/workspace/wt/astra-rc-refinement-one",
+			"status": [
+				" M src/lib/site/DocArticle.svelte",
+				" M src/lib/site/SiteHeader.svelte",
+				" M src/lib/site/seo.ts",
+				" M src/routes/+page.svelte",
+				" M src/routes/about/+page.svelte",
+				" M src/routes/examples/+page.svelte",
+				" M src/routes/status/+page.svelte",
+				"?? src/lib/site/release.ts",
+				"?? tests/motion/content-proportions.spec.ts"
+			]
+		},
+		{
+			"path": "/workspace/wt/astra-rc-refinement-two",
+			"status": [
+				" M src/lib/motion/layout.ts",
+				" M src/lib/site/DocArticle.svelte",
+				" M src/lib/site/SiteHeader.svelte",
+				" M src/lib/site/content/gestures-layout.ts",
+				" M src/lib/site/content/guides.ts",
+				" M src/lib/site/examples/HomeLayoutExample.svelte",
+				" M src/lib/site/seo.ts",
+				" M src/routes/+page.svelte",
+				" M src/routes/about/+page.svelte",
+				" M src/routes/examples/+page.svelte",
+				" M src/routes/status/+page.svelte",
+				"?? src/lib/motion-lab/layout-display.svelte.spec.ts",
+				"?? src/lib/site/release.ts",
+				"?? tests/motion/content-proportions.spec.ts"
+			]
+		},
+		{
+			"path": "/workspace/wt/astra-rc-vgpu",
+			"status": [
+				" M src/lib/motion-lab/notification-reentry.svelte.spec.ts",
+				" M src/lib/motion-lab/presence-lifecycle.svelte.spec.ts",
+				" M src/lib/motion-lab/scroll.svelte.spec.ts",
+				" M src/lib/motion/AnimatePresence.svelte",
+				" M src/lib/motion/ReorderGroup.svelte",
+				" M src/lib/motion/component-motion.ts",
+				" M src/lib/motion/component-props.ts",
+				" M src/lib/motion/elements/index.ts",
+				" M src/lib/motion/helper-hooks.svelte.ts",
+				" M src/lib/motion/index.ts",
+				" M src/lib/motion/motion-core.svelte.ts",
+				" M src/lib/motion/presence-model.ts",
+				" M src/lib/motion/presence-state.ts",
+				" M src/lib/motion/use-animate.svelte.ts",
+				" M src/lib/motion/value-hooks.svelte.ts",
+				" M src/lib/motion/values.ts",
+				" M src/lib/motion/view-animation.ts",
+				" M src/lib/motion/view-entry.ts",
+				" M src/lib/motion/view-registry.ts",
+				" M src/lib/motion/view-transitions.ts",
+				" M src/lib/site/snippet-previews.ts",
+				" M tests/motion/components.spec.ts",
+				" M tests/motion/docs-site.spec.ts",
+				" M tests/motion/parity-docs.spec.ts",
+				" M tests/motion/showcase-queue.spec.ts",
+				" M tests/motion/site.spec.ts",
+				"?? docs/research/threlte-scene.md",
+				"?? docs/research/vgpu-threlte.md",
+				"?? docs/reviews/2026-09-29-rc-previews.md",
+				"?? experiments/",
+				"?? src/lib/motion-lab/RCNativeExitOptions.svelte",
+				"?? src/lib/motion-lab/RCNativeInfiniteReentry.svelte",
+				"?? src/lib/motion-lab/RCNativeIntrinsic.svelte",
+				"?? src/lib/motion-lab/rc-native-intrinsic.svelte.spec.ts",
+				"?? src/lib/motion-lab/rc-presence.svelte.spec.ts",
+				"?? src/lib/motion/animate-view.ts",
+				"?? src/lib/motion/diagnostics.spec.ts",
+				"?? src/lib/motion/diagnostics.ts",
+				"?? src/lib/motion/native-motion.ts",
+				"?? src/lib/motion/will-change.svelte.ts",
+				"?? src/lib/site/snippet-previews/animate-presence--exit-data-value.svelte",
+				"?? src/lib/site/snippet-previews/animate-view--imperative-builder.svelte",
+				"?? src/lib/site/snippet-previews/getting-started--accordion-recipe.svelte",
+				"?? src/lib/site/snippet-previews/getting-started--dialog-recipe.svelte",
+				"?? src/lib/site/snippet-previews/getting-started--headless-recipe.svelte",
+				"?? src/lib/site/snippet-previews/getting-started--native-svelte.svelte",
+				"?? src/lib/site/snippet-previews/getting-started--panel-recipes.svelte",
+				"?? src/lib/site/snippet-previews/motion-values--follow-value.svelte",
+				"?? src/lib/site/snippet-previews/reorder--list-binding.svelte",
+				"?? src/lib/site/snippet-previews/text-animation--replacement-value.svelte"
+			]
+		},
+		{
+			"path": "/workspace/wt/astra-release-presence",
+			"status": [
+				" M docs/migration.md",
+				" M docs/parity/CONTRACTS.md",
+				" M docs/parity/presence-view-audit.md",
+				" M src/lib/motion-lab/ParityPresenceChild.svelte",
+				" M src/lib/motion-lab/parity-presence.svelte.spec.ts",
+				" M src/lib/motion/presence-context.svelte.ts",
+				" M src/lib/site/content/presence-view.ts",
+				" M src/lib/site/content/values-helpers.ts",
+				" M src/lib/site/snippet-previews/ManualExit.svelte",
+				"?? src/lib/motion-lab/ReleasePresenceChild.svelte",
+				"?? src/lib/motion-lab/ReleasePresenceFixture.svelte",
+				"?? src/lib/motion-lab/release-presence.svelte.spec.ts"
+			]
+		},
+		{
+			"path": "/workspace/wt/astra-release-projection",
+			"status": [
+				" M src/lib/motion/projection-boundaries.ts",
+				"?? src/lib/motion-lab/projection-measurement-lifetime.svelte.spec.ts"
+			]
+		},
+		{
+			"path": "/workspace/wt/astra-release-regressions",
+			"status": [
+				"?? src/lib/motion-lab/ReleaseLayout.svelte",
+				"?? src/lib/motion-lab/release-layout.svelte.spec.ts"
+			]
+		},
+		{
+			"path": "/workspace/wt/astra-word-qualification",
+			"status": [
+				" M docs/text-motion.md",
+				" M package.json",
+				" M scripts/check-motion-guide.mjs",
+				" M src/lib/motion-lab/text-motion.svelte.spec.ts",
+				" M src/lib/motion/diagnostics.ts",
+				" M src/lib/motion/layout.ts",
+				" M src/lib/motion/text-segments.spec.ts",
+				" M src/lib/motion/text-segments.ts",
+				" M src/lib/site/DocArticle.svelte",
+				" M src/lib/site/SiteHeader.svelte",
+				" M src/lib/site/content/gestures-layout.ts",
+				" M src/lib/site/content/guides.ts",
+				" M src/lib/site/examples/HomeLayoutExample.svelte",
+				" M src/lib/site/seo.ts",
+				" M src/routes/+page.svelte",
+				" M src/routes/about/+page.svelte",
+				" M src/routes/examples/+page.svelte",
+				" M src/routes/status/+page.svelte",
+				" M tests/motion/components.spec.ts",
+				" M vitest.motion.config.ts",
+				"?? .astra-webkit-verification.config.ts",
+				"?? docs/reviews/2026-09-30-rc-polish.md",
+				"?? src/lib/motion-lab/layout-display.svelte.spec.ts",
+				"?? src/lib/site/release.ts",
+				"?? tests/motion/content-proportions.spec.ts"
+			]
+		}
+	],
+	"policy": "Preserve unrelated uncommitted work; consolidate verified runtime fixes into t3code/svelte-motion-parity-review. Only disposable worktrees created for this release pass will be removed."
+}

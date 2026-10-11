@@ -1,7 +1,8 @@
 import { afterEach, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import { tick } from 'svelte';
-import { frame, motionValue, svgSubjectEffect } from 'motion-dom';
+import { frame, frameData, motionValue, svgSubjectEffect, time } from 'motion-dom';
+import { MotionGlobalConfig } from 'motion-utils';
 import Harness from './parity-values-harness.svelte';
 
 const frames = async (count = 3) => {
@@ -93,39 +94,82 @@ it('removes subscriptions and pending derived work while preserving borrowed sou
 });
 
 it('springs to reactive targets, preserves string units and accepts durations in seconds', async () => {
+	const previousManualTiming = MotionGlobalConfig.useManualTiming;
+	const previousTimestamp = frameData.timestamp;
+	let timestamp = performance.now();
+	MotionGlobalConfig.useManualTiming = true;
+	frameData.timestamp = timestamp;
+	time.set(timestamp);
+	const advance = async (milliseconds: number) => {
+		timestamp += milliseconds;
+		frameData.timestamp = timestamp;
+		time.set(timestamp);
+		await frames(1);
+	};
 	const source = motionValue(0);
-	const screen = render(Harness, { source });
-	await tick();
-	const api = screen.component.getApi();
-	api.units.set('20px');
-	expect(api.unitSpring.get()).toBe('20px');
-	api.units.set('30px');
-	expect(api.unitSpring.get()).toBe('20px');
-	await expect.poll(() => api.unitSpring.get()).toBe('30px');
-	screen.component.configure({ spring: { duration: 0.3, bounce: 0 } });
-	await tick();
-	source.set(100);
-	await frames(3);
-	expect(api.smooth.get()).toBeGreaterThan(0);
-	expect(api.smooth.get()).toBeLessThan(100);
-	await expect.poll(() => api.smooth.get()).toBe(100);
 	const replacement = motionValue(30);
-	screen.component.select(replacement);
-	await tick();
-	await expect.poll(() => api.smooth.get()).toBe(30);
-	source.set(200);
-	await frames();
-	expect(api.smooth.get()).toBe(30);
-	api.directSpring.set(100);
-	await frames();
-	expect(api.directSpring.isAnimating()).toBe(true);
-	api.directSpring.jump(50);
-	expect(api.directSpring.get()).toBe(50);
-	expect(api.directSpring.getVelocity()).toBe(0);
-	expect(api.directSpring.isAnimating()).toBe(false);
-	await screen.unmount();
-	source.destroy();
-	replacement.destroy();
+	let screen: ReturnType<typeof render<typeof Harness>> | undefined;
+	try {
+		screen = render(Harness, { source });
+		await tick();
+		const api = screen.component.getApi();
+		api.units.set('20px');
+		expect(api.unitSpring.get()).toBe('20px');
+		api.units.set('30px');
+		expect(api.unitSpring.get()).toBe('20px');
+		await advance(50);
+		expect(api.unitSpring.get()).toMatch(/px$/);
+		expect(parseFloat(api.unitSpring.get())).toBeGreaterThan(20);
+		expect(parseFloat(api.unitSpring.get())).toBeLessThan(30);
+		await advance(1950);
+		expect(api.unitSpring.get()).toBe('30px');
+		screen.component.configure({ spring: { duration: 0.3, bounce: 0 } });
+		await tick();
+		source.set(100);
+		expect(api.smooth.get()).toBe(0);
+		// Drive Motion's real clock: three browser frames can exceed the entire
+		// spring on a busy runner. These phases also verify seconds-to-ms conversion.
+		await advance(50);
+		expect(api.smooth.get()).toBeGreaterThan(0);
+		expect(api.smooth.get()).toBeLessThan(100);
+		await advance(249);
+		expect(api.smooth.get()).toBeLessThan(100);
+		expect(api.smooth.isAnimating()).toBe(true);
+		await advance(1);
+		expect(api.smooth.get()).toBe(100);
+		expect(api.smooth.isAnimating()).toBe(false);
+		screen.component.select(replacement);
+		await tick();
+		await advance(50);
+		expect(api.smooth.get()).toBeGreaterThan(30);
+		expect(api.smooth.get()).toBeLessThan(100);
+		await advance(250);
+		expect(api.smooth.get()).toBe(30);
+		source.set(200);
+		await advance(50);
+		expect(api.smooth.get()).toBe(30);
+		api.directSpring.set(100);
+		await advance(50);
+		expect(api.directSpring.get()).toBeGreaterThan(0);
+		expect(api.directSpring.get()).toBeLessThan(100);
+		expect(api.directSpring.isAnimating()).toBe(true);
+		api.directSpring.jump(50);
+		expect(api.directSpring.get()).toBe(50);
+		expect(api.directSpring.getVelocity()).toBe(0);
+		expect(api.directSpring.isAnimating()).toBe(false);
+		await advance(2000);
+		expect(api.directSpring.get()).toBe(50);
+	} finally {
+		try {
+			await screen?.unmount();
+			source.destroy();
+			replacement.destroy();
+		} finally {
+			MotionGlobalConfig.useManualTiming = previousManualTiming;
+			frameData.timestamp = previousManualTiming ? previousTimestamp : performance.now();
+			time.set(frameData.timestamp);
+		}
+	}
 });
 
 it('derives per-second velocity and returns to zero without retaining frame work', async () => {

@@ -66,7 +66,7 @@ export const presenceViewDocs: DocPage[] = [
 				text: [
 					'An item’s ordinary props stop following the requested list once it has been removed. Use the boundary’s custom prop for data that must keep reaching that outgoing subtree, such as the latest navigation direction. Dynamic exit variants on motion descendants receive this custom value.',
 					'usePresenceData<T>() returns a reactive object with a current property. Read current when rendering or inside a reactive computation; destructuring a value once does not keep it reactive. The generic describes your application data and does not validate it at runtime.',
-					'When a direction changes during an active exit, Astra retains the removal generation while updating the exit data. Rapid re-entry creates a new generation, so a late completion from an earlier exit cannot remove the restored child.'
+					'When a direction changes during an active exit, Astra retains the removal generation while updating the exit data. Rapid re-entry creates a new generation, so a late library-owned animation completion cannot remove the restored child. Cancel application-owned exit work when the child returns.'
 				],
 				code: {
 					label: 'Focused directional variant excerpt',
@@ -89,7 +89,7 @@ export const presenceViewDocs: DocPage[] = [
 				title: 'Coordinate application-owned exit work',
 				text: [
 					'useIsPresent().current reports whether the nearest retained record is still requested. It does not delay removal. usePresence() adds a removal registration and returns reactive isPresent plus safeToRemove. Call safeToRemove after your own animation or asynchronous cleanup finishes.',
-					'Read safeToRemove when starting the current exit and retain that callback with the work it belongs to. It captures the exit generation. Cancel the work when the child returns or is destroyed. Every registered child must finish or release its registration before the enclosing record can disappear.',
+					'safeToRemove is stable and can be captured during component initialization. It completes the current exit when invoked. Cancel application-owned work when the child returns or is destroyed, and ignore asynchronous continuations after cleanup. Every registered child must finish or release its registration before the enclosing record can disappear.',
 					'Call these helpers during component initialization. Outside a presence boundary, isPresent is true, presence data is undefined, and safeToRemove is a no-op. A forgotten manual completion intentionally keeps the outgoing record mounted.'
 				],
 				code: {
@@ -97,21 +97,31 @@ export const presenceViewDocs: DocPage[] = [
 					source: `<script lang="ts">
   import { usePresence } from 'astra-motion';
   const presence = usePresence();
-  let element = $state<HTMLDivElement>();
-
-  $effect(() => {
-    if (presence.isPresent || !element) return;
-    const remove = presence.safeToRemove;
-    const animation = element.animate(
-      [{ opacity: 1 }, { opacity: 0 }],
-      { duration: 200, fill: 'forwards' }
-    );
-    void animation.finished.then(remove, () => {});
-    return () => animation.cancel();
-  });
+  const remove = presence.safeToRemove;
 </script>
 
-<div bind:this={element}>Application-owned exit</div>`
+<div
+  {@attach (element) => {
+    if (presence.isPresent) return;
+    let active = true;
+    const animation = element.animate([{ opacity: 1 }, { opacity: 0 }], {
+      duration: 200,
+      fill: 'forwards'
+    });
+    void animation.finished.then(
+      () => {
+        if (active) remove();
+      },
+      () => {}
+    );
+    return () => {
+      active = false;
+      animation.cancel();
+    };
+  }}
+>
+  Application-owned exit
+</div>`
 				}
 			},
 			{
@@ -422,7 +432,7 @@ export const presenceViewDocs: DocPage[] = [
 				text: [
 					'If input state resets, confirm that the Activity itself, its as tag, and any inner keyed component identity stay mounted across mode changes. Hiding with an outer if block bypasses retention.',
 					'If work continues while hidden, check whether it belongs to an ordinary $effect or third-party resource. Move that work into useActivityEffect or use activity.active to manage it explicitly. A child of a hidden Activity remains inactive even if its own nested Activity requests visible.',
-					'If the panel never reaches hidden, inspect manual usePresence registrations. Every such holder must call its captured safeToRemove callback or be destroyed. If the layout shifts unexpectedly, check layoutMode and the containing block for popped roots.'
+					'If the panel never reaches hidden, inspect manual usePresence registrations. Every such holder must call safeToRemove for its current exit or be destroyed; cancel its work if the panel returns. If the layout shifts unexpectedly, check layoutMode and the containing block for popped roots.'
 				],
 				related: ['animate-presence', 'animate-view']
 			}

@@ -1,0 +1,89 @@
+{
+	"version": "0.1.0-rc.3",
+	"branch": "t3code/svelte-motion-parity-review",
+	"baseCommit": "e1e645563e0403621d37ab603492d9e0958ce861",
+	"archive": "artifacts/releases/rc3/astra-motion-0.1.0-rc.3.tgz",
+	"sha256": "7514976ccaebe59547edce057d404d3771737e5d8a9fd4898103e496b061eaeb",
+	"published": false,
+	"publicExportsAdded": false,
+	"engine": "Motion 13.4.4",
+	"newRequiredStateWrappers": false,
+	"packedConsumerCasesPerEngine": {
+		"plainSvelte": 9,
+		"svelteKit": 15
+	},
+	"engines": ["chromium", "firefox", "webkit"],
+	"server": {
+		"passed": 251,
+		"failed": 0
+	},
+	"sourceFullRunsBeforeTestOnlyCorrections": {
+		"chromium": {
+			"files": 136,
+			"passed": 1173,
+			"failed": 0
+		},
+		"firefox": {
+			"files": 137,
+			"passed": 1174,
+			"failed": 4
+		},
+		"webkit": {
+			"files": 137,
+			"passed": 1171,
+			"failed": 7
+		}
+	},
+	"correctedSourceFiles": {
+		"filesPerEngine": 8,
+		"uniqueCasesPerEngine": 66,
+		"engines": 3,
+		"allPassed": true,
+		"wholeSourceSuiteRerun": false
+	},
+	"productionFullBeforeGlyphReferenceCorrection": {
+		"passed": 248,
+		"failed": 2,
+		"skipped": 2,
+		"skipReason": "Existing Chromium-only touch-input emulation",
+		"failureReason": "WebKit native button glyph reference rounds differently before animation"
+	},
+	"correctedProductionGlyphFile": {
+		"passed": 42,
+		"failed": 0,
+		"engines": 3,
+		"independentReorderRecheckPassed": 6,
+		"wholeProductionSuiteRerun": false,
+		"distortionNegativeControlsRejected": 2,
+		"glyphTolerancePx": 0.5
+	},
+	"pinnedUpstream": {
+		"passed": 12,
+		"failed": 0,
+		"engines": 3
+	},
+	"staticChecks": {
+		"svelteErrors": 0,
+		"svelteWarnings": 0,
+		"eslint": true,
+		"prettier": true,
+		"strictPublint": true,
+		"guideCompilation": true,
+		"scriptTestsPassed": 4,
+		"upgradeAudit": true
+	},
+	"localBranchCleanup": {
+		"before": 45,
+		"retiredVerifiedMergedUnattached": 29,
+		"remaining": 16,
+		"preexistingWorktreesRemoved": 0,
+		"remoteRefsChanged": false,
+		"restorationManifest": "docs/releases/2026-10-11-retired-local-branches.json"
+	},
+	"limitations": [
+		"Universal arbitrary unstaged parity is unproven",
+		"Two existing nonfatal derived_inert warnings in shared-layout dependency fixture",
+		"Full source/production suites were not repeated after test-only corrections",
+		"Remote CI and registry publication have not occurred"
+	]
+}

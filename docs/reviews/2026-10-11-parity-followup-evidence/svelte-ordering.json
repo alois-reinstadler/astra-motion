@@ -1,0 +1,283 @@
+[
+	{
+		"mode": "normal",
+		"operation": "combined",
+		"before": {
+			"width": 100,
+			"top": 38
+		},
+		"after": {
+			"width": 300,
+			"top": 78
+		},
+		"records": [
+			{
+				"kind": "identity",
+				"columns": "100px 100px 100px",
+				"width": 100,
+				"top": 38,
+				"order": ["0", "1", "2"]
+			},
+			{
+				"kind": "length",
+				"columns": "100px 100px 100px",
+				"width": 100,
+				"top": 38,
+				"order": ["0", "1", "2"]
+			},
+			{
+				"kind": "deep",
+				"columns": "100px 100px 100px",
+				"width": 100,
+				"top": 38,
+				"order": ["0", "1", "2"]
+			}
+		],
+		"errors": []
+	},
+	{
+		"mode": "normal",
+		"operation": "siblingCombined",
+		"before": {
+			"width": 100,
+			"top": 38
+		},
+		"after": {
+			"width": 100,
+			"top": 108
+		},
+		"records": [
+			{
+				"kind": "identity",
+				"columns": "100px 100px 100px",
+				"width": 100,
+				"top": 108,
+				"order": ["0", "1", "2"]
+			},
+			{
+				"kind": "length",
+				"columns": "100px 100px 100px",
+				"width": 100,
+				"top": 108,
+				"order": ["0", "1", "2"]
+			},
+			{
+				"kind": "deep",
+				"columns": "100px 100px 100px",
+				"width": 100,
+				"top": 108,
+				"order": ["0", "1", "2"]
+			}
+		],
+		"errors": []
+	},
+	{
+		"mode": "normal",
+		"operation": "reverse",
+		"before": {
+			"width": 100,
+			"top": 38
+		},
+		"after": {
+			"width": 100,
+			"top": 38
+		},
+		"records": [
+			{
+				"kind": "deep",
+				"columns": "100px 100px 100px",
+				"width": 100,
+				"top": 38,
+				"order": ["0", "1", "2"]
+			}
+		],
+		"errors": []
+	},
+	{
+		"mode": "normal",
+		"operation": "splice",
+		"before": {
+			"width": 100,
+			"top": 38
+		},
+		"after": null,
+		"records": [
+			{
+				"kind": "length",
+				"columns": "100px 100px 100px",
+				"width": 100,
+				"top": 38,
+				"order": ["0", "1", "2"]
+			},
+			{
+				"kind": "deep",
+				"columns": "100px 100px 100px",
+				"width": 100,
+				"top": 38,
+				"order": ["0", "1", "2"]
+			}
+		],
+		"errors": []
+	},
+	{
+		"mode": "normal",
+		"operation": "sibling",
+		"before": {
+			"width": 100,
+			"top": 38
+		},
+		"after": {
+			"width": 100,
+			"top": 108
+		},
+		"records": [],
+		"errors": []
+	},
+	{
+		"mode": "normal",
+		"operation": "await",
+		"before": {
+			"width": 100,
+			"top": 38
+		},
+		"after": {
+			"width": 100,
+			"top": 108
+		},
+		"records": [],
+		"errors": []
+	},
+	{
+		"mode": "async",
+		"operation": "combined",
+		"before": {
+			"width": 100,
+			"top": 38
+		},
+		"after": {
+			"width": 300,
+			"top": 78
+		},
+		"records": [
+			{
+				"kind": "identity",
+				"columns": "100px 100px 100px",
+				"width": 100,
+				"top": 38,
+				"order": ["2", "1", "0"]
+			},
+			{
+				"kind": "length",
+				"columns": "100px 100px 100px",
+				"width": 100,
+				"top": 38,
+				"order": ["2", "1", "0"]
+			},
+			{
+				"kind": "deep",
+				"columns": "100px 100px 100px",
+				"width": 100,
+				"top": 38,
+				"order": ["2", "1", "0"]
+			}
+		],
+		"errors": []
+	},
+	{
+		"mode": "async",
+		"operation": "siblingCombined",
+		"before": {
+			"width": 100,
+			"top": 38
+		},
+		"after": {
+			"width": 100,
+			"top": 108
+		},
+		"records": [
+			{
+				"kind": "identity",
+				"columns": "100px 100px 100px",
+				"width": 100,
+				"top": 108,
+				"order": ["2", "1", "0"]
+			},
+			{
+				"kind": "length",
+				"columns": "100px 100px 100px",
+				"width": 100,
+				"top": 108,
+				"order": ["2", "1", "0"]
+			},
+			{
+				"kind": "deep",
+				"columns": "100px 100px 100px",
+				"width": 100,
+				"top": 108,
+				"order": ["2", "1", "0"]
+			}
+		],
+		"errors": []
+	},
+	{
+		"mode": "async",
+		"operation": "reverse",
+		"before": {
+			"width": 100,
+			"top": 38
+		},
+		"after": {
+			"width": 100,
+			"top": 38
+		},
+		"records": [
+			{
+				"kind": "deep",
+				"columns": "100px 100px 100px",
+				"width": 100,
+				"top": 38,
+				"order": ["2", "1", "0"]
+			}
+		],
+		"errors": []
+	},
+	{
+		"mode": "async",
+		"operation": "splice",
+		"before": {
+			"width": 100,
+			"top": 38
+		},
+		"after": null,
+		"records": [],
+		"errors": []
+	},
+	{
+		"mode": "async",
+		"operation": "sibling",
+		"before": {
+			"width": 100,
+			"top": 38
+		},
+		"after": {
+			"width": 100,
+			"top": 108
+		},
+		"records": [],
+		"errors": []
+	},
+	{
+		"mode": "async",
+		"operation": "await",
+		"before": {
+			"width": 100,
+			"top": 38
+		},
+		"after": {
+			"width": 100,
+			"top": 108
+		},
+		"records": [],
+		"errors": []
+	}
+]

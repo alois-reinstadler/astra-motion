@@ -4,7 +4,7 @@
 	import { popPresenceNodes, type PresencePopOptions } from './presence-pop.js';
 	import type { PresenceEntry } from './presence-model.js';
 	import { layoutBridge } from './commit.js';
-	import { observePresenceBoxes, type PresenceBox } from './presence-measure.js';
+	import { createPresenceBoxes, observePresenceBoxes } from './presence-measure.js';
 
 	let {
 		entry,
@@ -34,7 +34,7 @@
 		queueMicrotask(() => scope.releaseInitial());
 	});
 	let restorePop: (() => void) | undefined;
-	const boxes = new WeakMap<HTMLElement, PresenceBox>();
+	const boxes = createPresenceBoxes();
 	function trackPopBoxes() {
 		if (!pop || !entry.isPresent) return;
 		const nodes = [...scope.nodes];

@@ -3,9 +3,137 @@ import { expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import Fixture from './ParityPresence.svelte';
 import Nested from './ParityPresenceNested.svelte';
+import { layoutBridge } from '../motion/commit.js';
 
 const node = (id: string) => document.querySelector<HTMLElement>(`[data-presence-item="${id}"]`);
 const delay = (duration: number) => new Promise<void>((resolve) => setTimeout(resolve, duration));
+
+function captureRemovalBatches() {
+	const previous = { schedule: layoutBridge.schedule, update: layoutBridge.update };
+	const frames: (() => void)[] = [];
+	let transactions = 0;
+	layoutBridge.schedule = (flush) => frames.push(flush);
+	layoutBridge.update = (change) => {
+		transactions++;
+		flushSync(change);
+	};
+	return {
+		frames,
+		get transactions() {
+			return transactions;
+		},
+		flush() {
+			frames.shift()?.();
+		},
+		restore() {
+			while (frames.length) frames.shift()!();
+			Object.assign(layoutBridge, previous);
+		}
+	};
+}
+
+it('removes independently completed records together in one layout transaction', async () => {
+	const complete = vi.fn();
+	const screen = render(Fixture, {
+		initialItems: ['a', 'b', 'c'],
+		hold: null,
+		onExitComplete: complete
+	});
+	const batches = captureRemovalBatches();
+	try {
+		await tick();
+		const survivor = node('c');
+		flushSync(() => screen.component.select(['c']));
+		screen.component.release('a');
+		await tick();
+		screen.component.release('b');
+		await tick();
+		expect(batches.frames).toHaveLength(1);
+		expect(node('a')).not.toBeNull();
+		expect(node('b')).not.toBeNull();
+		expect(complete).not.toHaveBeenCalled();
+		batches.flush();
+		expect(node('a')).toBeNull();
+		expect(node('b')).toBeNull();
+		expect(node('c')).toBe(survivor);
+		expect(batches.transactions).toBe(1);
+		expect(complete).toHaveBeenCalledTimes(1);
+	} finally {
+		await screen.unmount();
+		batches.restore();
+	}
+});
+
+it('does not apply a queued completion to a revived record that exits again', async () => {
+	const complete = vi.fn();
+	const screen = render(Fixture, { hold: null, onExitComplete: complete });
+	const batches = captureRemovalBatches();
+	try {
+		await tick();
+		const original = node('a');
+		flushSync(() => screen.component.select([]));
+		screen.component.release('a');
+		await tick();
+		expect(batches.frames).toHaveLength(1);
+		flushSync(() => screen.component.select(['a']));
+		flushSync(() => screen.component.select([]));
+		batches.flush();
+		expect(node('a')).toBe(original);
+		expect(complete).not.toHaveBeenCalled();
+		screen.component.release('a');
+		await tick();
+		batches.flush();
+		expect(node('a')).toBeNull();
+		expect(complete).toHaveBeenCalledTimes(1);
+	} finally {
+		await screen.unmount();
+		batches.restore();
+	}
+});
+
+it('preserves a pending revival when presence runs without the layout engine', async () => {
+	const complete = vi.fn();
+	const screen = render(Fixture, { hold: null, onExitComplete: complete });
+	const batches = captureRemovalBatches();
+	layoutBridge.update = undefined;
+	try {
+		await tick();
+		const original = node('a');
+		flushSync(() => screen.component.select([]));
+		screen.component.release('a');
+		await tick();
+		expect(batches.frames).toHaveLength(1);
+		// No layout transaction is available to flush the requested revival before
+		// removal runs. Reconciliation must consult the latest requested input.
+		screen.component.select(['a']);
+		batches.flush();
+		await tick();
+		expect(node('a')).toBe(original);
+		expect(complete).not.toHaveBeenCalled();
+	} finally {
+		await screen.unmount();
+		batches.restore();
+	}
+});
+
+it('discards a queued removal when its boundary is destroyed', async () => {
+	const complete = vi.fn();
+	const screen = render(Fixture, { hold: null, onExitComplete: complete });
+	const batches = captureRemovalBatches();
+	try {
+		await tick();
+		flushSync(() => screen.component.select([]));
+		screen.component.release('a');
+		await tick();
+		expect(batches.frames).toHaveLength(1);
+		await screen.unmount();
+		batches.flush();
+		expect(node('a')).toBeNull();
+		expect(complete).not.toHaveBeenCalled();
+	} finally {
+		batches.restore();
+	}
+});
 
 it('defaults to sync, retains outgoing data and keeps surviving keyed inputs on list changes', async () => {
 	const complete = vi.fn();
@@ -60,7 +188,7 @@ it('wait coalesces pending selections and uses the latest custom data inside an 
 	expect(complete).toHaveBeenCalledTimes(1);
 });
 
-it('reuses a reversed record and an old safeToRemove cannot release its next exit', async () => {
+it('reuses a reversed record and cancelled manual work cannot release its next exit', async () => {
 	const complete = vi.fn();
 	const { component } = render(Fixture, { hold: null, onExitComplete: complete });
 	await tick();

@@ -76,8 +76,10 @@ transform-ownership mode.
 `children(item)` snippet receives retained outgoing data. Null/undefined values are
 absent; objects use reference identity without a selector. The forms are mutually exclusive. It coordinates descendants,
 manual removal, nested propagation and `popLayout`. Use item identity, not array
-indices, when ordering can change. Keep a manual `safeToRemove` callback captured for
-the exit generation that started the work.
+indices, when ordering can change. `safeToRemove` is stable and can be captured during
+component initialization. It completes the current exit when called. Cancel manual
+exit work in the effect cleanup on re-entry or destruction, including ignoring
+already-queued asynchronous continuations after cleanup.
 
 `AnimateActivity` stays mounted while `mode` changes. Child state and DOM survive;
 Astra-owned work pauses only after exits complete and the phase becomes hidden.

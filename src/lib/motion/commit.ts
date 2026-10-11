@@ -1,5 +1,21 @@
 /** Small lifecycle bridge. Presence-only consumers do not import the projection engine. */
 export const beforeCommit = new Set<() => void>();
+let presenceSnapshotOwner: symbol | undefined;
+
+/** Internal ownership shared by nested synchronous layout updates. */
+export function beginPresenceSnapshot(): () => void {
+	if (presenceSnapshotOwner) return () => {};
+	const owner = Symbol('presence snapshot');
+	presenceSnapshotOwner = owner;
+	return () => {
+		// A stale closer must never release a subsequent transaction's origin.
+		if (presenceSnapshotOwner === owner) presenceSnapshotOwner = undefined;
+	};
+}
+
+export function currentPresenceSnapshot(): symbol | undefined {
+	return presenceSnapshotOwner;
+}
 export const layoutBridge: {
 	update?: (change: () => void) => void;
 	updateAfterRender?: (change: () => void) => void;
@@ -12,6 +28,12 @@ const mutations = new Set<() => void>();
 let scheduled = false;
 let beforePaintScheduled = false;
 let scheduleVersion = 0;
+let flushPending: (() => void) | undefined;
+
+/** Include managed pop writes in an explicit transaction before projection commits. */
+export function flushLayoutMutations(): void {
+	if (beforePaintScheduled) flushPending?.();
+}
 
 /** Batch flow changes outside Svelte's flush; managed exits cannot wait for a frame read. */
 export function queueLayoutMutation(change: () => void, beforePaint = false): void {
@@ -22,13 +44,24 @@ export function queueLayoutMutation(change: () => void, beforePaint = false): vo
 	const version = ++scheduleVersion;
 	const flush = () => {
 		// A managed exit can advance an already queued frame batch to this microtask.
-		if (version !== scheduleVersion) return;
+		if (!scheduled || version !== scheduleVersion) return;
 		scheduled = false;
+		flushPending = undefined;
 		beforePaintScheduled = false;
 		const pending = [...mutations];
 		mutations.clear();
 		const apply = () => {
-			for (const mutation of pending) mutation();
+			const errors: unknown[] = [];
+			for (const mutation of pending) {
+				try {
+					mutation();
+				} catch (error) {
+					// One boundary's callback must not discard another boundary's removal.
+					errors.push(error);
+				}
+			}
+			if (errors.length === 1) throw errors[0];
+			if (errors.length > 1) throw new AggregateError(errors, 'Astra layout mutations failed.');
 		};
 		const update = beforePaint
 			? (layoutBridge.updateAfterRender ?? layoutBridge.update)
@@ -36,12 +69,14 @@ export function queueLayoutMutation(change: () => void, beforePaint = false): vo
 		if (update) update(apply);
 		else apply();
 	};
+	flushPending = flush;
 	(beforePaint ? queueMicrotask : (layoutBridge.schedule ?? queueMicrotask))(flush);
 }
 
 /** Validate a synchronous state transaction without importing layout projection. */
 export function synchronousMutation<Result>(
-	change: (() => Result) & (Result extends PromiseLike<unknown> ? never : unknown)
+	change: (() => Result) &
+		([Result] extends [never] ? unknown : Result extends PromiseLike<unknown> ? never : unknown)
 ): () => void {
 	if (change.constructor.name === 'AsyncFunction')
 		throw new Error(

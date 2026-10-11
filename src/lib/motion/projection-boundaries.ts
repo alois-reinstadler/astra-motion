@@ -182,6 +182,16 @@ export class ProjectionBoundary extends HTMLProjectionNode {
 	}
 
 	private renderBoundary = () => {
+		// Transactions opened in Motion's read phase defer their root measurement to
+		// a microtask. Keep the normalized transform until that read has completed;
+		// restoring in this frame would measure the authored transform as layout.
+		const root = this.root as InstanceType<typeof HTMLProjectionNode>;
+		if (this.saved && root.updateScheduled) {
+			// Queue the next render, never re-enter this phase. updateScheduled clears
+			// even when the root skips measurement (resize, blocking or cancellation).
+			frame.render(this.renderBoundary);
+			return;
+		}
 		// Perspective is suppressed only while measuring. It must be restored even
 		// while this wrapper keeps a counter-scale transform during parent projection.
 		this.restoreProperty('perspective');

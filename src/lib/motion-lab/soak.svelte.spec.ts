@@ -10,42 +10,46 @@ const frames = async (count = 2) => {
 		await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
 };
 
-// These check 100 real mount/paint/cleanup cycles, not throughput. Concurrent
+// These check 100–120 real mount/paint/cleanup cycles, not throughput. Concurrent
 // browser engines can exceed 20s in WebKit while every lifecycle assertion passes.
-const scrollSoakTimeout = 60_000;
+const lifecycleSoakTimeout = 60_000;
 
-it('releases every timeline owner and native playback across 120 interruption/remount cycles', async () => {
-	const scope = createAnimate({ reducedMotion: 'never' });
-	const nodes: HTMLElement[] = [];
-	for (let index = 0; index < 120; index++) {
-		const root = document.createElement('section');
-		const node = document.createElement('div');
-		node.style.cssText = 'width:20px;height:20px;opacity:1';
-		root.append(node);
-		document.body.append(root);
-		nodes.push(node);
-		const detach = scope.attach(root);
-		try {
-			scope.sequence([
-				[node, { opacity: 0.3, x: 80 }, { duration: 0.1 }],
-				[node, { opacity: 0, x: -80 }, { duration: 0.1 }]
-			]);
-			await frames(1);
-			node.style.width = `${20 + (index % 4) * 10}px`;
-			scope.animate(node, { opacity: 1, x: 0 }, { duration: 0.1 });
-			if (index % 3 === 0) node.remove();
-		} finally {
-			detach?.();
-			root.remove();
+it(
+	'releases every timeline owner and native playback across 120 interruption/remount cycles',
+	async () => {
+		const scope = createAnimate({ reducedMotion: 'never' });
+		const nodes: HTMLElement[] = [];
+		for (let index = 0; index < 120; index++) {
+			const root = document.createElement('section');
+			const node = document.createElement('div');
+			node.style.cssText = 'width:20px;height:20px;opacity:1';
+			root.append(node);
+			document.body.append(root);
+			nodes.push(node);
+			const detach = scope.attach(root);
+			try {
+				scope.sequence([
+					[node, { opacity: 0.3, x: 80 }, { duration: 0.1 }],
+					[node, { opacity: 0, x: -80 }, { duration: 0.1 }]
+				]);
+				await frames(1);
+				node.style.width = `${20 + (index % 4) * 10}px`;
+				scope.animate(node, { opacity: 1, x: 0 }, { duration: 0.1 });
+				if (index % 3 === 0) node.remove();
+			} finally {
+				detach?.();
+				root.remove();
+			}
+			expect(scope.active).toBe(0);
+			expect(hasMotionOwnership(node)).toBe(false);
+			expect(node.getAnimations()).toHaveLength(0);
 		}
-		expect(scope.active).toBe(0);
-		expect(hasMotionOwnership(node)).toBe(false);
-		expect(node.getAnimations()).toHaveLength(0);
-	}
-	await frames(4);
-	expect(nodes.filter(hasMotionOwnership)).toHaveLength(0);
-	expect(nodes.flatMap((node) => node.getAnimations())).toHaveLength(0);
-}, 15000);
+		await frames(4);
+		expect(nodes.filter(hasMotionOwnership)).toHaveLength(0);
+		expect(nodes.flatMap((node) => node.getAnimations())).toHaveLength(0);
+	},
+	lifecycleSoakTimeout
+);
 
 it('prevents completed controls from writing after another motion owner takes over', async () => {
 	const root = document.createElement('section');
@@ -152,7 +156,7 @@ it(
 			removeSpy.mockRestore();
 		}
 	},
-	scrollSoakTimeout
+	lifecycleSoakTimeout
 );
 
 it(
@@ -208,5 +212,5 @@ it(
 			spacer.remove();
 		}
 	},
-	scrollSoakTimeout
+	lifecycleSoakTimeout
 );
