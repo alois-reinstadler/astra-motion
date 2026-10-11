@@ -98,14 +98,19 @@ was introduced.
 The known `derived_inert` warnings remain an **advisory requiring an explicit
 release caveat**, not a package blocker established by this review. Reproduction
 is the shared-layout dependency fixture's rapid retained replacement. Expected:
-owned queued work must not outlive final destruction. Observed in the source
-review: Svelte can mark a retained branch INERT before attachment teardown sets
-Astra's disposed flag, so the initial queued `refresh(options())` can read the
-owner's derived options during retention. The warning alone does not establish
-post-destruction work. The fresh packed cleanup and two-root regression checks
-above found none; the independent runtime review separately probes the warning
-fixture and engine registries. Do not claim a warning-free source matrix or
-unbounded cleanup proof from these bounded observations.
+owned work must not outlive final destruction. The independent runtime review's
+captured Firefox stack identifies Svelte's deferred native transition calling
+`createBinding.transition`, then `options()`, then the compiled fixture's style
+getter, which evaluates an inert derived value. I inspected that stack in
+`reviews/runtime/warning-stack-summary.json` under the release evidence directory;
+it corrects this report's earlier attribution to the initial queued refresh,
+which was a hypothesis rather than a captured cause. The runtime probe observed
+48 warnings across 12 cycles and 48 nodes while verifying released strong
+registries, subscriptions, projection stacks and document listeners, with no late
+callbacks. The warning alone does not establish post-destruction work. The fresh
+packed cleanup and two-root regression checks above also found none. Do not claim
+a warning-free source matrix or unbounded cleanup proof from these bounded
+observations.
 
 I did not repeat the whole production/source matrix, perform a heap-retention
 soak, exercise real touch hardware, or claim all possible direct/derived/async
