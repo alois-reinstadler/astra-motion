@@ -142,3 +142,26 @@ all gesture/focus paths or every possible state/effect/await topology. The
 existing Firefox/WebKit touch-emulation skips and the native-button glyph oracle
 remain disclosed by qualification. Arbitrary unstaged trajectory equivalence is
 still unproven. No confirmed blocker requires a runtime fix from this review.
+
+## Documentary follow-up verification
+
+I independently reviewed `251bca404f50791b591627673c40985d7d8ba286`. Its changes
+to STATUS, runtime integration and the human/machine qualification records
+accurately identify the captured deferred-transition path, explicitly supersede
+the initial queued-refresh hypothesis, and retain the advisory's bounded cleanup
+and console limitations. No runtime change is implied or required by that
+correction.
+
+The separate public-documentation blocker produced a new actual archive:
+`/workspace/releases/astra-motion/main-2026-10-11/reviewed/astra-motion-0.1.0-rc.3.tgz`,
+SHA-256 `719b4424df6d4c047d20b76a9429636378f600f9e9abec665ae96e364992542e`.
+I independently hashed both archives and compared every regular member. Of 1,223
+files, only `package/README.md` changed; the remaining 1,222 are byte-identical.
+This review's runtime conclusion therefore applies to the unchanged runtime and
+declarations in the new archive. Fresh installation/browser qualification of
+that archive remains separately recorded by the coordinator. The original
+reviewed archive and evidence remain preserved.
+
+Comparison evidence: `reviews/runtime/documentary-followup-verification.json`
+under the external release evidence directory. This follow-up required no new
+runtime probe or implementation change.
