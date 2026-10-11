@@ -29,8 +29,8 @@ export const presenceViewExamples = {
 		description:
 			'Change a stable key to replace a note, then choose whether entrance overlaps exit.',
 		category: 'Presence',
-		guide: 'animate-presence',
-		anchor: 'sequencing',
+		guide: 'presence',
+		anchor: 'replacement',
 		filename: 'AnimatePresenceSequenceExample.svelte',
 		component: AnimatePresenceSequenceExample,
 		source: publicExampleSource(sequenceSource)

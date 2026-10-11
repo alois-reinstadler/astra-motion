@@ -2,17 +2,20 @@ import { describe, expect, it } from 'vitest';
 import { compile } from 'svelte/compiler';
 import { docs, docGroups, docAliases, getDoc } from './docs.js';
 import { liveExamples, exampleCatalog } from './examples.js';
-import { legacyExamples } from './examples/legacy-examples.js';
+import { exampleAliases, getExample, featuredExampleIds } from './examples.js';
 
-const compositions = new Set(
-	Object.values(legacyExamples)
-		.filter((example) => !['state', 'variants'].includes(example.id))
-		.map((example) => example.id)
-);
+const compositions = new Set([
+	'scroll-composition',
+	'player-layout',
+	'tab-highlight',
+	'viewport-reveal'
+]);
 
 describe('documentation sources', () => {
 	it('covers the exact requested navigation surface in the requested order', () => {
 		expect(docGroups).toEqual([
+			'Start',
+			'Learn',
 			'Animations',
 			'Gestures',
 			'Components',
@@ -21,11 +24,13 @@ describe('documentation sources', () => {
 			'Guides'
 		]);
 		expect(docs.map((doc) => doc.slug)).toEqual([
+			'quick-start',
 			'animations',
+			'transitions',
+			'presence',
 			'layout',
 			'scroll',
 			'svg',
-			'transitions',
 			'gestures',
 			'drag',
 			'hover',
@@ -51,13 +56,14 @@ describe('documentation sources', () => {
 			'use-in-view',
 			'use-page-in-view',
 			'use-reduced-motion',
-			'getting-started',
+			'recipes',
+			'coming-from-react',
 			'accessibility',
 			'reduce-bundle-size',
 			'text-animation'
 		]);
 		expect(docGroups.map((group) => docs.filter((doc) => doc.group === group).length)).toEqual([
-			5, 3, 8, 8, 6, 4
+			1, 5, 1, 3, 8, 8, 6, 5
 		]);
 	});
 	it('each reference demo has one canonical section; larger compositions link to their concept', () => {
@@ -85,13 +91,13 @@ describe('documentation sources', () => {
 		}
 	});
 	it('onboarding gives install requirements followed by one working component', () => {
-		const start = getDoc('getting-started')!;
+		const start = getDoc('quick-start')!;
 		expect(start.sections.slice(0, 3).map((section) => section.id)).toEqual([
 			'installation',
-			'requirements',
-			'first-component'
+			'first-animation',
+			'notices'
 		]);
-		expect(start.sections[2].example).toBe('state');
+		expect(start.sections[1].example).toBe('state');
 		expect(liveExamples.state.snippetLabel).toBe('Notification.svelte');
 		for (const generate of ['client', 'server'] as const) {
 			expect(
@@ -99,6 +105,34 @@ describe('documentation sources', () => {
 			).toEqual([]);
 		}
 		expect(start.sections.filter((section) => section.example)).toHaveLength(1);
+	});
+	it('retired example URLs resolve to modern sources and the featured collection leads the catalog', () => {
+		for (const [alias, target] of Object.entries(exampleAliases)) {
+			expect(getExample(alias)).toBe(liveExamples[target]);
+			expect(liveExamples[alias]).toBeUndefined();
+		}
+		expect(exampleCatalog.slice(0, featuredExampleIds.length).map((example) => example.id)).toEqual(
+			featuredExampleIds
+		);
+		for (const example of Object.values(liveExamples))
+			expect(example.source).not.toMatch(
+				/\bcreate(?:Layout|Animate|Scroll|InView)\b|<Presence[\s>]/
+			);
+	});
+	it('learning pages start with an interaction and retain technical notes after the introduction', () => {
+		for (const slug of ['animations', 'transitions', 'presence', 'layout', 'scroll']) {
+			const page = getDoc(slug)!;
+			expect(page.learning).toBeTruthy();
+			expect(page.sections[0].text.length).toBeLessThanOrEqual(2);
+			expect(page.sections[0].example).toBeTruthy();
+			expect(page.sections[0].text.join(' ')).not.toMatch(/updateLayout|popLayout|held geometry/);
+			expect(page.sections.at(-1)?.id).toBe('where-next');
+		}
+		expect(
+			getDoc('layout')!
+				.sections.find((section) => section.id === 'troubleshooting')!
+				.note!.text.join(' ')
+		).toContain('updateLayout');
 	});
 	it('all live examples have standalone public source that compiles for client and server', () => {
 		for (const example of Object.values(liveExamples)) {

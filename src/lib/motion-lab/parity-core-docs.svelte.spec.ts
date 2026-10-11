@@ -65,7 +65,7 @@ it('animates SVG geometry, path drawing and viewBox then restores the geometry',
 	render(SVG);
 	await tick();
 	const circle = document.querySelector('circle')!;
-	const path = document.querySelector('path')!;
+	const path = document.querySelector('path[stroke-dasharray]')!;
 	const svg = document.querySelector('svg')!;
 	const drawn = Promise.all([
 		nextAnimationCompletion(path, { pathLength: 1 }),
@@ -94,18 +94,18 @@ it('animates SVG geometry, path drawing and viewBox then restores the geometry',
 it('switches transition settings and interrupts a tween with a reversed spring target', async () => {
 	render(Transitions);
 	await tick();
-	await expect.poll(() => x(tile())).toBe(-100);
+	await expect.poll(() => x(tile())).toBe(-160);
 	const select = document.querySelector('select')!;
 	select.value = 'linear';
 	select.dispatchEvent(new Event('change', { bubbles: true }));
 	button('Move tile').click();
-	await expect.poll(() => x(tile())).toBeGreaterThan(-90);
-	expect(x(tile())).toBeLessThan(100);
+	await expect.poll(() => x(tile())).toBeGreaterThan(-150);
+	expect(x(tile())).toBeLessThan(160);
 	select.value = 'spring';
 	select.dispatchEvent(new Event('change', { bubbles: true }));
 	button('Move tile').click();
 	// A reversed spring can settle beyond the default polling window.
-	await expect.poll(() => x(tile()), { timeout: 4000 }).toBe(-100);
+	await expect.poll(() => x(tile()), { timeout: 4000 }).toBe(-160);
 });
 
 it('applies a changed provider policy to already-running position without stopping paint', async () => {

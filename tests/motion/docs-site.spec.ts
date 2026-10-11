@@ -7,13 +7,13 @@ test('live docs examples keep their interactions, reset, and source on the page'
 	const errors: string[] = [];
 	page.on('pageerror', (error) => errors.push(error.message));
 	await page.goto('/examples/list-composition');
-	const list = page.locator('[data-example="list-composition"]');
-	const complete = list.getByRole('button', { name: 'Complete: Collect a little inspiration' });
+	const list = page.locator('[data-example="animate-presence-list"]');
+	const complete = list.getByRole('button', { name: 'Remove Read something new' });
 	await settlePointerTarget(complete);
 	await complete.click();
-	await expect(list.locator('li.task')).toHaveCount(2);
-	await list.getByRole('button', { name: 'Start again' }).click();
-	await expect(list.locator('li.task')).toHaveCount(3);
+	await expect(list.locator('li')).toHaveCount(2);
+	await list.getByRole('button', { name: 'Restore list' }).click();
+	await expect(list.locator('li')).toHaveCount(3);
 	await page.goto('/docs/getting-started#first-component');
 	const notification = page.locator('[data-example="state"]');
 	await notification.getByRole('button', { name: 'Dismiss notification' }).click();
@@ -31,14 +31,14 @@ test('preserved layout, shared selection, gestures and stagger work on dedicated
 	const errors: string[] = [];
 	page.on('pageerror', (error) => errors.push(error.message));
 	await page.goto('/examples/layout');
-	const layout = page.locator('[data-example="layout"]');
+	const layout = page.locator('[data-example="player-layout"]');
 	const before = await layout.locator('.record').evaluate((node) => node.clientHeight);
 	await layout.getByRole('button', { name: 'Open player' }).click();
 	await expect
 		.poll(() => layout.locator('.record').evaluate((node) => node.clientHeight))
 		.toBeGreaterThan(before);
 	await page.goto('/examples/shared');
-	const shared = page.locator('[data-example="shared"]');
+	const shared = page.locator('[data-example="tab-highlight"]');
 	await shared.getByRole('button', { name: 'Rest', exact: true }).click();
 	await expect(shared.getByRole('heading', { name: 'Take the long way.' })).toBeVisible();
 	await page.goto('/examples/variants');
@@ -48,20 +48,12 @@ test('preserved layout, shared selection, gestures and stagger work on dedicated
 	await variants.getByRole('button', { name: 'Reveal menu', exact: false }).click();
 	await expect(variants.locator('.item').last()).toHaveCSS('opacity', '1');
 	await page.goto('/examples/gestures');
-	const gestures = page.locator('[data-example="gestures"]');
+	const gestures = page.locator('[data-example="gesture-feedback"]');
 	await gestures.getByRole('button', { name: 'Save to collection' }).click();
 	await expect(gestures.getByRole('button', { name: 'Saved to collection' })).toHaveAttribute(
 		'aria-pressed',
 		'true'
 	);
-	await gestures.getByRole('slider').fill('120');
-	await expect
-		.poll(() =>
-			gestures
-				.locator('.handle')
-				.evaluate((node) => new DOMMatrix(getComputedStyle(node).transform).m41)
-		)
-		.toBeCloseTo(120, 0);
 	expect(errors).toEqual([]);
 });
 
@@ -78,7 +70,7 @@ test('scroll, visibility and timelines stay local and usable with reduced motion
 	});
 	await expect(scroll.locator('progress')).toHaveAttribute('value', '1');
 	await page.goto('/examples/in-view');
-	const visibility = page.locator('[data-example="in-view"]');
+	const visibility = page.locator('[data-example="viewport-reveal"]');
 	await expect(visibility.locator('.status')).toHaveText('Out of view');
 	await visibility.locator('.viewport').evaluate((node) => {
 		node.scrollTop = node.scrollHeight;
@@ -90,10 +82,11 @@ test('scroll, visibility and timelines stay local and usable with reduced motion
 	});
 	await expect(visibility.locator('.status')).toHaveText('Out of view');
 	await page.goto('/examples/timeline');
-	const timeline = page.locator('[data-example="timeline"]');
-	await timeline.getByRole('button', { name: 'Replay' }).click();
-	await expect(timeline.locator('.disc')).toHaveCSS('opacity', '1');
-	await expect(timeline.getByRole('button', { name: 'Play sequence' })).toBeVisible();
+	const timeline = page.locator('[data-example="use-animate"]');
+	await timeline.getByRole('button', { name: 'Replay sequence' }).click();
+	await timeline.getByRole('button', { name: 'Finish', exact: true }).click();
+	await expect(timeline.locator('.tile').first()).toHaveCSS('opacity', '1');
+	await expect(timeline.getByRole('button', { name: 'Replay sequence' })).toBeVisible();
 	expect(errors).toEqual([]);
 });
 
@@ -113,15 +106,15 @@ test('documentation has connected navigation, topic filtering and complete copya
 		});
 	});
 	await page.goto('/docs/layout');
-	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Layout animation');
+	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Layout & shared elements');
 	const navigation = page.getByRole('navigation', { name: 'Documentation', exact: true });
 	await expect(
-		navigation.getByRole('link', { name: 'Layout animation', exact: true })
+		navigation.getByRole('link', { name: 'Layout & shared elements', exact: true })
 	).toHaveAttribute('aria-current', 'page');
 	await page.goto('/examples/layout');
-	const example = page.locator('[data-example="layout"]');
+	const example = page.locator('[data-example="player-layout"]');
 	await example.locator('summary').click();
-	const copy = example.getByRole('button', { name: 'Copy LayoutExample.svelte', exact: true });
+	const copy = example.getByRole('button', { name: 'Copy Player.svelte', exact: true });
 	// Position the control before clicking: WebKit can continue native smooth scrolling
 	// after Playwright's actionability check. Keep the actual pointer interaction.
 	await settlePointerTarget(copy);
@@ -130,32 +123,28 @@ test('documentation has connected navigation, topic filtering and complete copya
 	expect(await page.locator('html').getAttribute('data-copied-source')).toContain(
 		"from 'astra-motion'"
 	);
-	await page.getByRole('link', { name: 'Read Layout animation', exact: true }).click();
+	await page.getByRole('link', { name: 'Read Layout & shared elements', exact: true }).click();
 	await expect(page).toHaveURL(/\/docs\/layout#automatic$/);
 	const search = page.getByRole('searchbox', { name: 'Find a guide' });
 	await search.fill('scroll');
 	await expect(
 		navigation.getByRole('link', { name: 'Scroll animations', exact: true })
 	).toBeVisible();
-	// Search includes reference prose and code, where getting-started introduces useScroll.
+	// Search includes migration prose, where the React guide introduces useScroll.
 	await expect(
-		navigation.getByRole('link', { name: 'Getting started', exact: true })
+		navigation.getByRole('link', { name: 'Coming from Motion for React', exact: true })
 	).toBeVisible();
 	for (const api of ['useFollowValue', 'useWillChange']) {
 		await search.fill(api);
 		await expect(
 			navigation.getByRole('link', { name: 'Motion values overview', exact: true })
 		).toBeVisible();
-		await expect(
-			navigation.getByRole('link', { name: 'Getting started', exact: true })
-		).toHaveCount(0);
+		await expect(navigation.getByRole('link', { name: 'Quick start', exact: true })).toHaveCount(0);
 	}
 	for (const api of ['motion.bind', 'motion.create']) {
 		await search.fill(api);
 		await expect(navigation.getByRole('link', { name: '<motion>', exact: true })).toBeVisible();
-		await expect(
-			navigation.getByRole('link', { name: 'Getting started', exact: true })
-		).toBeVisible();
+		await expect(navigation.getByRole('link', { name: 'Quick start', exact: true })).toBeVisible();
 	}
 	await search.fill('no-such-astra-api');
 	await expect(navigation.getByRole('link')).toHaveCount(0);
@@ -206,8 +195,8 @@ test('documentation renders without JavaScript and missing guides return 404', a
 	const context = await browser.newContext({ javaScriptEnabled: false, baseURL });
 	const page = await context.newPage();
 	await page.goto('/docs/getting-started');
-	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Getting started');
-	for (const id of ['first-component']) {
+	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Quick start');
+	for (const id of ['first-animation']) {
 		await page.locator(`#${id} summary`).click();
 		await expect(
 			page.locator(`#${id}`).getByRole('region', { name: /Example.svelte source/ })
@@ -217,7 +206,7 @@ test('documentation renders without JavaScript and missing guides return 404', a
 		page
 			.getByRole('navigation', { name: 'Previous and next guide' })
 			.getByRole('link', { name: 'Next' })
-	).toHaveAttribute('href', /docs\/accessibility$/);
+	).toHaveAttribute('href', /docs\/animations$/);
 	await page.setViewportSize({ width: 390, height: 844 });
 	await page.locator('details.mobile-navigation summary').click();
 	await expect(
@@ -236,31 +225,31 @@ test('client navigation disposes demo exits instead of retaining previous guide 
 	page.on('pageerror', (error) => errors.push(error.message));
 	await page.goto('/examples/shared');
 	await page.getByRole('button', { name: 'Rest', exact: true }).click();
-	await page.getByRole('link', { name: 'Read Layout animation', exact: true }).click();
+	await page.getByRole('link', { name: 'Read Layout & shared elements', exact: true }).click();
 	await expect(page).toHaveURL(/\/docs\/layout#shared-elements$/);
-	await expect(page.locator('[data-example="shared"]')).toHaveCount(0);
+	await expect(page.locator('[data-example="tab-highlight"]')).toHaveCount(0);
 	const navigation = page.getByRole('navigation', { name: 'Documentation', exact: true });
 	await navigation.getByRole('link', { name: 'Scroll animations', exact: true }).click();
 	await expect(page).toHaveURL(/\/docs\/scroll$/);
 	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Scroll animations');
 	await expect(page.locator('#shared-elements')).toHaveCount(0);
-	await expect(page.locator('[data-example="shared"]')).toHaveCount(0);
-	await expect(page.locator('article > section')).toHaveCount(9);
-	const gettingStarted = navigation.getByRole('link', { name: 'Getting started', exact: true });
+	await expect(page.locator('[data-example="tab-highlight"]')).toHaveCount(0);
+	await expect(page.locator('article > section')).toHaveCount(10);
+	const gettingStarted = navigation.getByRole('link', { name: 'Quick start', exact: true });
 	await settlePointerTarget(gettingStarted);
 	await gettingStarted.click();
-	await expect(page).toHaveURL(/\/docs\/getting-started$/);
+	await expect(page).toHaveURL(/\/docs\/quick-start$/);
 	await page
 		.locator('[data-example="state"]')
 		.getByRole('button', { name: 'Dismiss notification' })
 		.click();
-	await navigation.getByRole('link', { name: 'Layout animation', exact: true }).click();
+	await navigation.getByRole('link', { name: 'Layout & shared elements', exact: true }).click();
 	await expect(page).toHaveURL(/\/docs\/layout$/);
 	await expect(page.locator('[data-example="state"]')).toHaveCount(0);
 	await expect(page.locator('[data-example="wait"]')).toHaveCount(0);
 	await expect(page.locator('[data-example="layout-expand"]')).toHaveCount(1);
 	await page.goBack();
-	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Getting started');
+	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Quick start');
 	await expect(page.locator('[data-example="state"] .notification')).toHaveCount(1);
 	await expect(page.locator('[data-example="layout-expand"]')).toHaveCount(0);
 	expect(errors).toEqual([]);

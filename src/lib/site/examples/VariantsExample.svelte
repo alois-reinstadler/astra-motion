@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { motion } from '$lib/motion/index.js';
+	import { motion, stagger } from '$lib/motion/index.js';
 	let open = $state(true);
 	const item = {
 		variants: { open: { opacity: 1, x: 0 }, closed: { opacity: 0, x: -18 } },
@@ -25,7 +25,7 @@
 			initial="closed"
 			animate={open ? 'open' : 'closed'}
 			variants={{ open: { opacity: 1 }, closed: { opacity: 1 } }}
-			transition={{ staggerChildren: 0.12 }}
+			transition={{ delayChildren: stagger(0.12) }}
 		>
 			<motion.div class="item" {...item}>
 				<span class="icon projects" aria-hidden="true">▦</span>

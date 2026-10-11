@@ -48,8 +48,8 @@ const entries: [string, string, string, LiveExample['component'], string, string
 	],
 	[
 		'use-motion-value-event',
-		'Observe animation events',
-		'Start and stop an animated value while its managed listeners report changes and lifecycle events.',
+		'Hide a reading header on scroll',
+		'Compare current and previous scroll values to hide a reading header on the way down and restore it on the way up.',
 		MotionValueEventExample,
 		'MotionValueEventExample.svelte',
 		eventSource

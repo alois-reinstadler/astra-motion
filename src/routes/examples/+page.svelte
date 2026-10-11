@@ -5,6 +5,7 @@
 		ready = true;
 	});
 	import { resolve } from '$app/paths';
+	import ExampleHint from '$lib/site/ExampleHint.svelte';
 	import SiteFrame from '$lib/site/SiteFrame.svelte';
 	import {
 		exampleCatalog as examples,
@@ -30,11 +31,18 @@
 			<p class="eyebrow">EXAMPLES</p>
 			<h1>Find the interaction<br /><em>you want to build.</em></h1>
 			<p>
-				Each example has a live preview, complete source, and a link to its reference. Try a focused
-				interaction or explore a larger composition.
+				Start with the learning collection, then explore the supporting demos. Every detail page has
+				a live preview, complete source, and its reference. Hover or focus a card for a motion hint.
 			</p>
 		</header>
 
+		<aside class="showcase-link">
+			<div>
+				<h2>See it all in Fieldwork.</h2>
+				<p>A complete contact sheet, editing desk, publishing queue and reading experience.</p>
+			</div>
+			<a href={resolve('/showcase')}>Explore the complete application</a>
+		</aside>
 		<div class="collection-tools">
 			<nav aria-label="Filter examples">
 				{#each categories as option (option)}<button
@@ -64,12 +72,9 @@
 		<div class="example-grid">
 			{#each filtered as example (example.title)}<a
 					class="example"
-					href={example.slug === 'showcase'
-						? resolve('/showcase')
-						: resolve('/examples/[slug]', { slug: example.example! })}
+					href={resolve('/examples/[slug]', { slug: example.example })}
 					><div class="example-art" aria-hidden="true">
-						<span class="art-index">{String(examples.indexOf(example) + 1).padStart(2, '0')}</span>
-						<span class="art-tag">{example.category}</span>
+						<ExampleHint category={example.category} id={example.id} />
 					</div>
 					<div class="example-content">
 						<span class="example-category">{example.category}</span>
@@ -94,18 +99,22 @@
 		<aside>
 			<div>
 				<h2>Start with one component.</h2>
-				<p>
-					New to Astra? Install the release candidate and build a notification in Getting started.
-				</p>
+				<p>New to Astra? Install the release candidate and build a notification in Quick start.</p>
 			</div>
-			<a href={resolve('/docs/[slug]', { slug: 'getting-started' })}
-				>Read the getting started guide
-			</a>
+			<a href={resolve('/docs/[slug]', { slug: 'quick-start' })}>Read Quick start </a>
 		</aside>
 	</main>
 </SiteFrame>
 
 <style>
+	.showcase-link {
+		margin: 0;
+		padding: 24px 0;
+	}
+	.example:focus-visible {
+		outline: 2px solid var(--site-accent);
+		outline-offset: 5px;
+	}
 	main {
 		max-width: 1440px;
 		padding: 0 56px;
@@ -204,28 +213,15 @@
 		min-width: 0;
 	}
 	.example-art {
-		height: 88px;
+		height: 124px;
 		background: var(--site-panel);
 		border-bottom: 1px solid var(--site-line);
-		padding: 20px;
+		padding: 0;
 		position: relative;
 		overflow: hidden;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
-	}
-
-	.art-index,
-	.art-tag {
-		font:
-			8px ui-monospace,
-			monospace;
-		letter-spacing: 1px;
-		position: relative;
-		z-index: 1;
-	}
-	.art-tag {
-		align-self: flex-end;
 	}
 
 	.example-content {
@@ -336,7 +332,7 @@
 			gap: 18px;
 		}
 		.example-art {
-			height: 74px;
+			height: 124px;
 		}
 		aside {
 			align-items: flex-start;

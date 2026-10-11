@@ -11,11 +11,13 @@
 
 <div class="example">
 	<div class="stage">
+		<div class="destination" class:right={moved} aria-hidden="true"></div>
 		<motion.div
 			class="tile"
+			initial={false}
 			aria-hidden="true"
 			reducedMotion="user"
-			animate={{ x: moved ? 100 : -100 }}
+			animate={{ x: moved ? 160 : -160 }}
 			{transition}
 		/>
 	</div>
@@ -27,10 +29,41 @@
 				></select
 			></label
 		><button onclick={() => (moved = !moved)}>Move tile</button>
+		<button onclick={() => (moved = !moved)}>Reverse now</button>
 	</div>
+	<p>
+		Reverse before arrival. The outline marks the destination; watch spring overshoot and tween
+		speed.
+	</p>
 </div>
 
 <style>
+	p {
+		max-width: 400px;
+		font-size: 12px;
+		line-height: 1.6;
+		text-align: center;
+		color: var(--site-muted);
+		margin: 0;
+	}
+	.destination {
+		position: absolute;
+		width: 64px;
+		height: 64px;
+		top: calc(50% - 32px);
+		left: calc(50% - 32px);
+		border: 1px dashed var(--site-ink);
+		border-radius: 16px;
+		transform: translateX(-160px);
+	}
+	.destination.right {
+		transform: translateX(160px);
+	}
+	@media (max-width: 500px) {
+		.stage {
+			zoom: 0.65;
+		}
+	}
 	.example {
 		display: grid;
 		justify-items: center;
@@ -56,7 +89,8 @@
 	.stage {
 		display: grid;
 		place-items: center;
-		width: min(100%, 340px);
+		width: min(100%, 450px);
+		position: relative;
 		min-height: 180px;
 	}
 	.controls {

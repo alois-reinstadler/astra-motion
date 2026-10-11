@@ -136,6 +136,23 @@ it('coordinates independent native disclosure state without adding group wrapper
 		.toBe(true);
 });
 
+it('shows the unchanged sibling jumping when group coordination is disabled', async () => {
+	await render(Group);
+	await frame();
+	await frame();
+	document.querySelector<HTMLInputElement>('.group-toggle input')!.click();
+	await tick();
+	for (let i = 0; i < 4; i++) await frame();
+	const panels = [...document.querySelectorAll<HTMLDetailsElement>('.panel')];
+	const before = panels[1].getBoundingClientRect().top;
+	panels[0].querySelector('summary')!.click();
+	await expect.poll(() => panels[0].open).toBe(true);
+	for (let i = 0; i < 4; i++) await frame();
+	expect(panels[1].getBoundingClientRect().top).toBeGreaterThan(before);
+	expect(Boolean(visualElementStore.get(panels[1])?.projection?.currentAnimation)).toBe(false);
+	expect(getComputedStyle(panels[1]).transform).toBe('none');
+});
+
 it('keeps shared indicators inside their separate namespaces', async () => {
 	await render(Namespaces);
 	await frame();

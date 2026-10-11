@@ -3,16 +3,18 @@ import { expect, test, type Page } from '@playwright/test';
 import { settlePointerTarget } from './pointer-target.js';
 
 const groups = [
+	['Start', [['quick-start', 'Quick start']]],
 	[
-		'Animations',
+		'Learn',
 		[
-			['animations', 'Animations overview'],
-			['layout', 'Layout animation'],
-			['scroll', 'Scroll animations'],
-			['svg', 'SVG animation'],
-			['transitions', 'Transitions']
+			['animations', 'Animating targets'],
+			['transitions', 'Transitions'],
+			['presence', 'Presence'],
+			['layout', 'Layout & shared elements'],
+			['scroll', 'Scroll animations']
 		]
 	],
+	['Animations', [['svg', 'SVG animation']]],
 	[
 		'Gestures',
 		[
@@ -61,7 +63,8 @@ const groups = [
 	[
 		'Guides',
 		[
-			['getting-started', 'Getting started'],
+			['recipes', 'Recipes'],
+			['coming-from-react', 'Coming from Motion for React'],
 			['accessibility', 'Accessibility'],
 			['reduce-bundle-size', 'Reduce bundle size'],
 			['text-animation', 'Text animation']
@@ -175,12 +178,12 @@ function captureErrors(page: Page) {
 	return errors;
 }
 
-test('the sidebar exposes the complete surface in six ordered groups', async ({ page }) => {
+test('the sidebar exposes the complete surface in eight ordered groups', async ({ page }) => {
 	await page.goto('/docs');
-	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Getting started');
+	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Quick start');
 	const navigation = page.getByRole('navigation', { name: 'Documentation', exact: true });
 	await expect(navigation.locator('.nav-group > p')).toHaveText(groups.map(([name]) => name));
-	await expect(navigation.getByRole('link')).toHaveCount(34);
+	await expect(navigation.getByRole('link')).toHaveCount(37);
 	for (const [index, [, pages]] of groups.entries()) {
 		const links = navigation.locator('.nav-group').nth(index).getByRole('link');
 		await expect(links).toHaveText(pages.map(([, title]) => title));
@@ -188,16 +191,17 @@ test('the sidebar exposes the complete surface in six ordered groups', async ({ 
 			await expect(links.nth(index)).toHaveAttribute('href', `/docs/${slug}`);
 		}
 	}
-	await expect(
-		navigation.getByRole('link', { name: 'Getting started', exact: true })
-	).toHaveAttribute('aria-current', 'page');
+	await expect(navigation.getByRole('link', { name: 'Quick start', exact: true })).toHaveAttribute(
+		'aria-current',
+		'page'
+	);
 });
 
-test('all 34 documentation pages hydrate their examples and reference tables without errors', async ({
+test('all 37 documentation pages hydrate their examples and reference tables without errors', async ({
 	page
 }) => {
 	// This case deliberately visits the complete public surface with one browser page.
-	test.setTimeout(120_000);
+	test.setTimeout(240_000);
 	const errors = captureErrors(page);
 	for (const [group, pages] of groups) {
 		for (const [slug, title] of pages) {
@@ -206,7 +210,8 @@ test('all 34 documentation pages hydrate their examples and reference tables wit
 				expect(response?.status()).toBe(200);
 				await expect(page.getByRole('heading', { level: 1 })).toHaveText(title);
 				const examples = page.locator('[data-example]');
-				expect(await examples.count(), `live examples on /docs/${slug}`).toBeGreaterThan(0);
+				if (slug === 'coming-from-react') expect(await examples.count()).toBe(0);
+				else expect(await examples.count(), `live examples on /docs/${slug}`).toBeGreaterThan(0);
 				for (const example of await examples.all()) {
 					// Deferred examples mount when observed near the viewport. Visit each one
 					// and verify mounted content and usable controls before checking the page.
@@ -267,6 +272,7 @@ test('reference tables and complete source can be scrolled with a keyboard on mo
 	expect(await table.evaluate((node) => node.scrollWidth > node.clientWidth)).toBe(true);
 	await page.keyboard.press('ArrowRight');
 	await expect.poll(() => table.evaluate((node) => node.scrollLeft)).toBeGreaterThan(0);
+	await page.goto('/docs/animations');
 	await page.locator('[data-example="motion-component"] summary').click();
 	const source = page.getByRole('region', { name: 'MotionExample.svelte source', exact: true });
 	await source.focus();
@@ -282,15 +288,16 @@ test('historical documentation routes and useful anchors resolve to existing con
 }) => {
 	test.setTimeout(90_000);
 	const aliases = [
-		['introduction', '/docs/getting-started'],
+		['introduction', '/docs/quick-start'],
+		['getting-started', '/docs/quick-start'],
 		['state', '/docs/animations'],
-		['presence', '/docs/animate-presence'],
+		['presence', '/docs/presence'],
 		['shared-layout', '/docs/layout'],
 		['timelines', '/docs/use-animate'],
 		['routes', '/docs/animate-view'],
 		['components', '/docs/motion'],
 		['api', '/docs/motion'],
-		['troubleshooting', '/docs/getting-started']
+		['troubleshooting', '/docs/recipes']
 	];
 	for (const [alias, destination] of aliases) {
 		const response = await request.get(`/docs/${alias}`, { maxRedirects: 0 });
@@ -326,10 +333,9 @@ test('historical documentation routes and useful anchors resolve to existing con
 		}
 	}
 	await page.goto('/docs/routes');
-	await expect(page.getByRole('link', { name: 'Try the two-page route demo' })).toHaveAttribute(
-		'href',
-		/motion-lab\/product$/
-	);
+	await expect(
+		page.getByRole('link', { name: 'Try a shared transition across routes' })
+	).toHaveAttribute('href', /motion-lab\/product$/);
 	for (const route of [
 		'/docs/getting-started#motion-component',
 		'/docs/getting-started#install-local-package',
@@ -365,8 +371,8 @@ test('historical aliases retain their content and fragment without JavaScript', 
 	try {
 		const page = await context.newPage();
 		for (const [route, title] of [
-			['/docs/state#inheritance', 'Animations overview'],
-			['/docs/presence#wait', '<AnimatePresence>'],
+			['/docs/state#inheritance', 'Animating targets'],
+			['/docs/presence#wait', 'Presence'],
 			['/docs/api#create-motion', '<motion>']
 		]) {
 			const response = await page.goto(route);

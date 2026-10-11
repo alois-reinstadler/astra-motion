@@ -1,5 +1,7 @@
 /** Shared content model. Examples are registered separately from page prose. */
 export const documentationGroups = [
+	'Start',
+	'Learn',
 	'Animations',
 	'Gestures',
 	'Components',
@@ -9,6 +11,7 @@ export const documentationGroups = [
 ] as const;
 export type DocGroup = (typeof documentationGroups)[number];
 export interface DocSection {
+	note?: { title: string; text: string[] };
 	id: string;
 	title: string;
 	text: string[];
@@ -26,6 +29,7 @@ export interface DocSection {
 	}[];
 }
 export interface DocPage {
+	learning?: string;
 	slug: string;
 	title: string;
 	group: DocGroup;

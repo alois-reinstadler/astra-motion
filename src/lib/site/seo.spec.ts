@@ -42,7 +42,7 @@ describe('public site discovery', () => {
 		}
 	});
 	it('preserves historical alias content with a canonical primary URL', () => {
-		expect(canonicalPathname('/docs')).toBe('/docs/getting-started');
+		expect(canonicalPathname('/docs')).toBe('/docs/quick-start');
 		for (const [old, alias] of Object.entries(docAliases)) {
 			expect(canonicalPathname(`/docs/${old}`)).toBe(`/docs/${alias.slug}`);
 			expect(pageMetadata(`/docs/${old}`)).toBe(pageMetadata(`/docs/${alias.slug}`));

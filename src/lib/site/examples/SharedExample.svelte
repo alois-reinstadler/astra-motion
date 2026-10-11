@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { motion, createLayout } from '$lib/motion/index.js';
+	import { motion, LayoutGroup } from '$lib/motion/index.js';
 	const moods = [
 		{
 			name: 'Focus',
@@ -21,7 +21,7 @@
 		}
 	];
 	let selected = $state(0);
-	const layout = createLayout({ transition: { type: 'spring', stiffness: 360, damping: 30 } });
+	const namespace = $props.id();
 </script>
 
 <div class="shared-example">
@@ -36,16 +36,27 @@
 		<h3>{moods[selected].title}</h3>
 		<p>{moods[selected].detail}</p>
 	</div>
-	<div class="choices" role="group" aria-label="Choose a mood">
-		{#each moods as mood, index (mood.name)}
-			<button type="button" aria-pressed={selected === index} onclick={() => (selected = index)}>
-				{#if selected === index}
-					<motion.div class="selected" layout={{ id: 'mood-selection' }} layoutGroup={layout} />
-				{/if}
-				<span>{mood.name}</span>
-			</button>
-		{/each}
-	</div>
+	<LayoutGroup id={namespace}>
+		<div class="choices" role="group" aria-label="Choose a mood">
+			{#each moods as mood, index (mood.name)}
+				<button
+					type="button"
+					aria-pressed={selected === index}
+					onclick={() => (selected = index)}
+					onfocus={() => (selected = index)}
+				>
+					{#if selected === index}
+						<motion.div
+							class="selected"
+							layoutId="mood-selection"
+							transition={{ layout: { type: 'spring', stiffness: 360, damping: 30 } }}
+						/>
+					{/if}
+					<span>{mood.name}</span>
+				</button>
+			{/each}
+		</div>
+	</LayoutGroup>
 </div>
 
 <style>

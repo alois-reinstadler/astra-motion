@@ -14,7 +14,7 @@
 		'text-tilt': { slug: 'text-animation', title: 'Text animation' },
 		timelines: { slug: 'timelines', title: 'Timelines' },
 		product: { slug: 'routes', title: 'Routes' },
-		guide: { slug: 'getting-started', title: 'Getting started' }
+		guide: { slug: 'quick-start', title: 'Quick start' }
 	};
 	const guide = $derived(
 		guides[page.route.id?.split('/')[2] ?? ''] ?? { slug: 'layout', title: 'Layout' }

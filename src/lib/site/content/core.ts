@@ -3,8 +3,8 @@ import type { DocPage } from '../doc-types.js';
 export const coreDocs: DocPage[] = [
 	{
 		slug: 'animations',
-		title: 'Animations overview',
-		group: 'Animations',
+		title: 'Animating targets',
+		group: 'Learn',
 		summary:
 			'Describe a destination, let values travel there, and coordinate the movement across your component tree.',
 		sections: [
@@ -12,15 +12,11 @@ export const coreDocs: DocPage[] = [
 				id: 'first-animation',
 				title: 'Animate a changing target',
 				text: [
-					'Import motion from astra-motion and put an animate target on the element you want to move. A target is an object of CSS properties, independent transforms, or supported SVG attributes. When a reactive value changes, Astra animates from the current rendered value to the new destination.',
-					'Svelte state describes your interface. MotionValues carry values that change every frame. You can start with ordinary $state and introduce MotionValues when connecting gestures, scroll, or derived values. Component destruction releases Astra’s subscriptions and animation work.'
+					'A target describes the values an element should reach. Put an animate object on a motion element, then change the destination with ordinary Svelte state.',
+					'Toggle the tile, then toggle again while it moves. The same element turns toward the new target from its current appearance.'
 				],
-				code: {
-					label: 'Small complete component',
-					source:
-						"<script lang=\"ts\">\n  import { motion } from 'astra-motion';\n  let expanded = $state(false);\n</script>\n\n<button onclick={() => expanded = !expanded}>Change target</button>\n<motion.div animate={{ scale: expanded ? 1.2 : 1 }} style={{ width: 80, height: 80, backgroundColor: '#d34123' }} />"
-				},
-				related: ['motion', 'motion-values']
+				related: ['motion', 'motion-values'],
+				example: 'motion-component'
 			},
 			{
 				id: 'entrances',
@@ -36,7 +32,7 @@ export const coreDocs: DocPage[] = [
 				title: 'Name states and coordinate descendants',
 				text: [
 					'Variants name related targets. Pass variants={{ closed: {...}, open: {...} }} and animate="open". A descendant with matching variant names follows the nearest controlling ancestor. Labels can be arrays; later labels override earlier properties. inherit={false} disconnects a component from inherited variant state.',
-					'A variant function receives custom data, the current values, and current velocities. Return a target with optional transition and transitionEnd. A parent can delay or stagger children and run before or after them. Change the selection quickly in this example to see each item continue from its current position.'
+					'A variant function receives custom data, the current values, and current velocities. Return a target with optional transition and transitionEnd. A parent can delay or stagger children and run before or after them. Hide and reveal the menu quickly while items are mid-flight: each item continues from its current position instead of restarting.'
 				],
 				example: 'variants',
 				related: ['transitions', 'animate-presence']
@@ -54,10 +50,16 @@ export const coreDocs: DocPage[] = [
 				id: 'lifecycles',
 				title: 'Reactivity, interruption and cleanup',
 				text: [
-					'Direct props react to Svelte assignments and nested state changes. Keep component identity stable so updates can interrupt an existing animation; changing a key creates a new instance. MotionValues keep their own velocity and can animate styles without rendering the whole Svelte component each frame.',
-					'Callbacks belong to the current animation definition. Rapid replacement cancels stale orchestration and transitionEnd writes. An exit that waits forever will retain its presence record forever, so use finite exit transitions. For imperative sequences and automatically managed scope cleanup, use useAnimate.'
+					'Keep the element’s key stable when an animation should continue from its current pose. Changing the key creates a new instance.',
+					'Use MotionValues for values driven every frame and useAnimate for imperative sequences; their managed helpers release subscriptions and playback on destruction.'
 				],
-				related: ['use-animate', 'use-motion-value-event']
+				related: ['use-animate', 'use-motion-value-event'],
+				note: {
+					title: 'Exit lifetime',
+					text: [
+						'Callbacks belong to the current animation definition. Rapid replacement cancels stale orchestration and transitionEnd writes. An exit that never finishes retains its presence record; use finite exit transitions.'
+					]
+				}
 			},
 			{
 				id: 'accessible-motion',
@@ -67,8 +69,28 @@ export const coreDocs: DocPage[] = [
 					'If a target does not move, check that the element can transform, the value is animatable, and a higher-priority gesture is not controlling the same property. Inline text needs an inline-block or block host. A raw transform takes precedence over independent x, y and rotate values; transformTemplate provides explicit composition.'
 				],
 				related: ['accessibility', 'motion', 'transitions']
+			},
+			{
+				id: 'where-next',
+				title: 'Where next',
+				text: [
+					'Use the next guide to build on this interaction, or inspect a complete application.'
+				],
+				links: [
+					{
+						slug: 'transitions',
+						title: 'Transitions',
+						detail: 'Continue the learning path.'
+					},
+					{
+						path: '/showcase',
+						title: 'Fieldwork',
+						detail: 'See these techniques working together.'
+					}
+				]
 			}
-		]
+		],
+		learning: 'Changing targets, keyframes, named variants and interruption.'
 	},
 	{
 		slug: 'svg',
@@ -164,7 +186,7 @@ export const coreDocs: DocPage[] = [
 	{
 		slug: 'transitions',
 		title: 'Transitions',
-		group: 'Animations',
+		group: 'Learn',
 		summary:
 			'Control duration, spring response, keyframe timing, repetition and sequencing with one transition vocabulary.',
 		sections: [
@@ -172,15 +194,10 @@ export const coreDocs: DocPage[] = [
 				id: 'usage',
 				title: 'Choose how a target is reached',
 				text: [
-					'A transition describes movement between values. Set transition on a motion component for its default, inside a variant or target for that state, or through MotionConfig for a subtree. A specific property entry overrides the general transition; default supplies the fallback for the remaining properties.',
-					'A tween follows a duration and easing curve. A physics spring responds to displacement and current velocity, which makes interruption natural. A duration-based spring trades physical parameters for a chosen duration and bounce. Try changing the transition before reversing the tile.'
+					'A tween reaches its destination over a duration; a spring responds to distance and velocity. Choose a timing style, move the marker, and press Reverse now before it arrives.',
+					'The outlined marker shows the destination. A spring can overshoot it; a linear tween travels at constant speed, and an eased tween changes speed.'
 				],
-				example: 'transition-picker',
-				code: {
-					label: 'Focused per-property transition excerpt',
-					source:
-						'<motion.div\n  animate={{ x: 100, opacity: 1 }}\n  transition={{ default: { type: "spring", stiffness: 180, damping: 20 }, opacity: { duration: 0.2 } }}\n/>'
-				}
+				example: 'transition-picker'
 			},
 			{
 				id: 'defaults',
@@ -237,8 +254,7 @@ export const coreDocs: DocPage[] = [
 				id: 'springs',
 				title: 'Spring options',
 				text: [
-					'Physical parameters override duration/bounce tuning. Larger stiffness increases the pull toward the target, damping removes oscillation, and mass changes how readily velocity responds. Zero damping can oscillate indefinitely. Finish an exit with nonzero damping and finite repeat settings.',
-					'The qualified engine only enters its visualDuration branch when duration or bounce is also present. Pair visualDuration with bounce, for example { type: "spring", visualDuration: 0.4, bounce: 0.2 }. This avoids relying on a visualDuration-only combination that this upstream version ignores.'
+					'Physical parameters override duration/bounce tuning. Larger stiffness increases the pull toward the target, damping removes oscillation, and mass changes how readily velocity responds. Zero damping can oscillate indefinitely. Finish an exit with nonzero damping and finite repeat settings.'
 				],
 				table: {
 					columns: ['Option or API', 'Default / type', 'Behavior'],
@@ -264,6 +280,12 @@ export const coreDocs: DocPage[] = [
 							'engine values depend on value scale and animation API',
 							'Completion requires sufficiently low speed and displacement. Set both for exact settling requirements.'
 						]
+					]
+				},
+				note: {
+					title: 'Motion engine detail',
+					text: [
+						'The bundled Motion engine only enters its visualDuration branch when duration or bounce is also present. Pair visualDuration with bounce, for example { type: "spring", visualDuration: 0.4, bounce: 0.2 }. This avoids relying on a visualDuration-only combination that this engine version ignores.'
 					]
 				}
 			},
@@ -329,8 +351,28 @@ export const coreDocs: DocPage[] = [
 					'Use matching units and compatible value structures across keyframes. A spring that never finishes usually has zero damping, infinite repetition, or unattainable rest criteria. Respect reduced-motion policy and provide a stop control for nonessential repeating motion. Native View Transition geometry uses its browser-layer timing contract; its reference explains which options apply.'
 				],
 				related: ['animate-view', 'accessibility', 'use-animate']
+			},
+			{
+				id: 'where-next',
+				title: 'Where next',
+				text: [
+					'Use the next guide to build on this interaction, or inspect a complete application.'
+				],
+				links: [
+					{
+						slug: 'presence',
+						title: 'Presence',
+						detail: 'Continue the learning path.'
+					},
+					{
+						path: '/showcase',
+						title: 'Fieldwork',
+						detail: 'See these techniques working together.'
+					}
+				]
 			}
-		]
+		],
+		learning: 'Springs, tweens, stagger and reversing an animation.'
 	},
 	{
 		slug: 'motion',
@@ -346,12 +388,18 @@ export const coreDocs: DocPage[] = [
 					'Import { motion } from astra-motion and choose a tag: motion.div, motion.button, motion.input or motion.path. These are compiled Svelte components that render the named element. Ordinary native attributes and event handlers pass through. bind:ref gives you the actual element.',
 					'Changing animate reacts to state immediately. The example changes position, rotation and border radius using one state variable. The same direct props apply to Motion with a stable as tag; compiled motion tags provide more precise native bindings.'
 				],
-				example: 'motion-component',
 				code: {
 					label: 'Small complete component',
 					source:
 						'<script lang="ts">\n  import { motion } from \'astra-motion\';\n  let active = $state(false);\n  let element = $state<HTMLButtonElement | null>();\n</script>\n<motion.button bind:ref={element} onclick={() => active = !active}\n  aria-pressed={active} animate={{ scale: active ? 1.15 : 1 }}>\n  Toggle size\n</motion.button>'
-				}
+				},
+				links: [
+					{
+						slug: 'animations',
+						title: 'Try a reactive destination',
+						detail: 'The canonical target example.'
+					}
+				]
 			},
 			{
 				id: 'animation-props',
@@ -542,7 +590,7 @@ export const coreDocs: DocPage[] = [
 				title: 'Animate variants from application code',
 				text: [
 					'useAnimationControls returns start(definition, transitionOverride?), set(definition), and stop(), with mount and cleanup managed by Svelte. Pass the controls to animate on one or several motion elements. Start them from onMount, an effect, or an event; calls before mounting report an error. start returns a promise for the linked animations.',
-					'A start issued from a parent’s onMount waits for child attachment setup in the current microtask. Variant descendants participate in orchestration. Replacing controls unsubscribes the old controls. Legacy controls.set with several labels follows upstream’s first-label-wins order, while declarative target arrays use last-label-wins. Prefer one label for imperative set.'
+					'A start issued from a parent’s onMount waits for child attachment setup in the current microtask. Variant descendants participate in orchestration. Replacing controls unsubscribes the old controls. Legacy controls.set with several labels follows Motion’s first-label-wins order, while declarative target arrays use last-label-wins. Prefer one label for imperative set.'
 				],
 				code: {
 					label: 'Complete imperative variant example',
@@ -610,7 +658,7 @@ export const coreDocs: DocPage[] = [
 						[
 							'transition',
 							'undefined',
-							'Fallback Transition; merge behavior follows the qualified engine resolveTransition contract.'
+							'Fallback Transition; merge behavior follows the engine’s resolveTransition contract.'
 						],
 						[
 							'reducedMotion',
@@ -642,9 +690,9 @@ export const coreDocs: DocPage[] = [
 			},
 			{
 				id: 'internal-static',
-				title: 'Static rendering and upstream internal flags',
+				title: 'Static rendering and Motion internal flags',
 				text: [
-					'MotionConfig.isStatic is an internal upstream implementation flag and is not a supported Astra prop. For a final initial pose, set initial={false}; for accessibility policy, choose reducedMotion="always"; for a static element, omit animation. These choices have distinct behavior and do not claim to emulate the internal flag.'
+					'MotionConfig.isStatic is an internal Motion implementation flag and is not a supported Astra prop. For a final initial pose, set initial={false}; for accessibility policy, choose reducedMotion="always"; for a static element, omit animation. These choices have distinct behavior and do not claim to emulate the internal flag.'
 				]
 			},
 			{

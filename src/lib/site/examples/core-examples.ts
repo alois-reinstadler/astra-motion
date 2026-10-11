@@ -21,8 +21,8 @@ export const coreExamples = {
 		filename: 'MotionExample.svelte',
 		component: MotionExample,
 		source: publicExampleSource(MotionExampleSource),
-		guide: 'motion',
-		anchor: 'usage',
+		guide: 'animations',
+		anchor: 'first-animation',
 		category: 'State & gestures'
 	},
 	'svg-drawing': {

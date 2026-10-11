@@ -18,6 +18,9 @@
 	<LayoutGroup id={namespace}>
 		<div class="track">
 			<div class="baseline"></div>
+			<svg class="arc-guide" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"
+				><path d="M 0 0 Q 50 70 100 0" /></svg
+			>
 			{#if shared}
 				{#key atEnd}
 					<motion.div
@@ -44,10 +47,28 @@
 			<span class="start">Start</span><span class="end">End</span>
 		</div>
 	</LayoutGroup>
-	<p>Move again during the animation to reverse the path.</p>
+	<p>
+		The dotted curve shows the arc. Move again during travel to reverse from the current position.
+	</p>
 </div>
 
 <style>
+	.arc-guide {
+		position: absolute;
+		top: 59px;
+		left: 24px;
+		width: calc(100% - 48px);
+		height: auto;
+		aspect-ratio: 1;
+		overflow: visible;
+	}
+	.arc-guide path {
+		fill: none;
+		stroke: #62695a;
+		stroke-width: 1;
+		vector-effect: non-scaling-stroke;
+		stroke-dasharray: 3 5;
+	}
 	.demo {
 		width: min(100%, 330px);
 		margin: auto;

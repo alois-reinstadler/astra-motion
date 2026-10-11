@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { createInView, motion } from '$lib/motion/index.js';
+	import { useInView, motion } from '$lib/motion/index.js';
 
 	let panel = $state<HTMLElement>();
 	let target = $state<HTMLElement>();
-	const visible = createInView(
+	const visible = useInView(
 		() => target,
 		() => ({ root: panel, amount: 0.6 })
 	);

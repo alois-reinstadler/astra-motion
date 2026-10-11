@@ -9,7 +9,7 @@ const examples = [
 	['hover-feedback', 'ParityGestureHover.svelte'],
 	['drag-controls-handle', 'ParityGestureControls.svelte'],
 	['reorder-list-grid', 'ParityGestureReorder.svelte'],
-	['layout-expand', 'ParityLayoutExpand.svelte'],
+	['layout-expand', 'SessionCards.svelte'],
 	['layout-curved-path', 'ParityLayoutArc.svelte'],
 	['layout-group-coordination', 'ParityLayoutGroup.svelte'],
 	['layout-group-namespaces', 'ParityLayoutNamespaces.svelte']

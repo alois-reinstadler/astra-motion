@@ -38,7 +38,7 @@ test('home demo keeps identity through repeated layout changes and links into th
 		)
 		.toBe(true);
 	await page.getByRole('link', { name: 'Start building' }).click();
-	await expect(page).toHaveURL(/\/docs\/getting-started$/);
+	await expect(page).toHaveURL(/\/docs\/quick-start$/);
 	await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
 	expect(errors).toEqual([]);
 });
@@ -47,9 +47,35 @@ test('example discovery filters, searches, and opens a dedicated live example', 
 	page
 }) => {
 	await page.goto('/examples');
-	const category = page.getByRole('button', { name: 'View Transitions', exact: true });
+	// The leading collection offers motion hints before loading any demo engine.
+	for (const card of await page
+		.locator('.example-grid > .example')
+		.all()
+		.then((cards) => cards.slice(0, 6))) {
+		const piece = card.locator('.one');
+		const initial = await piece.evaluate((node) => getComputedStyle(node).transform);
+		await card.hover();
+		await expect
+			.poll(() => piece.evaluate((node) => getComputedStyle(node).transform))
+			.not.toBe(initial);
+		await page.mouse.move(0, 0);
+		await expect
+			.poll(() => piece.evaluate((node) => getComputedStyle(node).transform))
+			.toBe(initial);
+	}
+	const firstCard = page.locator('.example-grid > .example').first();
+	const firstPiece = firstCard.locator('.one');
+	const resting = await firstPiece.evaluate((node) => getComputedStyle(node).transform);
+	await page.getByRole('searchbox', { name: 'Search examples' }).focus();
+	await page.keyboard.press('Tab');
+	await expect(firstCard).toBeFocused();
+	await expect
+		.poll(() => firstPiece.evaluate((node) => getComputedStyle(node).transform))
+		.not.toBe(resting);
+	const category = page.getByRole('button', { name: 'Layout & presence', exact: true });
 	await category.click();
 	await expect(category).toHaveAttribute('aria-pressed', 'true');
+	await page.getByRole('searchbox', { name: 'Search examples' }).fill('shared artwork');
 	await expect(page.locator('.example-grid > .example')).toHaveCount(1);
 	await expect(page.locator('.example-grid > .example')).toContainText(
 		'Open a field note with shared artwork and a title'
@@ -61,12 +87,12 @@ test('example discovery filters, searches, and opens a dedicated live example', 
 	await page.getByRole('searchbox', { name: 'Search examples' }).fill('no-such-example');
 	await expect(page.getByRole('heading', { name: 'No examples found.' })).toBeVisible();
 	await page.getByRole('button', { name: 'Show all examples' }).click();
-	await expect(page.locator('.example-grid > .example')).toHaveCount(45);
-	await page.getByRole('searchbox', { name: 'Search examples' }).fill('drag feedback');
+	await expect(page.locator('.example-grid > .example')).toHaveCount(40);
+	await page.getByRole('searchbox', { name: 'Search examples' }).fill('hover, press');
 	await expect(page.locator('.example-grid > .example')).toHaveCount(1);
 	await page.locator('.example-grid > .example').click();
-	await expect(page).toHaveURL(/\/examples\/gestures$/);
-	await expect(page.locator('[data-example="gestures"]')).toBeVisible();
+	await expect(page).toHaveURL(/\/examples\/gesture-feedback$/);
+	await expect(page.locator('[data-example="gesture-feedback"]')).toBeVisible();
 	await page
 		.getByRole('navigation', { name: 'Main navigation' })
 		.getByRole('link', { name: 'Examples', exact: true })
@@ -152,32 +178,32 @@ test('a preserved presence composition can be tried and inspected on a narrow sc
 }) => {
 	await page.setViewportSize({ width: 390, height: 844 });
 	await page.goto('/examples/wait');
-	const example = page.locator('[data-example="wait"]');
+	const example = page.locator('[data-example="animate-presence-sequence"]');
 	await example.getByRole('button', { name: 'Next note' }).click();
-	await expect(example.locator('.chapter')).toContainText('02');
+	await expect(example.locator('.card > span')).toContainText('02');
 	await example.locator('summary').click();
 	await expect(
-		example.getByRole('region', { name: 'PresenceExample.svelte source' })
+		example.getByRole('region', { name: 'AnimatePresenceSequenceExample.svelte source' })
 	).toBeVisible();
 	await expect(page.locator('a[href*="motion-lab"]')).toHaveCount(0);
-	await expect(page).toHaveURL(/\/examples\/wait$/);
+	await expect(page).toHaveURL(/\/examples\/animate-presence-sequence$/);
 });
 
 test('the first lesson exposes runnable code and every catalog entry opens its promised destination', async ({
 	page
 }) => {
-	// The expanded catalogue deliberately opens all 45 destinations and their reference anchors.
-	test.setTimeout(180_000);
+	// The expanded catalogue deliberately opens all 40 demos and their reference anchors.
+	test.setTimeout(240_000);
 	const errors: string[] = [];
 	page.on('pageerror', (error) => errors.push(error.message));
 	page.on('console', (message) => {
 		if (message.type() === 'error') errors.push(message.text());
 	});
 	await page.goto('/docs');
-	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Getting started');
+	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Quick start');
 	await expect(page.locator('[data-example="state"]')).toHaveCount(1);
 	await page.goto('/docs/getting-started#motion-component');
-	const first = page.locator('#first-component');
+	const first = page.locator('#first-animation');
 	await expect(first.getByRole('region', { name: 'Notification.svelte source' })).toBeVisible();
 	await expect(first.getByRole('region', { name: 'Notification.svelte source' })).toContainText(
 		"import { motion } from 'astra-motion'"
@@ -186,19 +212,28 @@ test('the first lesson exposes runnable code and every catalog entry opens its p
 		'{#if visible}'
 	);
 	await expect(first.locator('[data-example]')).toHaveCount(1);
-	const recipeIds = [
-		'snippet-getting-started-reactivity',
-		'snippet-getting-started-native-svelte',
-		'snippet-getting-started-panel-recipes',
-		'snippet-getting-started-accordion-recipe',
-		'snippet-getting-started-dialog-recipe',
-		'snippet-getting-started-headless-recipe'
+	const quickStartIds = [
+		'state',
+		'snippet-quick-start-make-it-yours',
+		'snippet-quick-start-keep-the-element'
 	];
 	expect(
 		await page
 			.locator('[data-example]')
 			.evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-example')))
-	).toEqual(['state', ...recipeIds]);
+	).toEqual(quickStartIds);
+	await page.goto('/docs/recipes');
+	const recipeIds = [
+		'snippet-recipes-panel-recipes',
+		'snippet-recipes-accordion-recipe',
+		'snippet-recipes-dialog-recipe',
+		'snippet-recipes-headless-recipe'
+	];
+	expect(
+		await page
+			.locator('[data-example]')
+			.evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-example')))
+	).toEqual(recipeIds);
 	for (const id of recipeIds) {
 		const recipe = page.locator(`[data-example="${id}"]`);
 		await recipe.evaluate((node) => node.scrollIntoView({ behavior: 'instant', block: 'center' }));
@@ -216,7 +251,7 @@ test('the first lesson exposes runnable code and every catalog entry opens its p
 			title: node.querySelector('h2')!.textContent!
 		}))
 	);
-	expect(destinations).toHaveLength(45);
+	expect(destinations).toHaveLength(40);
 	for (const destination of destinations) {
 		// Keep the pointer off document links between independently loaded destinations.
 		await page.mouse.move(0, 0);
@@ -249,4 +284,28 @@ test('the first lesson exposes runnable code and every catalog entry opens its p
 			/[\u2190-\u21ff\u27f0-\u27ff\u2900-\u297f\u2b00-\u2b11]/u
 		);
 	}
+});
+
+test('quick start keeps reactive targets and native form bindings usable', async ({ page }) => {
+	await page.goto('/docs/quick-start');
+	const reactive = page.locator('[data-example="snippet-quick-start-make-it-yours"]');
+	await reactive.evaluate((node) => node.scrollIntoView({ behavior: 'instant', block: 'center' }));
+	await expect(reactive.locator(':scope > fieldset.preview')).toBeEnabled();
+	await reactive.getByRole('button', { name: 'Choose item', exact: true }).click();
+	await expect(reactive.getByRole('button', { name: 'Selected', exact: true })).toHaveAttribute(
+		'aria-pressed',
+		'true'
+	);
+	const native = page.locator('[data-example="snippet-quick-start-keep-the-element"]');
+	await native.evaluate((node) => node.scrollIntoView({ behavior: 'instant', block: 'center' }));
+	await expect(native.locator(':scope > fieldset.preview')).toBeEnabled();
+	const news = native.getByRole('checkbox', { name: 'News', exact: true });
+	await news.check();
+	await expect(news).toBeChecked();
+	await expect(native.locator('.preview-root')).toContainText('Selected: news');
+	await native.getByRole('button', { name: 'Toggle choices', exact: true }).click();
+	await expect(news).toHaveCount(0);
+	await native.getByRole('button', { name: 'Toggle choices', exact: true }).click();
+	await expect(news).toBeChecked();
+	await expect(native.locator('.preview-root')).toContainText('Selected: news');
 });

@@ -5,17 +5,25 @@
 </script>
 
 <div class="example">
+	<p class="route-label">Walking route · Station to the lookout</p>
 	<div class="stage">
 		<motion.svg
 			width="320"
 			height="180"
 			viewBox="0 0 320 180"
-			aria-label="An animated curved line"
+			aria-label="Walking route from the station to the lookout"
 			role="img"
 			reducedMotion="user"
 			animate={{ viewBox: zoomed ? '60 25 200 112.5' : '0 0 320 180' }}
 			transition={{ duration: 0.5 }}
 		>
+			<path
+				d="M 35 125 C 95 10 220 170 285 55"
+				fill="none"
+				stroke="currentColor"
+				stroke-opacity="0.18"
+				stroke-width="3"
+			/>
 			<motion.path
 				d="M 35 125 C 95 10 220 170 285 55"
 				fill="none"
@@ -44,6 +52,12 @@
 </div>
 
 <style>
+	.route-label {
+		margin: 0;
+		font-size: 13px;
+		color: var(--site-muted);
+		text-align: center;
+	}
 	.example {
 		display: grid;
 		justify-items: center;

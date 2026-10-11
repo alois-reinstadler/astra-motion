@@ -46,7 +46,13 @@ export const presenceViewDocs: DocPage[] = [
 					'wait holds the next child until the outgoing child has completed. It supports at most one requested child. A second change during the exit replaces the pending destination, so the latest requested item appears next. Returning the outgoing key reverses removal instead of creating a duplicate.',
 					'An exit can use easeIn and the following entrance easeOut to produce a deliberate handoff. Use per-target transition options on the motion child when entrance and exit need different timing.'
 				],
-				example: 'animate-presence-sequence'
+				links: [
+					{
+						slug: 'presence',
+						title: 'Compare sync and wait',
+						detail: 'Try the canonical replacement demo in the learning guide.'
+					}
+				]
 			},
 			{
 				id: 'pop-layout',
@@ -273,7 +279,7 @@ export const presenceViewDocs: DocPage[] = [
 				title: 'Sequence an ordinary child component',
 				text: [
 					'Put Tab inside <AnimateActivity mode={visible ? "visible" : "hidden"}><Tab /></AnimateActivity>. The child below needs no Activity-specific registration. Add layoutMode="pop" on the boundary to release its space during the exit.',
-					'Place delayChildren inside the variant transition. The upstream Activity article currently puts it directly on the variant, but Motion 13.4.4 reads orchestration from transition; the complete child below uses that pinned contract.'
+					'Place delayChildren inside the variant transition. Motion’s Activity article currently puts it directly on the variant, but Motion 13.4.4 reads orchestration from transition; the complete child below uses that pinned contract.'
 				],
 				code: {
 					label: 'Tab.svelte — complete child component',
@@ -347,7 +353,7 @@ export const presenceViewDocs: DocPage[] = [
 				text: [
 					'Ordinary Svelte $effects and onMount resources remain active while the panel is hidden. Svelte 5 does not provide a public primitive for disconnecting and recreating every effect in a mounted component subtree. Use useActivityEffect for application work that needs cleanup on hiding.',
 					'This Svelte adaptation retains DOM and component state without changing Svelte’s scheduler priority, background rendering, or the lifecycle of arbitrary third-party resources.',
-					'The upstream AnimateActivity reference was still a Motion+ alpha on 27 September 2026, requiring Motion 12.23.24 or later and React 19.2 or later. Astra’s documented contract is the Svelte behavior described here; no React dependency or Motion+ token is required.'
+					'The AnimateActivity reference was still a Motion+ alpha on 27 September 2026, requiring Motion 12.23.24 or later and React 19.2 or later. Astra’s documented contract is the Svelte behavior described here; no React dependency or Motion+ token is required.'
 				]
 			},
 			{
@@ -733,9 +739,14 @@ void transition.finished.catch(showLoadError);`
 				links: [
 					{
 						path: '/motion-lab/product',
-						title: 'Try the two-page route demo',
+						title: 'Try a shared transition across routes',
 						detail:
-							'An existing SvelteKit route composition with shared elements and navigation fallback.'
+							'Open a product, then return to the collection. The artwork connects the two pages.'
+					},
+					{
+						path: '/showcase',
+						title: 'Fieldwork',
+						detail: 'A complete reading and editing experience with shared transitions.'
 					}
 				],
 				code: {
@@ -768,7 +779,7 @@ void transition.finished.catch(showLoadError);`
 					'If a state change does not animate, confirm that it runs inside startViewTransition, that the real root has the supplied attachment, and that the browser supports native View Transitions. Check the returned finished outcome and onDiagnostic before assuming the update failed.',
 					'If shared elements do not connect, make their names equal and unique on each side of one transaction. Reusing a single mounted boundary is an update; changing component identity with the same name is a share. Entering-side options control a shared pair.',
 					'If a custom target behaves differently from motion.div, use CSS snapshot properties and complete transform strings. If rapidly replaced data arrives late, use the update context’s AbortSignal and handle rejected data requests in your UI.',
-					'This contract was researched against Motion 13.4.4 and stable React 19.3.0 on 27 September 2026. AnimateView had moved from Motion+ early access to Motion’s public separate entry by that date. Astra uses the native browser API with its own Svelte coordinator and has no React runtime dependency. Future changes to browser snapshot behavior or the upstream integration are tracked separately from this documented Svelte API.'
+					'This contract was researched against Motion 13.4.4 and stable React 19.3.0 on 27 September 2026. AnimateView had moved from Motion+ early access to Motion’s public separate entry by that date. Astra uses the native browser API with its own Svelte coordinator and has no React runtime dependency. Future changes to browser snapshot behavior or the Motion integration are tracked separately from this documented Svelte API.'
 				],
 				related: ['animate-presence', 'animate-activity', 'layout']
 			}

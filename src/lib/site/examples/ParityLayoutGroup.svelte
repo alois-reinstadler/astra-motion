@@ -1,27 +1,61 @@
 <script lang="ts">
 	import { LayoutGroup, motion } from '$lib/motion/index.js';
+	let grouped = $state(true);
+	let firstOpen = $state(false);
+	let secondOpen = $state(false);
+	const namespace = $props.id();
 </script>
 
+{#snippet panels()}
+	<motion.details
+		layout
+		layoutDependency={firstOpen}
+		ontoggle={(event) => (firstOpen = event.currentTarget.open)}
+		class="panel"
+	>
+		<motion.summary layout="position">What should move?</motion.summary>
+		<motion.p layout="position"
+			>Let layout connect the size and position changes that your CSS already describes.</motion.p
+		>
+	</motion.details>
+	<motion.details
+		layout
+		layoutDependency={secondOpen}
+		ontoggle={(event) => (secondOpen = event.currentTarget.open)}
+		class="panel"
+	>
+		<motion.summary layout="position">What stays native?</motion.summary>
+		<motion.p layout="position">
+			These details elements keep their own open state, keyboard behavior, and semantics. The
+			sibling moves when either one expands.
+		</motion.p>
+	</motion.details>
+{/snippet}
 <div class="demo">
-	<LayoutGroup id="field-notes">
-		<motion.details layout class="panel">
-			<motion.summary layout="position">What should move?</motion.summary>
-			<motion.p layout="position"
-				>Let layout connect the size and position changes that your CSS already describes.</motion.p
-			>
-		</motion.details>
-		<motion.details layout class="panel">
-			<motion.summary layout="position">What stays native?</motion.summary>
-			<motion.p layout="position">
-				These details elements keep their own open state, keyboard behavior, and semantics. The
-				sibling moves when either one expands.
-			</motion.p>
-		</motion.details>
-	</LayoutGroup>
-	<p class="hint">Open each panel independently. The group adds no wrapper element.</p>
+	<label class="group-toggle"
+		><input type="checkbox" bind:checked={grouped} /> Coordinate the siblings with LayoutGroup</label
+	>
+	{#key grouped}
+		{#if grouped}<LayoutGroup id={namespace}>{@render panels()}</LayoutGroup>
+		{:else}{@render panels()}{/if}
+	{/key}
+	<p class="hint">
+		Open the first panel and watch the second. Each has its own layoutDependency: the group includes
+		the unchanged sibling in the measurement. Switch the group off to compare.
+	</p>
 </div>
 
 <style>
+	.group-toggle {
+		display: flex;
+		gap: 8px;
+		align-items: center;
+		font-size: 12px;
+		margin: 0 0 18px;
+	}
+	input {
+		accent-color: #bc3c21;
+	}
 	.demo {
 		width: 100%;
 		max-width: 340px;

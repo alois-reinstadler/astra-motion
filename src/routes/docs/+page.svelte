@@ -3,4 +3,4 @@
 	import { getDoc } from '$lib/site/docs.js';
 </script>
 
-<DocArticle doc={getDoc('getting-started')!} />
+<DocArticle doc={getDoc('quick-start')!} />

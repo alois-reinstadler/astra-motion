@@ -37,7 +37,7 @@
 					exit. Motion’s engine, connected to Svelte.
 				</p>
 				<div class="hero-actions">
-					<a class="action primary" href={resolve('/docs/[slug]', { slug: 'getting-started' })}
+					<a class="action primary" href={resolve('/docs/[slug]', { slug: 'quick-start' })}
 						>Start building</a
 					>
 					<a class="action secondary" href={resolve('/examples')}>Explore examples</a>

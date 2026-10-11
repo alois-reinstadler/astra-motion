@@ -3,10 +3,14 @@ import { coreDocs } from './content/core.js';
 import { gesturesLayoutPages } from './content/gestures-layout.js';
 import { presenceViewDocs } from './content/presence-view.js';
 import { valuesHelpersDocs } from './content/values-helpers.js';
+import { startDocs } from './content/start.js';
+import { presenceDocs } from './content/presence.js';
 import { guidesDocs } from './content/guides.js';
 export type { DocPage, DocSection, DocGroup } from './doc-types.js';
 export const docGroups = documentationGroups;
 const pages = [
+	...startDocs,
+	...presenceDocs,
 	...coreDocs,
 	...gesturesLayoutPages,
 	...presenceViewDocs,
@@ -14,11 +18,13 @@ const pages = [
 	...guidesDocs
 ];
 const order = [
+	'quick-start',
 	'animations',
+	'transitions',
+	'presence',
 	'layout',
 	'scroll',
 	'svg',
-	'transitions',
 	'gestures',
 	'drag',
 	'hover',
@@ -44,26 +50,45 @@ const order = [
 	'use-in-view',
 	'use-page-in-view',
 	'use-reduced-motion',
-	'getting-started',
+	'recipes',
+	'coming-from-react',
 	'accessibility',
 	'reduce-bundle-size',
 	'text-animation'
 ];
 const historicalAnchors: Record<string, Record<string, string[]>> = {
-	'getting-started': {
-		installation: ['install-local-package', 'use-the-workspace'],
-		'first-component': ['motion-component'],
-		reactivity: ['the-contract'],
-		migration: ['existing-markup', 'native-bindings', 'lite-or-full'],
-		requirements: ['a-small-set-of-tools', 'choose-your-entry', 'qualified-dependencies'],
-		troubleshooting: [
-			'build-with-confidence',
+	'quick-start': {
+		installation: [
+			'install-local-package',
+			'use-the-workspace',
+			'requirements',
+			'qualified-dependencies',
 			'current-status',
-			'distortion',
-			'missing-exit',
-			'ownership',
-			'api-status'
+			'lite-or-full',
+			'choose-your-entry'
+		],
+		'first-animation': ['first-component', 'motion-component', 'a-small-set-of-tools'],
+		'make-it-yours': ['reactivity', 'the-contract'],
+		'keep-the-element': ['native-svelte', 'existing-markup', 'native-bindings'],
+		'where-next': [
+			'build-with-confidence',
+			'migration',
+			'coming-from-react',
+			'troubleshooting',
+			'configuration',
+			'ssr',
+			'panel-recipes',
+			'accordion-recipe',
+			'dialog-recipe',
+			'headless-recipe'
 		]
+	},
+	presence: {
+		replacement: ['simultaneous', 'wait'],
+		choose: ['pop-layout', 'nested-exits']
+	},
+	recipes: {
+		troubleshooting: ['distortion', 'missing-exit', 'ownership', 'api-status']
 	},
 	animations: {
 		'first-animation': ['targets'],
@@ -129,14 +154,15 @@ export const docs: DocPage[] = order.map((slug) => {
 });
 /** Legacy locations render the canonical document while retaining incoming URL fragments. */
 export const docAliases: Record<string, { slug: string; anchor?: string }> = {
-	introduction: { slug: 'getting-started' },
+	introduction: { slug: 'quick-start' },
+	'getting-started': { slug: 'quick-start' },
 	state: { slug: 'animations' },
-	presence: { slug: 'animate-presence' },
 	'shared-layout': { slug: 'layout' },
 	timelines: { slug: 'use-animate' },
 	routes: { slug: 'animate-view' },
 	components: { slug: 'motion' },
 	api: { slug: 'motion' },
-	troubleshooting: { slug: 'getting-started' }
+	troubleshooting: { slug: 'recipes', anchor: 'troubleshooting' }
 };
-export const getDoc = (slug: string) => docs.find((doc) => doc.slug === slug);
+export const getDoc = (slug: string) =>
+	docs.find((doc) => doc.slug === (docAliases[slug]?.slug ?? slug));

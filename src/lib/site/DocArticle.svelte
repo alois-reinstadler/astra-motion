@@ -18,6 +18,10 @@
 			<p class="eyebrow">DOCUMENTATION <span>/</span> {doc.group.toUpperCase()}</p>
 			<h1>{doc.title}</h1>
 			<p class="lede">{doc.summary}</p>
+			{#if doc.learning}<p class="learning">
+					<strong>What you’ll learn</strong>
+					{doc.learning}
+				</p>{/if}
 			<details class="compact-contents">
 				<summary>On this page <span aria-hidden="true">+</span></summary>
 				<nav aria-label="Article sections">
@@ -74,6 +78,10 @@
 				{#if example}
 					<DocExample {example} />
 				{/if}
+				{#if section.note}<details class="technical-note">
+						<summary>{section.note.title}</summary
+						>{#each section.note.text as paragraph (paragraph)}<p>{paragraph}</p>{/each}
+					</details>{/if}
 				{#if section.links}<nav class="reading-path" aria-label={`${section.title} links`}>
 						{#each section.links as link (link.title)}
 							<a
@@ -115,6 +123,29 @@
 </div>
 
 <style>
+	.learning {
+		font-size: 14px;
+		line-height: 1.7;
+		color: var(--site-muted);
+	}
+	.learning strong {
+		display: block;
+		color: var(--site-ink);
+		font-weight: 550;
+	}
+	.technical-note {
+		margin: 24px 0;
+		padding: 16px;
+		border: 1px solid var(--site-line);
+		border-radius: 5px;
+		font-size: 14px;
+		line-height: 1.8;
+		color: var(--site-muted);
+	}
+	.technical-note summary {
+		cursor: pointer;
+		color: var(--site-ink);
+	}
 	.reference-table {
 		width: 100%;
 		overflow: auto;

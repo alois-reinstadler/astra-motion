@@ -1,8 +1,16 @@
 <script lang="ts">
-	import { createScroll, motionStore } from '$lib/motion/index.js';
+	import {
+		motion,
+		useScroll,
+		useTransform,
+		useReducedMotion,
+		motionStore
+	} from '$lib/motion/index.js';
 
-	const reading = createScroll();
-	const progress = motionStore(reading.progress);
+	let container = $state<HTMLElement>();
+	const { scrollYProgress } = useScroll(() => ({ container }));
+	const progress = motionStore(scrollYProgress);
+	const reduced = useReducedMotion();
 	const phase = $derived($progress < 0.35 ? 0 : $progress < 0.7 ? 1 : 2);
 	const chapters = ['Find the pieces.', 'Bring them together.', 'Let them go.'];
 	const poses = [
@@ -27,17 +35,16 @@
 	];
 	const cards = ['MAKE', 'IT', 'MOVE.'].map((word, index) => ({
 		word,
-		attach: reading.animate(
-			{ transform: poses[index] },
-			{ times: [0, 0.4, 0.6, 1], ease: 'linear' }
-		)
+		transform: useTransform(scrollYProgress, [0, 0.4, 0.6, 1], poses[index])
 	}));
-	const orbit = reading.animate({
-		transform: ['rotate(-90deg) scale(0.65)', 'rotate(90deg) scale(1.15)']
-	});
+	const orbit = useTransform(
+		scrollYProgress,
+		[0, 1],
+		['rotate(-90deg) scale(0.65)', 'rotate(90deg) scale(1.15)']
+	);
 </script>
 
-<div class="example" class:reduced={reading.reducedMotion}>
+<div class="example" class:reduced={reduced.current}>
 	<div class="reading-label">
 		<span>SCROLL STUDY / 001</span><span>{Math.round($progress * 100)}%</span>
 	</div>
@@ -47,7 +54,12 @@
 		class="reader"
 		tabindex="0"
 		aria-label="Scroll to scatter, gather and release the composition"
-		{@attach reading.container}
+		{@attach (node) => {
+			container = node;
+			return () => {
+				container = undefined;
+			};
+		}}
 	>
 		<div class="scroll-travel">
 			<div class="pinned-stage">
@@ -56,14 +68,22 @@
 						SCROLL TO COMPOSE</span
 					>
 				</div>
-				<div class="orbit" aria-hidden="true" {@attach orbit}><span></span></div>
+				<motion.div
+					class="orbit"
+					aria-hidden="true"
+					style={{ transform: reduced.current ? 'none' : orbit }}><span></span></motion.div
+				>
 				<div class="composition" role="img" aria-label="Make it move">
 					{#each cards as card, index (card.word)}
-						<div class="paper paper-{index}" aria-hidden="true" {@attach card.attach}>
+						<motion.div
+							class="paper paper-{index}"
+							aria-hidden="true"
+							style={{ transform: reduced.current ? 'none' : card.transform }}
+						>
 							<span class="paper-index">0{index + 1}</span><strong>{card.word}</strong><span
 								class="paper-mark">✳</span
 							>
-						</div>
+						</motion.div>
 					{/each}
 				</div>
 				<div class="stage-footer">
@@ -164,7 +184,7 @@
 	.stage-caption > span:last-child {
 		font-size: 8px;
 	}
-	.orbit {
+	.example :global(.orbit) {
 		position: absolute;
 		width: 320px;
 		height: 320px;
@@ -173,14 +193,14 @@
 		border: 1px solid #78836e;
 		border-radius: 50%;
 	}
-	.orbit::before {
+	.example :global(.orbit::before) {
 		content: '';
 		position: absolute;
 		inset: 30px;
 		border: 1px solid #78836e;
 		border-radius: 50%;
 	}
-	.orbit span {
+	.example :global(.orbit span) {
 		position: absolute;
 		left: 50%;
 		top: -7px;
@@ -193,7 +213,7 @@
 		position: absolute;
 		inset: 80px 0 90px;
 	}
-	.paper {
+	.example :global(.paper) {
 		position: absolute;
 		width: 68%;
 		left: 16%;
@@ -206,18 +226,18 @@
 		background: #edeee5;
 		box-shadow: 0 8px 18px #0002;
 	}
-	.paper-0 {
+	.example :global(.paper-0) {
 		top: 0;
 		background: #e98564;
 	}
-	.paper-1 {
+	.example :global(.paper-1) {
 		top: 80px;
 		background: #d5e2a5;
 	}
-	.paper-2 {
+	.example :global(.paper-2) {
 		top: 160px;
 	}
-	.paper strong {
+	.example :global(.paper strong) {
 		font-size: clamp(40px, 6vw, 68px);
 		line-height: 0.9;
 		font-weight: 650;
@@ -276,17 +296,17 @@
 		font-size: 10px;
 		line-height: 1.6;
 	}
-	.reduced .paper,
-	.reduced .orbit {
+	.reduced :global(.paper),
+	.reduced :global(.orbit) {
 		transform: none !important;
 	}
 	@media (max-width: 600px) {
-		.paper {
+		.example :global(.paper) {
 			width: 76%;
 			left: 12%;
 			padding: 14px 10px;
 		}
-		.paper strong {
+		.example :global(.paper strong) {
 			font-size: 48px;
 		}
 		.stage-caption,

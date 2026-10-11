@@ -10,8 +10,8 @@ import Controls from './ParityGestureControls.svelte';
 import ControlsSource from './ParityGestureControls.svelte?raw';
 import Reorder from './ParityGestureReorder.svelte';
 import ReorderSource from './ParityGestureReorder.svelte?raw';
-import Layout from './ParityLayoutExpand.svelte';
-import LayoutSource from './ParityLayoutExpand.svelte?raw';
+import Layout from './SessionCards.svelte';
+import LayoutSource from './SessionCards.svelte?raw';
 import Group from './ParityLayoutGroup.svelte';
 import GroupSource from './ParityLayoutGroup.svelte?raw';
 import Namespaces from './ParityLayoutNamespaces.svelte';
@@ -78,9 +78,9 @@ export const gesturesLayoutExamples = {
 	},
 	'layout-expand': {
 		id: 'layout-expand',
-		title: 'Animate real size changes',
-		filename: 'ExpandableNote.svelte',
-		description: 'Resize with CSS and keep the inner text from stretching.',
+		title: 'Compare text during a resize',
+		filename: 'SessionCards.svelte',
+		description: 'Expand two session cards together and compare layout with layout="position".',
 		category: 'Layout',
 		guide: 'layout',
 		anchor: 'automatic',

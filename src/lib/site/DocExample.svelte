@@ -8,6 +8,7 @@
 	let ready = $state(false);
 	let sourceOpen = $state(false);
 	const context = getAllContexts();
+	const placeholder = 'Loading preview…';
 	function preview(node: HTMLElement) {
 		// A separate Svelte root keeps a demo's global outros inside its preview.
 		// Navigation and Reset dispose it immediately, even during an active exit.
@@ -57,9 +58,10 @@
 				<div class="preview-root" {@attach preview}></div>
 			{/key}
 		{:else}
-			<p class="preview-placeholder">
-				Interactive preview · Enable JavaScript to try it. Full source below.
-			</p>
+			<p class="preview-placeholder">{placeholder}</p>
+			<noscript
+				><p>Enable JavaScript to try the interactive preview. Full source below.</p></noscript
+			>
 		{/if}
 	</fieldset>
 	{#if example.snippet}<div class="concept-code">

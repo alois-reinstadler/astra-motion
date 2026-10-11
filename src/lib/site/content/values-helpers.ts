@@ -206,7 +206,7 @@ export const valuesHelpersDocs: DocPage[] = [
 		sections: [
 			example(
 				'use-motion-value-event',
-				'Call useMotionValueEvent(value, event, callback) during initialization. The helper subscribes before mounted effects and removes the listener when its owner is destroyed. The example listens to changes and animation lifecycle events on the same value.',
+				'Call useMotionValueEvent(value, event, callback) during initialization. The helper subscribes before mounted effects and removes the listener when its owner is destroyed. The reading header compares each scroll position with getPrevious(): moving down hides it, moving up restores it.',
 				'Use change for application logic such as detecting scroll direction. Prefer direct MotionValue style bindings for frame-by-frame visual rendering; copying every frame into Svelte state is unnecessary when only a style needs to move.'
 			),
 			section(
@@ -739,7 +739,7 @@ export const valuesHelpersDocs: DocPage[] = [
 						],
 						[
 							'finished / then()',
-							'Completion-only upstream semantics are unchanged and may remain pending on stop/cancel. Use settled for cancellation-aware application cleanup.'
+							'Completion-only Motion semantics are unchanged and may remain pending on stop/cancel. Use settled for cancellation-aware application cleanup.'
 						],
 						[
 							'attachTimeline({ timeline?, observe })',
@@ -758,7 +758,7 @@ export const valuesHelpersDocs: DocPage[] = [
 				'mini',
 				'Choose the mini entry when appropriate',
 				'Import useAnimate from astra-motion/mini for a separate native DOM-style animation helper. It uses the same [scope, animate] authoring pattern but does not include hybrid subjects or sequences. Use complete CSS transforms in mini animations; independent transform aliases and general object/MotionValue animation belong to the hybrid helper.',
-				'The mini helper owns playback and Activity suspension, but it does not inherit the hybrid helper’s MotionConfig transition or reduced-motion policy. Read useReducedMotion when choosing its keyframes or timing. Actual Astra production bundle measurements are published in Reduce bundle size; upstream package size claims are not Astra measurements.',
+				'The mini helper owns playback and Activity suspension, but it does not inherit the hybrid helper’s MotionConfig transition or reduced-motion policy. Read useReducedMotion when choosing its keyframes or timing. Actual Astra production bundle measurements are published in Reduce bundle size; Motion package size claims are not Astra measurements.',
 				'Existing createAnimate remains available with its stricter scope and style-ownership contract. Its object API and restrictions are preserved for current users. useAnimate is the general engine surface and only scopes selector lookup.'
 			),
 			section(
@@ -888,7 +888,7 @@ export const valuesHelpersDocs: DocPage[] = [
 				'Reactivity, SSR, and cleanup',
 				'Read .current where Svelte tracks reads. A one-time destructure of current does not stay live. A target getter and options getter let bound elements or thresholds change without recreating the helper.',
 				'SSR returns the configured initial value. If IntersectionObserver is unavailable, that fallback remains. Observation is disconnected on ref replacement, owner destruction, and hidden Activity; stale observer deliveries are ignored.',
-				'Astra deliberately resolves initial:true on the first real measurement, including an outside result. once only latches after actual entry, and replacing an element starts fresh. This preserves the documented meaning even where the audited upstream hook has different initial-observation behavior.'
+				'Astra deliberately resolves initial:true on the first real measurement, including an outside result. once only latches after actual entry, and replacing an element starts fresh. This preserves the documented meaning even where the audited Motion hook has different initial-observation behavior.'
 			),
 			section(
 				'troubleshooting',
@@ -999,41 +999,53 @@ export const valuesHelpersDocs: DocPage[] = [
 	{
 		slug: 'scroll',
 		title: 'Scroll animations',
-		group: 'Animations',
+		group: 'Learn',
 		summary:
 			'Choose scroll-triggered or scroll-linked techniques, then compose reveals, progress indicators, and spatial effects with Svelte state.',
 		sections: [
-			example(
-				'scroll',
-				'Scroll-triggered animation starts a time-based transition when an element enters or leaves a region. Scroll-linked animation continuously maps scroll position to a visual value. The example shows both: the note responds to entry, while the bar follows every scroll position.',
-				'Use whileInView for a declarative reveal, useInView for visibility state used by application logic, and useScroll for continuous progress. These tools can share the same scroll container.'
-			),
-			section(
-				'triggered',
-				'Reveal content on entry',
-				'Add whileInView to a motion element and choose its initial or animate target for the outside state. viewport.once:true keeps the entered state after its first real entry; without once, the outside state returns as the element leaves.',
-				'viewport.root chooses a scrollable parent, viewport.margin adjusts the detection region, and viewport.amount selects the visible fraction. Use a getter for a root populated by bind:this. For a non-motion element or effects beyond animation targets, useInView exposes a reactive boolean.',
-				'Keep the reveal modest and the content usable. Large initial translations, hidden essential text, or strict all thresholds can make content inaccessible or impossible to reveal in a small viewport.'
-			),
-			section(
-				'linked',
-				'Link a style to scroll progress',
-				'useScroll provides pixel positions and progress MotionValues. Bind scrollYProgress to scaleX with originX:0 for a progress bar. Compose useTransform to map the same progress into color, opacity, clipPath, or a complete transform.',
-				'Use a container for an element’s own scrolling and a target for that element’s journey through a viewport. Offsets describe where that journey starts and ends. The exact argument, return, and offset contracts belong to the useScroll reference.'
-			),
-			section(
-				'smooth',
-				'Smooth movement and detect direction',
-				'Passing progress through useSpring makes it follow the scroll target over time. This can soften abrupt input, but the result will intentionally lag the scroll position. Use skipInitialAnimation when a restored scroll position should not spring in from zero.',
-				'To determine direction, subscribe to scrollY with useMotionValueEvent and compare the new position with getPrevious(). Ignore unchanged values. Update a small directional state only when direction changes, then let a motion header animate between visible and tucked-away targets.'
-			),
-			section(
-				'parallax',
-				'Build depth and reveal effects',
-				'Parallax maps one scroll progress value into different translation ranges for foreground and background layers. Keep ranges small and disable depth movement when reduced motion is requested. A clipped reveal maps progress into compatible clipPath strings while the underlying content remains semantically available.',
-				'For a horizontal story driven by vertical scrolling, use a tall outer target, a sticky viewport, and a wide flex track. Map progress to the negative difference between track width and viewport width. Keep the translated track’s measurement separate from the target whose layout position drives progress.',
-				'Scrolling text can use the same transform mappings on ordinary text elements. Repeated decorative text should be hidden from assistive technology while one readable label remains. Astra’s supported text techniques are documented in Text animation; a separate ticker product is not required.'
-			),
+			{
+				id: 'usage',
+				title: 'Usage',
+				text: [
+					'Triggered motion runs when an element enters the viewport. Linked motion follows the scroll position continuously.',
+					'Scroll inside the frame: the bar tracks every position, while the note starts an animation when it enters. Focus the frame and use the arrow keys to try the same interaction by keyboard.'
+				],
+				example: 'scroll'
+			},
+			{
+				id: 'triggered',
+				title: 'Reveal content on entry',
+				text: [
+					'Add whileInView to a motion element and choose its initial or animate target for the outside state. viewport.once:true keeps the entered state after its first real entry; without once, the outside state returns as the element leaves.',
+					'viewport.root chooses a scrollable parent, viewport.margin adjusts the detection region, and viewport.amount selects the visible fraction. Use a getter for a root populated by bind:this. For a non-motion element or effects beyond animation targets, useInView exposes a reactive boolean.',
+					'Keep the reveal modest and the content usable. Large initial translations, hidden essential text, or strict all thresholds can make content inaccessible or impossible to reveal in a small viewport.'
+				]
+			},
+			{
+				id: 'linked',
+				title: 'Link a style to scroll progress',
+				text: [
+					'useScroll provides pixel positions and progress MotionValues. Bind scrollYProgress to scaleX with originX:0 for a progress bar. Compose useTransform to map the same progress into color, opacity, clipPath, or a complete transform.',
+					'Use a container for an element’s own scrolling and a target for that element’s journey through a viewport. Offsets describe where that journey starts and ends. The exact argument, return, and offset contracts belong to the useScroll reference.'
+				]
+			},
+			{
+				id: 'smooth',
+				title: 'Smooth movement and detect direction',
+				text: [
+					'Passing progress through useSpring makes it follow the scroll target over time. This can soften abrupt input, but the result will intentionally lag the scroll position. Use skipInitialAnimation when a restored scroll position should not spring in from zero.',
+					'To determine direction, subscribe to scrollY with useMotionValueEvent and compare the new position with getPrevious(). Ignore unchanged values. Update a small directional state only when direction changes, then let a motion header animate between visible and tucked-away targets.'
+				]
+			},
+			{
+				id: 'parallax',
+				title: 'Build depth and reveal effects',
+				text: [
+					'Parallax maps one scroll progress value into different translation ranges for foreground and background layers. Keep ranges small and disable depth movement when reduced motion is requested. A clipped reveal maps progress into compatible clipPath strings while the underlying content remains semantically available.',
+					'For a horizontal story driven by vertical scrolling, use a tall outer target, a sticky viewport, and a wide flex track. Map progress to the negative difference between track width and viewport width. Keep the translated track’s measurement separate from the target whose layout position drives progress.',
+					'Scrolling text can use the same transform mappings on ordinary text elements. Repeated decorative text should be hidden from assistive technology while one readable label remains. Astra’s supported text techniques are documented in Text animation; a separate ticker product is not required.'
+				]
+			},
 			{
 				id: 'choices',
 				title: 'Choose a technique',
@@ -1066,28 +1078,55 @@ export const valuesHelpersDocs: DocPage[] = [
 					]
 				}
 			},
-			section(
-				'performance',
-				'Performance and lifecycle',
-				'Use native timeline acceleration where the browser and value mapping support it, with JavaScript fallback for other cases. Opacity and transforms are generally preferable to layout-changing properties for continuous movement. Adding many scroll subscriptions or frame-based content-size checks has a cost even when the resulting animation looks simple.',
-				'Managed helpers own their subscriptions and release them on teardown or hidden Activity. trackContentSize is opt-in because it checks changing content dimensions each frame. Set image dimensions and keep the measured target separate from transformed artwork to make progress predictable.',
-				'SSR has no scroll measurement. Progress starts at zero and updates on the client; reveal helpers have explicit initial behavior. Keep server content readable and let enhancement add motion after hydration.'
-			),
-			section(
-				'accessibility',
-				'Accessibility and troubleshooting',
-				'Keep native scrolling available to touch, wheel, and keyboard users. A custom scroll region should be focusable when users need keyboard access and have an accessible name. Do not trap scrolling just to preserve an animation scene.',
-				'Use reduced-motion policy for triggered movement and choose reduced mappings for manually linked parallax or scale. A useful progress indicator can remain while decorative spatial effects are removed.',
-				'If a target never enters, check clipping and the chosen root. If linked progress stays at zero, verify overflow and scroll range. If it changes after a later scroll but not a content resize, enable content-size tracking where needed. If transformed artwork distorts your expectations, remember target progress uses layout coordinates.'
-			),
-			related(
-				'use-scroll',
-				'use-in-view',
-				'use-transform',
-				'use-spring',
-				'accessibility',
-				'text-animation'
-			)
-		]
+			{
+				id: 'performance',
+				title: 'Performance and lifecycle',
+				text: [
+					'Use native timeline acceleration where the browser and value mapping support it, with JavaScript fallback for other cases. Opacity and transforms are generally preferable to layout-changing properties for continuous movement. Adding many scroll subscriptions or frame-based content-size checks has a cost even when the resulting animation looks simple.',
+					'Managed helpers own their subscriptions and release them on teardown or hidden Activity. trackContentSize is opt-in because it checks changing content dimensions each frame. Set image dimensions and keep the measured target separate from transformed artwork to make progress predictable.',
+					'SSR has no scroll measurement. Progress starts at zero and updates on the client; reveal helpers have explicit initial behavior. Keep server content readable and let enhancement add motion after hydration.'
+				]
+			},
+			{
+				id: 'accessibility',
+				title: 'Accessibility and troubleshooting',
+				text: [
+					'Keep native scrolling available to touch, wheel, and keyboard users. A custom scroll region should be focusable when users need keyboard access and have an accessible name. Do not trap scrolling just to preserve an animation scene.',
+					'Use reduced-motion policy for triggered movement and choose reduced mappings for manually linked parallax or scale. A useful progress indicator can remain while decorative spatial effects are removed.',
+					'If a target never enters, check clipping and the chosen root. If linked progress stays at zero, verify overflow and scroll range. If it changes after a later scroll but not a content resize, enable content-size tracking where needed. If transformed artwork distorts your expectations, remember target progress uses layout coordinates.'
+				]
+			},
+			{
+				id: 'related',
+				title: 'Related topics',
+				text: [],
+				related: [
+					'use-scroll',
+					'use-in-view',
+					'use-transform',
+					'use-spring',
+					'accessibility',
+					'text-animation'
+				]
+			},
+			{
+				id: 'where-next',
+				title: 'Where next',
+				text: ['Compose values or try a complete scroll study.'],
+				links: [
+					{
+						slug: 'motion-values',
+						title: 'Motion values',
+						detail: 'Share and transform values without writing state every frame.'
+					},
+					{
+						path: '/examples',
+						title: 'Scroll study',
+						detail: 'Find scatter, gather and release in the examples collection.'
+					}
+				]
+			}
+		],
+		learning: 'Triggered motion, linked progress and choosing a scroll container.'
 	}
 ];

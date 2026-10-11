@@ -1,13 +1,16 @@
 <script lang="ts">
-	import { motion, createLayout } from '$lib/motion/index.js';
+	import { motion } from '$lib/motion/index.js';
 	let expanded = $state(false);
-	const layout = createLayout({ transition: { type: 'spring', stiffness: 300, damping: 30 } });
 </script>
 
 <div class="layout-example">
 	<div class="stage">
-		<motion.div class="record" layout layoutGroup={layout}>
-			<div class="record-heading" {@attach layout({ mode: 'position' })}>
+		<motion.div
+			class="record"
+			layout
+			transition={{ layout: { type: 'spring', stiffness: 300, damping: 30 } }}
+		>
+			<motion.div class="record-heading" layout="position">
 				<div class="artwork" aria-hidden="true"><span></span></div>
 				<div>
 					<span class="eyebrow">ON REPEAT</span>
@@ -15,13 +18,13 @@
 					<p>A little room to breathe.</p>
 				</div>
 				<span class="play" aria-hidden="true">Ⅱ</span>
-			</div>
+			</motion.div>
 			{#if expanded}
-				<div class="details" {@attach layout({ mode: 'position' })}>
+				<motion.div class="details" layout="position">
 					<div class="progress"><span></span></div>
 					<div class="times"><span>1:24</span><span>3:42</span></div>
 					<p>Soft keys. Open windows. Nowhere to rush.</p>
-				</div>
+				</motion.div>
 			{/if}
 		</motion.div>
 	</div>
@@ -52,7 +55,7 @@
 		background: #fffdf7;
 		box-shadow: 0 12px 32px #25282108;
 	}
-	.record-heading {
+	.layout-example :global(.record-heading) {
 		display: flex;
 		align-items: center;
 		gap: 13px;
@@ -110,7 +113,7 @@
 		font-size: 19px;
 		font-weight: 600;
 	}
-	.details {
+	.layout-example :global(.details) {
 		padding-top: 25px;
 		animation: details-enter 240ms ease-out 100ms both;
 	}
@@ -123,7 +126,7 @@
 		}
 	}
 	@media (prefers-reduced-motion: reduce) {
-		.details {
+		.layout-example :global(.details) {
 			animation: none;
 		}
 	}
@@ -147,7 +150,7 @@
 		font-size: 9px;
 		font-variant-numeric: tabular-nums;
 	}
-	.details > p {
+	.layout-example :global(.details > p) {
 		padding-top: 15px;
 	}
 	button {

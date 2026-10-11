@@ -1,37 +1,38 @@
 <script lang="ts">
-	import { AnimatePresence, createLayout, motion } from '$lib/motion/index.js';
+	import { AnimatePresence, LayoutGroup, motion } from '$lib/motion/index.js';
 	const initial = [
 		{ id: 'read', label: 'Read something new' },
 		{ id: 'walk', label: 'Take the long way home' },
 		{ id: 'write', label: 'Write one good sentence' }
 	];
 	let items = $state(initial);
-	const layout = createLayout();
+	const namespace = $props.id();
 </script>
 
 <div class="example">
 	<button class="reset" onclick={() => (items = initial)}>Restore list</button>
-	<ul>
-		<AnimatePresence {items} key={(item) => item.id} mode="popLayout" initial={false}>
-			{#snippet children(item)}
-				<motion.li
-					reducedMotion="user"
-					layout
-					layoutGroup={layout}
-					initial={{ opacity: 0, x: -20 }}
-					animate={{ opacity: 1, x: 0 }}
-					exit={{ opacity: 0, x: 28 }}
-					transition={{ duration: 0.25 }}
-				>
-					<span>{item.label}</span>
-					<button
-						aria-label={`Remove ${item.label}`}
-						onclick={() => (items = items.filter((entry) => entry.id !== item.id))}>Remove</button
+	<LayoutGroup id={namespace}>
+		<ul>
+			<AnimatePresence {items} key={(item) => item.id} mode="popLayout" initial={false}>
+				{#snippet children(item)}
+					<motion.li
+						reducedMotion="user"
+						layout
+						initial={{ opacity: 0, x: -20 }}
+						animate={{ opacity: 1, x: 0 }}
+						exit={{ opacity: 0, x: 28 }}
+						transition={{ duration: 0.25 }}
 					>
-				</motion.li>
-			{/snippet}
-		</AnimatePresence>
-	</ul>
+						<span>{item.label}</span>
+						<button
+							aria-label={`Remove ${item.label}`}
+							onclick={() => (items = items.filter((entry) => entry.id !== item.id))}>Remove</button
+						>
+					</motion.li>
+				{/snippet}
+			</AnimatePresence>
+		</ul>
+	</LayoutGroup>
 </div>
 
 <style>

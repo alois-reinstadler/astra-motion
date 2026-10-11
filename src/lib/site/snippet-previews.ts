@@ -15,11 +15,9 @@ const sources = import.meta.glob<string>('./snippet-previews/*.svelte', {
 
 /** Every code-only exception is intentional and checked by the documentation tests. */
 export const codeOnlySnippets: Record<string, string> = {
-	'getting-started/installation': 'Shell commands install the package without rendering a UI.',
+	'quick-start/installation': 'Shell commands install the package without rendering a UI.',
 	'motion/custom-components':
 		'A forwarding-only shell needs application children and a motion.create caller.',
-	'getting-started/configuration':
-		'Application defaults wrap the caller’s children; see the MotionConfig demo.',
 	'layout-group/api': 'An empty namespace wrapper configures IDs without rendering content.',
 	'animate-view/asynchronous-content':
 		'Application integration requires a real collection API and error handling.',
@@ -28,6 +26,13 @@ export const codeOnlySnippets: Record<string, string> = {
 
 /** Preserve historical fixtures while current guides select the modern authoring examples. */
 const previewFiles: Record<string, string> = {
+	'quick-start/make-it-yours': 'quick-start--make-it-yours.svelte',
+	'quick-start/keep-the-element': 'getting-started--native-svelte.svelte',
+	'recipes/panel-recipes': 'getting-started--panel-recipes.svelte',
+	'recipes/accordion-recipe': 'getting-started--accordion-recipe.svelte',
+	'recipes/dialog-recipe': 'getting-started--dialog-recipe.svelte',
+	'recipes/headless-recipe': 'getting-started--headless-recipe.svelte',
+
 	'reorder/list': 'reorder--list-binding.svelte',
 	'animate-presence/exit-data': 'animate-presence--exit-data-value.svelte',
 	'text-animation/replacement': 'text-animation--replacement-value.svelte'

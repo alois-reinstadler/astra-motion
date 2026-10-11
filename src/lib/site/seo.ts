@@ -1,5 +1,5 @@
 import { docs, docAliases } from './docs.js';
-import { liveExamples } from './examples.js';
+import { liveExamples, exampleAliases } from './examples.js';
 
 export interface PageMetadata {
 	title: string;
@@ -77,7 +77,9 @@ export function siteOrigin(value: string | undefined): string | undefined {
 }
 
 export function canonicalPathname(pathname: string): string {
-	if (pathname === '/docs') return '/docs/getting-started';
+	if (pathname === '/docs') return '/docs/quick-start';
+	if (pathname.startsWith('/examples/') && Object.hasOwn(exampleAliases, pathname.slice(10)))
+		return `/examples/${exampleAliases[pathname.slice(10)]}`;
 	const alias = pathname.startsWith('/docs/') ? docAliases[pathname.slice(6)] : undefined;
 	return alias ? `/docs/${alias.slug}` : pathname;
 }

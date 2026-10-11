@@ -51,16 +51,15 @@ it('assembles a live template including zero and applies the CSS filter', async 
 		.toBe('blur(4px) saturate(1.2)');
 });
 
-it('reports value animation events and supports cancellation followed by completion', async () => {
+it('uses the previous scroll value to restore a reading header on upward movement', async () => {
 	render(Events);
 	await tick();
-	button('Start value').click();
-	await expect.poll(() => document.querySelector('p')?.textContent).toContain('Started');
-	button('Stop value').click();
-	await expect.poll(() => document.querySelector('p')?.textContent).toContain('Cancelled');
-	button('Start value').click();
-	await expect.poll(output).toBe('100 / 100');
-	await expect.poll(() => document.querySelector('p')?.textContent).toContain('Completed');
+	button('Read further').click();
+	await expect.poll(output).toBe('Header hidden while reading down');
+	expect(document.querySelector('.reading-header')!.getAttribute('aria-hidden')).toBe('true');
+	button('Scroll back').click();
+	await expect.poll(output).toBe('Header visible');
+	expect(document.querySelector('.reader')!.scrollTop).toBeGreaterThan(0);
 });
 
 it('reads both native scroll axes and resets normalized progress', async () => {

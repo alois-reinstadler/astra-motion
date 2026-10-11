@@ -9,7 +9,8 @@
 	} from '$lib/motion/index.js';
 	const x = useSpring(0, { stiffness: 140, damping: 16 });
 	const velocity = useVelocity(x);
-	const scale = useTransform(velocity, [-700, 0, 700], [1.3, 1, 1.3]);
+	const scale = useTransform(() => 1 + Math.min(Math.abs(velocity.get()) / 500, 1) * 0.65);
+	const skew = useTransform(velocity, [-500, 0, 500], [-25, 0, 25]);
 	const speed = motionStore(velocity);
 	const reduced = useReducedMotion();
 	let right = false;
@@ -23,11 +24,29 @@
 
 <div class="example">
 	<button onclick={move}>Move the marker</button>
-	<div class="stage"><motion.div class="marker" style={{ x, scale }} /></div>
+	<div class="stage">
+		<motion.div class="marker" style={{ x, scale, skewX: skew }}
+			><svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"
+				><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" /></svg
+			></motion.div
+		>
+	</div>
 	<output>{Math.round($speed)} pixels per second</output>
+	<p>
+		Speed changes the marker’s size. Left and right movement both grow it; rest returns it to
+		normal.
+	</p>
 </div>
 
 <style>
+	p {
+		max-width: 300px;
+		margin: 0;
+		font-size: 12px;
+		line-height: 1.6;
+		text-align: center;
+		color: var(--site-muted);
+	}
 	.example {
 		display: grid;
 		justify-items: center;
@@ -59,7 +78,10 @@
 	.stage :global(.marker) {
 		width: 48px;
 		height: 48px;
-		border-radius: 50%;
+		border-radius: 10px;
+		display: grid;
+		place-items: center;
+		color: #fffdf7;
 		background: #d34123;
 	}
 	output {

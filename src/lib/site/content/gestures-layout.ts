@@ -181,7 +181,7 @@ export const gesturesLayoutPages: DocPage[] = [
 				text: [
 					'Numeric dragConstraints are translation offsets from the element’s layout position: { left: -100, right: 100, top: 0, bottom: 200 }. Omitted edges are unbounded. Values must be finite and each minimum must be no greater than its maximum.',
 					'For a responsive container, bind its element and pass dragConstraints={() => bounds}. An element or { current: element } ref is accepted too. Bounds are measured at drag start and during layout/size updates. Resizing a constrained container preserves the element’s relative position within the new bounds.',
-					'Elasticity allows resistance outside a bound. Astra follows Motion 13.4.4’s shipped default of 0.35; the upstream component article still describes 0.5. False gives hard bounds, true means 0.35, a number applies to every edge, and an edge object configures each edge separately. Unspecified edges in that object use zero elasticity.'
+					'Elasticity allows resistance outside a bound. Astra follows the bundled Motion 13.4.4 default of 0.35; Motion’s component article still describes 0.5. False gives hard bounds, true means 0.35, a number applies to every edge, and an edge object configures each edge separately. Unspecified edges in that object use zero elasticity.'
 				],
 				example: 'drag-playground',
 				code: {
@@ -201,7 +201,7 @@ export const gesturesLayoutPages: DocPage[] = [
 				title: 'Shape the release',
 				text: [
 					'Momentum continues movement with an inertia animation after release. Set dragMomentum={false} to discard release velocity; elastic overshoot still returns to the bounds. dragSnapToOrigin returns to zero, and can be true, "x", or "y".',
-					'dragTransition customizes inertia. Its modifyTarget function receives the calculated destination and returns a replacement, useful for snapping to a grid. Numeric bounds still apply. With hard bounds, Astra clamps the release destination to prevent the upstream generator’s first-frame overshoot.'
+					'dragTransition customizes inertia. Its modifyTarget function receives the calculated destination and returns a replacement, useful for snapping to a grid. Numeric bounds still apply. With hard bounds, Astra clamps the release destination to prevent the engine generator’s first-frame overshoot.'
 				],
 				table: {
 					columns: ['Option', 'Default', 'Effect'],
@@ -499,7 +499,7 @@ export const gesturesLayoutPages: DocPage[] = [
 				title: 'Snap to a track or wait for deliberate movement',
 				text: [
 					'Use snapToCursor for a track that should place its thumb under the click. Constraint checks, coordinate transforms, and the configured drag axis still apply. A larger distanceThreshold is useful when a pointer press should not immediately become a drag.',
-					'Direction locking has its own upstream threshold: it selects an axis after more than 10 pixels, even if start uses a different recognition threshold. start does not bypass drag constraints, disabled state, or global axis arbitration.'
+					'Direction locking has its own engine threshold: it selects an axis after more than 10 pixels, even if start uses a different recognition threshold. start does not bypass drag constraints, disabled state, or global axis arbitration.'
 				],
 				code: {
 					label: 'Focused excerpt — immediate track positioning',
@@ -654,7 +654,7 @@ export const gesturesLayoutPages: DocPage[] = [
 				],
 				points: [
 					'Avoid CSS transforms that independently own the item transform; put animated properties in its motion style.',
-					'For a right-to-left row, set axis="xy" explicitly. Motion 13.4.4 applies RTL insertion only to its two-dimensional algorithm; automatic single-axis x ordering retains that upstream limitation.',
+					'For a right-to-left row, set axis="xy" explicitly. Motion 13.4.4 applies RTL insertion only to its two-dimensional algorithm; automatic single-axis x ordering retains that engine limitation.',
 					'Keep drag handle touch-action:none, including when the list itself scrolls.',
 					'For large or virtualized collections, ensure every potential neighbor needed for the current interaction is mounted and measured; offscreen virtualization is not supplied by Reorder.',
 					'Provide keyboard move controls and announce the resulting order when that information is important.'
@@ -665,8 +665,8 @@ export const gesturesLayoutPages: DocPage[] = [
 	},
 	{
 		slug: 'layout',
-		title: 'Layout animation',
-		group: 'Animations',
+		title: 'Layout & shared elements',
+		group: 'Learn',
 		summary:
 			'Animate the size and position changes your layout already makes, including shared elements.',
 		sections: [
@@ -674,10 +674,8 @@ export const gesturesLayoutPages: DocPage[] = [
 				id: 'automatic',
 				title: 'Change the layout and let Astra connect it',
 				text: [
-					'Add layout to a motion element, then change its classes, CSS, content, or surrounding layout through ordinary Svelte state. Astra measures the old and new boxes and animates the difference with transforms. You do not need to calculate a pixel animation for each layout rule.',
-					'Put the final width, height, alignment, or other layout property in normal style or CSS. Use animate for values that should be tweened directly. layout="position" on an inner element helps its content retain its proportions as the parent resizes.',
-					'The expandable note captures the card and paragraph through their public DOM refs on close. It holds the card’s currently painted size and preserves the text column’s width and the paragraph’s position, wrapping and inherited scale while AnimatePresence fades it. onExitComplete releases the held geometry, so removal and collapse happen together after the text is invisible. This also stops an interrupted expansion from continuing to grow or rewrapping the fading text. Reopening clears the held geometry and reverses the exit.',
-					'AnimatePresence popLayout preserves the last observed outgoing box when the same update resizes an ancestor. Give projected text a layout="position" boundary to retain its proportions. Use updateLayout for consecutive synchronous changes that leave no time for observation, and keep the positioning container stable. A preserved paragraph can still extend beyond a shrinking card: sequence the fade before collapse when every character must remain visible inside it.'
+					'Add layout to a motion element, then change its size or position through ordinary CSS and Svelte state. Astra connects the old and new boxes.',
+					'Expand the session cards together. The plain paragraph scales with its card; the inner layout="position" boundary keeps the other paragraph’s proportions. Reverse while expanding to see interruption.'
 				],
 				example: 'layout-expand',
 				code: {
@@ -691,7 +689,7 @@ export const gesturesLayoutPages: DocPage[] = [
 				id: 'modes-and-transitions',
 				title: 'Choose what changes',
 				text: [
-					'layout=true animates size and position. String modes restrict the calculation. Motion components use the qualified upstream default layout transition: 0.45 seconds with easing [0.4, 0, 0.1, 1]. Set transition.layout when opacity or other values need a separate transition.',
+					'layout=true animates size and position. String modes restrict the calculation. Motion components use the engine default layout transition: 0.45 seconds with easing [0.4, 0, 0.1, 1]. Set transition.layout when opacity or other values need a separate transition.',
 					'Existing createLayout controllers remain supported and retain their historical spring default when no transition is supplied. Set a transition explicitly when migrating between authoring styles and exact timing matters.'
 				],
 				table: {
@@ -737,7 +735,19 @@ export const gesturesLayoutPages: DocPage[] = [
   {/each}
 </LayoutGroup>`
 				},
-				related: ['layout-group', 'animate-presence']
+				related: ['layout-group', 'animate-presence'],
+				links: [
+					{
+						path: '/examples',
+						title: 'Tab highlight and player',
+						detail: 'Try shared identity and a real player resize in the examples collection.'
+					},
+					{
+						path: '/showcase',
+						title: 'Fieldwork',
+						detail: 'Explore shared transitions in a complete application.'
+					}
+				]
 			},
 			{
 				id: 'curved-paths',
@@ -757,7 +767,7 @@ export const gesturesLayoutPages: DocPage[] = [
 <motion.div layout transition={{ layout: { duration: 0.8, path } }} />`
 				},
 				table: {
-					columns: ['arc option', 'Default', 'Qualified behavior'],
+					columns: ['arc option', 'Default', 'Behavior'],
 					rows: [
 						[
 							'strength',
@@ -782,7 +792,7 @@ export const gesturesLayoutPages: DocPage[] = [
 					]
 				},
 				points: [
-					'The current upstream article overstates bend height: the shipped quadratic implementation reaches half strength × travel distance at its symmetric midpoint. Astra uses and verifies that engine behavior.',
+					'Motion’s article overstates bend height: the shipped quadratic implementation reaches half strength × travel distance at its symmetric midpoint. Astra uses and verifies that engine behavior.',
 					'For direct x/y animations, place path in transition.path instead. The full animate and useAnimate APIs support it; mini animation does not.',
 					'Reduced-motion policy removes spatial layout animation, including its arc.'
 				],
@@ -846,17 +856,46 @@ export const gesturesLayoutPages: DocPage[] = [
 				title: 'Troubleshooting',
 				points: [
 					'Use a rendered block, flex, grid, or inline-block box; a non-replaced display:inline element cannot render a transform. Astra warns about inline and display:contents layout hosts in development. It leaves your display styles intact: move layout="position" to a block content wrapper or give the text host display:inline-block.',
+					'Shared elements inside an ancestor translated with percentage values can show offset geometry during a shared transition; this is a known engine limitation. Prefer pixel or no transforms on ancestors of shared elements until it is corrected.',
 					'If a resize stretches text, give the text wrapper layout="position" or animate a separate surface.',
-					'SVG layout projection is not supported by the upstream layout engine. Animate SVG attributes directly instead.',
+					'SVG layout projection is not supported by the Motion layout engine. Animate SVG attributes directly instead.',
 					'Keep shared IDs unique within each intended namespace. Use an explicit LayoutGroup id for reusable controls.',
-					'Static 3D and perspective ancestors are supported for descendant layout changes, including nested planes, reversal, and parent scale correction. Changing the camera or 3D orientation during a layout transition, edge-on planes, and general 3D scene interpolation remain outside the qualified contract.'
+					'Static 3D and perspective ancestors are supported for descendant layout changes, including nested planes, reversal, and parent scale correction. Changing the camera or 3D orientation during a layout transition, edge-on planes, and general 3D scene interpolation remain outside the supported contract.'
 				],
 				text: [
 					'This page teaches layout techniques. The motion reference is the primary home for element props, and LayoutGroup documents coordination and namespace inheritance.'
 				],
-				related: ['motion', 'layout-group', 'svg']
+				related: ['motion', 'layout-group', 'svg'],
+				note: {
+					title: 'Interrupting collapse and coordinating measurements',
+					text: [
+						'On collapse, the session cards capture both currently painted boxes. They hold those dimensions while the detail text fades; onExitComplete releases them. Reopening clears both held boxes and reverses the exit.',
+						'For text whose wrapping must remain fixed during exit, hold the text column’s width and position as well as its card. The session comparison deliberately lets text rewrap so the scale correction stays visible.',
+						'AnimatePresence popLayout preserves the last observed outgoing box when the same update resizes an ancestor. Give projected text a layout="position" boundary to retain its proportions. Use updateLayout for consecutive synchronous changes that leave no time for observation, and keep the positioning container stable. A preserved paragraph can still extend beyond a shrinking card: sequence the fade before collapse when every character must remain visible inside it.'
+					]
+				}
+			},
+			{
+				id: 'where-next',
+				title: 'Where next',
+				text: [
+					'Use the next guide to build on this interaction, or inspect a complete application.'
+				],
+				links: [
+					{
+						slug: 'scroll',
+						title: 'Scroll',
+						detail: 'Continue the learning path.'
+					},
+					{
+						path: '/showcase',
+						title: 'Fieldwork',
+						detail: 'See these techniques working together.'
+					}
+				]
 			}
-		]
+		],
+		learning: 'CSS size changes, text scale correction and shared identity.'
 	},
 	{
 		slug: 'layout-group',
@@ -890,7 +929,7 @@ export const gesturesLayoutPages: DocPage[] = [
 				title: 'Reuse a shared layout name safely',
 				text: [
 					'A layoutId identifies an element within its namespace. Give each repeated control a distinct LayoutGroup id, then reuse names such as "selection" inside it. The two highlights below move independently although their local layoutId strings match.',
-					'An unkeyed group’s identity belongs to its mount, matching the upstream contract. Changing the id prop in place does not create a new namespace. Use a keyed block if the group’s identity really needs to change.'
+					'An unkeyed group’s identity belongs to its mount, matching Motion’s contract. Changing the id prop in place does not create a new namespace. Use a keyed block if the group’s identity really needs to change.'
 				],
 				example: 'layout-group-namespaces'
 			},
