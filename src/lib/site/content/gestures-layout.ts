@@ -869,8 +869,8 @@ export const gesturesLayoutPages: DocPage[] = [
 				note: {
 					title: 'Interrupting collapse and coordinating measurements',
 					text: [
-						'On collapse, the session cards capture both currently painted boxes. They hold those dimensions while the detail text fades; onExitComplete releases them. Reopening clears both held boxes and reverses the exit.',
-						'For text whose wrapping must remain fixed during exit, hold the text column’s width and position as well as its card. The session comparison deliberately lets text rewrap so the scale correction stays visible.',
+						'The session cards begin collapsing immediately. popLayout lets the detail fade outside normal flow while the card resizes; reopening reverses the exit. Parent and protected text share one layout transition so they move together.',
+						'The comparison keeps the cards in stable responsive columns. Its unprotected paragraph deliberately stretches; layout="position" preserves the protected text’s proportions. Outgoing content can be clipped during immediate collapse; the readable-note example below demonstrates deliberate fade-then-collapse sequencing.',
 						'AnimatePresence popLayout preserves the last observed outgoing box when the same update resizes an ancestor. Give projected text a layout="position" boundary to retain its proportions. Use updateLayout for consecutive synchronous changes that leave no time for observation, and keep the positioning container stable. A preserved paragraph can still extend beyond a shrinking card: sequence the fade before collapse when every character must remain visible inside it.'
 					]
 				}
@@ -919,19 +919,27 @@ export const gesturesLayoutPages: DocPage[] = [
 				title: 'Connect independently changing siblings',
 				text: [
 					'LayoutGroup makes related motion elements participate in a shared measurement cohort. A sibling can animate when another component changes its size, even when that sibling’s own animation props did not change.',
-					'The group renders its children directly and adds no wrapper. In this demonstration, each native details element owns its open state independently; their layout changes stay coordinated.'
+					'The group renders its children directly and adds no wrapper. Each native details element owns its open state independently. The text uses layout="position" to avoid stretching, and MotionConfig gives the panels and text the same short layout transition.'
 				],
 				example: 'layout-group-coordination',
 				code: {
 					label: 'Smallest group',
 					source: `<script lang="ts">
-  import { LayoutGroup, motion } from 'astra-motion';
+  import { LayoutGroup, MotionConfig, motion } from 'astra-motion';
 </script>
 
-<LayoutGroup>
-  <motion.details layout><summary>First panel</summary><p>First content</p></motion.details>
-  <motion.details layout><summary>Second panel</summary><p>Second content</p></motion.details>
-</LayoutGroup>`
+<MotionConfig transition={{ layout: { duration: 0.24, ease: 'easeOut' } }}>
+  <LayoutGroup>
+    <motion.details layout>
+      <motion.summary layout="position">First panel</motion.summary>
+      <motion.p layout="position">First content</motion.p>
+    </motion.details>
+    <motion.details layout>
+      <motion.summary layout="position">Second panel</motion.summary>
+      <motion.p layout="position">Second content</motion.p>
+    </motion.details>
+  </LayoutGroup>
+</MotionConfig>`
 				}
 			},
 			{

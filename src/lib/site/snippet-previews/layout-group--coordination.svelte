@@ -1,18 +1,20 @@
 <script lang="ts">
-	import { LayoutGroup, motion } from '$lib/motion/index.js';
+	import { LayoutGroup, MotionConfig, motion } from '$lib/motion/index.js';
 </script>
 
 <div class="snippet-stage">
-	<LayoutGroup>
-		<motion.details layout
-			><summary>First panel</summary>
-			<p>First content</p></motion.details
-		>
-		<motion.details layout
-			><summary>Second panel</summary>
-			<p>Second content</p></motion.details
-		>
-	</LayoutGroup>
+	<MotionConfig transition={{ layout: { duration: 0.24, ease: 'easeOut' } }}>
+		<LayoutGroup>
+			<motion.details layout>
+				<motion.summary layout="position">First panel</motion.summary>
+				<motion.p layout="position">First content</motion.p>
+			</motion.details>
+			<motion.details layout>
+				<motion.summary layout="position">Second panel</motion.summary>
+				<motion.p layout="position">Second content</motion.p>
+			</motion.details>
+		</LayoutGroup>
+	</MotionConfig>
 </div>
 
 <style>

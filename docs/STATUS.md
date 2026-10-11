@@ -1,3 +1,13 @@
+# Owner layout feedback — 2026-10-11
+
+The session-card comparison and minimal LayoutGroup demo now respond promptly.
+Cards collapse during the exit fade, keep stable responsive columns and share
+layout timing with protected text. The group snippet uses a shared 240ms layout
+transition and position-only text boundaries. Library runtime and published
+package inputs are unchanged. Scoped follow-up verification passes in all three
+engines; this does not claim a repeat of the entire earlier release matrix.
+See the [feedback verification](reviews/2026-10-11-layout-feedback.md).
+
 # Main consolidation qualification — 2026-10-11
 
 The selected documentation, site-loading, Unicode, sticky-scroll and native-pop
