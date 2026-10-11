@@ -25,8 +25,12 @@ export function preserveAspectMeasurements(node: InstanceType<typeof HTMLProject
 }
 
 /** Account only for the scroll that actually moves a sticky box, including its end constraint. */
-export function correctStickyScroll(node: IProjectionNode, element: HTMLElement) {
-	if (!node.scroll || getComputedStyle(element).position !== 'sticky') return;
+export function correctStickyScroll(
+	node: IProjectionNode,
+	element: HTMLElement,
+	position?: string
+) {
+	if (!node.scroll || (position ?? getComputedStyle(element).position) !== 'sticky') return;
 	const x = element.offsetLeft;
 	const y = element.offsetTop;
 	const insets = new Map(
@@ -62,7 +66,7 @@ export function observeProjectionScroll(
 		const position = getComputedStyle(element).position;
 		if (position === 'sticky' || position === 'fixed') node.options.layoutScroll = true;
 		update(phase);
-		correctStickyScroll(node as IProjectionNode, element);
+		correctStickyScroll(node as IProjectionNode, element, position);
 		stickyOffset =
 			position === 'sticky' && node.scroll
 				? {
@@ -228,8 +232,12 @@ export class ProjectionBoundary extends HTMLProjectionNode {
 	}
 
 	updateScroll(phase: 'snapshot' | 'measure' = 'measure') {
+		const previous = this.scroll;
 		super.updateScroll(phase);
-		correctStickyScroll(this as IProjectionNode, this.element);
+		// Motion replaces the scroll record once per animation ID and measurement
+		// phase. Shared ancestors are visited for every descendant; correct sticky
+		// offsets only when that record is fresh, matching Motion's own read cache.
+		if (this.scroll !== previous) correctStickyScroll(this as IProjectionNode, this.element);
 	}
 
 	resetSkewAndRotation() {
