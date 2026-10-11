@@ -1,10 +1,7 @@
 import type { LiveExample } from '../examples.js';
 import { publicExampleSource } from '../public-example-source.js';
-import Player from './LayoutExample.svelte';
 import playerSource from './LayoutExample.svelte?raw';
-import Tabs from './SharedExample.svelte';
 import tabsSource from './SharedExample.svelte?raw';
-import Viewport from './InViewExample.svelte';
 import viewportSource from './InViewExample.svelte?raw';
 
 export const compositionExamples = {
@@ -16,7 +13,7 @@ export const compositionExamples = {
 		guide: 'layout',
 		anchor: 'automatic',
 		filename: 'Player.svelte',
-		component: Player,
+		component: './examples/LayoutExample.svelte',
 		source: publicExampleSource(playerSource)
 	},
 	'tab-highlight': {
@@ -27,7 +24,7 @@ export const compositionExamples = {
 		guide: 'layout',
 		anchor: 'shared-elements',
 		filename: 'MoodPicker.svelte',
-		component: Tabs,
+		component: './examples/SharedExample.svelte',
 		source: publicExampleSource(tabsSource)
 	},
 	'viewport-reveal': {
@@ -38,7 +35,7 @@ export const compositionExamples = {
 		guide: 'use-in-view',
 		anchor: 'usage',
 		filename: 'Discovery.svelte',
-		component: Viewport,
+		component: './examples/InViewExample.svelte',
 		source: publicExampleSource(viewportSource)
 	}
 } satisfies Record<string, LiveExample>;

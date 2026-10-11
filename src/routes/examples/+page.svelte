@@ -7,10 +7,10 @@
 	import { resolve } from '$app/paths';
 	import ExampleHint from '$lib/site/ExampleHint.svelte';
 	import SiteFrame from '$lib/site/SiteFrame.svelte';
-	import {
-		exampleCatalog as examples,
-		exampleCategories as categories
-	} from '$lib/site/examples.js';
+	import type { PageData } from './$types.js';
+	let { data }: { data: PageData } = $props();
+	const examples = $derived(data.examples);
+	const categories = $derived(data.categories);
 	type Category = (typeof categories)[number];
 	let category = $state<Category>('All examples');
 	let query = $state('');

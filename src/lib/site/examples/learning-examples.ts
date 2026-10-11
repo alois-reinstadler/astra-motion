@@ -1,11 +1,8 @@
 import type { LiveExample } from '../examples.js';
 import { publicExampleSource } from '../public-example-source.js';
 import { authoringExamples } from '$lib/motion-lab/authoring-examples.js';
-import StateExample from './StateExample.svelte';
 import StateExampleSource from './StateExample.svelte?raw';
-import VariantsExample from './VariantsExample.svelte';
 import VariantsExampleSource from './VariantsExample.svelte?raw';
-import ScrollExample from './ScrollExample.svelte';
 import ScrollExampleSource from './ScrollExample.svelte?raw';
 
 /** Display the exact component being previewed, using the public package import. */
@@ -21,7 +18,7 @@ export const learningExamples = {
 		snippet: authoringExamples.find((example) => example.id === 'state')!.source,
 		snippetLabel: 'Notification.svelte',
 		filename: 'StateExample.svelte',
-		component: StateExample,
+		component: './examples/StateExample.svelte',
 		source: publicExampleSource(StateExampleSource)
 	},
 	variants: {
@@ -34,7 +31,7 @@ export const learningExamples = {
 		snippet:
 			"<motion.div\n  initial=\"closed\"\n  animate={open ? 'open' : 'closed'}\n  variants={{ open: { opacity: 1 }, closed: { opacity: 1 } }}\n  transition={{ delayChildren: stagger(0.12) }}\n>\n  <motion.div {...item}>Projects</motion.div>\n  <motion.div {...item}>Notes</motion.div>\n  <motion.div {...item}>Collection</motion.div>\n</motion.div>",
 		filename: 'VariantsExample.svelte',
-		component: VariantsExample,
+		component: './examples/VariantsExample.svelte',
 		source: publicExampleSource(VariantsExampleSource)
 	},
 	'scroll-composition': {
@@ -47,7 +44,7 @@ export const learningExamples = {
 		guide: 'scroll',
 		anchor: 'choices',
 		filename: 'ScrollExample.svelte',
-		component: ScrollExample,
+		component: './examples/ScrollExample.svelte',
 		source: publicExampleSource(ScrollExampleSource)
 	}
 } satisfies Record<string, LiveExample>;

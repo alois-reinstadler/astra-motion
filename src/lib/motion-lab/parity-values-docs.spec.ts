@@ -1,12 +1,20 @@
 import { render } from 'svelte/server';
+import type { Component } from 'svelte';
 import { expect, it } from 'vitest';
 import { valuesHelpersDocs } from '../site/content/values-helpers.js';
 import { valuesHelpersExamples } from '../site/examples/values-helpers-examples.js';
 
+// Eager test-only imports put compilation in suite setup, as before lazy site loading.
+// The separate loading suite exercises the production dynamic resolver.
+const components = import.meta.glob<Component>('../site/examples/*.svelte', {
+	eager: true,
+	import: 'default'
+});
+
 it.each(Object.values(valuesHelpersExamples))(
 	'renders the canonical $id example during SSR',
 	(example) => {
-		const { body } = render(example.component);
+		const { body } = render(components[`../site/${example.component.slice(2)}`]);
 		expect(body).toContain('class="example');
 		expect(body).not.toContain('undefined');
 		expect(example.source).toContain("from 'astra-motion'");

@@ -1,14 +1,9 @@
 import type { LiveExample } from '../examples.js';
 import { publicExampleSource } from '../public-example-source.js';
-import AnimatePresenceExample from './AnimatePresenceExample.svelte';
 import presenceSource from './AnimatePresenceExample.svelte?raw';
-import AnimatePresenceSequenceExample from './AnimatePresenceSequenceExample.svelte';
 import sequenceSource from './AnimatePresenceSequenceExample.svelte?raw';
-import AnimatePresenceListExample from './AnimatePresenceListExample.svelte';
 import listSource from './AnimatePresenceListExample.svelte?raw';
-import AnimateActivityExample from './AnimateActivityExample.svelte';
 import activitySource from './AnimateActivityExample.svelte?raw';
-import AnimateViewExample from './AnimateViewExample.svelte';
 import viewSource from './AnimateViewExample.svelte?raw';
 
 export const presenceViewExamples = {
@@ -20,7 +15,7 @@ export const presenceViewExamples = {
 		guide: 'animate-presence',
 		anchor: 'usage',
 		filename: 'AnimatePresenceExample.svelte',
-		component: AnimatePresenceExample,
+		component: './examples/AnimatePresenceExample.svelte',
 		source: publicExampleSource(presenceSource)
 	},
 	'animate-presence-sequence': {
@@ -32,7 +27,7 @@ export const presenceViewExamples = {
 		guide: 'presence',
 		anchor: 'replacement',
 		filename: 'AnimatePresenceSequenceExample.svelte',
-		component: AnimatePresenceSequenceExample,
+		component: './examples/AnimatePresenceSequenceExample.svelte',
 		source: publicExampleSource(sequenceSource)
 	},
 	'animate-presence-list': {
@@ -44,7 +39,7 @@ export const presenceViewExamples = {
 		guide: 'animate-presence',
 		anchor: 'pop-layout',
 		filename: 'AnimatePresenceListExample.svelte',
-		component: AnimatePresenceListExample,
+		component: './examples/AnimatePresenceListExample.svelte',
 		source: publicExampleSource(listSource)
 	},
 	'animate-activity': {
@@ -55,7 +50,7 @@ export const presenceViewExamples = {
 		guide: 'animate-activity',
 		anchor: 'usage',
 		filename: 'AnimateActivityExample.svelte',
-		component: AnimateActivityExample,
+		component: './examples/AnimateActivityExample.svelte',
 		source: publicExampleSource(activitySource)
 	},
 	'animate-view': {
@@ -67,7 +62,7 @@ export const presenceViewExamples = {
 		guide: 'animate-view',
 		anchor: 'usage',
 		filename: 'AnimateViewExample.svelte',
-		component: AnimateViewExample,
+		component: './examples/AnimateViewExample.svelte',
 		source: publicExampleSource(viewSource)
 	}
 } satisfies Record<string, LiveExample>;

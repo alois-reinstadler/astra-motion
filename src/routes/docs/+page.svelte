@@ -1,6 +1,7 @@
 <script lang="ts">
 	import DocArticle from '$lib/site/DocArticle.svelte';
-	import { getDoc } from '$lib/site/docs.js';
+	import type { PageData } from './$types.js';
+	let { data }: { data: PageData } = $props();
 </script>
 
-<DocArticle doc={getDoc('quick-start')!} />
+<DocArticle doc={data.doc} examples={data.examples} docs={data.docCatalog} />

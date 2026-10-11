@@ -4,4 +4,4 @@
 	let { data }: { data: PageData } = $props();
 </script>
 
-<DocArticle doc={data.doc} />
+<DocArticle doc={data.doc} examples={data.examples} docs={data.docCatalog} />

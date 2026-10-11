@@ -30,8 +30,9 @@ jobs:
       - run: pnpm run check:guide
       - run: node scripts/check-motion-upgrade.mjs
       - run: pnpm run test:server
-      - run: node --test scripts/qualification-origin.test.mjs scripts/module-specifiers.test.mjs
+      - run: node --test scripts/*.test.mjs
       - run: pnpm run build
+      - run: node scripts/check-site-bundles.mjs
       - run: node scripts/measure-motion-bundles.mjs
       - run: node scripts/prepare-motion-consumer.mjs
 

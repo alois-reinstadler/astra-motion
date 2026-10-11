@@ -1,12 +1,7 @@
-import type { Component } from 'svelte';
 import type { DocPage, DocSection } from './doc-types.js';
 import type { LiveExample } from './examples.js';
 import { publicExampleSource } from './public-example-source.js';
 
-const components = import.meta.glob<Component>('./snippet-previews/*--*.svelte', {
-	eager: true,
-	import: 'default'
-});
 const sources = import.meta.glob<string>('./snippet-previews/*.svelte', {
 	eager: true,
 	query: '?raw',
@@ -48,7 +43,7 @@ export function getSnippetPreview(doc: DocPage, section: DocSection): LiveExampl
 	if (!section.code) return;
 	const id = `${doc.slug}/${section.id}`;
 	const path = `./snippet-previews/${previewFiles[id] ?? `${doc.slug}--${section.id}.svelte`}`;
-	const component = components[path];
+	const component = sources[path] ? path : undefined;
 	if (!component) return;
 	const child = childFiles[id];
 	return {

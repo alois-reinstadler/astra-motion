@@ -20,7 +20,7 @@ describe('documentation snippet previews', () => {
 			expect(Boolean(preview) !== Boolean(codeOnlySnippets[key]), key).toBe(true);
 			if (preview) {
 				expect(preview.snippet, key).toBe(section.code!.source);
-				expect(preview.component, key).toBeTypeOf('function');
+				expect(preview.component, key).toBeTypeOf('string');
 			}
 		}
 		for (const key of Object.keys(codeOnlySnippets)) {

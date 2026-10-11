@@ -4,7 +4,9 @@ declare global {
 	namespace App {
 		// interface Error {}
 		// interface Locals {}
-		// interface PageData {}
+		interface PageData {
+			highlights?: import('$lib/site/highlight.js').PreparedHighlights;
+		}
 		// interface PageState {}
 		// interface Platform {}
 	}

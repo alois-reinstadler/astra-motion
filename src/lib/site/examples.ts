@@ -1,4 +1,3 @@
-import type { Component } from 'svelte';
 import { learningExamples } from './examples/learning-examples.js';
 import { compositionExamples } from './examples/composition-examples.js';
 import { coreExamples } from './examples/core-examples.js';
@@ -16,7 +15,7 @@ export interface LiveExample {
 	anchor: string;
 	snippet?: string;
 	snippetLabel?: string;
-	component: Component;
+	component: string;
 	source: string;
 	additionalSources?: { filename: string; source: string }[];
 }

@@ -1,8 +1,14 @@
 <script lang="ts">
 	import { MotionConfig, useReducedMotion } from '$lib/motion/index.js';
+	import { loadExampleComponent } from './example-components.js';
 	import type { LiveExample } from './examples.js';
 	let { example }: { example: LiveExample } = $props();
 	const reduced = useReducedMotion();
+	let attempt = $state(0);
+	const component = $derived.by(() => {
+		void attempt;
+		return loadExampleComponent(example.component);
+	});
 </script>
 
 <MotionConfig reducedMotion="user">
@@ -12,7 +18,14 @@
 			continue.
 		</p>
 	{/if}
-	<example.component />
+	{#await component}
+		<p role="status">Loading interactive preview…</p>
+	{:then Component}
+		<Component />
+	{:catch}
+		<p role="alert">The interactive preview could not load.</p>
+		<button onclick={() => attempt++}>Retry preview</button>
+	{/await}
 </MotionConfig>
 
 <style>

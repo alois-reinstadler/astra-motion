@@ -80,7 +80,11 @@ const historicalAnchors: Record<string, Record<string, string[]>> = {
 			'panel-recipes',
 			'accordion-recipe',
 			'dialog-recipe',
-			'headless-recipe'
+			'headless-recipe',
+			'distortion',
+			'missing-exit',
+			'ownership',
+			'api-status'
 		]
 	},
 	presence: {
@@ -166,3 +170,32 @@ export const docAliases: Record<string, { slug: string; anchor?: string }> = {
 };
 export const getDoc = (slug: string) =>
 	docs.find((doc) => doc.slug === (docAliases[slug]?.slug ?? slug));
+
+/** Lightweight navigation metadata; prose and source stay on the server. */
+export const docCatalog = docs.map(({ slug, title, group, summary }) => ({
+	slug,
+	title,
+	group,
+	summary
+}));
+/** Preserve substring search across all editorial content, including collapsed notes. */
+export const docSearchIndex = docs.map((doc) => ({
+	slug: doc.slug,
+	text: [
+		doc.title,
+		doc.summary,
+		doc.learning,
+		...doc.sections.flatMap((section) => [
+			section.title,
+			...section.text,
+			...(section.points ?? []),
+			section.note?.title,
+			...(section.note?.text ?? []),
+			section.code?.source,
+			JSON.stringify(section.table ?? []),
+			...(section.links ?? []).flatMap((link) => [link.title, link.detail])
+		])
+	]
+		.join(' ')
+		.toLowerCase()
+}));

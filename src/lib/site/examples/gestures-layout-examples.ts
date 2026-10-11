@@ -1,22 +1,13 @@
 import type { LiveExample } from '../examples.js';
 import { publicExampleSource } from '../public-example-source.js';
-import Feedback from './ParityGestureFeedback.svelte';
 import FeedbackSource from './ParityGestureFeedback.svelte?raw';
-import Drag from './ParityGestureDrag.svelte';
 import DragSource from './ParityGestureDrag.svelte?raw';
-import Hover from './ParityGestureHover.svelte';
 import HoverSource from './ParityGestureHover.svelte?raw';
-import Controls from './ParityGestureControls.svelte';
 import ControlsSource from './ParityGestureControls.svelte?raw';
-import Reorder from './ParityGestureReorder.svelte';
 import ReorderSource from './ParityGestureReorder.svelte?raw';
-import Layout from './SessionCards.svelte';
 import LayoutSource from './SessionCards.svelte?raw';
-import Group from './ParityLayoutGroup.svelte';
 import GroupSource from './ParityLayoutGroup.svelte?raw';
-import Namespaces from './ParityLayoutNamespaces.svelte';
 import NamespacesSource from './ParityLayoutNamespaces.svelte?raw';
-import Arc from './ParityLayoutArc.svelte';
 import ArcSource from './ParityLayoutArc.svelte?raw';
 
 export const gesturesLayoutExamples = {
@@ -28,7 +19,7 @@ export const gesturesLayoutExamples = {
 		category: 'Gestures',
 		guide: 'gestures',
 		anchor: 'feedback',
-		component: Feedback,
+		component: './examples/ParityGestureFeedback.svelte',
 		source: publicExampleSource(FeedbackSource)
 	},
 	'drag-playground': {
@@ -39,7 +30,7 @@ export const gesturesLayoutExamples = {
 		category: 'Gestures',
 		guide: 'drag',
 		anchor: 'constraints',
-		component: Drag,
+		component: './examples/ParityGestureDrag.svelte',
 		source: publicExampleSource(DragSource)
 	},
 	'hover-feedback': {
@@ -50,7 +41,7 @@ export const gesturesLayoutExamples = {
 		category: 'Gestures',
 		guide: 'hover',
 		anchor: 'variants',
-		component: Hover,
+		component: './examples/ParityGestureHover.svelte',
 		source: publicExampleSource(HoverSource)
 	},
 	'drag-controls-handle': {
@@ -62,7 +53,7 @@ export const gesturesLayoutExamples = {
 		category: 'Gestures',
 		guide: 'use-drag-controls',
 		anchor: 'handle',
-		component: Controls,
+		component: './examples/ParityGestureControls.svelte',
 		source: publicExampleSource(ControlsSource)
 	},
 	'reorder-list-grid': {
@@ -73,7 +64,7 @@ export const gesturesLayoutExamples = {
 		category: 'Layout',
 		guide: 'reorder',
 		anchor: 'list',
-		component: Reorder,
+		component: './examples/ParityGestureReorder.svelte',
 		source: publicExampleSource(ReorderSource)
 	},
 	'layout-expand': {
@@ -84,7 +75,7 @@ export const gesturesLayoutExamples = {
 		category: 'Layout',
 		guide: 'layout',
 		anchor: 'automatic',
-		component: Layout,
+		component: './examples/SessionCards.svelte',
 		source: publicExampleSource(LayoutSource)
 	},
 	'layout-curved-path': {
@@ -95,7 +86,7 @@ export const gesturesLayoutExamples = {
 		category: 'Layout',
 		guide: 'layout',
 		anchor: 'curved-paths',
-		component: Arc,
+		component: './examples/ParityLayoutArc.svelte',
 		source: publicExampleSource(ArcSource)
 	},
 	'layout-group-coordination': {
@@ -107,7 +98,7 @@ export const gesturesLayoutExamples = {
 		category: 'Layout',
 		guide: 'layout-group',
 		anchor: 'coordination',
-		component: Group,
+		component: './examples/ParityLayoutGroup.svelte',
 		source: publicExampleSource(GroupSource)
 	},
 	'layout-group-namespaces': {
@@ -118,7 +109,7 @@ export const gesturesLayoutExamples = {
 		category: 'Layout',
 		guide: 'layout-group',
 		anchor: 'namespaces',
-		component: Namespaces,
+		component: './examples/ParityLayoutNamespaces.svelte',
 		source: publicExampleSource(NamespacesSource)
 	}
 } satisfies Record<string, LiveExample>;

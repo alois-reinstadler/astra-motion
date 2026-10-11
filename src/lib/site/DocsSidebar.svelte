@@ -1,15 +1,35 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
-	import { docGroups, docs, docAliases } from './docs.js';
+	import { documentationGroups as docGroups, type DocPage } from './doc-types.js';
+	let {
+		docs,
+		docAliases
+	}: { docs: Omit<DocPage, 'sections'>[]; docAliases: Record<string, { slug: string }> } = $props();
 	let query = $state('');
-	const filtered = $derived(
-		docs.filter((doc) =>
-			`${doc.title} ${doc.summary} ${doc.sections.map((section) => [section.title, section.text?.join(' '), section.note?.text.join(' '), section.code?.source, JSON.stringify(section.table ?? [])].join(' ')).join(' ')}`
-				.toLowerCase()
-				.includes(query.trim().toLowerCase())
-		)
-	);
+	let searchIndex = $state<{ slug: string; text: string }[]>([]);
+	let searchStatus = $state<'idle' | 'loading' | 'ready' | 'error'>('idle');
+	async function prepareSearch() {
+		if (searchStatus === 'loading' || searchStatus === 'ready') return;
+		searchStatus = 'loading';
+		try {
+			const response = await fetch(resolve('/docs/search.json'));
+			if (!response.ok) throw new Error('Search unavailable');
+			searchIndex = await response.json();
+			searchStatus = 'ready';
+		} catch {
+			searchStatus = 'error';
+		}
+	}
+	const filtered = $derived.by(() => {
+		const needle = query.trim().toLowerCase();
+		if (!needle) return docs;
+		if (searchStatus !== 'ready') return [];
+		const matches = new Set(
+			searchIndex.filter((entry) => entry.text.includes(needle)).map((entry) => entry.slug)
+		);
+		return docs.filter((doc) => matches.has(doc.slug));
+	});
 	const current = $derived(
 		docAliases[page.params.slug ?? '']?.slug ?? page.params.slug ?? 'quick-start'
 	);
@@ -22,6 +42,8 @@
 				{id}
 				type="search"
 				bind:value={query}
+				onfocus={prepareSearch}
+				oninput={prepareSearch}
 				placeholder="Filter topics…"
 				autocomplete="off"
 			/>
@@ -41,7 +63,13 @@
 							>{/each}
 					</div>{/if}
 			{/each}
-			{#if !filtered.length}<p class="empty" role="status">
+			{#if query.trim() && searchStatus === 'loading'}
+				<p class="empty" role="status">Searching guides…</p>
+			{:else if query.trim() && searchStatus === 'error'}
+				<p class="empty" role="status">
+					Search could not load. <button onclick={prepareSearch}>Try again</button>
+				</p>
+			{:else if !filtered.length}<p class="empty" role="status">
 					No guide matches “{query}”. Try layout, exit or scroll.
 				</p>{/if}
 		</nav>

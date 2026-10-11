@@ -2,12 +2,13 @@
 	import type { Snippet } from 'svelte';
 	import SiteFrame from '$lib/site/SiteFrame.svelte';
 	import DocsSidebar from '$lib/site/DocsSidebar.svelte';
-	let { children }: { children: Snippet } = $props();
+	import type { LayoutData } from './$types.js';
+	let { children, data }: { children: Snippet; data: LayoutData } = $props();
 </script>
 
 <SiteFrame
 	><main id="site-content" class="docs-layout">
-		<DocsSidebar />
+		<DocsSidebar docs={data.docCatalog} docAliases={data.docAliases} />
 		<div class="document">{@render children()}</div>
 	</main></SiteFrame
 >

@@ -2,7 +2,6 @@
 	import { resolve } from '$app/paths';
 	import SiteFrame from '$lib/site/SiteFrame.svelte';
 	import DocExample from '$lib/site/DocExample.svelte';
-	import { getDoc } from '$lib/site/docs.js';
 	import type { PageData } from './$types.js';
 	let { data }: { data: PageData } = $props();
 </script>
@@ -17,7 +16,7 @@
 		<a
 			class="related"
 			href={resolve(`/docs/[slug]#${data.example.anchor}`, { slug: data.example.guide })}
-			>Read {getDoc(data.example.guide)?.title}</a
+			>Read {data.guideTitle}</a
 		>
 	</main>
 </SiteFrame>

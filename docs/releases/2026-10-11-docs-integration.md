@@ -40,3 +40,50 @@ examples pass 33 tests in four files, including intermediate layout scaling,
 reversal, focus identity and scroll reversal. Svelte MCP autofixer reports no issues
 or suggestions for all 23 changed/new components. Prettier has formatted the changed
 files. These focused results do not claim the final three-engine release matrix.
+
+## Separate site-loading integration
+
+The archived primary worktree's unfinished performance work is reconciled on top of
+the editorial commit. Documentation and example loaders are now server-only; page
+payloads contain their own prose, sources and compact highlight tokens. Navigation
+ships metadata, full-text search loads on demand, and preview components resolve
+through a lazy module map with loading/error/retry UI. The homepage defers its full
+source presentation while retaining no-JavaScript access. No animation runtime or
+public library API changes are included.
+
+The reconciliation retains Quick start, new learning/composition registries, all
+example redirects and the reduced-motion notice. Search includes learning summaries,
+points, collapsed notes and link descriptions in addition to the old headings,
+prose, source and tables. Four historical Getting started troubleshooting fragments
+remain valid after the route reorganization. The archived lab position-only tile
+change is excluded here because it belongs with its geometry oracle review.
+
+The old loading tests exposed compilation-time timeouts when each dynamic import
+compiled a large cold fixture graph inside a runtime assertion. Test-only eager
+imports now compile that graph during suite setup; the resolver assertion compares
+the exact resulting module identity. Runtime assertions and timeout thresholds were
+not relaxed. Existing values SSR assertions likewise remain unchanged in substance.
+
+CI now checks initial site modulepreload budgets and every existing
+`scripts/*.test.mjs` tooling test (including forwarding/provenance).
+
+Focused validation after reconciliation: 48 server tests in seven files pass;
+Svelte check reports zero errors/warnings; ESLint passes for the changed site,
+server, routes, types and tooling. Svelte MCP autofixer reports no issues or
+suggestions for all ten changed components. Build, prepack and strict publint pass.
+The existing lab-only NativeInput declaration and Vite `import.meta.env` packaging
+advisories remain; they are not new public-package failures.
+
+The new initial modulepreload measurements (uncompressed bytes; gzip computed per
+file, not a hosting claim) are: home 331,128 / gzip 126,765; Quick start 206,968 /
+gzip 72,487; examples catalog 128,446 / gzip 47,567. All pass the explicit
+400,000 / 400,000 / 200,000 budgets. These are site measurements from the integrated
+implementation build, not qualification of the final release package.
+
+All 25 focused Chromium production-page scenarios pass, including the complete
+37-document and 40-example sweeps, no-JavaScript aliases, copied sources, reduced
+motion, native/fallback View transitions, drafts, identity, reset and navigation
+cleanup. A separate T3 collaborative-browser check exercised Quick start search
+for text in a collapsed layout note, client navigation to that result, and expansion
+of both session cards (240 to 380 pixels). The page loaded without console errors;
+a screenshot was inspected. The full release matrix remains the consolidator's gate.

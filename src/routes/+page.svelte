@@ -6,7 +6,8 @@
 	import SiteFrame from '$lib/site/SiteFrame.svelte';
 	import DocCode from '$lib/site/DocCode.svelte';
 	import HomeLayoutExample from '$lib/site/examples/HomeLayoutExample.svelte';
-	import homeSource from '$lib/site/examples/HomeLayoutExample.svelte?raw';
+	import { homeSource as source, homeSnippet as snippet } from '$lib/site/home-code.js';
+	let sourceOpen = $state(false);
 	const entrance = createAnimate();
 	onMount(() => {
 		entrance.sequence([
@@ -18,8 +19,6 @@
 			]
 		]);
 	});
-	const source = homeSource.replaceAll("'$lib/motion/index.js'", "'astra-motion'");
-	const snippet = `<motion.div layout layoutGroup={layout}>\n  <strong style="display: block" {@attach layout({ mode: 'position' })}>\n    {piece.name}\n  </strong>\n</motion.div>`;
 </script>
 
 <SiteFrame>
@@ -62,11 +61,17 @@
 			</div>
 			<div class="code-sample">
 				<DocCode source={snippet} label="Layout and readable content · excerpt" />
-				<details>
-					<summary>Complete playground source</summary><DocCode
-						{source}
-						label="HomeLayoutExample.svelte"
-					/>
+				<details bind:open={sourceOpen}>
+					<summary>Complete playground source</summary>
+					{#if sourceOpen}
+						<DocCode {source} label="HomeLayoutExample.svelte" />
+					{/if}
+					<noscript>
+						<!-- svelte-ignore a11y_no_noninteractive_tabindex (Keyboard users need to scroll complete source.) -->
+						<pre tabindex="0" role="region" aria-label="HomeLayoutExample.svelte source"><code
+								>{source}</code
+							></pre>
+					</noscript>
 				</details>
 			</div>
 		</section>
@@ -219,6 +224,15 @@
 	}
 	.code-sample {
 		min-width: 0;
+	}
+	pre {
+		max-width: 100%;
+		overflow: auto;
+		padding: 18px;
+		border: 1px solid var(--site-line);
+		background: #fff;
+		font-size: 12px;
+		tab-size: 2;
 	}
 	details {
 		margin-top: 22px;
