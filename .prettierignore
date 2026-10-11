@@ -14,3 +14,7 @@ experiments/vgpu-threlte/evidence/
 # Immutable, attributed third-party scene assets
 experiments/threlte-scene/public/
 experiments/threlte-scene/licenses/
+
+# Immutable historical lifecycle experiment measurements
+experiments/staged-rendering/results/
+experiments/unstaged-rendering/results.json

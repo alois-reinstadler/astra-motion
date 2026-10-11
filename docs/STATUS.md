@@ -1,6 +1,13 @@
 # Release stabilization — 2026-10-11
 
-The sole active release candidate is `t3code/svelte-motion-parity-review`.
+The release baseline is now `main`, integrating qualified RC3 commit `87e4a76`
+with the existing research history. Library source, public exports, package metadata
+and release tests are identical to that qualified commit. The staged-state public
+prototype and its source fixtures are withdrawn; historical code remains in Git.
+
+The prior `main` working tree had substantial uncommitted work. It is preserved
+on `archive/main-in-progress-2026-10-11`, without altering its working files.
+The documentation worktrees remain separate pending integration and qualification.
 This pass keeps Motion 13.4.4 as the animation/projection engine and Svelte 5 as
 lifecycle owner. No compatibility API, staged-state API, compiler instrumentation,
 DOM interception or eager subscriptions are being introduced. `updateLayout`

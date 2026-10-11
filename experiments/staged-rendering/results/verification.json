@@ -1,0 +1,40 @@
+{
+  "build": "passed",
+  "unitTests": {
+    "passed": 6,
+    "failed": 0
+  },
+  "svelteCheck": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "svelteAutofixer": {
+    "components": [
+      "Staged.svelte",
+      "Managed.svelte",
+      "Native.svelte"
+    ],
+    "issues": 0,
+    "suggestions": 0
+  },
+  "focusedEslint": "passed",
+  "formatting": "passed",
+  "consoleWarningsErrors": [],
+  "network": "10 of 10 requests HTTP 200 on final diagnostic page",
+  "cleanup": {
+    "cells": 0,
+    "animations": 0,
+    "pageErrors": [],
+    "ownedChromePageClosed": true
+  },
+  "timingCasesPassed": 15,
+  "timingMeasuredTrialsPassed": 45,
+  "finalDiagnosticCasesPassed": 7,
+  "probeOutcomes": {
+    "passed": 15,
+    "failed": 5,
+    "sharedExternalLayoutFailures": 4,
+    "stagedOnlyUnownedParentFailure": 1
+  },
+  "scope": "Research experiment only; universal parity is not established"
+}

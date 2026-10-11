@@ -1,0 +1,1002 @@
+[
+  {
+    "schemaVersion": 1,
+    "createdAt": "2026-10-06T02:14:51.906Z",
+    "provenance": {
+      "builtAt": "2026-10-06T02:14:31.159Z",
+      "commit": "e1e645563e0403621d37ab603492d9e0958ce861",
+      "harnessSourceSha256": "6ad926685b622cf93e11514fc5e66d6226a79ba27b0e3e94d9388bb8077386d5",
+      "astraSourceSha256": "70b9519b623a968aa783645e623da9705a029db50db49236eda091d4a4829fea",
+      "versions": {
+        "react": "18.3.1",
+        "react-dom": "18.3.1",
+        "framer-motion": "13.4.4",
+        "motion-dom": "13.4.4",
+        "motion-utils": "13.3.0",
+        "svelte": "5.57.0",
+        "vite": "8.2.2"
+      },
+      "production": true
+    },
+    "environment": {
+      "idleRafCadence": {
+        "gaps": [
+          16.80000000000001,
+          16.5,
+          16.80000000000001,
+          16.599999999999994,
+          16.599999999999994,
+          16.69999999999999,
+          16.69999999999999,
+          16.600000000000023
+        ],
+        "medianMs": 16.69999999999999,
+        "valid": true
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+      "width": 1280,
+      "height": 800,
+      "dpr": 1,
+      "visibility": "visible",
+      "hardwareConcurrency": 8,
+      "cpuThrottle": 1
+    },
+    "options": {
+      "mode": "astra-staged",
+      "workload": "reverse",
+      "count": 500,
+      "warmups": 0,
+      "trials": 1,
+      "diagnostic": true,
+      "observationMs": 3000
+    },
+    "validTiming": false,
+    "passed": true,
+    "rows": [
+      {
+        "passed": true,
+        "mutationMs": 0.3000001907348633,
+        "elapsedMs": 3003.300000190735,
+        "exitCompleteMs": null,
+        "frames": 168,
+        "p95RafGapMs": 16.799999999999955,
+        "maxRafGapMs": 200.0000000000001,
+        "over25Ms": 2,
+        "movingFrames": 19,
+        "entries": [
+          {
+            "type": "longtask",
+            "duration": 212,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 206.79999923706055,
+            "forcedStyleAndLayoutMs": 5.9
+          }
+        ],
+        "correctness": {
+          "passed": true,
+          "count": 500,
+          "orderMatches": true,
+          "residual": 0,
+          "animations": 0,
+          "stats": {
+            "participants": 500,
+            "active": 0,
+            "commits": 1,
+            "removalCommits": 0,
+            "exitCaptures": 0,
+            "cancellations": 0,
+            "exiting": 0
+          }
+        },
+        "exitGeometry": null,
+        "reads": {
+          "counts": {
+            "getComputedStyle": 2013,
+            "offsetWidth": 8,
+            "offsetHeight": 8,
+            "getBoundingClientRect": 1004
+          },
+          "sites": {
+            "getComputedStyle\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:588:15)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)\n    at Array.forEach (<anonymous>)": 4,
+            "offsetWidth\n    at readTransformMatrix (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:364:18)\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:589:18)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)": 4,
+            "offsetHeight\n    at readTransformMatrix (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:365:19)\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:589:18)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)": 4,
+            "offsetWidth\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:603:37)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)\n    at Array.forEach (<anonymous>)": 4,
+            "offsetHeight\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:604:37)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)\n    at Array.forEach (<anonymous>)": 4,
+            "getComputedStyle\n    at checkIsScrollRoot (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7122:50)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6269:20)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:581:9)": 6,
+            "getComputedStyle\n    at correctStickyScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:415:22)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:582:3)\n    at ProjectionNode.willUpdate (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6138:10)": 1500,
+            "getBoundingClientRect\n    at measureViewportBox (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4221:61)\n    at HTMLVisualElement.measureInstanceViewportBox (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4972:10)\n    at HTMLVisualElement.measureViewportBox (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4655:30)": 1000,
+            "getBoundingClientRect\n    at ProjectionBoundary.measurePageBox (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:628:29)\n    at ProjectionBoundary.measure (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6293:25)\n    at ProjectionBoundary.updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6256:23)": 4,
+            "getComputedStyle\n    at correctStickyScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:415:22)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:582:3)\n    at ProjectionBoundary.updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6245:9)": 3,
+            "getComputedStyle\n    at node.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:445:20)\n    at ProjectionNode.updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6245:9)\n    at updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6896:7)": 500
+          },
+          "window": "mutation through observation window; excludes assertion reads"
+        }
+      }
+    ]
+  },
+  {
+    "schemaVersion": 1,
+    "createdAt": "2026-10-06T02:14:55.679Z",
+    "provenance": {
+      "builtAt": "2026-10-06T02:14:31.159Z",
+      "commit": "e1e645563e0403621d37ab603492d9e0958ce861",
+      "harnessSourceSha256": "6ad926685b622cf93e11514fc5e66d6226a79ba27b0e3e94d9388bb8077386d5",
+      "astraSourceSha256": "70b9519b623a968aa783645e623da9705a029db50db49236eda091d4a4829fea",
+      "versions": {
+        "react": "18.3.1",
+        "react-dom": "18.3.1",
+        "framer-motion": "13.4.4",
+        "motion-dom": "13.4.4",
+        "motion-utils": "13.3.0",
+        "svelte": "5.57.0",
+        "vite": "8.2.2"
+      },
+      "production": true
+    },
+    "environment": {
+      "idleRafCadence": {
+        "gaps": [
+          16.699999999999818,
+          16.59999999999991,
+          16.700000000000273,
+          16.59999999999991,
+          16.800000000000182,
+          16.59999999999991,
+          16.699999999999818,
+          16.59999999999991
+        ],
+        "medianMs": 16.699999999999818,
+        "valid": true
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+      "width": 1280,
+      "height": 800,
+      "dpr": 1,
+      "visibility": "visible",
+      "hardwareConcurrency": 8,
+      "cpuThrottle": 1
+    },
+    "options": {
+      "mode": "astra-staged",
+      "workload": "resize",
+      "count": 500,
+      "warmups": 0,
+      "trials": 1,
+      "diagnostic": true,
+      "observationMs": 3000
+    },
+    "validTiming": false,
+    "passed": true,
+    "rows": [
+      {
+        "passed": true,
+        "mutationMs": 0.09999942779541016,
+        "elapsedMs": 3000.3999996185303,
+        "exitCompleteMs": null,
+        "frames": 174,
+        "p95RafGapMs": 16.799999999999272,
+        "maxRafGapMs": 99.89999999999964,
+        "over25Ms": 2,
+        "movingFrames": 0,
+        "entries": [
+          {
+            "type": "longtask",
+            "duration": 116,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 113.30000019073486,
+            "forcedStyleAndLayoutMs": 2.6
+          }
+        ],
+        "correctness": {
+          "passed": true,
+          "count": 500,
+          "orderMatches": true,
+          "residual": 0,
+          "animations": 0,
+          "stats": {
+            "participants": 500,
+            "active": 0,
+            "commits": 1,
+            "removalCommits": 0,
+            "exitCaptures": 0,
+            "cancellations": 0,
+            "exiting": 0
+          }
+        },
+        "exitGeometry": null,
+        "reads": {
+          "counts": {
+            "getComputedStyle": 2013,
+            "offsetWidth": 8,
+            "offsetHeight": 8,
+            "getBoundingClientRect": 1004
+          },
+          "sites": {
+            "getComputedStyle\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:588:15)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)\n    at Array.forEach (<anonymous>)": 4,
+            "offsetWidth\n    at readTransformMatrix (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:364:18)\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:589:18)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)": 4,
+            "offsetHeight\n    at readTransformMatrix (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:365:19)\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:589:18)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)": 4,
+            "offsetWidth\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:603:37)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)\n    at Array.forEach (<anonymous>)": 4,
+            "offsetHeight\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:604:37)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)\n    at Array.forEach (<anonymous>)": 4,
+            "getComputedStyle\n    at checkIsScrollRoot (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7122:50)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6269:20)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:581:9)": 6,
+            "getComputedStyle\n    at correctStickyScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:415:22)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:582:3)\n    at ProjectionNode.willUpdate (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6138:10)": 1500,
+            "getBoundingClientRect\n    at measureViewportBox (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4221:61)\n    at HTMLVisualElement.measureInstanceViewportBox (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4972:10)\n    at HTMLVisualElement.measureViewportBox (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4655:30)": 1000,
+            "getBoundingClientRect\n    at ProjectionBoundary.measurePageBox (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:628:29)\n    at ProjectionBoundary.measure (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6293:25)\n    at ProjectionBoundary.updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6256:23)": 4,
+            "getComputedStyle\n    at correctStickyScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:415:22)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:582:3)\n    at ProjectionBoundary.updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6245:9)": 3,
+            "getComputedStyle\n    at node.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:445:20)\n    at ProjectionNode.updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6245:9)\n    at updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6896:7)": 500
+          },
+          "window": "mutation through observation window; excludes assertion reads"
+        }
+      }
+    ]
+  },
+  {
+    "schemaVersion": 1,
+    "createdAt": "2026-10-06T02:14:59.399Z",
+    "provenance": {
+      "builtAt": "2026-10-06T02:14:31.159Z",
+      "commit": "e1e645563e0403621d37ab603492d9e0958ce861",
+      "harnessSourceSha256": "6ad926685b622cf93e11514fc5e66d6226a79ba27b0e3e94d9388bb8077386d5",
+      "astraSourceSha256": "70b9519b623a968aa783645e623da9705a029db50db49236eda091d4a4829fea",
+      "versions": {
+        "react": "18.3.1",
+        "react-dom": "18.3.1",
+        "framer-motion": "13.4.4",
+        "motion-dom": "13.4.4",
+        "motion-utils": "13.3.0",
+        "svelte": "5.57.0",
+        "vite": "8.2.2"
+      },
+      "production": true
+    },
+    "environment": {
+      "idleRafCadence": {
+        "gaps": [
+          16.599999999999454,
+          16.699999999999818,
+          16.700000000000728,
+          16.699999999999818,
+          16.599999999999454,
+          16.700000000000728,
+          16.699999999999818,
+          16.599999999999454
+        ],
+        "medianMs": 16.699999999999818,
+        "valid": true
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+      "width": 1280,
+      "height": 800,
+      "dpr": 1,
+      "visibility": "visible",
+      "hardwareConcurrency": 8,
+      "cpuThrottle": 1
+    },
+    "options": {
+      "mode": "astra-staged",
+      "workload": "single-exit",
+      "count": 500,
+      "warmups": 0,
+      "trials": 1,
+      "diagnostic": true,
+      "observationMs": 3000
+    },
+    "validTiming": false,
+    "passed": true,
+    "rows": [
+      {
+        "passed": true,
+        "mutationMs": 0.09999942779541016,
+        "elapsedMs": 3002.5999994277954,
+        "exitCompleteMs": 353.29999923706055,
+        "frames": 168,
+        "p95RafGapMs": 16.80000000000109,
+        "maxRafGapMs": 100,
+        "over25Ms": 4,
+        "movingFrames": 14,
+        "entries": [
+          {
+            "type": "longtask",
+            "duration": 108,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 106.30000019073486,
+            "forcedStyleAndLayoutMs": 1.7
+          },
+          {
+            "type": "longtask",
+            "duration": 104,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 103.60000038146973,
+            "forcedStyleAndLayoutMs": 9.5
+          }
+        ],
+        "correctness": {
+          "passed": true,
+          "count": 499,
+          "orderMatches": true,
+          "residual": 0,
+          "animations": 0,
+          "stats": {
+            "participants": 499,
+            "active": 0,
+            "commits": 1,
+            "removalCommits": 1,
+            "exitCaptures": 1,
+            "cancellations": 0,
+            "exiting": 0
+          }
+        },
+        "exitGeometry": {
+          "passed": true,
+          "sampled": 1,
+          "expected": 1,
+          "poppedSamples": 1,
+          "maxErrorPx": 0.015625
+        },
+        "reads": {
+          "counts": {
+            "getComputedStyle": 4027,
+            "offsetParent": 1,
+            "offsetLeft": 2,
+            "offsetTop": 2,
+            "clientWidth": 1,
+            "offsetWidth": 17,
+            "clientHeight": 1,
+            "offsetHeight": 17,
+            "getBoundingClientRect": 2007
+          },
+          "sites": {
+            "getComputedStyle\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:381:19)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "offsetParent\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:382:25)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "offsetLeft\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:388:17)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "offsetTop\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:389:16)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "clientWidth\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:390:17)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "offsetLeft\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:390:95)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "offsetWidth\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:390:116)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "clientHeight\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:391:18)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "offsetTop\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:391:98)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "offsetHeight\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:391:118)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "getComputedStyle\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:588:15)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)\n    at Array.forEach (<anonymous>)": 8,
+            "offsetWidth\n    at readTransformMatrix (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:364:18)\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:589:18)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)": 8,
+            "offsetHeight\n    at readTransformMatrix (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:365:19)\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:589:18)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)": 8,
+            "offsetWidth\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:603:37)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)\n    at Array.forEach (<anonymous>)": 8,
+            "offsetHeight\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:604:37)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)\n    at Array.forEach (<anonymous>)": 8,
+            "getComputedStyle\n    at checkIsScrollRoot (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7122:50)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6269:20)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:581:9)": 12,
+            "getComputedStyle\n    at correctStickyScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:415:22)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:582:3)\n    at ProjectionNode.willUpdate (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6138:10)": 3000,
+            "getBoundingClientRect\n    at measureViewportBox (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4221:61)\n    at HTMLVisualElement.measureInstanceViewportBox (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4972:10)\n    at HTMLVisualElement.measureViewportBox (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4655:30)": 1999,
+            "getBoundingClientRect\n    at ProjectionBoundary.measurePageBox (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:628:29)\n    at ProjectionBoundary.measure (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6293:25)\n    at ProjectionBoundary.updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6256:23)": 8,
+            "getComputedStyle\n    at correctStickyScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:415:22)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:582:3)\n    at ProjectionBoundary.updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6245:9)": 6,
+            "getComputedStyle\n    at node.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:445:20)\n    at ProjectionNode.updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6245:9)\n    at updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6896:7)": 999,
+            "getComputedStyle\n    at getComputedStyle$1 (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4946:16)\n    at HTMLVisualElement.readValueFromInstance (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4966:26)\n    at HTMLVisualElement.readValue (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4765:146)": 1
+          },
+          "window": "mutation through observation window; excludes assertion reads"
+        }
+      }
+    ]
+  },
+  {
+    "schemaVersion": 1,
+    "createdAt": "2026-10-06T02:15:03.115Z",
+    "provenance": {
+      "builtAt": "2026-10-06T02:14:31.159Z",
+      "commit": "e1e645563e0403621d37ab603492d9e0958ce861",
+      "harnessSourceSha256": "6ad926685b622cf93e11514fc5e66d6226a79ba27b0e3e94d9388bb8077386d5",
+      "astraSourceSha256": "70b9519b623a968aa783645e623da9705a029db50db49236eda091d4a4829fea",
+      "versions": {
+        "react": "18.3.1",
+        "react-dom": "18.3.1",
+        "framer-motion": "13.4.4",
+        "motion-dom": "13.4.4",
+        "motion-utils": "13.3.0",
+        "svelte": "5.57.0",
+        "vite": "8.2.2"
+      },
+      "production": true
+    },
+    "environment": {
+      "idleRafCadence": {
+        "gaps": [
+          16.69999999999891,
+          16.700000000000728,
+          16.700000000000728,
+          16.599999999998545,
+          16.700000000000728,
+          16.600000000000364,
+          16.69999999999891,
+          16.700000000000728
+        ],
+        "medianMs": 16.700000000000728,
+        "valid": true
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+      "width": 1280,
+      "height": 800,
+      "dpr": 1,
+      "visibility": "visible",
+      "hardwareConcurrency": 8,
+      "cpuThrottle": 1
+    },
+    "options": {
+      "mode": "astra-staged",
+      "workload": "remove100",
+      "count": 500,
+      "warmups": 0,
+      "trials": 1,
+      "diagnostic": true,
+      "observationMs": 3000
+    },
+    "validTiming": false,
+    "passed": true,
+    "rows": [
+      {
+        "passed": true,
+        "mutationMs": 0.09999942779541016,
+        "elapsedMs": 3000.5999994277954,
+        "exitCompleteMs": 442.8999996185303,
+        "frames": 163,
+        "p95RafGapMs": 16.799999999999272,
+        "maxRafGapMs": 166.6999999999989,
+        "over25Ms": 4,
+        "movingFrames": 12,
+        "entries": [
+          {
+            "type": "longtask",
+            "duration": 178,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 173.30000019073486,
+            "forcedStyleAndLayoutMs": 4.1
+          },
+          {
+            "type": "longtask",
+            "duration": 115,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 114,
+            "forcedStyleAndLayoutMs": 9.3
+          }
+        ],
+        "correctness": {
+          "passed": true,
+          "count": 400,
+          "orderMatches": true,
+          "residual": 0,
+          "animations": 0,
+          "stats": {
+            "participants": 400,
+            "active": 0,
+            "commits": 1,
+            "removalCommits": 1,
+            "exitCaptures": 100,
+            "cancellations": 0,
+            "exiting": 0
+          }
+        },
+        "exitGeometry": {
+          "passed": true,
+          "sampled": 100,
+          "expected": 100,
+          "poppedSamples": 100,
+          "maxErrorPx": 0.015625
+        },
+        "reads": {
+          "counts": {
+            "getComputedStyle": 4126,
+            "offsetParent": 100,
+            "offsetLeft": 200,
+            "offsetTop": 200,
+            "clientWidth": 100,
+            "offsetWidth": 116,
+            "clientHeight": 100,
+            "offsetHeight": 116,
+            "getBoundingClientRect": 1908
+          },
+          "sites": {
+            "getComputedStyle\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:381:19)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 100,
+            "offsetParent\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:382:25)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 100,
+            "offsetLeft\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:388:17)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 100,
+            "offsetTop\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:389:16)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 100,
+            "clientWidth\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:390:17)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 100,
+            "offsetLeft\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:390:95)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 100,
+            "offsetWidth\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:390:116)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 100,
+            "clientHeight\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:391:18)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 100,
+            "offsetTop\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:391:98)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 100,
+            "offsetHeight\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:391:118)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 100,
+            "getComputedStyle\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:588:15)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)\n    at Array.forEach (<anonymous>)": 8,
+            "offsetWidth\n    at readTransformMatrix (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:364:18)\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:589:18)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)": 8,
+            "offsetHeight\n    at readTransformMatrix (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:365:19)\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:589:18)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)": 8,
+            "offsetWidth\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:603:37)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)\n    at Array.forEach (<anonymous>)": 8,
+            "offsetHeight\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:604:37)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)\n    at Array.forEach (<anonymous>)": 8,
+            "getComputedStyle\n    at checkIsScrollRoot (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7122:50)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6269:20)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:581:9)": 12,
+            "getComputedStyle\n    at correctStickyScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:415:22)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:582:3)\n    at ProjectionNode.willUpdate (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6138:10)": 3000,
+            "getBoundingClientRect\n    at measureViewportBox (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4221:61)\n    at HTMLVisualElement.measureInstanceViewportBox (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4972:10)\n    at HTMLVisualElement.measureViewportBox (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4655:30)": 1900,
+            "getBoundingClientRect\n    at ProjectionBoundary.measurePageBox (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:628:29)\n    at ProjectionBoundary.measure (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6293:25)\n    at ProjectionBoundary.updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6256:23)": 8,
+            "getComputedStyle\n    at correctStickyScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:415:22)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:582:3)\n    at ProjectionBoundary.updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6245:9)": 6,
+            "getComputedStyle\n    at node.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:445:20)\n    at ProjectionNode.updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6245:9)\n    at updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6896:7)": 900,
+            "getComputedStyle\n    at getComputedStyle$1 (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4946:16)\n    at HTMLVisualElement.readValueFromInstance (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4966:26)\n    at HTMLVisualElement.readValue (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4765:146)": 100
+          },
+          "window": "mutation through observation window; excludes assertion reads"
+        }
+      }
+    ]
+  },
+  {
+    "schemaVersion": 1,
+    "createdAt": "2026-10-06T02:15:06.844Z",
+    "provenance": {
+      "builtAt": "2026-10-06T02:14:31.159Z",
+      "commit": "e1e645563e0403621d37ab603492d9e0958ce861",
+      "harnessSourceSha256": "6ad926685b622cf93e11514fc5e66d6226a79ba27b0e3e94d9388bb8077386d5",
+      "astraSourceSha256": "70b9519b623a968aa783645e623da9705a029db50db49236eda091d4a4829fea",
+      "versions": {
+        "react": "18.3.1",
+        "react-dom": "18.3.1",
+        "framer-motion": "13.4.4",
+        "motion-dom": "13.4.4",
+        "motion-utils": "13.3.0",
+        "svelte": "5.57.0",
+        "vite": "8.2.2"
+      },
+      "production": true
+    },
+    "environment": {
+      "idleRafCadence": {
+        "gaps": [
+          16.599999999998545,
+          16.700000000000728,
+          16.600000000000364,
+          16.799999999999272,
+          16.600000000000364,
+          16.600000000000364,
+          16.69999999999891,
+          16.600000000000364
+        ],
+        "medianMs": 16.600000000000364,
+        "valid": true
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+      "width": 1280,
+      "height": 800,
+      "dpr": 1,
+      "visibility": "visible",
+      "hardwareConcurrency": 8,
+      "cpuThrottle": 1
+    },
+    "options": {
+      "mode": "astra-staged",
+      "workload": "remove500",
+      "count": 500,
+      "warmups": 0,
+      "trials": 1,
+      "diagnostic": true,
+      "observationMs": 3000
+    },
+    "validTiming": false,
+    "passed": true,
+    "rows": [
+      {
+        "passed": true,
+        "mutationMs": 0.19999980926513672,
+        "elapsedMs": 3001.300000190735,
+        "exitCompleteMs": 730,
+        "frames": 142,
+        "p95RafGapMs": 16.799999999999272,
+        "maxRafGapMs": 283.3000000000011,
+        "over25Ms": 5,
+        "movingFrames": 0,
+        "entries": [
+          {
+            "type": "longtask",
+            "duration": 289,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "longtask",
+            "duration": 50,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 285.69999980926514,
+            "forcedStyleAndLayoutMs": 10.7
+          },
+          {
+            "type": "longtask",
+            "duration": 63,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "longtask",
+            "duration": 85,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 64.69999980926514,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "longtask",
+            "duration": 202,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 86.69999980926514,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 212.39999961853027,
+            "forcedStyleAndLayoutMs": 7.5
+          }
+        ],
+        "correctness": {
+          "passed": true,
+          "count": 0,
+          "orderMatches": true,
+          "residual": 0,
+          "animations": 0,
+          "stats": {
+            "participants": 0,
+            "active": 0,
+            "commits": 1,
+            "removalCommits": 1,
+            "exitCaptures": 500,
+            "cancellations": 0,
+            "exiting": 0
+          }
+        },
+        "exitGeometry": {
+          "passed": true,
+          "sampled": 500,
+          "expected": 500,
+          "poppedSamples": 500,
+          "maxErrorPx": 0.40625
+        },
+        "reads": {
+          "counts": {
+            "getComputedStyle": 4520,
+            "offsetParent": 500,
+            "offsetLeft": 1000,
+            "offsetTop": 1000,
+            "clientWidth": 500,
+            "offsetWidth": 516,
+            "clientHeight": 500,
+            "offsetHeight": 516,
+            "getBoundingClientRect": 1504
+          },
+          "sites": {
+            "getComputedStyle\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:381:19)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 500,
+            "offsetParent\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:382:25)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 500,
+            "offsetLeft\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:388:17)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 500,
+            "offsetTop\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:389:16)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 500,
+            "clientWidth\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:390:17)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 500,
+            "offsetLeft\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:390:95)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 500,
+            "offsetWidth\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:390:116)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 500,
+            "clientHeight\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:391:18)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 500,
+            "offsetTop\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:391:98)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 500,
+            "offsetHeight\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:391:118)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 500,
+            "getComputedStyle\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:588:15)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)\n    at Array.forEach (<anonymous>)": 8,
+            "offsetWidth\n    at readTransformMatrix (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:364:18)\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:589:18)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)": 8,
+            "offsetHeight\n    at readTransformMatrix (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:365:19)\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:589:18)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)": 8,
+            "offsetWidth\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:603:37)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)\n    at Array.forEach (<anonymous>)": 8,
+            "offsetHeight\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:604:37)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)\n    at Array.forEach (<anonymous>)": 8,
+            "getComputedStyle\n    at checkIsScrollRoot (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7122:50)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6269:20)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:581:9)": 9,
+            "getComputedStyle\n    at correctStickyScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:415:22)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:582:3)\n    at ProjectionNode.willUpdate (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6138:10)": 3000,
+            "getBoundingClientRect\n    at measureViewportBox (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4221:61)\n    at HTMLVisualElement.measureInstanceViewportBox (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4972:10)\n    at HTMLVisualElement.measureViewportBox (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4655:30)": 1500,
+            "getBoundingClientRect\n    at ProjectionBoundary.measurePageBox (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:628:29)\n    at ProjectionBoundary.measure (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6293:25)\n    at ProjectionBoundary.updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6256:23)": 4,
+            "getComputedStyle\n    at correctStickyScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:415:22)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:582:3)\n    at ProjectionBoundary.updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6245:9)": 3,
+            "getComputedStyle\n    at node.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:445:20)\n    at ProjectionNode.updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6245:9)\n    at updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6896:7)": 500,
+            "getComputedStyle\n    at getComputedStyle$1 (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4946:16)\n    at HTMLVisualElement.readValueFromInstance (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4966:26)\n    at HTMLVisualElement.readValue (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4765:146)": 500
+          },
+          "window": "mutation through observation window; excludes assertion reads"
+        }
+      }
+    ]
+  },
+  {
+    "schemaVersion": 1,
+    "createdAt": "2026-10-06T02:15:10.561Z",
+    "provenance": {
+      "builtAt": "2026-10-06T02:14:31.159Z",
+      "commit": "e1e645563e0403621d37ab603492d9e0958ce861",
+      "harnessSourceSha256": "6ad926685b622cf93e11514fc5e66d6226a79ba27b0e3e94d9388bb8077386d5",
+      "astraSourceSha256": "70b9519b623a968aa783645e623da9705a029db50db49236eda091d4a4829fea",
+      "versions": {
+        "react": "18.3.1",
+        "react-dom": "18.3.1",
+        "framer-motion": "13.4.4",
+        "motion-dom": "13.4.4",
+        "motion-utils": "13.3.0",
+        "svelte": "5.57.0",
+        "vite": "8.2.2"
+      },
+      "production": true
+    },
+    "environment": {
+      "idleRafCadence": {
+        "gaps": [
+          16.700000000000728,
+          16.700000000000728,
+          16.599999999998545,
+          16.700000000000728,
+          16.700000000000728,
+          16.599999999998545,
+          16.700000000000728,
+          16.599999999998545
+        ],
+        "medianMs": 16.700000000000728,
+        "valid": true
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+      "width": 1280,
+      "height": 800,
+      "dpr": 1,
+      "visibility": "visible",
+      "hardwareConcurrency": 8,
+      "cpuThrottle": 1
+    },
+    "options": {
+      "mode": "astra-staged",
+      "workload": "single-exit",
+      "count": 100,
+      "warmups": 0,
+      "trials": 1,
+      "diagnostic": true,
+      "observationMs": 3000
+    },
+    "validTiming": false,
+    "passed": true,
+    "rows": [
+      {
+        "passed": true,
+        "mutationMs": 0.09999942779541016,
+        "elapsedMs": 3001.199999809265,
+        "exitCompleteMs": 234.39999961853027,
+        "frames": 178,
+        "p95RafGapMs": 16.799999999999272,
+        "maxRafGapMs": 33.400000000001455,
+        "over25Ms": 2,
+        "movingFrames": 21,
+        "entries": [],
+        "correctness": {
+          "passed": true,
+          "count": 99,
+          "orderMatches": true,
+          "residual": 0,
+          "animations": 0,
+          "stats": {
+            "participants": 99,
+            "active": 0,
+            "commits": 1,
+            "removalCommits": 1,
+            "exitCaptures": 1,
+            "cancellations": 0,
+            "exiting": 0
+          }
+        },
+        "exitGeometry": {
+          "passed": true,
+          "sampled": 1,
+          "expected": 1,
+          "poppedSamples": 1,
+          "maxErrorPx": 0.015625
+        },
+        "reads": {
+          "counts": {
+            "getComputedStyle": 827,
+            "offsetParent": 1,
+            "offsetLeft": 2,
+            "offsetTop": 2,
+            "clientWidth": 1,
+            "offsetWidth": 17,
+            "clientHeight": 1,
+            "offsetHeight": 17,
+            "getBoundingClientRect": 407
+          },
+          "sites": {
+            "getComputedStyle\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:381:19)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "offsetParent\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:382:25)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "offsetLeft\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:388:17)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "offsetTop\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:389:16)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "clientWidth\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:390:17)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "offsetLeft\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:390:95)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "offsetWidth\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:390:116)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "clientHeight\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:391:18)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "offsetTop\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:391:98)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "offsetHeight\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:391:118)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "getComputedStyle\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:588:15)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)\n    at Array.forEach (<anonymous>)": 8,
+            "offsetWidth\n    at readTransformMatrix (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:364:18)\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:589:18)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)": 8,
+            "offsetHeight\n    at readTransformMatrix (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:365:19)\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:589:18)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)": 8,
+            "offsetWidth\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:603:37)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)\n    at Array.forEach (<anonymous>)": 8,
+            "offsetHeight\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:604:37)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)\n    at Array.forEach (<anonymous>)": 8,
+            "getComputedStyle\n    at checkIsScrollRoot (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7122:50)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6269:20)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:581:9)": 12,
+            "getComputedStyle\n    at correctStickyScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:415:22)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:582:3)\n    at ProjectionNode.willUpdate (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6138:10)": 600,
+            "getBoundingClientRect\n    at measureViewportBox (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4221:61)\n    at HTMLVisualElement.measureInstanceViewportBox (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4972:10)\n    at HTMLVisualElement.measureViewportBox (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4655:30)": 399,
+            "getBoundingClientRect\n    at ProjectionBoundary.measurePageBox (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:628:29)\n    at ProjectionBoundary.measure (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6293:25)\n    at ProjectionBoundary.updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6256:23)": 8,
+            "getComputedStyle\n    at correctStickyScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:415:22)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:582:3)\n    at ProjectionBoundary.updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6245:9)": 6,
+            "getComputedStyle\n    at node.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:445:20)\n    at ProjectionNode.updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6245:9)\n    at updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6896:7)": 199,
+            "getComputedStyle\n    at getComputedStyle$1 (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4946:16)\n    at HTMLVisualElement.readValueFromInstance (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4966:26)\n    at HTMLVisualElement.readValue (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4765:146)": 1
+          },
+          "window": "mutation through observation window; excludes assertion reads"
+        }
+      }
+    ]
+  },
+  {
+    "schemaVersion": 1,
+    "createdAt": "2026-10-06T02:15:14.364Z",
+    "provenance": {
+      "builtAt": "2026-10-06T02:14:31.159Z",
+      "commit": "e1e645563e0403621d37ab603492d9e0958ce861",
+      "harnessSourceSha256": "6ad926685b622cf93e11514fc5e66d6226a79ba27b0e3e94d9388bb8077386d5",
+      "astraSourceSha256": "70b9519b623a968aa783645e623da9705a029db50db49236eda091d4a4829fea",
+      "versions": {
+        "react": "18.3.1",
+        "react-dom": "18.3.1",
+        "framer-motion": "13.4.4",
+        "motion-dom": "13.4.4",
+        "motion-utils": "13.3.0",
+        "svelte": "5.57.0",
+        "vite": "8.2.2"
+      },
+      "production": true
+    },
+    "environment": {
+      "idleRafCadence": {
+        "gaps": [
+          16.799999999999272,
+          16.600000000002183,
+          16.599999999998545,
+          16.700000000000728,
+          16.700000000000728,
+          16.599999999998545,
+          16.700000000000728,
+          16.700000000000728
+        ],
+        "medianMs": 16.700000000000728,
+        "valid": true
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+      "width": 1280,
+      "height": 800,
+      "dpr": 1,
+      "visibility": "visible",
+      "hardwareConcurrency": 8,
+      "cpuThrottle": 1
+    },
+    "options": {
+      "mode": "astra-staged",
+      "workload": "single-exit",
+      "count": 1000,
+      "warmups": 0,
+      "trials": 1,
+      "diagnostic": true,
+      "observationMs": 3000
+    },
+    "validTiming": false,
+    "passed": true,
+    "rows": [
+      {
+        "passed": true,
+        "mutationMs": 0.10000038146972656,
+        "elapsedMs": 3000.5,
+        "exitCompleteMs": 687.8999996185303,
+        "frames": 140,
+        "p95RafGapMs": 33.29999999999927,
+        "maxRafGapMs": 283.2999999999993,
+        "over25Ms": 8,
+        "movingFrames": 7,
+        "entries": [
+          {
+            "type": "longtask",
+            "duration": 255,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 247.79999923706055,
+            "forcedStyleAndLayoutMs": 3.9
+          },
+          {
+            "type": "longtask",
+            "duration": 77,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "longtask",
+            "duration": 281,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 53.69999980926514,
+            "forcedStyleAndLayoutMs": 0
+          },
+          {
+            "type": "long-animation-frame",
+            "duration": 274.70000076293945,
+            "forcedStyleAndLayoutMs": 14.3
+          }
+        ],
+        "correctness": {
+          "passed": true,
+          "count": 999,
+          "orderMatches": true,
+          "residual": 0,
+          "animations": 0,
+          "stats": {
+            "participants": 999,
+            "active": 0,
+            "commits": 1,
+            "removalCommits": 1,
+            "exitCaptures": 1,
+            "cancellations": 0,
+            "exiting": 0
+          }
+        },
+        "exitGeometry": {
+          "passed": true,
+          "sampled": 1,
+          "expected": 1,
+          "poppedSamples": 1,
+          "maxErrorPx": 0.015625
+        },
+        "reads": {
+          "counts": {
+            "getComputedStyle": 8027,
+            "offsetParent": 1,
+            "offsetLeft": 2,
+            "offsetTop": 2,
+            "clientWidth": 1,
+            "offsetWidth": 17,
+            "clientHeight": 1,
+            "offsetHeight": 17,
+            "getBoundingClientRect": 4007
+          },
+          "sites": {
+            "getComputedStyle\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:381:19)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "offsetParent\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:382:25)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "offsetLeft\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:388:17)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "offsetTop\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:389:16)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "clientWidth\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:390:17)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "offsetLeft\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:390:95)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "offsetWidth\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:390:116)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "clientHeight\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:391:18)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "offsetTop\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:391:98)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "offsetHeight\n    at measurePresenceBox (http://127.0.0.1:4509/assets/presence-model-DAxouJ_2.js:391:118)\n    at http://127.0.0.1:4509/assets/Staged-Cn7k35Xr.js:1034:10\n    at Array.map (<anonymous>)": 1,
+            "getComputedStyle\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:588:15)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)\n    at Array.forEach (<anonymous>)": 8,
+            "offsetWidth\n    at readTransformMatrix (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:364:18)\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:589:18)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)": 8,
+            "offsetHeight\n    at readTransformMatrix (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:365:19)\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:589:18)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)": 8,
+            "offsetWidth\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:603:37)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)\n    at Array.forEach (<anonymous>)": 8,
+            "offsetHeight\n    at ProjectionBoundary.resetSkewAndRotation (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:604:37)\n    at resetSkewAndRotation (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7040:7)\n    at Array.forEach (<anonymous>)": 8,
+            "getComputedStyle\n    at checkIsScrollRoot (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:7122:50)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6269:20)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:581:9)": 12,
+            "getComputedStyle\n    at correctStickyScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:415:22)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:582:3)\n    at ProjectionNode.willUpdate (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6138:10)": 6000,
+            "getBoundingClientRect\n    at measureViewportBox (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4221:61)\n    at HTMLVisualElement.measureInstanceViewportBox (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4972:10)\n    at HTMLVisualElement.measureViewportBox (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4655:30)": 3999,
+            "getBoundingClientRect\n    at ProjectionBoundary.measurePageBox (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:628:29)\n    at ProjectionBoundary.measure (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6293:25)\n    at ProjectionBoundary.updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6256:23)": 8,
+            "getComputedStyle\n    at correctStickyScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:415:22)\n    at ProjectionBoundary.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:582:3)\n    at ProjectionBoundary.updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6245:9)": 6,
+            "getComputedStyle\n    at node.updateScroll (http://127.0.0.1:4509/assets/layout-DIoUedd7.js:445:20)\n    at ProjectionNode.updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6245:9)\n    at updateLayout (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:6896:7)": 1999,
+            "getComputedStyle\n    at getComputedStyle$1 (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4946:16)\n    at HTMLVisualElement.readValueFromInstance (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4966:26)\n    at HTMLVisualElement.readValue (http://127.0.0.1:4509/assets/HTMLProjectionNode-BSP6ujQk.js:4765:146)": 1
+          },
+          "window": "mutation through observation window; excludes assertion reads"
+        }
+      }
+    ]
+  }
+]

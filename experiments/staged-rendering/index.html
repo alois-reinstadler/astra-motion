@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>React / Astra Motion benchmark</title>
+		<link rel="icon" href="data:," />
+	</head>
+	<body>
+		<header>
+			<h1>React / Astra Motion benchmark</h1>
+			<p>500 cells. Production builds. One framework at a time.</p>
+			<label
+				>Framework
+				<select id="mode"></select
+			></label>
+			<label
+				>Workload
+				<select id="workload"></select
+			></label>
+			<label><input type="checkbox" id="diagnostic" /> Diagnostic reads + exit geometry</label>
+			<button id="run">Run case</button> <button id="download">Download JSON</button>
+		</header>
+		<div id="app"></div>
+		<pre id="output" aria-live="polite"></pre>
+		<script type="module" src="/main.js"></script>
+	</body>
+</html>

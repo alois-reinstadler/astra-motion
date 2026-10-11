@@ -1,0 +1,24 @@
+{
+  "exit100": [
+    {
+      "mode": "react",
+      "firstMedianMs": 359.30000019073486,
+      "repeatMedianMs": 481.19999980926514
+    },
+    {
+      "mode": "astra-staged",
+      "firstMedianMs": 284.4000005722046,
+      "repeatMedianMs": 327.1000003814697
+    },
+    {
+      "mode": "astra-managed",
+      "firstMedianMs": 11624,
+      "repeatMedianMs": 10718.099999427795
+    }
+  ],
+  "timingCases": 15,
+  "timingMeasuredTrials": 45,
+  "allTimingCorrect": true,
+  "scope": "Plain owned grid, manual staged renderer, no compiler plugin",
+  "negativeControl": "Unowned reactive parent: staged error 302 px; React 0.015625 px"
+}
