@@ -94,7 +94,11 @@ it('animates SVG geometry, path drawing and viewBox then restores the geometry',
 it('switches transition settings and interrupts a tween with a reversed spring target', async () => {
 	render(Transitions);
 	await tick();
-	await expect.poll(() => x(tile())).toBe(-160);
+	const element = tile();
+	// WebKit serializes -160px as -160.000006px inside this demo's CSS zoom.
+	// Compare with the unanimated sibling marker in the same coordinate system.
+	const origin = x(document.querySelector('.destination')!);
+	await expect.poll(() => x(element)).toBe(origin);
 	const select = document.querySelector('select')!;
 	select.value = 'linear';
 	select.dispatchEvent(new Event('change', { bubbles: true }));
@@ -105,7 +109,9 @@ it('switches transition settings and interrupts a tween with a reversed spring t
 	select.dispatchEvent(new Event('change', { bubbles: true }));
 	button('Move tile').click();
 	// A reversed spring can settle beyond the default polling window.
-	await expect.poll(() => x(tile()), { timeout: 4000 }).toBe(-160);
+	await expect.poll(() => x(element), { timeout: 4000 }).toBe(origin);
+	expect(visualElementStore.get(element)!.getValue('x')!.get()).toBe(-160);
+	expect(tile()).toBe(element);
 });
 
 it('applies a changed provider policy to already-running position without stopping paint', async () => {
