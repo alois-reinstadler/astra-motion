@@ -1,21 +1,30 @@
 # Consolidated main qualification — 11 October 2026
 
 Qualified source commit: `63281005d2aa855ef4a22073f3f379b8e10d018d`. All three complete source runs started from
-this clean committed tree. Independent final review is pending; this record does
-not authorize publication or release.
+this clean committed tree. One independent final review cycle by three
+nonimplementing reviewers is complete: one documentation blocker was corrected
+and verified, with no confirmed blockers remaining. Owner human review is next;
+this record does not authorize publication or release.
 
 ## Concrete package
 
-Archive: `/workspace/releases/astra-motion/main-2026-10-11/qualified/astra-motion-0.1.0-rc.3.tgz`
+Archive: `/workspace/releases/astra-motion/main-2026-10-11/reviewed/astra-motion-0.1.0-rc.3.tgz`
 
-SHA-256: `a24a314c3ad5e27ad8207c53ef5fb66e642bd274177eddedbfdf5b436088259f`
+SHA-256: `719b4424df6d4c047d20b76a9429636378f600f9e9abec665ae96e364992542e`
 
-This archive supersedes the earlier RC3 archive with SHA-256
-`7514976ccaebe59547edce057d404d3771737e5d8a9fd4898103e496b061eaeb`.
-Earlier artifacts remain unchanged. The new archive is byte-for-byte identical
-to the consolidated archive installed into the isolated plain-Svelte and
-SvelteKit consumers. `qualified-package-equivalence.json` records both paths
-and hashes; the consumer lockfiles and package payload hashes are retained.
+Packed from clean commit `d7d366e1aaf06c22d81a1754d23a4aa35a6017c6` after
+correcting stale RC2 installation instructions. This supersedes the pre-review
+`a24a314c3ad5e27ad8207c53ef5fb66e642bd274177eddedbfdf5b436088259f` archive
+and the earlier RC3 `7514976ccaebe59547edce057d404d3771737e5d8a9fd4898103e496b061eaeb`
+archive. Earlier artifacts remain unchanged.
+
+All three reviewers independently verified the replacement: only packaged README
+changed, with all 1,222 other members byte-identical. The actual replacement was
+installed into fresh isolated plain-Svelte and SvelteKit consumers; declarations,
+builds, all 72 browser scenarios and strict installed-package publint passed.
+`consumer-reviewed.json`, `reviewed-package-diff.json` and `packed-reviewed/`
+record archive identity and fresh results. A final committed-tree repack and
+`handoff-package-equivalence.json` provide the handoff byte-identity check.
 
 ## Results
 
@@ -46,7 +55,10 @@ browser-test-only corrections. Their actual inputs are unchanged;
 `qualification-input-applicability.json` lists every intervening changed path.
 They are not inherited RC3 results. The final source matrix, Svelte check,
 formatting, ESLint and package rebuild ran on the qualified source commit above.
-Packed checks verify declarations, SSR/hydration, runtime identity, navigation,
+Subsequent changes are README and documentation/review records only; runtime,
+site, tests and configuration remain unchanged. README was repacked and all
+consumer checks repeated on the replacement archive. Packed checks verify
+declarations, SSR/hydration, runtime identity, navigation,
 retained-node behavior, cancellation, unmount cleanup and bundle isolation.
 
 ## Investigated failures and retained evidence
@@ -82,6 +94,17 @@ skips were introduced.
   successful complete production run used a restarted preview of the current
   production build. The final source engines ran sequentially.
 
+## Independent final review
+
+The [final review overview](../reviews/2026-10-11-final-review.md) links the three
+independent reports and verified resolution. The public reviewer reproduced stale
+RC2 installation instructions in source and actual packaged README. The correction
+is verified by a regression that detects four original mismatches and none after
+the fix, by independent archive comparison, and by fresh consumer qualification.
+No confirmed release blocker remains. Runtime and package reviewers additionally
+probed repeated replacement/unmount and independent-root teardown in all engines.
+Their bounded evidence does not establish universal lifecycle or unstaged parity.
+
 ## Limits requiring owner attention
 
 The shared-layout dependency fixture emits two nonfatal `derived_inert` warnings
@@ -96,6 +119,12 @@ existing case that requires Chromium CDP touch emulation; no real-device touch
 coverage is claimed. The native-button glyph oracle retains its 0.5px tolerance
 and 150 frames. Deliberate `scaleX(1.15)` distortion fails in both tested WebKit
 viewports.
+
+The historical layout-timing paragraph lacks an adjacent date/commit/evidence
+link; the public reviewer records this as an editorial owner follow-up. It is
+not fresh final-runtime performance qualification. Prepack also retains existing
+unpublished laboratory declaration warnings; public package declarations and
+strict publint pass.
 
 The [consolidation ledger](2026-10-11-consolidation.md) records source dispositions
 and restoration. Historical experiments remain historical. Motion 13.4.4 stays

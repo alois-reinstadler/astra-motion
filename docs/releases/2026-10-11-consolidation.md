@@ -50,8 +50,8 @@ Detailed source decisions and validation are in the
 [documentation integration](2026-10-11-docs-integration.md),
 [runtime integration](2026-10-11-runtime-integration.md), and
 [older-workstream audit](2026-10-11-older-workstream-audit.md).
-The original worktree inventory remains in the external archive; final retirement
-will verify preserved contents and record every removed local ref.
+The original worktree inventory remains in the external archive; retirement
+verified preserved contents and recorded every removed local ref.
 
 ## Explicitly deferred or rejected historical proposals
 
@@ -87,11 +87,12 @@ remain in the original archive. This session remains on main.
 All 16 original non-main local branches were retired with their tips recorded in
 `retired-original-branches.json`. The three consolidation worker tips were then
 preserved in verified `final-worker-tips.bundle` and recorded in
-`retired-worker-branches.json` before retiring their branches. The audit checkout
-is retained detached for the independent final review. Remote-tracking refs were
+`retired-worker-branches.json` before retiring their branches. All three detached
+final reviewer checkouts were subsequently preserved in self-contained bundles,
+independently cloned to verify restoration, and retired. Remote-tracking refs were
 compared with the original inventory and remain unchanged. T3 checkpoint refs
-were not altered. The final handoff will recheck that `refs/heads` contains only
-`main` and that all retained working trees are clean.
+were not altered. The final handoff rechecks that `refs/heads` contains only
+`main` and that both retained working trees are clean.
 
 The archive contains `pre-retirement-verification.json`,
 `retired-original-worktrees.json`, `primary-retirement.json`, and separate
@@ -104,7 +105,10 @@ The [fresh qualification record](2026-10-11-final-qualification.md) identifies
 source commit `6328100`, the actual package and complete three-engine source
 matrix. Production, server and packed-consumer evidence is fresh, with exact
 input and archive equivalence verified after test-only corrections. The final
-independent review is pending; nothing has been published.
+[independent review](../reviews/2026-10-11-final-review.md) is complete, with its
+one confirmed installation-instruction blocker fixed and verified. The corrected
+archive is SHA-256 `719b4424df6d4c047d20b76a9429636378f600f9e9abec665ae96e364992542e`;
+all 72 packed-consumer checks passed again. Nothing has been published.
 
 Two detached qualification-fix checkouts were retired after clean status,
 verified Git bundles and hashed diagnostic evidence. Restoration is recorded in
@@ -112,3 +116,20 @@ verified Git bundles and hashed diagnostic evidence. Restoration is recorded in
 `qualification-cleanup-followup-retirement.json` in the durable archive. The
 later evidence explicitly corrects the earlier unsupported sampler-stall
 inference and proves the thenable-poll timeout and false-positive mechanisms.
+
+## Final owner handoff
+
+`main` is the only local branch. Only the intact primary repository (detached at
+final main) and this current T3 main checkout remain. Review worker tips, clean
+statuses, active-writer checks, evidence hashes and tested restoration are recorded
+in `final-review-preservation.json` and `final-review-retirement.json` under
+`/workspace/archives/astra-consolidation-2026-10-11/`. `FINAL-RESTORE.md` supplements
+the unchanged original `RESTORE.md`. Generated dependencies and build caches were
+excluded; all unique review evidence lives outside retired worktrees.
+
+The final main hash, clean statuses, exact local/remote refs and final committed-tree
+repack identity are recorded externally in `handoff-git-state.json` and
+`handoff-package-equivalence.json` under the final qualification evidence directory.
+These external receipts avoid a self-referential commit hash. The owner should
+review the integrated runtime/docs diff, remaining bounded advisories and actual
+reviewed archive before authorizing any release. No push, publish or release occurred.

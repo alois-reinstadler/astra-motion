@@ -12,7 +12,11 @@ nine plain-Svelte fixtures and 15 SvelteKit scenarios per engine. Svelte check,
 formatting, ESLint, snippets, build, prepack and strict publint pass. See the
 [final qualification record](releases/2026-10-11-final-qualification.md).
 
-The independent final review is starting. Earlier failed or interrupted runs are
+The independent final review is complete: three nonimplementing reviewers, one
+confirmed documentation blocker corrected and verified, no open confirmed blockers.
+The replacement archive passes all 72 fresh packed-consumer checks. See the
+[final review overview](reviews/2026-10-11-final-review.md). Owner human review of
+main and the concrete archive is next. Earlier failed or interrupted runs are
 preserved and excluded from successful qualification. The delayed-outro timeout
 was traced to polling a thenable animation; the corrected boolean cleanup oracle
 passes the complete matrix and rejects deliberately retained animation references.
@@ -20,7 +24,7 @@ See the [consolidation ledger](releases/2026-10-11-consolidation.md). No push,
 publication or release has occurred.
 
 The following stabilization record describes the prior RC3 baseline only. It does
-not qualify the in-progress consolidated tree.
+not qualify the final consolidated tree.
 
 # Release stabilization — 2026-10-11
 

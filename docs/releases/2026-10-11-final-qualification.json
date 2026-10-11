@@ -1,16 +1,19 @@
 {
-	"status": "qualification-passed-independent-review-pending",
+	"status": "qualification-and-independent-review-passed-owner-review-pending",
 	"qualifiedSourceCommit": "63281005d2aa855ef4a22073f3f379b8e10d018d",
 	"qualifiedTree": "9ff009b1f667a39af5ab20c00a2b2b427c50f963",
 	"version": "0.1.0-rc.3",
 	"engine": "Motion 13.4.4",
 	"package": {
-		"candidateCommit": "63281005d2aa855ef4a22073f3f379b8e10d018d",
-		"archive": "/workspace/releases/astra-motion/main-2026-10-11/qualified/astra-motion-0.1.0-rc.3.tgz",
-		"sha256": "a24a314c3ad5e27ad8207c53ef5fb66e642bd274177eddedbfdf5b436088259f",
-		"consumerQualifiedArchive": "/workspace/releases/astra-motion/main-2026-10-11/astra-motion-0.1.0-rc.3.tgz",
-		"consumerQualifiedSha256": "a24a314c3ad5e27ad8207c53ef5fb66e642bd274177eddedbfdf5b436088259f",
-		"byteIdentical": true
+		"candidateCommit": "d7d366e1aaf06c22d81a1754d23a4aa35a6017c6",
+		"archive": "/workspace/releases/astra-motion/main-2026-10-11/reviewed/astra-motion-0.1.0-rc.3.tgz",
+		"sha256": "719b4424df6d4c047d20b76a9429636378f600f9e9abec665ae96e364992542e",
+		"consumerQualifiedArchive": "/tmp/astra-motion-production-LwgUvL/astra-motion-0.1.0-rc.3.tgz",
+		"consumerQualifiedSha256": "719b4424df6d4c047d20b76a9429636378f600f9e9abec665ae96e364992542e",
+		"byteIdentical": true,
+		"members": 1223,
+		"changedFromPreReview": ["package/README.md"],
+		"unchangedMembersFromPreReview": 1222
 	},
 	"supersedes": {
 		"record": "2026-10-11-rc3-qualification.json",
@@ -450,15 +453,129 @@
 			"dirty": false,
 			"exitCode": 0,
 			"finished": "2026-10-11T20:34:17.434658+00:00"
+		},
+		"prepare-reviewed-consumers": {
+			"name": "prepare-reviewed-consumers",
+			"command": [
+				"node",
+				"scripts/prepare-motion-consumer.mjs",
+				"--output=/workspace/releases/astra-motion/main-2026-10-11/consumer-reviewed.json"
+			],
+			"cwd": "/home/node/.t3/worktrees/astra-motion/t3code-fbadf1d5",
+			"started": "2026-10-11T22:50:06.634688+00:00",
+			"commit": "d7d366e1aaf06c22d81a1754d23a4aa35a6017c6",
+			"tree": "acf359a6e8a1871ef946b1072bd2b7e0008df999",
+			"dirty": false,
+			"status": "passed",
+			"browser": null,
+			"exitCode": 0,
+			"finished": "2026-10-11T22:52:07.820638+00:00"
+		},
+		"packed-reviewed-consumers": {
+			"name": "packed-reviewed-consumers",
+			"command": [
+				"node",
+				"scripts/qualify-packed-motion-ci.mjs",
+				"/workspace/releases/astra-motion/main-2026-10-11/consumer-reviewed.json",
+				"/workspace/releases/astra-motion/main-2026-10-11/packed-reviewed"
+			],
+			"cwd": "/home/node/.t3/worktrees/astra-motion/t3code-fbadf1d5",
+			"started": "2026-10-11T22:52:33.539815+00:00",
+			"commit": "251bca404f50791b591627673c40985d7d8ba286",
+			"tree": "20515c0ec80a70f7f48c085969c64680cef9c39b",
+			"dirty": false,
+			"status": "passed",
+			"browser": null,
+			"exitCode": 0,
+			"finished": "2026-10-11T22:53:35.694481+00:00"
+		},
+		"archive-reviewed-publint": {
+			"name": "archive-reviewed-publint",
+			"command": [
+				"pnpm",
+				"exec",
+				"publint",
+				"/tmp/astra-motion-production-LwgUvL/plain-consumer/node_modules/astra-motion",
+				"--pack",
+				"false",
+				"--strict"
+			],
+			"cwd": "/home/node/.t3/worktrees/astra-motion/t3code-fbadf1d5",
+			"started": "2026-10-11T22:54:17.998141+00:00",
+			"commit": "39c8ea1d31e2ed5db3fe9bbd140d9bd73525f7c0",
+			"tree": "1f07f35f2a4ebb90a525511bc10070955c8f256f",
+			"dirty": false,
+			"status": "passed",
+			"browser": null,
+			"exitCode": 0,
+			"finished": "2026-10-11T22:54:18.802658+00:00"
+		},
+		"guide-review-fix": {
+			"name": "guide-review-fix",
+			"command": ["pnpm", "check:guide"],
+			"cwd": "/home/node/.t3/worktrees/astra-motion/t3code-fbadf1d5",
+			"started": "2026-10-11T22:54:18.834881+00:00",
+			"commit": "39c8ea1d31e2ed5db3fe9bbd140d9bd73525f7c0",
+			"tree": "1f07f35f2a4ebb90a525511bc10070955c8f256f",
+			"dirty": false,
+			"status": "passed",
+			"browser": null,
+			"exitCode": 0,
+			"finished": "2026-10-11T22:54:36.398309+00:00"
 		}
 	},
 	"limitations": [
 		"Two derived_inert warnings per engine originate in deferred native transition reads of retained derived style. Independent three-engine replacement/unmount probes found released owned work and no late completions; advisory, not universal leak-freedom proof.",
 		"Arbitrary unstaged parity remains unproven.",
 		"Firefox/WebKit touch emulation case remains skipped; no native touch-device coverage is claimed.",
-		"Native-button WebKit glyph rounding uses an unanimated native-button reference, unchanged 0.5px tolerance and 150 frames; scaleX(1.15) negative controls fail as required."
+		"Native-button WebKit glyph rounding uses an unanimated native-button reference, unchanged 0.5px tolerance and 150 frames; scaleX(1.15) negative controls fail as required.",
+		"Historical layout timing provenance is an editorial owner follow-up, not final runtime qualification."
 	],
 	"published": false,
 	"pushed": false,
-	"released": false
+	"released": false,
+	"preReviewPackage": {
+		"candidateCommit": "63281005d2aa855ef4a22073f3f379b8e10d018d",
+		"archive": "/workspace/releases/astra-motion/main-2026-10-11/qualified/astra-motion-0.1.0-rc.3.tgz",
+		"sha256": "a24a314c3ad5e27ad8207c53ef5fb66e642bd274177eddedbfdf5b436088259f",
+		"consumerQualifiedArchive": "/workspace/releases/astra-motion/main-2026-10-11/astra-motion-0.1.0-rc.3.tgz",
+		"consumerQualifiedSha256": "a24a314c3ad5e27ad8207c53ef5fb66e642bd274177eddedbfdf5b436088259f",
+		"byteIdentical": true
+	},
+	"independentReview": {
+		"cycleCount": 1,
+		"nonImplementingReviewers": 3,
+		"confirmedBlockers": 1,
+		"resolvedBlockers": 1,
+		"openConfirmedBlockers": 0,
+		"fixCommit": "d7d366e1aaf06c22d81a1754d23a4aa35a6017c6",
+		"reports": [
+			"../reviews/2026-10-11-final-runtime-review.md",
+			"../reviews/2026-10-11-final-package-review.md",
+			"../reviews/2026-10-11-final-public-review.md"
+		],
+		"advisories": [
+			"Deferred native transition derived_inert warnings; bounded cleanup probes pass.",
+			"Historical layout timing paragraph lacks adjacent date/commit/evidence link."
+		]
+	},
+	"postSourceQualificationChanges": {
+		"throughCommit": "ec04a2750b52804628644447d18892c506d60a03",
+		"paths": [
+			"README.md",
+			"docs/STATUS.md",
+			"docs/authoring.md",
+			"docs/releases/2026-10-11-consolidation.md",
+			"docs/releases/2026-10-11-final-qualification.json",
+			"docs/releases/2026-10-11-final-qualification.md",
+			"docs/releases/2026-10-11-runtime-integration.md",
+			"docs/reviews/2026-10-11-final-package-review.md",
+			"docs/reviews/2026-10-11-final-public-review.md",
+			"docs/reviews/2026-10-11-final-runtime-review.md",
+			"docs/try-it.md"
+		],
+		"runtimeSiteTestsAndConfigurationUnchanged": true,
+		"packageReadmeRepackedAndFreshConsumersQualified": true,
+		"finalRecordChanges": "Documentation/review records only; final committed tree repack proof is retained externally as handoff-package-equivalence.json."
+	}
 }
