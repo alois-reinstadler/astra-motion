@@ -69,6 +69,28 @@ describe('independent adversarial layout and presence tests', () => {
 		const exiting = node('tile-0');
 		const sibling = node('tile-1');
 		let before: DOMRect | undefined;
+		let captured = false;
+		let sample: (box: DOMRect) => void = () => {};
+		const sampled = new Promise<DOMRect>((resolve) => {
+			sample = resolve;
+		});
+		const capture = () => {
+			if (!before) return;
+			// Observe the actual flow transaction after Motion's measurement microtask,
+			// before another animation frame. Polling position can discover an active
+			// spring several frames later and mistake normal travel for a jump.
+			queueMicrotask(() =>
+				queueMicrotask(() => {
+					if (!captured && getComputedStyle(exiting).position === 'absolute') {
+						captured = true;
+						beforeCommit.delete(capture);
+						sample(sibling.getBoundingClientRect());
+					}
+				})
+			);
+		};
+		beforeCommit.add(capture);
+		cleanups.push(() => beforeCommit.delete(capture));
 		exiting.addEventListener(
 			'outrostart',
 			() => {
@@ -76,30 +98,23 @@ describe('independent adversarial layout and presence tests', () => {
 			},
 			{ once: true, capture: true }
 		);
-		const started = new Promise<void>((resolve) =>
-			exiting.addEventListener('outrostart', () => resolve(), { once: true })
-		);
 		node('remove-0').click();
-		await started;
-		await positioned(exiting, 'absolute');
+		const first = await sampled;
 		expect(before).toBeDefined();
 		expect(sibling.offsetLeft).toBe(exiting.offsetLeft);
 		const projection = visualElementStore.get(sibling)?.projection;
-		expect(
-			distance(sibling.getBoundingClientRect(), before!),
-			JSON.stringify({
-				transform: sibling.style.transform,
-				active: !!projection?.currentAnimation,
-				blocked: projection?.root?.isUpdateBlocked(),
-				rootUpdating: projection?.root?.isUpdating,
-				rootId: projection?.root?.animationId,
-				layoutDirty: projection?.isLayoutDirty,
-				layout: projection?.layout,
-				target: projection?.target,
-				snapshot: projection?.snapshot
+		expect(distance(first, before!)).toBeLessThan(20);
+		// Keep natural playback coverage: no seek, pause or controlled frame clock.
+		const finalLeft = exiting.getBoundingClientRect().left;
+		const travel = Math.abs(before!.left - finalLeft);
+		expect(travel).toBeGreaterThan(20);
+		await expect
+			.poll(() => Math.abs(sibling.getBoundingClientRect().left - finalLeft), {
+				timeout: 2000,
+				interval: 5
 			})
-		).toBeLessThan(20);
-		await wait(950);
+			.toBeLessThan(1);
+		await expect.poll(() => projection?.currentAnimation, { timeout: 2000 }).toBeUndefined();
 	});
 
 	it('preserves a paused intermediate projection when an exiting node leaves flow', async () => {
