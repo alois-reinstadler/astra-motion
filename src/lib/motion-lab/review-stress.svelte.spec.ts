@@ -130,7 +130,10 @@ describe('independent adversarial layout and presence tests', () => {
 				interval: 5
 			})
 			.toBeLessThan(1);
-		await expect.poll(() => projection?.currentAnimation, { timeout: 2000 }).toBeUndefined();
+		// Motion playback controls are thenable; poll the property, not their completion.
+		await expect
+			.poll(() => projection?.currentAnimation === undefined, { timeout: 2000 })
+			.toBe(true);
 		await expect.poll(() => exiting.isConnected, { timeout: 2000 }).toBe(false);
 	});
 
