@@ -12,6 +12,8 @@ export const compositionExamples = {
 		category: 'Layout',
 		guide: 'layout',
 		anchor: 'automatic',
+		snippet:
+			'<motion.div layout>\n  <motion.div layout="position">\n    <!-- Artwork and title keep their proportions. -->\n  </motion.div>\n  {#if expanded}\n    <motion.div layout="position">Track details</motion.div>\n  {/if}\n</motion.div>',
 		filename: 'Player.svelte',
 		component: './examples/LayoutExample.svelte',
 		source: publicExampleSource(playerSource)

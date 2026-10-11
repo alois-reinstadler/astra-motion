@@ -6,7 +6,8 @@ for (const width of [1280, 320]) {
 	}) => {
 		await page.setViewportSize({ width, height: 900 });
 		await page.goto('/examples/layout');
-		const demo = page.locator('[data-example="layout"]');
+		await expect(page).toHaveURL(/\/examples\/player-layout$/);
+		const demo = page.locator('[data-example="player-layout"]');
 		await expect(demo.getByRole('button', { name: 'Open player' })).toBeEnabled();
 		await demo.evaluate((node) => node.scrollIntoView({ block: 'center', behavior: 'instant' }));
 		const result = await demo.evaluate(async (node) => {
@@ -59,14 +60,16 @@ test('player settles immediately with reduced motion and complete source mounts 
 }) => {
 	await page.emulateMedia({ reducedMotion: 'reduce' });
 	await page.goto('/examples/layout');
-	const demo = page.locator('[data-example="layout"]');
+	await expect(page).toHaveURL(/\/examples\/player-layout$/);
+	const demo = page.locator('[data-example="player-layout"]');
 	await demo.getByRole('button', { name: 'Open player' }).click();
 	await expect(demo.locator('.details')).toHaveCSS('opacity', '1');
 	await expect(demo.locator('.details')).toHaveCSS('animation-name', 'none');
 	const excerpt = demo.locator('.concept-code pre');
 	const source = demo.locator('details');
 	await expect(excerpt).toBeVisible();
-	await expect(excerpt).toContainText('createLayout');
+	await expect(excerpt).toContainText('<motion.div layout>');
+	await expect(excerpt).toContainText('layout="position"');
 	await expect(source.locator('pre')).toHaveCount(0);
 	await source.locator('summary').click();
 	await expect(source.locator('pre code')).toHaveAttribute('data-language', 'svelte');
@@ -76,5 +79,5 @@ test('player settles immediately with reduced motion and complete source mounts 
 	await expect(source.locator('pre')).toHaveCount(0);
 	await expect(excerpt).toBeVisible();
 	await source.locator('summary').click();
-	await expect(source.getByRole('button', { name: 'Copy LayoutExample.svelte' })).toBeEnabled();
+	await expect(source.getByRole('button', { name: 'Copy Player.svelte' })).toBeEnabled();
 });

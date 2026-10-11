@@ -106,3 +106,32 @@ consolidator's extracted-library/EGL/software-rendering environment executes bot
 cases successfully. The two focused Chromium catalog scenarios pass, including
 all 41 destinations and their reference anchors. Changed files pass ESLint and
 Prettier. Evidence is preserved alongside the earlier worker logs.
+
+## Production-suite follow-up: renamed example selectors
+
+The full baseline E2E run exposed stale exact IDs in `code-polish.spec.ts` and
+`layout-player.spec.ts`. The `/examples/layout` URL remains a supported alias;
+tests now explicitly assert its `/examples/player-layout` destination and target
+the current `player-layout` ID and `Player.svelte` copy label. The navigation
+cleanup assertion names the current `animate-presence-sequence` instead of the
+retired `wait` ID. An audit of all production-test example routes, exact IDs and
+copy labels found the other historical routes already paired with their canonical
+IDs, so their alias coverage is retained.
+
+The modern player metadata again supplies a focused concept excerpt, using
+`motion.div layout` and child `layout="position"`. This preserves the original
+source-on-demand invariant: the excerpt remains visible when complete source is
+opened, closed and reopened. Only the obsolete `createLayout` wording assertion
+changes; clipping, intermediate-frame coverage, reversal, reset, reduced-motion,
+exact clipboard content, token coloring, feedback geometry and error recovery
+assertions remain intact. No tolerance, timeout, retry or skip was introduced.
+
+Validation for this follow-up: 22 site server tests and 18 targeted production
+checks pass. The 15 clipboard, player clipping/reversal and navigation checks ran
+against the consolidator's baseline preview; the three reduced-motion/excerpt
+checks ran against a fresh production build containing the metadata addition.
+Each group includes Chromium, Firefox and WebKit. The fresh build, prepack and
+strict publint pass, with only the previously recorded packaging advisories.
+The guide check reports zero errors and warnings. Changed files pass ESLint and
+Prettier; the Svelte snippet passes the MCP autofixer without suggestions. These
+focused results do not replace qualification of the final consolidated commit.

@@ -14,7 +14,8 @@ test('highlighting preserves copied source and copy feedback does not move the c
 		});
 	});
 	await page.goto('/examples/layout');
-	const example = page.locator('[data-example="layout"]');
+	await expect(page).toHaveURL(/\/examples\/player-layout$/);
+	const example = page.locator('[data-example="player-layout"]');
 	await example.locator('summary').click();
 	const code = example.locator('details pre code');
 	await expect(code).toHaveAttribute('data-language', 'svelte');
@@ -24,7 +25,7 @@ test('highlighting preserves copied source and copy feedback does not move the c
 			.evaluateAll((nodes) => new Set(nodes.map((node) => getComputedStyle(node).color)).size)
 	).toBeGreaterThan(4);
 	const original = await code.textContent();
-	const button = example.getByRole('button', { name: 'Copy LayoutExample.svelte' });
+	const button = example.getByRole('button', { name: 'Copy Player.svelte' });
 	// Finish the page's smooth scroll before a native pointer click chooses its coordinates.
 	await button.evaluate((node) => node.scrollIntoView({ behavior: 'instant', block: 'center' }));
 	const width = await button.evaluate((node) => node.getBoundingClientRect().width);
@@ -56,9 +57,10 @@ test('clipboard failure remains actionable and reduced motion disables feedback 
 		});
 	});
 	await page.goto('/examples/layout');
-	const example = page.locator('[data-example="layout"]');
+	await expect(page).toHaveURL(/\/examples\/player-layout$/);
+	const example = page.locator('[data-example="player-layout"]');
 	await example.locator('summary').click();
-	const button = example.getByRole('button', { name: 'Copy LayoutExample.svelte' });
+	const button = example.getByRole('button', { name: 'Copy Player.svelte' });
 	await button.click();
 	await expect(example.locator('details').getByRole('status')).toContainText(
 		'Clipboard access is unavailable'

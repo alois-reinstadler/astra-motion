@@ -246,7 +246,7 @@ test('client navigation disposes demo exits instead of retaining previous guide 
 	await navigation.getByRole('link', { name: 'Layout & shared elements', exact: true }).click();
 	await expect(page).toHaveURL(/\/docs\/layout$/);
 	await expect(page.locator('[data-example="state"]')).toHaveCount(0);
-	await expect(page.locator('[data-example="wait"]')).toHaveCount(0);
+	await expect(page.locator('[data-example="animate-presence-sequence"]')).toHaveCount(0);
 	await expect(page.locator('[data-example="layout-expand"]')).toHaveCount(1);
 	await page.goBack();
 	await expect(page.getByRole('heading', { level: 1 })).toHaveText('Quick start');
