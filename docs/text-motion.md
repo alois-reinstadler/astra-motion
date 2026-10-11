@@ -38,7 +38,9 @@ hydration mismatches. `Intl.Segmenter` segments words and grapheme clusters in t
 explicit locale. If it is unavailable, keep the entire string intact rather than
 splitting emoji, combining sequences or unfamiliar scripts. Whitespace remains
 literal text, with inherited CSS white-space rules; wrapping occurs at natural word
-boundaries. Graphemes stay grouped within each word. Line measurement is outside
+boundaries. Word mode animates each word and its attached opening/closing punctuation
+as one fragment, sharing one stagger delay. Grapheme mode still animates punctuation
+individually while keeping graphemes grouped within each word. Line measurement is outside
 this API; fragment boundaries may affect font ligatures and complex-script shaping.
 
 Inherited `MotionConfig` policy is authoritative, including explicit `never`.

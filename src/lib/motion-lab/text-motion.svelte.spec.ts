@@ -220,16 +220,27 @@ it('replays viewport entry and releases the observer during hidden Activity', as
 	expect(window.IntersectionObserver).toBe(original);
 });
 
-it('keeps closing punctuation on its word line at a narrow wrap boundary', async () => {
+it('animates closing punctuation with its word, preserving wrapping and stagger slots', async () => {
 	render(TextReveal, {
-		text: 'Hello.',
+		text: 'Hello. Next!',
 		split: 'words',
 		as: 'p',
-		duration: 0,
+		duration: 2,
+		stagger: 0.25,
 		style: 'width:50px;font:10px monospace'
 	});
 	await tick();
 	const pieces = document.querySelectorAll<HTMLElement>('[data-text-fragment]');
 	expect(pieces).toHaveLength(2);
-	expect(pieces[0].getBoundingClientRect().top).toBe(pieces[1].getBoundingClientRect().top);
+	expect(Array.from(pieces, (piece) => piece.textContent)).toEqual(['Hello.', 'Next!']);
+	expect(pieces[1].getBoundingClientRect().top).toBeGreaterThan(
+		pieces[0].getBoundingClientRect().top
+	);
+	await poll(() => pieces[0].getAnimations().length).toBeGreaterThan(0);
+	const delays = Array.from(pieces, (piece) =>
+		piece.getAnimations().map((animation) => animation.effect!.getTiming().delay)
+	);
+	expect(delays[0].every((delay) => delay === 0)).toBe(true);
+	expect(delays[1].length).toBeGreaterThan(0);
+	expect(delays[1].every((delay) => delay === 250)).toBe(true);
 });

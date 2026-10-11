@@ -15,12 +15,14 @@ export function segmentText(text: string, split: TextSplit, locale = 'en'): Text
 	const words = new Intl.Segmenter(locale, { granularity: 'word' });
 	const graphemes =
 		split === 'graphemes' ? new Intl.Segmenter(locale, { granularity: 'grapheme' }) : undefined;
+	const fragments = (value: string) =>
+		graphemes ? Array.from(graphemes.segment(value), (part) => part.segment) : [value];
 	const groups: TextSegment[] = [];
 	let opening = '';
 	for (const { segment } of words.segment(text)) {
 		if (/^\s+$/u.test(segment)) {
 			if (opening) {
-				groups.push({ text: opening, fragments: [opening], nowrap: true });
+				groups.push({ text: opening, fragments: fragments(opening), nowrap: true });
 				opening = '';
 			}
 			groups.push({ text: segment, fragments: [] });
@@ -33,19 +35,19 @@ export function segmentText(text: string, split: TextSplit, locale = 'en'): Text
 		const previous = groups.at(-1);
 		if (!opening && /^\p{P}+$/u.test(segment) && previous?.fragments.length) {
 			previous.text += segment;
-			previous.fragments.push(
-				...(graphemes ? Array.from(graphemes.segment(segment), (part) => part.segment) : [segment])
-			);
+			// Word mode gives attached punctuation the same animation and stagger slot.
+			if (graphemes) previous.fragments.push(...fragments(segment));
+			else previous.fragments = [previous.text];
 			continue;
 		}
 		const value = opening + segment;
 		opening = '';
 		groups.push({
 			text: value,
-			fragments: graphemes ? Array.from(graphemes.segment(value), (part) => part.segment) : [value],
+			fragments: fragments(value),
 			nowrap: true
 		});
 	}
-	if (opening) groups.push({ text: opening, fragments: [opening], nowrap: true });
+	if (opening) groups.push({ text: opening, fragments: fragments(opening), nowrap: true });
 	return groups;
 }

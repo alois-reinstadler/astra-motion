@@ -61,3 +61,25 @@ it('keeps opening and closing punctuation with words without swallowing language
 	expect(segmentText('你好世界', 'words').length).toBeGreaterThan(1);
 	expect(segmentText('Whole text can wrap', 'whole')[0].nowrap).toBeUndefined();
 });
+
+it.each([
+	['Hello. Next!', ['Hello.', 'Next!']],
+	['(Hello, 世界。)', ['(Hello,', '世界。)']],
+	['“Hello!” «世界»', ['“Hello!”', '«世界»']],
+	['e\u0301! 👨‍👩‍👧‍👦?', ['e\u0301!', '👨‍👩‍👧‍👦?']]
+])('animates attached word punctuation as one fragment: %s', (text, expected) => {
+	expect(segmentText(text as string, 'words').flatMap((group) => group.fragments)).toEqual(
+		expected
+	);
+});
+it('still animates punctuation individually in grapheme mode, including unmatched openings', () => {
+	expect(segmentText('(Hi!)', 'graphemes').flatMap((group) => group.fragments)).toEqual([
+		'(',
+		'H',
+		'i',
+		'!',
+		')'
+	]);
+	expect(segmentText('(( ', 'graphemes').flatMap((group) => group.fragments)).toEqual(['(', '(']);
+	expect(segmentText('((', 'graphemes').flatMap((group) => group.fragments)).toEqual(['(', '(']);
+});
