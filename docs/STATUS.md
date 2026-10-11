@@ -1,3 +1,15 @@
+# Main consolidation in progress — 2026-10-11
+
+The active release baseline is `main` in `t3code-fbadf1d5`. Original branch tips,
+working patches and untracked files have been durably archived and restoration
+tested. The documentation overhaul is integrated; runtime and site-loading work
+is being reconciled before complete qualification and independent final review.
+See the [consolidation ledger](releases/2026-10-11-consolidation.md). No push,
+publication or release has occurred.
+
+The following stabilization record describes the prior RC3 baseline only. It does
+not qualify the in-progress consolidated tree.
+
 # Release stabilization — 2026-10-11
 
 The release baseline is now `main`, integrating qualified RC3 commit `87e4a76`

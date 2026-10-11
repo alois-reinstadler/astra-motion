@@ -1,6 +1,11 @@
 # Motion parity contract and evidence
 
-Current RC2 scope removes legacy `createMotion` and adds optional `/text` and
+Current consolidation is tracked in the [main ledger](../releases/2026-10-11-consolidation.md).
+All qualification, CI and deployment claims below are historical and apply only to
+the revisions named in their linked records. They do not qualify the final main
+archive, establish universal unstaged parity, or imply a new remote delivery.
+
+Historical RC2 scope removes legacy `createMotion` and adds optional `/text` and
 `/tilt` entries. [Migration](../migration.md) defines the current native API;
 [Text/Tilt handoff](../text-tilt-handoff.md) and [Threlte research](../research/threlte-scene.md)
 record their bounded evidence. Earlier qualification records below describe their
