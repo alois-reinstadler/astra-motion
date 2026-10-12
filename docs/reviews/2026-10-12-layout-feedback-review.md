@@ -122,3 +122,27 @@ passes 4/4 after that correction. Newly started full runs were stopped when the
 review finding arrived; their logs remain explicitly interrupted evidence. The
 final full runs use the corrected committed test tree. No runtime or example code
 changed during these qualification-oracle corrections.
+
+## Final natural-phase and Notes oracle follow-up
+
+A subsequent complete WebKit run recorded no held-child-phase sample in the
+repeated handoff case. Twelve independently instrumented default-duration runs
+observed both phases and no parent-opacity errors; render-triggered sampling
+captured one additional intermediate tick in one run. The exact reason for the
+original missed phase remains unproven. The repeated test now explicitly gives
+both exits one second, while preserving 0.2-second initial/shifted WAAPI setup
+and the separate default-duration cases. Five repetitions, both required phase
+samples, 0.01 parent bound and removal remain. Focused checks pass 7/7 in each
+engine; disabling handoff ownership still fails all five WAAPI checks. The reviewer
+verified the final fixture, tests and negative control (`fd40386`). This changes
+only a laboratory fixture and its tests, not published runtime or example timing.
+
+The same full runs exposed a Notes origin oracle that sampled after natural spring
+progress. Independent timing captured 45ms elapsed and a 40ms projection clock,
+with legitimate movement of 3.503px. Commit `86e405c` retains the 3px origin bound
+at explicit time zero, preserves the original natural forward/reverse case and
+adds natural rapid-interruption coverage with measured intermediate positions,
+paint order, focus, pointer targets, identity, cross-instance isolation and final
+cleanup. The independent reviewer found no lost assertion or test contamination.
+All three cases pass in each engine; the original stacking fails all three in each
+engine. See [Notes sampling investigation](2026-10-12-notes-sampling.md).

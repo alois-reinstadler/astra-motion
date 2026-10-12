@@ -5,21 +5,23 @@ The complete earlier workstream ledger remains
 and release evidence are unchanged. This ledger records the subsequent owner
 feedback; no remote refs were changed and no package was published.
 
-| Workstream                   | Disposition                                                                                                                            | Evidence                                                               |
-| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| SessionCards outgoing text   | Integrated runtime correction in `7d9ff70`; snapshot dimensions, containing-block rebasing, between-frame refresh and RTL used margins | [Runtime investigation](../reviews/2026-10-12-pop-containing-block.md) |
-| Notes/Drafts/Saved highlight | Integrated `10b77f7` as `2dbd3c6`; canonical excerpt reconciled in `7d9ff70`                                                           | [Notes investigation](../reviews/2026-10-12-notes-highlight.md)        |
-| Accordion preview            | Integrated `3281c117` as `e34d4ac`; one CSS alignment declaration and actual-preview regressions                                       | [Accordion investigation](../reviews/2026-10-12-accordion-preview.md)  |
-| Qualification evidence path  | Integrated `2f943c9`; separate output preserves previous performance artifacts                                                         | Fresh evidence directory below                                         |
-| Natural playback sampling    | Integrated `24e534e`; six settled-parent frames and every-frame geometry checks, with fixture duration and cleanup deadline aligned    | [Independent review](../reviews/2026-10-12-layout-feedback-review.md)  |
-| Native handoff phase checks  | Integrated `210c89b` and `fcf7c97`; bounded natural child-exit phase, subsequent parent fade/removal, existing tolerances              | [Independent review](../reviews/2026-10-12-layout-feedback-review.md)  |
-| Accordion phase checks       | Worker `4e11816` integrated as `60501e9`, endpoint assertions restored in `e5f4827`; precise phases plus independent natural playback  | [Sampling investigation](../reviews/2026-10-12-accordion-sampling.md)  |
-| Packed page-scroll oracle    | Integrated `d8b9a81`; document coordinates account for browser scroll clamping, unchanged 2px tolerance                                | [Independent review](../reviews/2026-10-12-layout-feedback-review.md)  |
+| Workstream                    | Disposition                                                                                                                            | Evidence                                                               |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| SessionCards outgoing text    | Integrated runtime correction in `7d9ff70`; snapshot dimensions, containing-block rebasing, between-frame refresh and RTL used margins | [Runtime investigation](../reviews/2026-10-12-pop-containing-block.md) |
+| Notes/Drafts/Saved highlight  | Integrated `10b77f7` as `2dbd3c6`; canonical excerpt reconciled in `7d9ff70`                                                           | [Notes investigation](../reviews/2026-10-12-notes-highlight.md)        |
+| Accordion preview             | Integrated `3281c117` as `e34d4ac`; one CSS alignment declaration and actual-preview regressions                                       | [Accordion investigation](../reviews/2026-10-12-accordion-preview.md)  |
+| Qualification evidence path   | Integrated `2f943c9`; separate output preserves previous performance artifacts                                                         | Fresh evidence directory below                                         |
+| Natural playback sampling     | Integrated `24e534e`; six settled-parent frames and every-frame geometry checks, with fixture duration and cleanup deadline aligned    | [Independent review](../reviews/2026-10-12-layout-feedback-review.md)  |
+| Native handoff phase checks   | Integrated `210c89b` and `fcf7c97`; bounded natural child-exit phase, subsequent parent fade/removal, existing tolerances              | [Independent review](../reviews/2026-10-12-layout-feedback-review.md)  |
+| Accordion phase checks        | Worker `4e11816` integrated as `60501e9`, endpoint assertions restored in `e5f4827`; precise phases plus independent natural playback  | [Sampling investigation](../reviews/2026-10-12-accordion-sampling.md)  |
+| Natural handoff observability | Integrated `fd40386`; exit-only test headroom, unchanged ordinary-duration coverage and opacity bounds                                 | [Independent review](../reviews/2026-10-12-layout-feedback-review.md)  |
+| Notes phase checks            | Worker `a5436bb` integrated as `86e405c`; time-zero origin plus separate natural rapid reversals                                       | [Sampling investigation](../reviews/2026-10-12-notes-sampling.md)      |
+| Packed page-scroll oracle     | Integrated `d8b9a81`; document coordinates account for browser scroll clamping, unchanged 2px tolerance                                | [Independent review](../reviews/2026-10-12-layout-feedback-review.md)  |
 
 Worker originals, binary working/index patches, untracked-file inventories, hashes
 and restoration instructions are outside removable worktrees at
 `/workspace/archives/astra-layout-feedback-2026-10-12/RESTORE.md`.
-All three feedback implementation workers were clean at handoff; their original
+All feedback implementation workstreams were clean at handoff; their original
 tips are bundled before retirement or reuse for qualification. Their complete-history
 bundles verify, and the accordion bundle was restored into a separate bare repository
 to verify its original commit. No unique worker work was rejected or dropped.
