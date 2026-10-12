@@ -1,6 +1,6 @@
 # Independent review of owner layout feedback
 
-Reviewed implementation: `0b2355a..d8b9a81`. This supplements the completed
+Reviewed implementation: `0b2355a..24e534e`. This supplements the completed
 11 October consolidation review. Reviewers did not implement the changes they
 reviewed. Complete source and production qualification is recorded separately;
 this report does not substitute focused probes for those gates.
@@ -63,3 +63,18 @@ No confirmed blockers remain in these bounded independent reviews. Owner review
 should inspect protected SessionCards exits during collapse, rapid Notes selection,
 and narrow accordion reversal. The fresh qualification record and artifact replace
 the earlier runtime-unchanged feedback claim; no publication is authorized here.
+
+## Final source-test sampling review
+
+The complete Firefox run exposed a sampling defect in one new regression: only two
+frames fell in its 230–340ms late window. All sampled geometry passed. The
+reviewer verified the test-only correction in `24e534e`: retain this fixture for
+1.5 seconds, sample natural playback until six late frames show the parent at its
+settled width (with a one-second deadline), and check connection and the unchanged
+2px geometry bound on every frame. The first frame always contributes to the
+early oracle. Cleanup now has a two-second deadline appropriate to the chosen
+1.5-second exit. The default 0.4-second fixture, actual examples and packed checks
+are unchanged. An interim run failed only because its old cleanup timeout was
+shorter than the new exit; that log is preserved. Focused Firefox passes 9/9.
+The final complete matrix separately verifies the tightened six-frame assertion.
+No confirmed blocker remains in this review.

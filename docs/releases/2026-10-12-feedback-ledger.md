@@ -11,6 +11,7 @@ feedback; no remote refs were changed and no package was published.
 | Notes/Drafts/Saved highlight | Integrated `10b77f7` as `2dbd3c6`; canonical excerpt reconciled in `7d9ff70`                                                           | [Notes investigation](../reviews/2026-10-12-notes-highlight.md)        |
 | Accordion preview            | Integrated `3281c117` as `e34d4ac`; one CSS alignment declaration and actual-preview regressions                                       | [Accordion investigation](../reviews/2026-10-12-accordion-preview.md)  |
 | Qualification evidence path  | Integrated `2f943c9`; separate output preserves previous performance artifacts                                                         | Fresh evidence directory below                                         |
+| Natural playback sampling    | Integrated `24e534e`; six settled-parent frames and every-frame geometry checks, with fixture duration and cleanup deadline aligned    | [Independent review](../reviews/2026-10-12-layout-feedback-review.md)  |
 | Packed page-scroll oracle    | Integrated `d8b9a81`; document coordinates account for browser scroll clamping, unchanged 2px tolerance                                | [Independent review](../reviews/2026-10-12-layout-feedback-review.md)  |
 
 Worker originals, binary working/index patches, untracked-file inventories, hashes
