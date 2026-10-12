@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { motion } from '../motion/lite.svelte.js';
 	import type { LiteMotionOptions } from '../motion/lite.svelte.js';
-	let { options = {} }: { options?: LiteMotionOptions } = $props();
+	let { options = {}, exitDuration }: { options?: LiteMotionOptions; exitDuration?: number } =
+		$props();
 	import type { MotionBinding } from '../motion/motion.svelte.js';
 	let open = $state(true);
 	let changed = $state(false);
@@ -9,20 +10,33 @@
 		initial: false,
 		animate: changed ? 'shifted' : 'visible',
 		exit: 'hidden',
-		variants: { visible: { opacity: 1 }, shifted: { opacity: 0.8 }, hidden: { opacity: 0 } },
+		variants: {
+			visible: { opacity: 1 },
+			shifted: { opacity: 0.8 },
+			hidden: {
+				opacity: 0,
+				...(exitDuration === undefined
+					? {}
+					: { transition: { duration: exitDuration, when: 'afterChildren' } })
+			}
+		},
 		transition: { duration: 0.2, when: 'afterChildren' },
 		reducedMotion: 'never',
 		...options
 	}));
-	const child = parent.child({
+	const child = parent.child(() => ({
 		variants: {
 			visible: { x: 0, opacity: 1 },
 			shifted: { x: 80, opacity: 1 },
-			hidden: { x: -20, opacity: 0 }
+			hidden: {
+				x: -20,
+				opacity: 0,
+				...(exitDuration === undefined ? {} : { transition: { duration: exitDuration } })
+			}
 		},
 		transition: { duration: 0.2 },
 		reducedMotion: 'never'
-	});
+	}));
 	// The same binding works with custom components accepting MotionBinding.
 	const binding: MotionBinding = parent;
 	const presence = binding.transition;

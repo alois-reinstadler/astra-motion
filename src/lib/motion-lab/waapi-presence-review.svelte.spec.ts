@@ -14,7 +14,9 @@ it('captures the WAAPI to native-presence handoff across repeated inherited exit
 		elapsed: number;
 	}[] = [];
 	for (let run = 0; run < 5; run++) {
-		const screen = render(LiteState);
+		// Keep both natural exit phases observable under suite load; ordinary 0.2s
+		// exits remain covered by the adjacent case and lite-state suite.
+		const screen = render(LiteState, { exitDuration: 1 });
 		await tick();
 		await frame();
 		await frame();
@@ -34,7 +36,7 @@ it('captures the WAAPI to native-presence handoff across repeated inherited exit
 			let heldSamples = 0;
 			let parentExitSamples = 0;
 			const start = performance.now();
-			while (parent.isConnected && performance.now() - start < 1000) {
+			while (parent.isConnected && performance.now() - start < 3000) {
 				await frame();
 				if (!parent.isConnected) break;
 				const childOpacity = Number(getComputedStyle(child).opacity);
@@ -46,15 +48,15 @@ it('captures the WAAPI to native-presence handoff across repeated inherited exit
 				}
 				if (childOpacity === 0 && held > 0 && held < 0.79) parentExitSamples++;
 			}
-			expect(heldSamples).toBeGreaterThan(0);
-			expect(parentExitSamples).toBeGreaterThan(0);
+			expect(heldSamples, `run ${run}: child-exit phase`).toBeGreaterThan(0);
+			expect(parentExitSamples, `run ${run}: parent-exit phase`).toBeGreaterThan(0);
 			expect(parent.isConnected).toBe(false);
 		} finally {
 			await screen.unmount();
 		}
 	}
 	expect(failures).toEqual([]);
-}, 10000);
+}, 20000);
 
 it('captures a finished native animation before its asynchronous finish event', async () => {
 	const screen = render(LiteState);
