@@ -62,6 +62,7 @@ async function verifyPopContainingBlock(page) {
 		const shell = document.querySelector('.pop-shell');
 		const child = shell.querySelector('.outgoing');
 		const before = child.getBoundingClientRect();
+		const origin = { x: before.x + scrollX, y: before.y + scrollY };
 		const parent = child.offsetParent;
 		const styles = document.querySelectorAll('style').length;
 		shell.querySelector('button').click();
@@ -75,8 +76,9 @@ async function verifyPopContainingBlock(page) {
 			const box = child.getBoundingClientRect();
 			error = Math.max(
 				error,
-				Math.abs(box.x - before.x),
-				Math.abs(box.y - before.y),
+				// Page-bottom collapse can clamp scrolling; compare document coordinates.
+				Math.abs(box.x + scrollX - origin.x),
+				Math.abs(box.y + scrollY - origin.y),
 				Math.abs(box.width - before.width)
 			);
 			changedParent ||= child.offsetParent !== parent;
