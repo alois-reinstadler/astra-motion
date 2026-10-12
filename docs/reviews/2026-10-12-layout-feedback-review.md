@@ -78,3 +78,27 @@ are unchanged. An interim run failed only because its old cleanup timeout was
 shorter than the new exit; that log is preserved. Focused Firefox passes 9/9.
 The final complete matrix separately verifies the tightened six-frame assertion.
 No confirmed blocker remains in this review.
+
+## Native handoff phase oracle
+
+The first complete WebKit run after the retained-exit sampling correction reported
+a failure in an existing WAAPI handoff check. Its `child opacity < 0.8` predicate
+remained true after the child finished, when `afterChildren` correctly lets the
+parent fade. An independent reviewer recorded natural playback in Chromium and
+WebKit, twelve ordinary WebKit repetitions, and a deliberately delayed old poll.
+At 301ms that poll passed with child opacity 0 and parent opacity 0.402637; this
+reproduces a false failure without changing the runtime. The original failed run
+recorded source 0.8 but omitted its held opacity and phase, so its precise cause
+is not retrospectively established. It is consistent with the demonstrated
+oracle defect.
+
+The corrected check reads both opacities in the same natural frame, requires
+observed intermediate child and subsequent parent-exit phases, and verifies
+removal. The 0.01 parent-opacity tolerance and five repetitions remain. Two
+adjacent checks now also require an intermediate child phase before inspecting
+the held parent. Corrected focused checks pass 7/7 in each engine. The final full matrix remains
+pending and will be recorded in the fresh qualification report. Disabling `prepareMotionHandoff` makes all
+five WAAPI checks fail, including the natural case with held opacity 1 during
+intermediate child opacity. The independent reviewer verified this evidence and
+found no weakened oracle or confirmed runtime blocker. Probe sources, hashes,
+recordings and original failures remain in the external evidence directory.

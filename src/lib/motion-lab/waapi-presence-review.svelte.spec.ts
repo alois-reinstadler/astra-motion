@@ -72,7 +72,13 @@ it('captures a finished native animation before its asynchronous finish event', 
 		expect(visualElementStore.get(parent)?.values.get('opacity')?.get()).toBe(1);
 		screen.component.toggle();
 		await tick();
-		await expect.poll(() => Number(getComputedStyle(child).opacity)).toBeLessThan(0.8);
+		let childOpacity = 1;
+		for (let index = 0; index < 20 && childOpacity >= 0.8; index++) {
+			await frame();
+			childOpacity = Number(getComputedStyle(child).opacity);
+		}
+		expect(childOpacity).toBeGreaterThan(0.05);
+		expect(childOpacity).toBeLessThan(0.8);
 		expect(before).toBeCloseTo(0.8, 2);
 		expect(Number(getComputedStyle(parent).opacity)).toBeCloseTo(0.8, 2);
 	} finally {

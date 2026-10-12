@@ -34,7 +34,14 @@ it('supports inherited state, native coordinated reversal and cleanup without a 
 	await expect.poll(() => new DOMMatrix(getComputedStyle(child).transform).e).toBeCloseTo(80, 1);
 	await expect.poll(() => Number(getComputedStyle(parent).opacity)).toBeCloseTo(0.8, 2);
 	component.toggle();
-	await expect.poll(() => Number(getComputedStyle(child).opacity)).toBeLessThan(0.8);
+	await tick();
+	let childOpacity = 1;
+	for (let index = 0; index < 20 && childOpacity >= 0.8; index++) {
+		await frame();
+		childOpacity = Number(getComputedStyle(child).opacity);
+	}
+	expect(childOpacity).toBeGreaterThan(0.05);
+	expect(childOpacity).toBeLessThan(0.8);
 	expect(Number(getComputedStyle(parent).opacity)).toBeCloseTo(0.8, 2);
 	component.toggle();
 	await expect.poll(() => Number(getComputedStyle(child).opacity)).toBeCloseTo(1, 2);
