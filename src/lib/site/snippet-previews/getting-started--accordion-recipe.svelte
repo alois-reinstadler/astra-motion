@@ -26,6 +26,7 @@
 <style>
 	.snippet-stage {
 		display: grid;
+		align-content: start;
 		justify-items: start;
 		gap: 16px;
 		width: min(100%, 360px);
