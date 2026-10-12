@@ -146,3 +146,23 @@ paint order, focus, pointer targets, identity, cross-instance isolation and fina
 cleanup. The independent reviewer found no lost assertion or test contamination.
 All three cases pass in each engine; the original stacking fails all three in each
 engine. See [Notes sampling investigation](2026-10-12-notes-sampling.md).
+
+## Resource-isolated qualification and natural reversal interval
+
+The concurrent full run at `d7b445b` passed all 1,211 Chromium cases but failed
+one Firefox and three WebKit cases. Firefox recorded identical completion times
+for three staggered exits. WebKit recorded one grouped-disclosure intermediate
+frame, a tilt cleanup deadline with 0.000792-degree residual rotation, and no
+accordion reentry sample. CPU pressure was high, but that observation alone does
+not establish any failure's cause. All logs and pressure readings are retained.
+
+The independent reviewer identified a concrete mathematical defect in the new
+natural accordion oracle: it allowed reversal just over 1px below full height H,
+then required a sample strictly between R+1 and H-1. That interval is empty when
+H-R is at most 2px. The failed run did not save H/R, so this is a confirmed test
+design flaw, not a proven retrospective explanation of that run. The correction
+reverses at the first naturally rendered sample below half height and asserts
+H>4. This guarantees a nonempty interval while preserving every intermediate,
+geometry, focus, identity, settlement and removal assertion. Failure output now
+includes H, R and sampled reentry heights. No runtime, example, clock, duration,
+easing, tolerance or skip changes. Complete final source qualification is pending.

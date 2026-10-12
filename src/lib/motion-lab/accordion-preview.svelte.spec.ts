@@ -211,7 +211,7 @@ it('accordion plays naturally through opening, exit reversal and final cleanup',
 				triggerHeight: button.getBoundingClientRect().height,
 				textTop: text.getBoundingClientRect().top
 			});
-			if (reversing && !reversed && height > 1 && height < fullHeight - 1) {
+			if (reversing && !reversed && height > 1 && height < fullHeight / 2) {
 				reversed = true;
 				reverseHeight = height;
 				flushSync(() => button.click());
@@ -221,6 +221,9 @@ it('accordion plays naturally through opening, exit reversal and final cleanup',
 	onTestFinished(stop);
 	await expect.poll(() => answer.style.height).toBe('auto');
 	fullHeight = answer.getBoundingClientRect().height;
+	// Reversal must leave room for the strictly interior reentry sample below.
+	// Reversing just over 1px from full height can make that interval empty.
+	expect(fullHeight).toBeGreaterThan(4);
 	expect(heights.some((height) => height > 1 && height < fullHeight - 1)).toBe(true);
 	heights.length = 0;
 	reversing = true;
@@ -230,9 +233,10 @@ it('accordion plays naturally through opening, exit reversal and final cleanup',
 	expect(root.querySelector('.answer')).toBe(answer);
 	expect(reverseHeight).toBeGreaterThan(1);
 	expect(reverseHeight).toBeLessThan(fullHeight - 1);
-	expect(heights.some((height) => height > reverseHeight + 1 && height < fullHeight - 1)).toBe(
-		true
-	);
+	expect(
+		heights.some((height) => height > reverseHeight + 1 && height < fullHeight - 1),
+		JSON.stringify({ fullHeight, reverseHeight, reentryHeights: heights })
+	).toBe(true);
 	heights.length = 0;
 	expect(button.getAttribute('aria-expanded')).toBe('true');
 	flushSync(() => button.click());

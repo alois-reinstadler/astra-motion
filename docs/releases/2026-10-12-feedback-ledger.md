@@ -32,3 +32,9 @@ concrete package are in
 The original `/workspace/archives/astra-consolidation-2026-10-11/` archive remains
 available with its original restoration records. Qualification-only checkouts
 contain the same committed tree and are retired after preserving their evidence.
+
+The final natural accordion reversal trigger was corrected after independent
+review proved its former reentry interval could be empty. It now reverses below
+half height during unchanged natural playback; all existing assertions remain.
+Concurrent-run failures and resource-isolation results are retained explicitly
+in the final qualification evidence, not silently retried or erased.
