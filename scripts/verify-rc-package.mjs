@@ -1,6 +1,7 @@
 import { expect } from '@playwright/test';
 /** Shared installed-archive regression; no source aliases or internal APIs. */
 export async function verifyRC(page) {
+	await verifyPopContainingBlock(page);
 	const x = () =>
 		page
 			.locator('[data-rc-native]')
@@ -50,4 +51,45 @@ export async function verifyRC(page) {
 			);
 		}
 	}
+}
+
+async function verifyPopContainingBlock(page) {
+	await page.locator('.pop-shell').scrollIntoViewIfNeeded();
+	const result = await page.evaluate(async () => {
+		const frame = () => new Promise((resolve) => requestAnimationFrame(resolve));
+		await frame();
+		await frame();
+		const shell = document.querySelector('.pop-shell');
+		const child = shell.querySelector('.outgoing');
+		const before = child.getBoundingClientRect();
+		const parent = child.offsetParent;
+		const styles = document.querySelectorAll('style').length;
+		shell.querySelector('button').click();
+		const start = performance.now();
+		let error = 0,
+			samples = 0,
+			late = 0,
+			changedParent = false;
+		while (performance.now() - start < 340) {
+			await frame();
+			const box = child.getBoundingClientRect();
+			error = Math.max(
+				error,
+				Math.abs(box.x - before.x),
+				Math.abs(box.y - before.y),
+				Math.abs(box.width - before.width)
+			);
+			changedParent ||= child.offsetParent !== parent;
+			samples++;
+			if (performance.now() - start > 230) late++;
+		}
+		return { error, samples, late, changedParent, styles };
+	});
+	expect(result.error).toBeLessThan(2);
+	expect(result.samples).toBeGreaterThan(5);
+	expect(result.late).toBeGreaterThan(2);
+	expect(result.changedParent).toBe(true);
+	await expect(page.locator('.pop-shell .outgoing')).toHaveCount(0);
+	await expect(page.locator('[data-astra-presence-pop]')).toHaveCount(0);
+	expect(await page.locator('style').count()).toBe(result.styles);
 }

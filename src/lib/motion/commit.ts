@@ -1,5 +1,26 @@
 /** Small lifecycle bridge. Presence-only consumers do not import the projection engine. */
 export const beforeCommit = new Set<() => void>();
+/** Active retained roots only: rebase offsets before projection reads their subtree. */
+export const presenceMeasurements = new Map<HTMLElement, Set<() => void>>();
+let presenceRefreshPending = false;
+export function preparePresenceMeasurement(element: HTMLElement) {
+	if (!presenceMeasurements.size) return;
+	for (let node: HTMLElement | null = element; node; node = node.parentElement) {
+		for (const refresh of presenceMeasurements.get(node) ?? []) refresh();
+	}
+	// Motion's synchronous commit flushes render but not postRender. A retained
+	// child need not own projection, so refresh all active exits once after the
+	// commit, even when only their ancestors participated in measurement.
+	if (presenceRefreshPending) return;
+	presenceRefreshPending = true;
+	queueMicrotask(() => {
+		presenceRefreshPending = false;
+		for (const callbacks of presenceMeasurements.values()) {
+			for (const refresh of callbacks) refresh();
+		}
+	});
+}
+
 let presenceSnapshotOwner: symbol | undefined;
 
 /** Internal ownership shared by nested synchronous layout updates. */

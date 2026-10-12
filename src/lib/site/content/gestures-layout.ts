@@ -720,20 +720,33 @@ export const gesturesLayoutPages: DocPage[] = [
 				title: 'Connect two elements with a shared identity',
 				text: [
 					'Give related elements the same layoutId to animate between their measured positions and sizes. layoutId activates shared projection even without layout. When both elements remain mounted they crossfade by default; layoutCrossfade={false} disables that opacity mixing.',
-					'The incoming destination supplies the shared layout transition. Use LayoutGroup id to namespace repeated controls so a selection in one instance does not connect to a different instance. Retain outgoing content with AnimatePresence when it needs an exit before removal.'
+					'The incoming destination supplies the shared layout transition. Use LayoutGroup id to namespace repeated controls so a selection in one instance does not connect to a different instance. Retain outgoing content with AnimatePresence when it needs an exit before removal.',
+					'Keep a moving selection background below every label, including labels in neighboring buttons. Isolate the control’s stacking context and give its labels a higher z-index than the highlight.'
 				],
 				code: {
 					label: 'Focused excerpt — moving selection',
-					source: `<LayoutGroup id="navigation">
-  {#each tabs as tab (tab.id)}
-    <button onclick={() => selected = tab.id}>
-      {#if selected === tab.id}
-        <motion.div layoutId="highlight" />
-      {/if}
-      {tab.label}
-    </button>
-  {/each}
-</LayoutGroup>`
+					source: `<div class="tabs">
+  <LayoutGroup id="navigation">
+    {#each tabs as tab (tab.id)}
+      <button type="button" onclick={() => selected = tab.id}>
+        {#if selected === tab.id}
+          <motion.div class="highlight" layoutId="highlight" aria-hidden="true" />
+        {/if}
+        <span>{tab.label}</span>
+      </button>
+    {/each}
+  </LayoutGroup>
+</div>
+
+<style>
+  .tabs { display: flex; isolation: isolate; }
+  button { position: relative; }
+  .tabs :global(.highlight) {
+    position: absolute; inset: 0; z-index: 1;
+    background: #dfe5d1; pointer-events: none;
+  }
+  span { position: relative; z-index: 2; }
+</style>`
 				},
 				related: ['layout-group', 'animate-presence'],
 				links: [

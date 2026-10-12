@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PopContainingBlock from './PopContainingBlock.svelte';
 	import {
 		motion,
 		Reorder,
@@ -79,3 +80,5 @@
 	{/each}
 </Reorder.Group>
 <output data-rc-order>{items.join(',')}</output>
+
+<PopContainingBlock />

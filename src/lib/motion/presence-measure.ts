@@ -1,8 +1,14 @@
 import { beforeCommit, currentPresenceSnapshot } from './commit.js';
 import { observeLayout } from './observe.js';
+import { layoutOrigin } from './css-transform.js';
 
 export interface PresenceBox {
 	parent: Element | null;
+	domParent: HTMLElement | null;
+	localLeft: number;
+	localTop: number;
+	localRight: number;
+	localBottom: number;
 	width: string;
 	height: string;
 	boxSizing: string;
@@ -52,8 +58,26 @@ export function presenceRoots(nodes: Iterable<HTMLElement | SVGElement>): HTMLEl
 export function measurePresenceBox(element: HTMLElement): PresenceBox {
 	const computed = getComputedStyle(element);
 	const parent = element.offsetParent;
+	const domParent = element.parentElement;
+	const origin = layoutOrigin(element);
+	const parentOrigin = domParent ? layoutOrigin(domParent) : { x: 0, y: 0 };
+	const localLeft =
+		origin.x - parentOrigin.x - (domParent?.clientLeft ?? 0) + (domParent?.scrollLeft ?? 0);
+	const localTop =
+		origin.y - parentOrigin.y - (domParent?.clientTop ?? 0) + (domParent?.scrollTop ?? 0);
 	return {
 		parent,
+		domParent,
+		localLeft,
+		localTop,
+		localRight:
+			(domParent?.clientWidth ?? element.ownerDocument.documentElement.clientWidth) -
+			localLeft -
+			element.offsetWidth,
+		localBottom:
+			(domParent?.clientHeight ?? element.ownerDocument.documentElement.clientHeight) -
+			localTop -
+			element.offsetHeight,
 		width: computed.width,
 		height: computed.height,
 		boxSizing: computed.boxSizing,

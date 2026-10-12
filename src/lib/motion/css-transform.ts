@@ -43,7 +43,7 @@ export function readTransformMatrix(element: HTMLElement | SVGElement, css: CSSS
 }
 
 /** The pre-transform page origin; offset metrics include current sticky positioning. */
-function layoutOrigin(element: HTMLElement) {
+export function layoutOrigin(element: HTMLElement) {
 	let x = 0,
 		y = 0;
 	for (

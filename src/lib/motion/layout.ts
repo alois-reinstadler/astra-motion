@@ -33,6 +33,7 @@ import {
 } from './projection-boundaries.js';
 import {
 	beforeCommit,
+	preparePresenceMeasurement,
 	beginPresenceSnapshot,
 	flushLayoutMutations,
 	layoutBridge,
@@ -700,6 +701,11 @@ export function createLayout(options: LayoutGroupOptions = {}) {
 						? { duration: 0 }
 						: transition
 				});
+				const measurePageBox = projection.measurePageBox.bind(projection);
+				projection.measurePageBox = () => {
+					preparePresenceMeasurement(element);
+					return measurePageBox();
+				};
 				projection.isPresent = true;
 				// Measurement resets the DOM transform. Same-frame commits can hit Motion's
 				// VisualElement timestamp deduplication, so enqueue restoration directly.

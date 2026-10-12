@@ -1,3 +1,4 @@
+import { preparePresenceMeasurement } from './commit.js';
 import { readTransformMatrix } from './css-transform.js';
 import {
 	HTMLProjectionNode,
@@ -289,6 +290,7 @@ export class ProjectionBoundary extends HTMLProjectionNode {
 	}
 
 	measurePageBox(): import('framer-motion').Box {
+		preparePresenceMeasurement(this.element);
 		const rect = this.element.getBoundingClientRect();
 		const box = createBox();
 		const fixed = this.scroll?.wasRoot || this.path.some((ancestor) => ancestor.scroll?.wasRoot);

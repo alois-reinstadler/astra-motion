@@ -1,3 +1,12 @@
+# Runtime layout feedback — 2026-10-12
+
+The retained-paragraph containing-block correction and Notes highlight layering
+fix are integrated. Focused regressions and independent runtime review found and
+resolved additional between-frame and WebKit RTL cases. Final source/package
+qualification and the newly reported accordion preview correction are in progress.
+Earlier qualification below applies to its recorded source/archive, not these changes.
+See [runtime investigation](reviews/2026-10-12-pop-containing-block.md).
+
 # Owner layout feedback — 2026-10-11
 
 The session-card comparison and minimal LayoutGroup demo now respond promptly.
