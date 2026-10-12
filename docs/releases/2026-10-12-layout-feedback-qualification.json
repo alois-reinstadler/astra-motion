@@ -1,0 +1,87 @@
+{
+	"status": "consolidated-owner-review-ready-full-final-source-matrix-incomplete",
+	"sourceCommit": "a69fad2194ff239a59b5d29b2f2d28fa90a91b3e",
+	"evidenceDirectory": "/workspace/releases/astra-motion/layout-runtime-feedback-2026-10-12",
+	"scopeChange": "Owner questioned excessive testing and requested the preview. Further full runs were stopped; last test-only correction was checked with focused Chromium/Firefox cases. No complete final three-engine source pass is claimed.",
+	"package": {
+		"archive": "/workspace/releases/astra-motion/layout-runtime-feedback-2026-10-12/astra-motion-0.1.0-rc.3.tgz",
+		"sha256": "eb65795058f3d92c51c6ece44fdd100b6aa5bf965a3053c3893db5d5d87ea571",
+		"bytes": 417399,
+		"finalCommittedTreeProof": "handoff-package-equivalence.json"
+	},
+	"supersedesPackageSha256": "719b4424df6d4c047d20b76a9429636378f600f9e9abec665ae96e364992542e",
+	"source": {
+		"webkit": {
+			"commit": "a69fad2194ff239a59b5d29b2f2d28fa90a91b3e",
+			"files": 144,
+			"passed": 1211,
+			"failed": 0,
+			"log": "source-webkit-final-isolated.log"
+		},
+		"chromium": {
+			"completeCommit": "d7b445ba6ef5e980ee46958d5579226687d1619f",
+			"files": 144,
+			"passed": 1211,
+			"failed": 0,
+			"log": "source-chromium-release.log",
+			"finalCommitFullRun": "interrupted at owner feedback",
+			"finalAccordion": {
+				"passed": 4,
+				"log": "accordion-final-chromium.log"
+			}
+		},
+		"firefox": {
+			"latestCompleteCommit": "d7b445ba6ef5e980ee46958d5579226687d1619f",
+			"passed": 1210,
+			"failed": 1,
+			"log": "source-firefox-release.log",
+			"isolatedDiagnostic": "Prior failed staggered-exit case passed unchanged; run interrupted after test correction, not qualification.",
+			"finalAccordion": {
+				"passed": 4,
+				"log": "accordion-final-firefox.log"
+			}
+		}
+	},
+	"otherGates": {
+		"serverPassed": 283,
+		"serverFiles": 61,
+		"productionPassed": 253,
+		"productionSkipped": 2,
+		"plainPackedPassed": 27,
+		"kitPackedPassed": 45,
+		"upstreamPassed": 12,
+		"svelteErrors": 0,
+		"svelteWarnings": 0,
+		"formattingEslint": "passed",
+		"guideSnippets": "passed",
+		"buildPrepackStrictPublint": "passed; final committed repack bound externally"
+	},
+	"logs": {
+		"server": "server-final-tree.log",
+		"production": "production.log",
+		"packed": "packed-final/",
+		"upstream": "upstream.log",
+		"check": "check-handoff.log",
+		"lint": "lint-release.log",
+		"guide": "guide-final.log",
+		"finalPack": "handoff-pack.log"
+	},
+	"independentReview": {
+		"report": "../reviews/2026-10-12-layout-feedback-review.md",
+		"confirmedRuntimeBlockersResolved": 1,
+		"confirmedTestOracleGapsResolved": 2,
+		"openConfirmedRuntimeOrPublicPackageBlockers": 0,
+		"remainingQualificationGap": "Complete final Chromium/Firefox source suites were not finished."
+	},
+	"limitations": [
+		"Two existing derived_inert warnings in shared-layout dependency fixture.",
+		"Arbitrary unstaged parity remains unproven.",
+		"Two Firefox/WebKit production touch-emulation skips; native-device touch not qualified.",
+		"WebKit button glyph oracle retains 0.5px / 150 frames; scaleX(1.15) negative controls fail.",
+		"Concurrent-run failure causes are not all proven; failed logs and CPU pressure preserved.",
+		"One test-only natural accordion interval flaw was proven and corrected; it does not prove the earlier failure cause."
+	],
+	"published": false,
+	"pushed": false,
+	"released": false
+}

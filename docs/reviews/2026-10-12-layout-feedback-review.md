@@ -96,8 +96,8 @@ The corrected check reads both opacities in the same natural frame, requires
 observed intermediate child and subsequent parent-exit phases, and verifies
 removal. The 0.01 parent-opacity tolerance and five repetitions remain. Two
 adjacent checks now also require an intermediate child phase before inspecting
-the held parent. Corrected focused checks pass 7/7 in each engine. The final full matrix remains
-pending and will be recorded in the fresh qualification report. Disabling `prepareMotionHandoff` makes all
+the held parent. Corrected focused checks pass 7/7 in each engine. The final qualification scope is recorded in the fresh handoff report; the complete
+final Chromium/Firefox source matrix remains unfinished. Disabling `prepareMotionHandoff` makes all
 five WAAPI checks fail, including the natural case with held opacity 1 during
 intermediate child opacity. The independent reviewer verified this evidence and
 found no weakened oracle or confirmed runtime blocker. Probe sources, hashes,
@@ -165,4 +165,26 @@ reverses at the first naturally rendered sample below half height and asserts
 H>4. This guarantees a nonempty interval while preserving every intermediate,
 geometry, focus, identity, settlement and removal assertion. Failure output now
 includes H, R and sampled reentry heights. No runtime, example, clock, duration,
-easing, tolerance or skip changes. Complete final source qualification is pending.
+easing, tolerance or skip changes. Complete final source qualification was subsequently curtailed as recorded below.
+
+## Bounded handoff after owner feedback
+
+The final WebKit source suite passes all 1,211 cases at `a69fad2`. The owner then
+questioned excessive testing and requested the preview. Further full runs were
+stopped; the final accordion correction passes all four focused cases in both
+Chromium and Firefox. Chromium's earlier full d7b445b run passed 1,211; its final
+repeat was interrupted. Firefox's latest complete run failed one staggered-exit
+timing check, which passed unchanged in a later partial isolated run. Neither
+partial run is treated as a complete final qualification.
+
+Independent runtime, public surface, package and test-oracle reviews remain
+applicable: published runtime bytes did not change during the test corrections.
+No confirmed runtime or public-package blocker remains, but the original complete
+final matrix requirement is not marked achieved. The handoff qualification record
+identifies exact logs, source revisions, remaining checks and the actual package.
+
+The nonimplementing package reviewer also checked the bounded final handoff
+claims after the successful final Svelte/lint gates. The reviewer found no claim
+blocker: incomplete final source qualification is explicit and package evidence
+is scoped separately. The 45 SvelteKit cases comprise 42 explicit success flags
+and three RC entries appended only after the awaited RC assertions complete.

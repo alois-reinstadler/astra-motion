@@ -1,11 +1,21 @@
-# Runtime layout feedback — 2026-10-12
+# Layout-feedback handoff — 2026-10-12
 
-The retained-paragraph containing-block correction and Notes highlight layering
-fix are integrated. Focused regressions and independent runtime review found and
-resolved additional between-frame and WebKit RTL cases. Final source/package
-qualification and the newly reported accordion preview correction are in progress.
-Earlier qualification below applies to its recorded source/archive, not these changes.
-See [runtime investigation](reviews/2026-10-12-pop-containing-block.md).
+Main contains the retained-exit positioning correction, Notes highlight layering,
+and accordion grid alignment fix. Independent review verified the runtime fixes
+and later test-oracle corrections. The actual package passes all 72 plain-Svelte
+and SvelteKit consumer cases; production E2E passes 253 cases with two existing
+skips. Final WebKit source passes all 1,211 cases.
+
+After the owner questioned excessive repeated testing, further full runs were
+stopped. The final accordion correction passes focused Chromium/Firefox checks.
+The complete final Chromium/Firefox source matrix remains unfinished and is not
+claimed clean. See the [bounded qualification record](releases/2026-10-12-layout-feedback-qualification.md)
+and [independent review](reviews/2026-10-12-layout-feedback-review.md).
+Main is the only local branch. The owner can review the concrete baseline and
+private preview; no push, publication or release has occurred.
+
+The records below are historical and qualify only their identified revisions.
+Their runtime-unchanged statements do not describe the current package.
 
 # Owner layout feedback — 2026-10-11
 
