@@ -6,7 +6,13 @@ import { createPresenceTimeline } from '../motion/presence-state.js';
 import LiteState from './LiteState.svelte';
 const frame = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
 it('captures the WAAPI to native-presence handoff across repeated inherited exits', async () => {
-	const failures: { run: number; source: unknown; held: number }[] = [];
+	const failures: {
+		run: number;
+		source: unknown;
+		held: number;
+		childOpacity: number;
+		elapsed: number;
+	}[] = [];
 	for (let run = 0; run < 5; run++) {
 		const screen = render(LiteState);
 		await tick();
@@ -23,14 +29,31 @@ it('captures the WAAPI to native-presence handoff across repeated inherited exit
 			const source = visualElementStore.get(parent)?.latestValues.opacity;
 			screen.component.toggle();
 			await tick();
-			await expect.poll(() => Number(getComputedStyle(child).opacity)).toBeLessThan(0.8);
-			const held = Number(getComputedStyle(parent).opacity);
-			if (Math.abs(held - 0.8) > 0.01) failures.push({ run, source, held });
+			// The parent is held only while its child exits. A child-opacity poll also
+			// succeeds after the child reaches zero, when the parent should be fading.
+			let heldSamples = 0;
+			let parentExitSamples = 0;
+			const start = performance.now();
+			while (parent.isConnected && performance.now() - start < 1000) {
+				await frame();
+				if (!parent.isConnected) break;
+				const childOpacity = Number(getComputedStyle(child).opacity);
+				const held = Number(getComputedStyle(parent).opacity);
+				if (childOpacity > 0.05 && childOpacity < 0.8) {
+					heldSamples++;
+					if (Math.abs(held - 0.8) > 0.01)
+						failures.push({ run, source, held, childOpacity, elapsed: performance.now() - start });
+				}
+				if (childOpacity === 0 && held > 0 && held < 0.79) parentExitSamples++;
+			}
+			expect(heldSamples).toBeGreaterThan(0);
+			expect(parentExitSamples).toBeGreaterThan(0);
+			expect(parent.isConnected).toBe(false);
 		} finally {
 			await screen.unmount();
 		}
 	}
-	expect(failures).toHaveLength(0);
+	expect(failures).toEqual([]);
 }, 10000);
 
 it('captures a finished native animation before its asynchronous finish event', async () => {
