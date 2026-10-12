@@ -7,7 +7,7 @@ export default defineConfig({
 	...motion,
 	define: {
 		'import.meta.env.VITE_PERFORMANCE_OUTPUT_DIR': JSON.stringify(
-			'artifacts/releases/final-main/performance'
+			process.env.MOTION_PERFORMANCE_OUTPUT_DIR ?? 'artifacts/releases/final-main/performance'
 		)
 	},
 	test: {
