@@ -11,16 +11,18 @@
 
 <div class="snippet-stage">
 	<LayoutGroup id={namespace}
-		><div style="display:flex;gap:8px;flex-wrap:wrap;">
+		><div style="display:flex;gap:8px;flex-wrap:wrap;isolation:isolate;">
 			{#each tabs as tab (tab.id)}<button
+					type="button"
 					aria-pressed={selected === tab.id}
 					onclick={() => (selected = tab.id)}
 					style="position:relative;"
 				>
 					{#if selected === tab.id}<motion.div
 							layoutId="highlight"
-							style="position:absolute;inset:0;background:#d9dec9;border-radius:8px;"
-						/>{/if}<span style="position:relative;">{tab.label}</span>
+							aria-hidden="true"
+							style="position:absolute;inset:0;z-index:1;pointer-events:none;background:#d9dec9;border-radius:8px;"
+						/>{/if}<span style="position:relative;z-index:2;">{tab.label}</span>
 				</button>{/each}
 		</div></LayoutGroup
 	>
