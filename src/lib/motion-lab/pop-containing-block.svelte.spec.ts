@@ -12,11 +12,13 @@ const frame = () => new Promise<void>((resolve) => requestAnimationFrame(() => r
 it.each([true, false])(
 	'preserves the outgoing box across containing-block changes (child projection=%s)',
 	async (projectedChild) => {
-		const view = render(Fixture, { projectedChild });
+		// Keep the exit alive while sampling several frames after the parent settles.
+		const view = render(Fixture, { projectedChild, exitDuration: 1.5 });
 		await document.fonts.ready;
 		await frame();
 		await frame();
 		const body = document.querySelector<HTMLElement>('.pop-body')!;
+		const shell = document.querySelector<HTMLElement>('.pop-shell')!;
 		const paragraph = document.querySelector<HTMLElement>('.outgoing')!;
 		const before = paragraph.getBoundingClientRect();
 		const parent = paragraph.offsetParent;
@@ -28,7 +30,10 @@ it.each([true, false])(
 			lateSamples = 0;
 		let changedParent = false;
 		const start = performance.now();
-		while (performance.now() - start < 340) {
+		while (
+			performance.now() - start < 1000 &&
+			(performance.now() - start < 340 || lateSamples < 6)
+		) {
 			await frame();
 			const box = paragraph.getBoundingClientRect();
 			const error = Math.max(
@@ -36,8 +41,13 @@ it.each([true, false])(
 				Math.abs(box.y - before.y),
 				Math.abs(box.width - before.width)
 			);
-			if (performance.now() - start < 80) earlyError = Math.max(earlyError, error);
-			if (performance.now() - start > 230) {
+			expect(paragraph.isConnected).toBe(true);
+			expect(error).toBeLessThan(2);
+			if (samples === 0 || performance.now() - start < 80) earlyError = Math.max(earlyError, error);
+			if (
+				performance.now() - start > 230 &&
+				Math.abs(shell.getBoundingClientRect().width - 260) < 0.5
+			) {
 				lateError = Math.max(lateError, error);
 				lateSamples++;
 			}
@@ -45,12 +55,12 @@ it.each([true, false])(
 			samples++;
 		}
 		expect(samples).toBeGreaterThan(5);
-		expect(lateSamples).toBeGreaterThan(2);
+		expect(lateSamples).toBeGreaterThanOrEqual(6);
 		expect(changedParent).toBe(true);
 		expect(earlyError).toBeLessThan(2);
 		expect(lateError).toBeLessThan(2);
 		expect(body.style.position).toBe('');
-		await expect.poll(() => paragraph.isConnected).toBe(false);
+		await expect.poll(() => paragraph.isConnected, { timeout: 2000 }).toBe(false);
 		expect(document.querySelectorAll('[data-astra-presence-pop]')).toHaveLength(0);
 		expect(document.querySelectorAll('style').length).toBe(stylesBefore);
 		await view.unmount();
