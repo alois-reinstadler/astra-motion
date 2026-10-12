@@ -102,3 +102,23 @@ five WAAPI checks fail, including the natural case with held opacity 1 during
 intermediate child opacity. The independent reviewer verified this evidence and
 found no weakened oracle or confirmed runtime blocker. Probe sources, hashes,
 recordings and original failures remain in the external evidence directory.
+
+## Accordion sampling review
+
+The complete WebKit run also exposed two insufficient intermediate-frame counts
+in the 200ms accordion tests; their geometry checks passed. The corrected tests
+measure five explicit phases of actual Motion/native clocks, preserve the
+original intermediate counts and 0.5px bounds, and add a separate unchanged-clock
+natural opening/reversal/reentry/removal case. Four focused cases pass in every
+engine. Restoring the original grid alignment makes all four fail in every engine.
+See [sampling investigation](2026-10-12-accordion-sampling.md).
+
+The independent reviewer found a coverage omission in the first correction:
+geometry needed checking again at settled and removed endpoints. Commit `e5f4827`
+restores those assertions. The reviewer verified the fix, scoped clock ownership,
+restoration/cancellation, retained-node checks and natural-playback coverage; no
+further confirmed assertion loss or test contamination remains. Focused WebKit
+passes 4/4 after that correction. Newly started full runs were stopped when the
+review finding arrived; their logs remain explicitly interrupted evidence. The
+final full runs use the corrected committed test tree. No runtime or example code
+changed during these qualification-oracle corrections.

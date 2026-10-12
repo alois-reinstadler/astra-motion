@@ -12,12 +12,15 @@ feedback; no remote refs were changed and no package was published.
 | Accordion preview            | Integrated `3281c117` as `e34d4ac`; one CSS alignment declaration and actual-preview regressions                                       | [Accordion investigation](../reviews/2026-10-12-accordion-preview.md)  |
 | Qualification evidence path  | Integrated `2f943c9`; separate output preserves previous performance artifacts                                                         | Fresh evidence directory below                                         |
 | Natural playback sampling    | Integrated `24e534e`; six settled-parent frames and every-frame geometry checks, with fixture duration and cleanup deadline aligned    | [Independent review](../reviews/2026-10-12-layout-feedback-review.md)  |
+| Native handoff phase checks  | Integrated `210c89b` and `fcf7c97`; bounded natural child-exit phase, subsequent parent fade/removal, existing tolerances              | [Independent review](../reviews/2026-10-12-layout-feedback-review.md)  |
+| Accordion phase checks       | Worker `4e11816` integrated as `60501e9`, endpoint assertions restored in `e5f4827`; precise phases plus independent natural playback  | [Sampling investigation](../reviews/2026-10-12-accordion-sampling.md)  |
 | Packed page-scroll oracle    | Integrated `d8b9a81`; document coordinates account for browser scroll clamping, unchanged 2px tolerance                                | [Independent review](../reviews/2026-10-12-layout-feedback-review.md)  |
 
 Worker originals, binary working/index patches, untracked-file inventories, hashes
 and restoration instructions are outside removable worktrees at
 `/workspace/archives/astra-layout-feedback-2026-10-12/RESTORE.md`.
-Both implementation workers were clean before retirement. Their complete-history
+All three feedback implementation workers were clean at handoff; their original
+tips are bundled before retirement or reuse for qualification. Their complete-history
 bundles verify, and the accordion bundle was restored into a separate bare repository
 to verify its original commit. No unique worker work was rejected or dropped.
 
