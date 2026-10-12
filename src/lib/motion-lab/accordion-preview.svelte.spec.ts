@@ -102,6 +102,7 @@ for (const width of [360, 240]) {
 		}
 		intro.play();
 		await expect.poll(() => answer.style.height).toBe('auto');
+		assertGeometry();
 		const height = answer.getBoundingClientRect().height;
 		expect(height).toBeGreaterThan(20);
 		expect(answer.style.height).toBe('auto');
@@ -121,6 +122,8 @@ for (const width of [360, 240]) {
 		expect(closing.filter((value) => value > 1 && value < height - 1).length).toBeGreaterThan(2);
 		clocks.release(outro);
 		await expect.poll(() => answer.isConnected).toBe(false);
+		near(button.getBoundingClientRect().height, before.height);
+		near(button.getBoundingClientRect().top, before.top);
 		expect(root.querySelector('.answer')).toBeNull();
 		expect(button.getAttribute('aria-expanded')).toBe('false');
 		expect(document.activeElement).toBe(button);
@@ -163,11 +166,16 @@ it('accordion reverses an active exit without replacing its answer or moving the
 	expect(intermediate).toBeGreaterThan(1);
 	clocks.release(intro);
 	await expect.poll(() => answer.style.height).toBe('auto');
+	near(button.getBoundingClientRect().height, trigger.height);
+	near(button.getBoundingClientRect().top, trigger.top);
+	near(text.getBoundingClientRect().top, textTop);
 	near(answer.getBoundingClientRect().height, height);
 	expect(button.getAttribute('aria-expanded')).toBe('true');
 	const finalExit = await clocks.after(() => button.click());
 	clocks.release(finalExit);
 	await expect.poll(() => answer.isConnected).toBe(false);
+	near(button.getBoundingClientRect().height, trigger.height);
+	near(button.getBoundingClientRect().top, trigger.top);
 	expect(document.activeElement).toBe(button);
 });
 
