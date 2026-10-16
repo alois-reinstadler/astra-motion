@@ -39,7 +39,7 @@ The visible caption distinguishes `WebGL2 · live 3D`, loading, explicit scene e
 
 ## Verification evidence
 
-Evidence directory: `/tmp/astra-next-20260929/scene/`.
+The table summarizes the original review. Its local logs and screenshots are not distributed with this experiment; rerun the checks in the [README](./README.md) for a new qualification.
 
 | Check                           | Result / evidence                                                                                                                                                                                                                                                               |
 | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -63,4 +63,4 @@ Use this as an isolated, reviewable app example of Astra values driving an exist
 
 The port requires a final GPU-capable device inspection before claiming its live lighting/composition and canvas lifecycle are qualified. Check all chapters, cursor and keyboard framing, OS reduced motion, repeated Pause/Load 3D, console/network, and a physical touch device. No GPU acceleration, frame-rate improvement or cross-device performance claim is made. The scene’s 2.57 MB model and approximately 290 KB gzip JavaScript are real costs; reducing initial Three loading or texture/model budgets would be a separate optimization supported by measurements.
 
-Reproduction and license instructions are in the [experiment README](../../experiments/threlte-scene/README.md) and its `assets.manifest.json`.
+Reproduction and license instructions are in the [experiment README](./README.md) and its `assets.manifest.json`.

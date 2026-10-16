@@ -32,7 +32,7 @@ Threlte already supplies [task ordering and on-demand invalidation](https://thre
 
 ## Proof of concept
 
-[Source and run instructions](../../experiments/vgpu-threlte/README.md).
+[Source and run instructions](./README.md).
 
 The same radial 2D field is expressed in WGSL and GLSL. vgpu has two uniforms animated through Motion; the Threlte scene lets the reviewer switch between native Svelte Tween and the public `threeEffect`. Rendering is invalidated on changes, not kept alive by an unconditional demo animation loop. A labeled Canvas2D reference appears only when WebGL2 is unavailable; it uses the same field equation and drivers. It is never presented as vgpu or Threlte rendering.
 
@@ -44,7 +44,7 @@ The package is isolated with an exact manifest and its own lockfile. Production 
 
 - Strict Svelte/TypeScript check: zero errors and warnings.
 - Node integration tests: 2/2; real published vgpu mock subject and public Motion effect; Three uniform writes and detachment.
-- Production build: passed; exact output and hashes retained in `experiments/vgpu-threlte/evidence/`.
+- Production build: passed; exact output and hashes retained in `./evidence/`.
 - Shared headed Chrome 152: completed/reversed both CPU-reference drivers, stop stability after defined pending-write flush, unmount/remount, reduced-motion endpoint, desktop/mobile layout screenshots and no horizontal overflow.
 - Final browser console: no application errors; browser warning `No available adapters` retained. Network requests completed with 200/304 responses.
 - GPU rendering, GPU timing, physical devices, Safari/Firefox, device loss/recovery, Activity suspension and SSR/hydration were **not verified**. This is a client-only experimental Vite app, not a supported Astra package entry point.
