@@ -143,17 +143,20 @@ for (const width of [1280, 393]) {
 								}
 								// Keep neighbouring characters for kerning, ligatures and numeric variants.
 								reference.textContent = text.textContent;
+								// Measure the first word: WebKit snaps text rects to whole pixels, so a
+								// single glyph can differ by 1px without any distortion.
+								const end = offset + Math.min(text.textContent!.slice(offset).search(/\s|$/), 12);
 								range.setStart(reference.firstChild!, offset);
-								range.setEnd(reference.firstChild!, offset + 1);
+								range.setEnd(reference.firstChild!, end);
 								const expected = range.getBoundingClientRect();
 								range.setStart(text, offset);
-								range.setEnd(text, offset + 1);
+								range.setEnd(text, end);
 								const actual = range.getBoundingClientRect();
 								if (!actual.width || !actual.height) continue;
 								samples++;
 								if (
-									Math.abs(actual.width - expected.width) > 0.5 ||
-									Math.abs(actual.height - expected.height) > 0.5
+									Math.abs(actual.width - expected.width) > 1 ||
+									Math.abs(actual.height - expected.height) > 1
 								) {
 									if (errors.length < 10)
 										errors.push(
