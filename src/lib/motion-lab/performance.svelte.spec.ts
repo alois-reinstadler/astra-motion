@@ -110,7 +110,7 @@ it('records actual read counts, frame intervals and Chromium engine metrics', as
 		}
 	}
 	await commands.writeFile(
-		`docs/research/performance-${server.browser}${import.meta.env.VITE_PERFORMANCE_SUFFIX ?? ''}.json`,
+		`test-results/performance-${server.browser}${import.meta.env.VITE_PERFORMANCE_SUFFIX ?? ''}.json`,
 		JSON.stringify(
 			{
 				browser: navigator.userAgent,

@@ -176,7 +176,7 @@ it('profiles repeated 500-participant reversals and rendering interventions', as
 	session.off('LayerTree.layerTreeDidChange', layerUpdate);
 	if (inspectLayers) await session.send('LayerTree.disable');
 	await commands.writeFile(
-		`docs/research/performance-profile-500${requested ? `-${requested}${inspectLayers ? '-layers' : '-observer'}` : ''}${import.meta.env.VITE_PERFORMANCE_SUFFIX ?? ''}.json`,
+		`test-results/performance-profile-500${requested ? `-${requested}${inspectLayers ? '-layers' : '-observer'}` : ''}${import.meta.env.VITE_PERFORMANCE_SUFFIX ?? ''}.json`,
 		JSON.stringify(
 			{
 				date: new Date().toISOString(),

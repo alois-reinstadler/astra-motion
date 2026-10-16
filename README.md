@@ -77,9 +77,8 @@ A similarly named registry package should not be assumed to be this project.
 Each reference has an interactive example with its canonical complete Svelte source.
 Larger compositions live in the examples area and link back to their primary concepts.
 The [parity matrix](docs/parity/MATRIX.md) records options, source versions,
-observable behavior, evidence and precise differences. The
-[reference manifest](docs/parity/references.json) and subsystem audits record the
-27 September 2026 upstream baseline, including documentation/source discrepancies.
+observable behavior and precise differences against the 27 September 2026 upstream
+baseline, including documentation/source discrepancies.
 
 ## Svelte adaptations
 
@@ -118,8 +117,7 @@ Unicode segmentation, independent reveal effects/stagger, accessible replacement
 and explicit sizing. `astra-motion/tilt` provides `Tilt` with shared springs and
 separate measurement/perspective/rotation ownership. Both honor MotionConfig and
 Activity lifecycle. See the [text contract](docs/text-motion.md), [tilt contract](docs/tilt.md)
-and the [Text and Tilt demo](http://100.64.0.2:4083/motion-lab/text-tilt) for interactive compositions
-on the local evaluation preview.
+and the [Text and Tilt demo](https://alois-reinstadler.github.io/astra-motion/motion-lab/text-tilt) for interactive compositions.
 
 ## Smaller entries and compatibility
 
@@ -140,8 +138,7 @@ for the required import, initial-style, transform and drag changes.
 
 ## Development and verification
 
-Use pnpm. Run the site with the repository’s managed preview instructions in
-[AGENTS.md](AGENTS.md); outside the shared container, `pnpm dev` prints the local URL.
+Use pnpm. `pnpm dev` prints the local URL.
 GitHub Pages builds `main` with `BASE_PATH=/astra-motion`.
 
 ```sh
@@ -160,5 +157,5 @@ another server. CI also checks the packed consumer and production import graph.
 Strict declarations use `skipLibCheck: false`.
 
 Report a small reproduction, package/browser versions, and the steps that interrupt
-or compose the behavior. See the [delivery record](docs/parity/PROGRESS.md),
-[architecture](docs/motion-system.md), and [deployment notes](docs/site-deployment.md).
+or compose the behavior. See the [architecture](docs/motion-system.md) and
+[deployment notes](docs/site-deployment.md).

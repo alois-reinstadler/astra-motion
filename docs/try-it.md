@@ -56,4 +56,3 @@ often misses it.
 
 Use the [project status](https://alois-reinstadler.github.io/astra-motion/status) and
 [current parity matrix](parity/MATRIX.md) for supported scope and qualification.
-The [dated aftercare report](research/aftercare-and-site.md) records an earlier review.

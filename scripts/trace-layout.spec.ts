@@ -48,6 +48,6 @@ it('captures first and warm reversal renderer traces', async () => {
 		if (result.eof) break;
 	}
 	await session.send('IO.close', { handle });
-	await commands.writeFile(`docs/research/.profile-layout-${variant}-trace.json`, trace);
+	await commands.writeFile(`test-results/.profile-layout-${variant}-trace.json`, trace);
 	await view.unmount();
 }, 20000);

@@ -1,14 +1,8 @@
 # Shared implementation contracts
 
-Follow-up: [Activity, View types and difficult geometry](PARITY-NEXT.md) records
-nested retained exits, automatic Activity pop roots, native View contracts, and
-static 3D/perspective plane qualification. [Independent focused verification](NEXT-FOCUSED-VERIFICATION.md)
-adds enforced CSP and Presence/Activity/View composition evidence. Historical
-checkpoints below retain their original dates and scope.
-
 The [parity matrix](MATRIX.md) records the reference date, engine and Svelte versions,
 normative scope, source discrepancies and qualification gates. This document defines
-the shared implementation boundaries used by the subsystem audits.
+the shared lifecycle and ownership boundaries.
 
 ## Svelte authoring
 
@@ -42,7 +36,7 @@ manual removal and re-entry are generation-scoped.
 `AnimatePresence` popLayout and `AnimateActivity` pop exits retain the last
 observed present box. A synchronous `updateLayout` captures it immediately before
 the state change. Managed flow removal runs in a microtask after the Svelte flush,
-before the next animation frame. See [runtime capture qualification](POP-RESIZE.md).
+before the next animation frame.
 The containing block must stay the same; newly mounted/unmeasured roots fall back
 to live measurement. Automatic capture cannot recover an unobserved intermediate
 layout between consecutive synchronous mutations: use `updateLayout` for that case.
@@ -74,10 +68,10 @@ Native conditional removal within a still-present boundary keeps native outros.
 `usePresence` exposes `{isPresent, safeToRemove}` with a generation-captured callback;
 `useIsPresent` and `usePresenceData<T>` expose `.current`.
 
-## Activity: explicitly agreed adaptation
+## Activity: Svelte adaptation
 
-The user approved retained child/DOM state, coordinated exit/visibility, automatic
-suspension of Astra-owned work while hidden, and an activity-aware application-effect
+Activity retains child/DOM state and coordinates exit/visibility, with automatic
+suspension of Astra-owned work while hidden and an activity-aware application-effect
 helper, `useActivityEffect`. Ordinary Svelte `$effect`s stay active unless using that helper. React
 Activity's arbitrary subtree effect suspension and background scheduling have no
 public Svelte equivalent. This is an explicit documented adaptation, not an assertion
@@ -94,8 +88,7 @@ that playback for their visual. The [Activity reference](https://alois-reinstadl
 is the primary authoring guide for phases, effects and retained host behavior.
 
 View capture name leases restore at most once, including when a skipped native
-update callback runs after its replacement has acquired the same name. See the
-[release audit regressions](RELEASE-AUDIT.md).
+update callback runs after its replacement has acquired the same name.
 
 Hybrid useAnimate observes live policy but preserves each run's explicit
 `reduceMotion: false`, including sequences and path animations.
@@ -147,6 +140,5 @@ qualification and packed consumer runtime lifecycle coverage are delivery gates.
 - `MotionConfig.isStatic` remains unsupported: it is an upstream internal implementation
   flag. The vgpu/Threlte proof of concept remains outside core dependencies and guarantees.
 
-Focused presence/reorder evidence is in [the implementation record](../reviews/2026-09-29-presence-reorder.md).
 Final release qualification must identify the exact integrated commit and package archive;
 source/API review alone is not full-candidate verification.

@@ -11,7 +11,7 @@ This candidate is prepared for local installation; it is not a registry publicat
   reduced-motion policy and cleanup. Fix reactive variant results, live policy
   changes during retained native exits, and per-animation reduced-motion opt-outs.
 - Add optional `/text` and `/tilt` entries with `TextReveal`, `TextSwap`, and `Tilt`.
-- Include an isolated, attributed [Threlte scene port](docs/research/threlte-scene.md)
+- Include an isolated, attributed [Threlte scene port](experiments/threlte-scene/README.md)
   with scroll-driven camera/clip sampling and cursor interactions. Its dependencies
   are excluded from the library package. Real GPU rendering remains unqualified here.
 - Clarify WebGPU secure-context and adapter failures. `MotionConfig.isStatic`

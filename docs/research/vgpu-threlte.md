@@ -32,7 +32,7 @@ Threlte already supplies [task ordering and on-demand invalidation](https://thre
 
 ## Proof of concept
 
-[Source and run instructions](../../experiments/vgpu-threlte/README.md). [Managed preview](http://100.64.0.2:4099).
+[Source and run instructions](../../experiments/vgpu-threlte/README.md).
 
 The same radial 2D field is expressed in WGSL and GLSL. vgpu has two uniforms animated through Motion; the Threlte scene lets the reviewer switch between native Svelte Tween and the public `threeEffect`. Rendering is invalidated on changes, not kept alive by an unconditional demo animation loop. A labeled Canvas2D reference appears only when WebGL2 is unavailable; it uses the same field equation and drivers. It is never presented as vgpu or Threlte rendering.
 

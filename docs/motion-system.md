@@ -2,9 +2,8 @@
 
 Current primary API and scope: [parity matrix](parity/MATRIX.md),
 [shared Svelte contracts](parity/CONTRACTS.md), and [migration](migration.md).
-This document explains the current adapter architecture alongside original design
-reasoning. Dated research links retain their historical scope and do not establish
-current API support or release qualification. Native outro retention requires a
+This document explains the adapter architecture and its design constraints.
+Native outro retention requires a
 finite total duration; it uses the same target resolution as motion components.
 
 **Recommendation: adopt the Svelte/Motion hybrid with the exact dependency pin and
@@ -14,9 +13,7 @@ Svelte assignments. The explicit transaction remains available for controlled wo
 **State bindings:** `motion.bind` supplies initial/update/exit targets, matching SSR
 styles, shared VisualElement ownership, variants/orchestration, MotionValues,
 gestures and context defaults. See [authoring](authoring.md) for current recipes.
-The [original state API](research/state-api.md) and
-[implementation report](research/state-implementation.md) record the earlier
-`createMotion` design; that helper has been removed.
+The earlier `createMotion` helper has been removed.
 
 The follow-up breakthrough is that Motion's cached layout and current projected pose
 can seed a postcommit snapshot. This works through interruption, nested projection and
@@ -56,9 +53,8 @@ not add dependencies or claims of GPU acceleration to the core adapter.
   produce maps. `print` exists but reprints source and its map needs care. The disabled
   spike passes 26 cases. Neither technique discovers every cause of layout changes.
 
-Primary sources and pinned source links: [Motion research](research/motion-architecture.md),
-[Svelte/platform research](research/svelte-platform.md), and the initial
-[architecture decision](research/decision.md). Research date: 2026-09-05.
+See the [parity matrix](parity/MATRIX.md) for upstream reference URLs and
+the pinned compatibility baseline.
 
 ## Architecture
 
@@ -109,8 +105,7 @@ when a shared element resizes inside a scroll container. The defect reproduces w
 native before-commit measurement too. The listener runs before Motion's animation
 listener and reuses Motion's own scroll helpers. It ships with the adapter; Motion
 itself is unpatched. Listener ordering and mutable event payloads are undocumented
-integration details covered by the exact pin and regression suite. See the
-[reproducer and compatibility contract](research/motion-coordinate-patch.md).
+integration details covered by the exact pin and regression suite.
 
 Our code owns change observation, cached-snapshot integration, the optional synchronous
 commit bridge, DOM registration ordering and disposal,
@@ -227,8 +222,7 @@ separate `popLayout()` attachment.
 
 Normal assignments now animate flex alignment, grid columns, keyed reorder, intrinsic
 size, shared replacement and cross-component reflow. DOM and size observation schedules
-a postcommit snapshot from Motion's cached pose. See the [automatic-layout research](research/automatic-layout.md)
-for precision, scrolling and lifecycle details.
+a postcommit snapshot from Motion's cached pose.
 
 `layout.update(() => { ... })` remains a synchronous precommit escape hatch. Set
 `createLayout({ automatic: false })` when an application deliberately controls every
@@ -240,7 +234,7 @@ the source from Motion's cached visual pose. With `.update`, it captures a fresh
 before the callback and flushes the synchronous state change. Both use the same engine;
 adding `.update` does not turn observation off or guarantee smoother motion.
 
-The isolated [update-mode experiment](/motion-lab/updates) demonstrates all four cases:
+The isolated [update-mode experiment](https://alois-reinstadler.github.io/astra-motion/motion-lab/updates) demonstrates all four cases:
 
 | Mounted mode                                 | Ordinary assignment                      | `layout.update(...)`              |
 | -------------------------------------------- | ---------------------------------------- | --------------------------------- |
@@ -382,8 +376,7 @@ basis during a shared handoff and singular transforms such as zero scale remain
 outside the general contract. Static 3D and perspective ancestors now have descendant
 layout coverage; changing camera/orientation, edge-on planes and general 3D scene
 interpolation remain excluded. See the current
-[layout reference](https://alois-reinstadler.github.io/astra-motion/docs/layout#troubleshooting)
-and the [historical boundary review](research/projection-boundaries.md). A state
+[layout reference](https://alois-reinstadler.github.io/astra-motion/docs/layout#troubleshooting). A state
 binding that only animates paint (for example opacity) preserves existing CSS
 transforms. When transform targets are introduced, Motion composes them using the same
 precedence as components; a nonempty raw transform masks independent targets.
@@ -535,11 +528,10 @@ remain the reusable component’s integration contract.
 
 ## Measurements and test evidence
 
-Read [validation report](research/validation.md) for exact commands, results, coverage
-and unverified cases. Raw benchmark files are alongside it. The [production qualification](research/production-qualification.md) records later
-packed application builds and runtime checks. Isolated in-memory feature bundles
-measure tree shaking with host Svelte/SvelteKit externalized; they are not application
-transfer-size measurements.
+Use the [release checklist](release-checklist.md) to qualify packed application
+builds and runtime behavior. Isolated in-memory feature bundles measure tree shaking
+with host Svelte/SvelteKit externalized; they are not application transfer-size
+measurements.
 
 The original settled-width cache experiment has been superseded by real cached Motion
 projection tests covering nested geometry, interruption, shared replacement and scrolling.
@@ -568,13 +560,13 @@ requires current DOM ordering for connected participants.
   tests before upgrading; the detached shared-scroll correction needs upstream reconciliation.
 - **Content must counter-project.** Text needs transformable position-projected hosts;
   images need a defined aspect/crop contract. Unregistered raw text inherits surface
-  scaling. See the user-reported [content distortion review](research/review-content.md).
+  scaling.
 - **No general CSS-transform coexistence.** The adapter has an explicit ownership
   contract. Static affine wrapper transforms and nested sticky/scroll/clipping contexts
   have geometry regressions, including interruption and cleanup. Changing wrapper transforms,
   camera/orientation during a 3D transition, edge-on planes and general 3D scene
   interpolation remain excluded. Static 3D/perspective ancestor support is described
-  in the current layout reference; the older boundary report records its earlier scope.
+  in the current layout reference.
 - **SSR inheritance needs declared ancestry.** Nested tag components declare it through
   context; native bindings use `parent.child()`. Arbitrary DOM ancestry discovered
   after mounting cannot determine server styles. Variant ancestry and projection's
@@ -613,5 +605,4 @@ corrected text, nested wait/destruction, and paired reduced-motion policies. Its
 stress runner applies 20 ordinary state changes at 80 ms intervals and can be stopped.
 The raw-text control deliberately demonstrates distortion and is labeled accordingly.
 
-See [remaining milestones](research/next-milestones.md) for the original-scope beta gate,
-which limitations also exist in Motion React, and the remaining value of compiler sugar.
+See the [release checklist](release-checklist.md) for candidate qualification gates.
