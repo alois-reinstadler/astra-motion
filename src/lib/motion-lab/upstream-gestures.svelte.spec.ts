@@ -1,11 +1,25 @@
 // Motion v13.4.4 gestures/__tests__/hover.test.tsx adaptations.
 // Source mapping and MIT attribution: tests/motion-baseline/README.md and LICENSE.motion.
 import { tick } from 'svelte';
-import { expect, it, vi } from 'vitest';
+import { beforeEach, expect, it, vi } from 'vitest';
+import { userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-svelte';
 import UpstreamGestures from './UpstreamGestures.svelte';
 
 const frame = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+// Synthetic pointer events do not move the browser's real mouse. Park it before
+// mounting so a prior trusted click cannot hover a newly inserted test target.
+beforeEach(async () => {
+	const parking = document.createElement('div');
+	parking.style.cssText =
+		'position:fixed;left:200px;top:150px;width:20px;height:20px;z-index:2147483647;';
+	document.body.append(parking);
+	try {
+		await userEvent.hover(parking, { timeout: 2000 });
+	} finally {
+		parking.remove();
+	}
+});
 function pointer(target: EventTarget, type: string, x = 10) {
 	target.dispatchEvent(
 		new PointerEvent(type, {

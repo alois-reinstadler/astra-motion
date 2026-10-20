@@ -30,7 +30,7 @@ node scripts/prepare-motion-consumer.mjs
 - [ ] All checks above pass on the release commit.
 - [ ] Run `node scripts/check-motion-consumer-types.mjs /path/to/qualification.json /path/to/strict-types.json`. This checks declarations with `skipLibCheck: false`, writes the complete diagnostics and exits nonzero on failure. An ordinary app check with `skipLibCheck: true` does not satisfy this gate.
 - [ ] Execute CI's browser unit matrix and production E2E matrix for Chromium, Firefox and WebKit. Retain the run links and failure artifacts. Config discovery is not execution.
-- [ ] Qualify the same packed consumer's exports, SSR, lifecycle and layout aftercare. Use explicit running server origins; see [package reproduction](research/production-package.md) and [lifecycle reproduction](research/production-lifecycle.md).
+- [ ] Qualify the same packed consumer's exports, SSR, lifecycle and layout aftercare. Use explicit running server origins with `scripts/qualify-motion-package.mjs` and `scripts/qualify-motion-lifecycle.mjs`.
 - [ ] Compare production bundles and review changes against the previous candidate.
 
 CI owns its production preview process explicitly. Local configs use an existing preview and never start a server. The qualification scripts launch Playwright engines when explicitly executed; they cannot be run in an environment that permits only its shared Chrome. In that environment, record bounded shared-Chrome checks and leave the full matrix pending.
@@ -55,9 +55,8 @@ from Astra; a separately installed engine is outside this identity contract.
 Compare the tarball size and the downstream feature bundles independently: the
 archive now contains dependencies that were previously downloaded separately.
 
-The [historical strict typing report](research/strict-consumer-types.md) records the
-original upstream failure. The current candidate must pass strict checking without
-that workaround, then pass browser qualification using the same packed archive.
+The current candidate must pass strict checking without declaration workarounds
+in the consuming app, then pass browser qualification using the same packed archive.
 
 ## Device qualification
 
@@ -78,4 +77,4 @@ Only after the owner approves publication and the release gates above are resolv
 - [ ] Fresh adversarial review and final polish findings are resolved and verified.
 - [ ] Main is merged/pushed, CI and Pages are green, and deployed interactions are verified.
 
-The dated [delivery record](parity/PROGRESS.md) records completion evidence.
+Attach completion evidence to the exact release commit and archive.

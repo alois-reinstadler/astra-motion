@@ -4,27 +4,19 @@ An isolated Svelte / Threlte port of Paul Henschel’s [ScrollControls GLTF scen
 
 ## Run
 
+From this experiment directory:
+
 ```sh
 pnpm install --frozen-lockfile
 pnpm check
 pnpm test
 pnpm build
-pnpm dev --host 0.0.0.0 --port 4097 --strictPort
+pnpm dev
 ```
 
-`--frozen-lockfile` preserves the reviewed dependency graph. `--host` accepts the managed container forwarding; `--port` uses this preview’s allocated port; `--strictPort` refuses a silently substituted port. Use the managed preview command below in this workspace rather than starting a second process on its occupied port. Outside this container choose your own free local port.
+`--frozen-lockfile` preserves the reviewed dependency graph. `pnpm dev` prints the local URL.
 
 The nested workspace prevents installation into the repository’s shared dependency tree. The bundled Astra archive makes this experiment installable without building the library or using a registry prerelease. SHA256: `8c001390e0406e5e628873bcd5f4f2a8a026e372aa2037f20ccc6578fe88515f`. The archive predates the subsequent core migration; this experiment intentionally evaluates that exact package.
-
-## Preview
-
-Managed slug: `astra-motion-release-consumer`. [Open the tailnet preview](http://100.64.0.2:4097). Browser tools inside the container use `http://127.0.0.1:4097`.
-
-```sh
-dev-preview start astra-motion-release-consumer --cwd /workspace/wt/astra-rc-vgpu/experiments/threlte-scene -- pnpm exec vite dev --host '{host}' --port '{port}' --strictPort
-```
-
-`--cwd` selects this isolated app; the manager substitutes its allocated host and port. The server remains managed and running for review; container restarts require the same start command again.
 
 ## Interaction and ownership
 
@@ -52,4 +44,4 @@ On a capable device: inspect all three chapters, move the pointer, use keyboard 
 
 `assets.manifest.json` records exact local bytes, SHA256, origin, and attribution. Fonts and all model/decoder assets are local; the running scene needs no third-party asset service. The font upstream links use `main`; their exact downloaded bytes are identified by hashes.
 
-Research and verification details: `../../docs/research/threlte-scene.md`. Evidence on this workstation: `/tmp/astra-next-20260929/scene/`.
+See [research and verification details](./RESEARCH.md).

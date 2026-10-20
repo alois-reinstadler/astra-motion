@@ -1,3 +1,21 @@
+# Branch consolidation — 2026-10-20
+
+The consolidation combines the existing RC3 main baseline with release-readiness
+commit `26ebab6`, including its three browser-test corrections. Merge resolution
+retains newer main behavior, configurable performance output, and historical
+qualification evidence still cited by current records. Experiment research lives
+beside its run instructions, with compatibility links at the original paths.
+
+Original refs and uncommitted documentation edits are preserved in the verified
+backup at `/workspace/branch-backups/astra-motion-20261020/`. The documentation
+worktree's uncommitted edits remain in place for separate review; they are not
+part of this merge. Retired worktree directories are retained with detached HEADs.
+The intended branch inventory is only `main`, locally and on origin.
+
+This consolidation does not claim a fresh complete release/browser qualification.
+The records below apply only to their named revisions. Exact commands and results
+for this consolidation are retained with the external backup.
+
 # Layout-feedback handoff — 2026-10-12
 
 Main contains the retained-exit positioning correction, Notes highlight layering,

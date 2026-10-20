@@ -10,7 +10,7 @@ or `transition:slide`. When new markup needs Astra capabilities, start with
 `motion.div`, `motion.button` or another tag component from `astra-motion`.
 Use `motion.bind` when an existing native element or component owns the markup. These
 complete recipes are also available with copy buttons and links to live scenarios
-at [/motion-lab/guide](/motion-lab/guide). This is a beta adapter over pinned Motion
+at [/motion-lab/guide](https://alois-reinstadler.github.io/astra-motion/motion-lab/guide). This is a beta adapter over pinned Motion
 13.4.4; see the [release checklist](release-checklist.md) for the current engine pins.
 
 ## Install the supplied release candidate
@@ -343,7 +343,7 @@ same explicit `id`. This avoids accidental sharing across independent widgets.
 
 layout.update(() => change()) explicitly captures fresh geometry before a synchronous change. Automatic observation normally makes it unnecessary.
 
-Try [Automatic layout](/motion-lab/updates).
+Try [Automatic layout](https://alois-reinstadler.github.io/astra-motion/motion-lab/updates).
 
 ## Wait for the outgoing branch
 
@@ -369,7 +369,7 @@ Use `mode="sync"` for immediate replacement while outgoing branches finish. Plai
 `onExitComplete={() => ...}` runs after the outgoing group is destroyed; in sync mode
 it waits for all outgoing branches. Cancelled exits and parent disposal do not notify.
 
-Try [Wait for the outgoing branch](/motion-lab/presence).
+Try [Wait for the outgoing branch](https://alois-reinstadler.github.io/astra-motion/motion-lab/presence).
 
 Changing Presence's mode resets its sequencing; completion callbacks from the abandoned
 mode are suppressed. Keep the mode stable during a sequence when completion matters.
@@ -403,7 +403,7 @@ container and `margin` to adjust its observation boundary. Pass a reactive optio
 reader when these change. `once` disconnects after entry and resets for a replacement
 target; component teardown always disconnects. Reduced motion does not change visibility.
 
-Try [Visibility and presence](/motion-lab/presence).
+Try [Visibility and presence](https://alois-reinstadler.github.io/astra-motion/motion-lab/presence).
 
 ## Remove from flow, finish the exit
 
@@ -445,7 +445,7 @@ popLayout captures the exiting element, frees its space, and lets projected sibl
 
 The direct parent must be positioned. The retained item needs a native outro. Use a per-item component if each item also needs its own `motion.bind` binding.
 
-Try [Remove from flow, finish the exit](/motion-lab).
+Try [Remove from flow, finish the exit](https://alois-reinstadler.github.io/astra-motion/motion-lab).
 
 ## Shared elements & isolated groups
 
@@ -490,7 +490,7 @@ A controller is a layout group. Local IDs pair different nodes within that group
 
 Pass a controller to children, or use the same explicit group ID across controllers to share a scope. Unnamed controllers are isolated. Reuse an element ID only for deliberate shared handoff.
 
-Try [Shared elements & isolated groups](/motion-lab).
+Try [Shared elements & isolated groups](https://alois-reinstadler.github.io/astra-motion/motion-lab).
 
 ## Coordinated children, including SSR
 
@@ -527,7 +527,7 @@ parent binding mounted while its child uses that ancestry. Add `|global` when a
 child transition must participate in removal of an enclosing block. `initial: false`
 skips the first entrance.
 
-Try [Coordinated children, including SSR](/motion-lab/inheritance).
+Try [Coordinated children, including SSR](https://alois-reinstadler.github.io/astra-motion/motion-lab/inheritance).
 
 ## Your own component
 
@@ -604,7 +604,7 @@ focus and accessibility behavior; create an independent `motion.bind` binding in
 portal. See the complete [Dialog adapter](../src/lib/components/ui/dialog/dialog-content.svelte).
 Test Escape, focus restoration, rapid reversal and removal of the owning component.
 
-Try [Your own component](/motion-lab/components).
+Try [Your own component](https://alois-reinstadler.github.io/astra-motion/motion-lab/components).
 
 ## Scroll-linked motion
 
@@ -644,7 +644,7 @@ Attach a container, optionally a target, and a linked animation. Motion selects 
 
 With no container attachment, tracking uses the window. progress is a MotionValue for semantic UI; decorative linked motion settles when reduced motion is enabled.
 
-Try [Scroll-linked motion](/motion-lab/scroll).
+Try [Scroll-linked motion](https://alois-reinstadler.github.io/astra-motion/motion-lab/scroll).
 
 ## Scoped timelines
 
@@ -681,7 +681,7 @@ Selectors stay inside the attached root. Replaying an overlapping sequence repla
 
 Use the returned controls for pause, play, time and speed. Do not give a timeline a node already owned by a motion binding, layout or a scroll animation.
 
-Try [Scoped timelines](/motion-lab/timelines).
+Try [Scoped timelines](https://alois-reinstadler.github.io/astra-motion/motion-lab/timelines).
 
 ## Install route transitions once
 
@@ -700,7 +700,7 @@ Call the coordinator in your persistent SvelteKit root layout. Kit owns navigati
 
 This is +layout.svelte. Unsupported browsers and reduced-motion users navigate immediately. Install one coordinator, not one per page.
 
-Try [Install route transitions once](/motion-lab/product).
+Try [Install route transitions once](https://alois-reinstadler.github.io/astra-motion/motion-lab/product).
 
 ## Shared identity across routes
 
@@ -732,7 +732,7 @@ Use the same ID and scope on the list image and detail image. Temporary browser 
 
 Use this component on both pages with the same product. The route coordinator above is required. Local layout IDs and route identities use separate backends.
 
-Try [Shared identity across routes](/motion-lab/product).
+Try [Shared identity across routes](https://alois-reinstadler.github.io/astra-motion/motion-lab/product).
 
 ## Keep text and images natural
 
@@ -881,7 +881,7 @@ that ownership.
 
 Try reversal before an exit finishes, resize during a layout animation, remove
 while reordering, and navigate away while a sequence runs. The labs linked above
-cover each feature; [extended scenarios](/motion-lab/extended) include rapid stress,
+cover each feature; [extended scenarios](https://alois-reinstadler.github.io/astra-motion/motion-lab/extended) include rapid stress,
 scroll and nested layout. Browser suites qualify Chromium, Firefox and WebKit, but
 physical mobile profiling and exhaustive route/BFCache behavior remain release work.
 

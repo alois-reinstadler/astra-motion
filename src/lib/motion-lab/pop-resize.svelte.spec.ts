@@ -108,12 +108,15 @@ it('keeps local offsets correct after scrolling before exit', async () => {
 	try {
 		await frames();
 		scroller.scrollTop = 110;
+		// Firefox may snap the applied offset to device pixels; compare against the realized value.
+		const scrollTop = scroller.scrollTop;
+		expect(Math.abs(scrollTop - 110)).toBeLessThan(1);
 		const before = text().getBoundingClientRect();
 		flushSync(() => screen.component.toggle());
 		await tick();
 		expect(text().getBoundingClientRect().top).toBeCloseTo(before.top, 1);
 		expect(text().getBoundingClientRect().width).toBeCloseTo(before.width, 1);
-		expect(scroller.scrollTop).toBe(110);
+		expect(scroller.scrollTop).toBe(scrollTop);
 	} finally {
 		await screen.unmount();
 		scroller.remove();
