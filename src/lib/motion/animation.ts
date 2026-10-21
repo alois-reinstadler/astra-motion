@@ -1,6 +1,8 @@
 import type { Transition } from './animation-types.js';
 import {
 	animateTarget,
+	defaultTransformValue,
+	transformProps,
 	calcChildStagger,
 	createAnimationState,
 	frame,
@@ -143,6 +145,19 @@ export function animateMotionDefinition(
 		const own = async () => {
 			if (!current() || !target) return;
 			const { transitionEnd, ...values } = target;
+			// A raw transform masks independent channels; it is not their initial value.
+			// Preserve known values/bases and use identity only for missing channels,
+			// so instant targets complete without resolving a masked CSS matrix first.
+			if (visual.latestValues.transform) {
+				for (const key of Object.keys(values)) {
+					if (transformProps.has(key) && !visual.hasValue(key)) {
+						const base = visual.getBaseTarget(key);
+						const initial = visual.latestValues[key] ?? base ?? defaultTransformValue(key);
+						visual.getValue(key, initial);
+						if (base === undefined) visual.setBaseTarget(key, initial);
+					}
+				}
+			}
 			const pathTransition = ownedPathTransition(transition);
 			// Settle already-finished native effects before Motion replaces targets.
 			// Running values remain entirely under Motion's priority/interruption logic.

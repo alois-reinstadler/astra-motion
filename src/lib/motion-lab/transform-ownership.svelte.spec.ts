@@ -2,6 +2,8 @@ import { expect, it } from 'vitest';
 import { render } from 'vitest-browser-svelte';
 import TransformOwnership from './TransformOwnership.svelte';
 import TransformBoundary from './TransformBoundary.svelte';
+import { animateMotionDefinition } from '../motion/animation.js';
+import { ensureMotionVisual } from '../motion/visual.js';
 
 const frame = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
 it('lets an imperative raw transform take precedence and explicitly clears it before aliases resume', async () => {
@@ -62,4 +64,20 @@ it('claims a newly inherited fractional transform when reduced motion settles it
 		.toBeCloseTo(12.123456789, 3);
 	expect(screen.container.querySelector('[data-transform-error]')).toBeNull();
 	expect(node.isConnected).toBe(true);
+});
+
+it('animates a newly masked scale from identity and resolves completion before explicit clearing', async () => {
+	const screen = render(TransformOwnership, {
+		config: { animate: { transform: 'rotate(60deg)' } }
+	});
+	await frame();
+	const node = screen.container.querySelector<HTMLElement>('[data-transform-owner]')!;
+	const visual = ensureMotionVisual(node)!;
+	const completion = animateMotionDefinition(visual, { scale: 2, transition: { duration: 0.05 } });
+	expect(visual.getValue('scale')?.get()).toBe(1);
+	await completion;
+	expect(visual.getValue('scale')?.get()).toBe(2);
+	expect(new DOMMatrix(getComputedStyle(node).transform).a).toBeCloseTo(0.5, 5);
+	await screen.component.animate({ transform: '', scale: 2 });
+	expect(new DOMMatrix(getComputedStyle(node).transform).a).toBe(2);
 });

@@ -58,6 +58,7 @@
 			"createDelta",
 			"createEffect",
 			"createGeneratorEasing",
+			"defaultTransformValue",
 			"frame",
 			"getDefaultTransition",
 			"getFinalKeyframe",
@@ -128,6 +129,7 @@
 				"time"
 			],
 			"sequence path timing": ["createGeneratorEasing", "isGenerator"],
+			"masked transform initialization": ["defaultTransformValue"],
 			"arc playback ownership": ["GroupAnimationWithThen", "addStyleValue", "styleSubjectEffect"]
 		},
 		"evidence": "docs/parity/MATRIX.md, docs/parity/CONTRACTS.md, component/view/gesture parity browser suites; export presence alone is not behavioral qualification",
