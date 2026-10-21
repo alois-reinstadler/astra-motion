@@ -41,28 +41,48 @@ it('scopes selectors, sequences labels, and clears finished playback', async () 
 		b.root.remove();
 	}
 });
-it('retargets an in-flight timeline and prevents stale later segments', async () => {
-	const { root, box } = fixture();
-	const scope = createAnimate({ reducedMotion: 'never' });
-	const detach = scope.attach(root);
-	try {
-		scope.sequence([
-			['.box', { x: 100 }, { duration: 0.4 }],
-			['.box', { x: 200 }, { duration: 0.1 }]
-		]);
-		await frames(4);
-		const before = new DOMMatrix(getComputedStyle(box).transform).e;
-		const next = scope.animate('.box', { x: 20 }, { duration: 0.06 });
-		expect(Math.abs(new DOMMatrix(getComputedStyle(box).transform).e - before)).toBeLessThan(2);
-		await next;
-		await frames(35);
-		expect(new DOMMatrix(getComputedStyle(box).transform).e).toBeCloseTo(20, 1);
-		expect(scope.active).toBe(0);
-	} finally {
-		detach?.();
-		root.remove();
+it.each([false, true])(
+	'retargets an in-flight timeline and prevents stale later segments (held=%s)',
+	async (held) => {
+		const { root, box } = fixture();
+		const scope = createAnimate({ reducedMotion: 'never' });
+		const detach = scope.attach(root);
+		try {
+			const old = scope.sequence([
+				['.box', { x: 100 }, { duration: 0.4 }],
+				['.box', { x: 200 }, { duration: 0.1 }]
+			]);
+			await frames(4);
+			if (held) {
+				old.pause();
+				await Promise.all(box.getAnimations().map((animation) => animation.ready));
+				old.time = 0.1;
+				await frames();
+			}
+			const before = new DOMMatrix(getComputedStyle(box).transform).e;
+			const next = scope.animate('.box', { x: 20 }, { duration: 0.06, autoplay: !held });
+			await expect(old.settled).resolves.toEqual({ status: 'cancelled', reason: 'replaced' });
+			expect(() => old.play()).toThrow(/stopped/);
+			if (held) {
+				next.time = 0;
+				await Promise.all(box.getAnimations().map((animation) => animation.ready));
+				await frames();
+				expect(before).toBeGreaterThan(0);
+				expect(before).toBeLessThan(100);
+				expect(Math.abs(new DOMMatrix(getComputedStyle(box).transform).e - before)).toBeLessThan(2);
+				next.play();
+			}
+			await next;
+			await frames(35);
+			expect(new DOMMatrix(getComputedStyle(box).transform).e).toBeCloseTo(20, 1);
+			expect(scope.active).toBe(0);
+		} finally {
+			detach?.();
+			root.remove();
+		}
 	}
-});
+);
+
 it('cleans up native playback and ownership when detached', async () => {
 	const { root, box } = fixture();
 	const scope = createAnimate({ reducedMotion: 'never' });

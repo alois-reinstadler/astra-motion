@@ -1,4 +1,9 @@
-import { animateTarget, AsyncMotionValueAnimation, HTMLVisualElement } from 'motion-dom';
+import {
+	animateTarget,
+	AsyncMotionValueAnimation,
+	HTMLVisualElement,
+	flushKeyframeResolvers
+} from 'motion-dom';
 import { animate, scroll } from 'motion';
 
 const frame = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
@@ -56,7 +61,7 @@ export async function nativeFinishCancel() {
 	}
 }
 
-/** Reading the public animation getter synchronously resolves an unrelated subject. */
+/** A resolved playback getter must not synchronously measure unrelated pending subjects. */
 export function pendingGetterMeasurements() {
 	const subject = fixture({ opacity: 1 }, 'opacity:1');
 	const unrelated = fixture({ height: 30 }, 'width:100px;height:30px');
@@ -74,7 +79,9 @@ export function pendingGetterMeasurements() {
 			throw new Error('Expected asynchronous MotionValue playback.');
 		const before = reads;
 		void playback.animation;
-		return { beforeGetter: before, afterGetter: reads };
+		const afterGetter = reads;
+		flushKeyframeResolvers();
+		return { beforeGetter: before, afterGetter, afterFlush: reads };
 	} finally {
 		window.getComputedStyle = original;
 		subject.cleanup();

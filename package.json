@@ -171,14 +171,14 @@
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.19.0",
 		"formsnap": "^2.0.1",
-		"framer-motion": "13.4.4",
+		"framer-motion": "14.5.0",
 		"globals": "^17.6.0",
 		"layerchart": "^2.3.1",
 		"magic-string": "0.30.21",
 		"mode-watcher": "^1.1.0",
-		"motion": "13.4.4",
-		"motion-dom": "13.4.4",
-		"motion-utils": "13.3.0",
+		"motion": "14.5.0",
+		"motion-dom": "14.5.0",
+		"motion-utils": "14.1.1",
 		"paneforge": "^1.0.2",
 		"playwright": "^1.60.0",
 		"prettier": "^3.8.3",
@@ -215,7 +215,7 @@
 			"optional": true
 		}
 	},
-	"description": "Motion\u2019s animation engine integrated with Svelte 5: native elements, coordinated exits and shared layout.",
+	"description": "Motion’s animation engine integrated with Svelte 5: native elements, coordinated exits and shared layout.",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/alois-reinstadler/astra-motion.git"

@@ -1,5 +1,8 @@
 # Motion parity contract and evidence
 
+Current engine: [Motion 14.5 upgrade qualification](../research/motion-14.5-upgrade-20261021.md).
+The reference baseline and dated audit evidence below remain historical.
+
 Current consolidation is tracked in the [main ledger](../releases/2026-10-11-consolidation.md).
 Qualification and deployment claims apply only to the revisions named in their records.
 See [migration](../migration.md), [text motion](../text-motion.md) and

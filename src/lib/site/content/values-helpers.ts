@@ -59,7 +59,7 @@ export const valuesHelpersDocs: DocPage[] = [
 				title: 'Opt into a persistent will-change hint',
 				text: [
 					'useWillChange() creates a component-owned MotionValue initially set to "auto". Pass it directly as style={{ willChange }} on motion.* or in motion.bind options to opt in. Eligible animated targets register with the value; willChange.add("x") explicitly prewarms the hint.',
-					'The pinned Motion 13.4.4 contract maps eligible independent transforms and accelerated targets to the "transform" hint. The hint remains for the value’s lifetime. Cleanup disposes the owned value; hidden Activity does not discard the persistent hint. This is a rendering hint, not a claim of GPU acceleration or a performance improvement. Avoid applying it indiscriminately.'
+					'The pinned Motion 14.5.0 contract maps eligible independent transforms and accelerated targets to the "transform" hint. The hint remains for the value’s lifetime. Cleanup disposes the owned value; hidden Activity does not discard the persistent hint. This is a rendering hint, not a claim of GPU acceleration or a performance improvement. Avoid applying it indiscriminately.'
 				]
 			},
 			{

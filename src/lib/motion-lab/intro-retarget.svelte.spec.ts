@@ -103,11 +103,25 @@ it.each(['object', 'custom', 'labels'] as const)(
 		await frame();
 		const before = Number(value.get());
 		expect(before).toBeLessThan(0);
+		// Motion14 reads compositor values live. Hold the replacement at its real
+		// origin so this checks continuity rather than elapsed wall-clock motion.
+		let replacement: AsyncMotionValueAnimation<number> | undefined;
+		const stop = value.on('animationStart', () => {
+			const playback = value.animation;
+			if (!(playback instanceof AsyncMotionValueAnimation) || playback === entry) return;
+			replacement = playback;
+			playback.pause();
+			playback.time = 0;
+		});
+		onTestFinished(stop);
 		flushSync(() => screen.component.retarget());
 		await microtasks();
+		expect(replacement).toBeDefined();
 		expect(Number(value.get())).toBeCloseTo(before, 3);
+		stop();
+		replacement!.play();
 		await expect.poll(() => Number(value.get()), { timeout: 600 }).toBeCloseTo(180, 2);
-		expect(new DOMMatrix(getComputedStyle(node).transform).e).toBeCloseTo(180, 2);
+		await expect.poll(() => new DOMMatrix(getComputedStyle(node).transform).e).toBeCloseTo(180, 2);
 	}
 );
 

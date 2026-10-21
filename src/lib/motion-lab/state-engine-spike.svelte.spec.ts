@@ -33,14 +33,15 @@ it('retargets Motion values on the same VisualElement while layout projection is
 			scale: 0.7,
 			transition: { duration: 1, ease: 'linear' }
 		});
+		// Let the engine initialize its layout-aware transform group before seeking.
+		await frames();
 		state.forEach((animation) => {
 			animation.pause();
 			animation.time = 0.3;
 		});
 		await frames();
 		const currentScale = Number(visual.getValue('scale')!.get());
-		expect(currentScale).toBeGreaterThan(0.7);
-		expect(currentScale).toBeLessThan(1);
+		expect(currentScale).toBeCloseTo(0.91, 5);
 		layout.update(() => {
 			parent.style.justifyContent = 'flex-end';
 		});

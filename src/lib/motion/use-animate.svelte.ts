@@ -50,7 +50,11 @@ import {
 } from './motion-compat.js';
 import { shouldReduceMotion, type MotionPolicy } from './policy.js';
 import { readMotionGetter, type MotionGetter } from './value-hooks.svelte.js';
-import { animateMotionPath, isMotionPathAnimation } from './animation.js';
+import {
+	animateMotionPath,
+	isMotionPathAnimation,
+	delayedInstantTransformTransition
+} from './animation.js';
 import { animateSequencePaths } from './sequence-path.js';
 
 /** Upstream overloads with additive cancellation-aware settlement. finished/then remain upstream. */
@@ -111,7 +115,7 @@ function pathOwner(element: HTMLElement | SVGElement): VisualElement {
 	} as VisualElement;
 }
 
-/** The hybrid engine currently bypasses MotionPath; route DOM arcs through its public hook. */
+/** Share the engine path clock with the axes whose ownership Astra manages. */
 function animatePathElements(
 	subject: unknown,
 	keyframes: unknown,
@@ -372,6 +376,20 @@ export function useAnimate<T extends Element = HTMLElement>(
 					}
 				}
 			: { ...configuration.transition, ...options };
+		if (!sequence && keyframes && typeof keyframes === 'object') {
+			const guarded = delayedInstantTransformTransition(args[optionIndex] as Transition, keyframes);
+			if (guarded) args[optionIndex] = guarded;
+		}
+		// Paths run before the engine's per-property reduction. Keep reduced positional
+		// targets on its ordinary instant path, including the hybrid fallback.
+		if (
+			!sequence &&
+			((args[optionIndex] as Record<string, unknown>).reduceMotion ?? untrack(reduced))
+		) {
+			const reducedOptions = { ...(args[optionIndex] as Record<string, unknown>) };
+			delete reducedOptions.path;
+			args[optionIndex] = reducedOptions;
+		}
 		const invoke = play as (...parameters: unknown[]) => AnimationPlaybackControlsWithThen;
 		const controls =
 			(sequence &&

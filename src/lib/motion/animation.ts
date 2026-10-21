@@ -2,6 +2,8 @@ import type { Transition } from './animation-types.js';
 import {
 	animateTarget,
 	defaultTransformValue,
+	resolveMotionValue,
+	getValueTransition,
 	transformProps,
 	calcChildStagger,
 	createAnimationState,
@@ -71,7 +73,17 @@ export function animateMotionPath(
 	const axes = ['x', 'y'].map((key) => visual.getValue(key, visual.latestValues[key] ?? 0));
 	for (const value of axes) value.stop();
 	const first = animations.length;
-	path.animateVisualElement(visual, target, transition, delay, animations);
+	if (path.animateValues)
+		path.animateValues(
+			(key) => visual.getValue(key, visual.latestValues[key] ?? 0),
+			target as Record<string, unknown>,
+			transition,
+			delay,
+			animations
+		);
+	else if (path.animateVisualElement)
+		path.animateVisualElement(visual, target, transition, delay, animations);
+	else throw new Error('Astra motion: an animated path requires a value animation hook.');
 	const owned = animations.slice(first);
 	if (!owned.length) return;
 	const playback = owned.length === 1 ? owned[0] : new GroupAnimationWithThen(owned);
@@ -79,25 +91,58 @@ export function animateMotionPath(
 	ownMotionPathPlayback(visual, playback);
 }
 
-function ownedPathTransition(transition: Transition | undefined): Transition | undefined {
+function ownedPathTransition(
+	visual: VisualElement,
+	transition: Transition | undefined,
+	policy: Pick<Transition, 'reduceMotion' | 'skipAnimations'>
+): Transition | undefined {
 	const path = transition?.path;
 	if (!path) return transition;
 	return {
 		...transition,
+		...policy,
 		path: {
 			...path,
-			animateVisualElement(visual, target, configuration, delay, animations) {
+			animateValues(_getValue, target, configuration, delay, animations) {
 				// Reduced transforms follow animateTarget's ordinary instant path.
-				if (
-					(configuration as (Transition & { reduceMotion?: boolean }) | undefined)?.reduceMotion ??
-					visual.shouldReduceMotion
-				)
-					return;
-				animateMotionPath(visual, path, target, configuration, delay, animations);
+				if (policy.skipAnimations || (policy.reduceMotion ?? visual.shouldReduceMotion)) return;
+				animateMotionPath(
+					visual,
+					path,
+					target as TargetAndTransition,
+					configuration,
+					delay,
+					animations
+				);
 			}
 		}
 	};
 }
+/** Keep delayed instant transforms on the engine's JS hold path. */
+export function delayedInstantTransformTransition(
+	transition: Transition | undefined,
+	target: object,
+	inheritedDelay = 0
+): Transition | undefined {
+	let guarded: Transition | undefined;
+	for (const key of Object.keys(target)) {
+		if (!transformProps.has(key)) continue;
+		const options = getValueTransition(transition ?? {}, key);
+		const delay = options.delay ?? inheritedDelay;
+		if (
+			(options.type === false || options.duration === 0) &&
+			(typeof delay === 'function' || (typeof delay === 'number' && delay > 0)) &&
+			!options.onUpdate
+		) {
+			guarded ??= { ...transition };
+			// Motion14.5's compositor collapses equal frames before their delay.
+			// A public update observer keeps this channel on its correct JS driver.
+			Object.assign(guarded, { [key]: { ...options, onUpdate() {} } });
+		}
+	}
+	return guarded;
+}
+
 type Run = Map<VisualElement, Versions>;
 
 /** Cancel deferred orchestration/transitionEnd, without destroying externally owned values. */
@@ -151,14 +196,22 @@ export function animateMotionDefinition(
 			if (visual.latestValues.transform) {
 				for (const key of Object.keys(values)) {
 					if (transformProps.has(key) && !visual.hasValue(key)) {
-						const base = visual.getBaseTarget(key);
+						const base = resolveMotionValue(visual.getBaseTargetFromProps(visual.getProps(), key));
 						const initial = visual.latestValues[key] ?? base ?? defaultTransformValue(key);
 						visual.getValue(key, initial);
-						if (base === undefined) visual.setBaseTarget(key, initial);
+						visual.setBaseTarget(key, initial);
 					}
 				}
 			}
-			const pathTransition = ownedPathTransition(transition);
+			const targetTransition = values.transition
+				? resolveTransition(values.transition, visual.getDefaultTransition())
+				: visual.getDefaultTransition();
+			const overrideReduction = options.transitionOverride?.reduceMotion;
+			const pathTransition = ownedPathTransition(visual, transition, {
+				reduceMotion: overrideReduction ?? targetTransition?.reduceMotion,
+				skipAnimations:
+					targetTransition?.skipAnimations || options.transitionOverride?.skipAnimations
+			});
 			// Settle already-finished native effects before Motion replaces targets.
 			// Running values remain entirely under Motion's priority/interruption logic.
 			visual.values.forEach((value) =>
@@ -166,7 +219,6 @@ export function animateMotionDefinition(
 			);
 			// The pinned engine reads reduction before applying transitionOverride.
 			// Carry its explicit policy on the target too, so timing and policy agree.
-			const overrideReduction = options.transitionOverride?.reduceMotion;
 			const ownedTarget = pathTransition?.path
 				? { ...values, transition: pathTransition }
 				: overrideReduction !== undefined
@@ -181,15 +233,22 @@ export function animateMotionDefinition(
 			const effectiveTransition = ownedTarget.transition
 				? resolveTransition(ownedTarget.transition, visual.getDefaultTransition())
 				: visual.getDefaultTransition();
+			const animationOptions =
+				options.transitionOverride && pathTransition?.path
+					? { ...options, transitionOverride: pathTransition }
+					: options;
+			const guarded = delayedInstantTransformTransition(
+				animationOptions.transitionOverride ?? effectiveTransition,
+				ownedTarget,
+				animationOptions.delay
+			);
 			const animations = startOwnedMotionAnimations(
 				visual,
 				() =>
 					animateTarget(
 						visual,
 						ownedTarget,
-						options.transitionOverride && pathTransition?.path
-							? { ...options, transitionOverride: pathTransition }
-							: options
+						guarded ? { ...animationOptions, transitionOverride: guarded } : animationOptions
 					),
 				effectiveTransition?.reduceMotion
 			);

@@ -1,5 +1,8 @@
 # Humanspeak catch-up: implementation and engine decision
 
+Current engine upgrade: [Motion 14.5](motion-14.5-upgrade-20261021.md). The 13.4.4
+and 14.2.0 decisions and check results below are historical.
+
 Date: 2026-10-21. Comparison source: Humanspeak Svelte Motion 2.1.1,
 commit `f2b5d7666cb62767fc4a753391fc35da840f46a2`.
 Reference: https://github.com/humanspeak/svelte-motion

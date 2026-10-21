@@ -1,13 +1,13 @@
 {
 	"pins": {
-		"motion": "13.4.4",
-		"motion-dom": "13.4.4",
-		"framer-motion": "13.4.4",
-		"motion-utils": "13.3.0"
+		"motion": "14.5.0",
+		"motion-dom": "14.5.0",
+		"framer-motion": "14.5.0",
+		"motion-utils": "14.1.1"
 	},
 	"resolved": {
-		"framer-motion": "13.4.4",
-		"motion-utils": "13.3.0"
+		"framer-motion": "14.5.0",
+		"motion-utils": "14.1.1"
 	},
 	"exports": {
 		"motion": [
@@ -133,23 +133,31 @@
 			"arc playback ownership": ["GroupAnimationWithThen", "addStyleValue", "styleSubjectEffect"]
 		},
 		"evidence": "docs/parity/MATRIX.md, docs/parity/CONTRACTS.md, component/view/gesture parity browser suites; export presence alone is not behavioral qualification",
-		"sequencePathEvidence": "Motion DOM 13.4.4 public index exports animation/generators/utils/{create-generator-easing,is-generator}. createGeneratorEasing returns seconds from the same spring generator; isGenerator identifies the public applyToOptions contract. sequence-path.ts uses these for documented path segments while preserving one engine and source sequence timing. Behavioral path/ownership review belongs to the integration source suites; export existence alone is not evidence.",
-		"arcOwnershipEvidence": "Motion DOM 13.4.4 exports GroupAnimationWithThen for awaitable grouped playback and the existing addStyleValue/styleSubjectEffect store. The scoped arc adapter borrows those public effect values and serializes pathRotation through the existing renderer; no duplicate engine, global table mutation or dependency patch.",
+		"sequencePathEvidence": "Motion DOM 14.5.0 public index exports animation/generators/utils/{create-generator-easing,is-generator}. createGeneratorEasing returns seconds from the same spring generator; isGenerator identifies the public applyToOptions contract. sequence-path.ts uses these for documented path segments while preserving one engine and source sequence timing. Behavioral path/ownership review belongs to the integration source suites; export existence alone is not evidence.",
+		"arcOwnershipEvidence": "Motion DOM 14.5.0 exports GroupAnimationWithThen for awaitable grouped playback and the existing addStyleValue/styleSubjectEffect store. The scoped arc adapter borrows those public effect values and serializes pathRotation through the existing renderer; no duplicate engine, global table mutation or dependency patch.",
 		"privateActivityContract": {
-			"version": "motion-dom 13.4.4",
+			"version": "motion-dom 14.5.0",
 			"member": "JSAnimation.stopDriver()",
 			"reason": "Public pause() retains its keep-alive driver and defers committing the held pose. Activity uses public sample(time) to commit it synchronously, then stopDriver() to release frame callbacks without stop() setting the irreversible isStopped flag. Public play() recreates the driver from holdTime.",
-			"evidence": "parity-composition.svelte.spec.ts: pauses a direct path in hidden Activity and resumes the shared playback once; exact held x/y, no hidden onUpdate calls, same playback resumes once to endpoint. Targeted Activity/borrowed-playback checks: 18 passed across Chromium, Firefox and WebKit. Requalify this private method on every engine upgrade."
+			"evidence": "Motion14.5.0: parity-composition.svelte.spec.ts passes on Chromium and WebKit, including exact held x/y, no hidden onUpdate calls, same driver resumed once to endpoint. Complete three-engine qualification recorded in docs/research/motion-14.5-upgrade-20261021.md.",
+			"previousQualification": {
+				"version": "motion-dom 13.4.4",
+				"evidence": "parity-composition.svelte.spec.ts: pauses a direct path in hidden Activity and resumes the shared playback once; exact held x/y, no hidden onUpdate calls, same playback resumes once to endpoint. Targeted Activity/borrowed-playback checks: 18 passed across Chromium, Firefox and WebKit. Requalify this private method on every engine upgrade."
+			}
 		},
 		"projectionAspectContract": {
-			"version": "motion-dom 13.4.4",
+			"version": "motion-dom 14.5.0",
 			"members": [
 				"HTMLProjectionNode.measure(removeTransform)",
 				"removeElementScroll(box)",
 				"removeTransform(box)"
 			],
 			"reason": "The pinned measure implementation rounds both layout-box endpoints on WebKit. For preserve-aspect only, reconstruct the unrounded extent from measuredBox in the same logical scroll/transform space while retaining the engine-rounded origin. Do not change other animation modes or global engine prototypes.",
-			"evidence": "parity-layout.svelte.spec.ts: fractional endpoints across a rounding boundary preserve exact width/height for both measure paths; original implementation returns 201 instead of 200.00002. Existing interrupted showcase resize assertions remain unchanged. Requalify measurement and projection behavior on engine upgrades."
+			"evidence": "Motion14.5.0: parity-layout.svelte.spec.ts passes Chromium and WebKit fractional endpoints across a rounding boundary, both measure paths, preserving engine origin and exact extent. Complete browser qualification recorded in docs/research/motion-14.5-upgrade-20261021.md.",
+			"previousQualification": {
+				"version": "motion-dom 13.4.4",
+				"evidence": "parity-layout.svelte.spec.ts: fractional endpoints across a rounding boundary preserve exact width/height for both measure paths; original implementation returns 201 instead of 200.00002. Existing interrupted showcase resize assertions remain unchanged. Requalify measurement and projection behavior on engine upgrades."
+			}
 		}
 	}
 }

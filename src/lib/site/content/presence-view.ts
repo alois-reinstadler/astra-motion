@@ -279,7 +279,7 @@ export const presenceViewDocs: DocPage[] = [
 				title: 'Sequence an ordinary child component',
 				text: [
 					'Put Tab inside <AnimateActivity mode={visible ? "visible" : "hidden"}><Tab /></AnimateActivity>. The child below needs no Activity-specific registration. Add layoutMode="pop" on the boundary to release its space during the exit.',
-					'Place delayChildren inside the variant transition. Motion’s Activity article currently puts it directly on the variant, but Motion 13.4.4 reads orchestration from transition; the complete child below uses that pinned contract.'
+					'Place delayChildren inside the variant transition. Motion’s Activity article currently puts it directly on the variant, but the bundled Motion engine reads orchestration from transition; the complete child below uses that pinned contract.'
 				],
 				code: {
 					label: 'Tab.svelte — complete child component',

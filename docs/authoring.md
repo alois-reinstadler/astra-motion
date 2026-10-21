@@ -11,7 +11,7 @@ or `transition:slide`. When new markup needs Astra capabilities, start with
 Use `motion.bind` when an existing native element or component owns the markup. These
 complete recipes are also available with copy buttons and links to live scenarios
 at [/motion-lab/guide](https://alois-reinstadler.github.io/astra-motion/motion-lab/guide). This is a beta adapter over pinned Motion
-13.4.4; see the [release checklist](release-checklist.md) for the current engine pins.
+14.5.0; see the [release checklist](release-checklist.md) for the current engine pins.
 
 ## Install the supplied release candidate
 
@@ -933,7 +933,7 @@ A nonempty raw `transform` masks independent targets such as `x` and `scale` in
 both authoring paths. Clear it with `transform: ''` before using independent
 targets again.
 
-The pinned Motion 13.4.4 engine has a matrix-to-`none` interpolation limitation:
+The pinned Motion 14.5.0 engine has a matrix-to-`none` interpolation limitation:
 it can normalize the target to an all-zero matrix, which collapses the element.
 Use an explicit identity matrix for a raw-transform reset. To retain the literal
 CSS `none` endpoint, apply it through `transitionEnd`:

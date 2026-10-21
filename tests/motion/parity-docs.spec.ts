@@ -210,7 +210,7 @@ test('all 37 documentation pages hydrate their examples and reference tables wit
 				expect(response?.status()).toBe(200);
 				await expect(page.getByRole('heading', { level: 1 })).toHaveText(title);
 				const examples = page.locator('[data-example]');
-				if (slug === 'coming-from-react') expect(await examples.count()).toBe(0);
+				if (slug === 'coming-from-react') await expect(examples).toHaveCount(5);
 				else expect(await examples.count(), `live examples on /docs/${slug}`).toBeGreaterThan(0);
 				for (const example of await examples.all()) {
 					// Deferred examples mount when observed near the viewport. Visit each one
