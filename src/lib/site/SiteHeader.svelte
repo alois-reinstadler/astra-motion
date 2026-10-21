@@ -6,12 +6,13 @@
 	const links = [
 		{ href: '/docs', title: 'Documentation' },
 		{ href: '/examples', title: 'Examples' },
+		{ href: '/recipes', title: 'Recipes' },
 		{ href: '/showcase', title: 'Showcase' },
 		{ href: '/about', title: 'Why Astra' }
 	] as const;
 </script>
 
-<header class="site-header" class:compact>
+<header class={['site-header', { compact }]}>
 	<a class="site-logo" href={resolve('/')} aria-label="Astra Motion home"
 		>astra<span aria-hidden="true">✳</span><small>MOTION</small></a
 	>

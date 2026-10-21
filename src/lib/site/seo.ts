@@ -22,6 +22,11 @@ export const publicPages: Record<string, PageMetadata> = {
 		description:
 			'What the Astra Motion release candidate supports, how to evaluate it, and what remains before a public release. Browser coverage, compatibility and known limits.'
 	},
+	'/recipes': {
+		title: 'Motion recipes — Astra Motion',
+		description:
+			'Copy accessible text, tilt, layout, presence, gesture and reorder recipes with complete source and explicit dependencies.'
+	},
 	'/examples': {
 		title: 'Interactive examples — Astra Motion',
 		description:

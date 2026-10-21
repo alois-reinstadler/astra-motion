@@ -62,6 +62,49 @@ export const valuesHelpersDocs: DocPage[] = [
 					'The pinned Motion 13.4.4 contract maps eligible independent transforms and accelerated targets to the "transform" hint. The hint remains for the value’s lifetime. Cleanup disposes the owned value; hidden Activity does not discard the persistent hint. This is a rendering hint, not a claim of GPU acceleration or a performance improvement. Avoid applying it indiscriminately.'
 				]
 			},
+			{
+				id: 'bridges',
+				title: 'Bridge stores and rune getters',
+				text: [
+					'toMotionValue(source) accepts a Svelte readable store, a rune-backed getter, or an existing MotionValue. Stores subscribe once and provide their initial value synchronously. Getters track Svelte dependencies in the browser and produce an initial snapshot during SSR; use useTransform for relationships between MotionValue.get() reads.',
+					'This bridge has explicit ownership: destroy values created from stores or getters when their owner finishes. An existing MotionValue passes through unchanged and retains its original owner. Newly created bridges do not automatically pause with Activity.',
+					'attrEffect, propEffect, styleEffect and svgEffect expose the same underlying Motion engine effects for native elements. Each effect returns a disposer; release it before destroying its input values. createEffect is the lower-level effect factory.'
+				],
+				code: {
+					label: 'Explicit bridge lifetime',
+					source: `<script lang="ts">
+  import { onDestroy } from 'svelte';
+  import { toMotionValue, motion } from 'astra-motion';
+  let progress = $state(0);
+  const opacity = toMotionValue(() => progress / 100);
+  onDestroy(() => opacity.destroy());
+</script>
+
+<label>Opacity <input type="range" min="0" max="100" bind:value={progress} /></label>
+<motion.div style={{ opacity }}>Preview</motion.div>`
+				}
+			},
+			{
+				id: 'cycle',
+				title: 'Cycle through reactive destinations',
+				text: [
+					'useCycle(...items) returns an object with a reactive .current getter and cycle(nextIndex?). Calling cycle() wraps to the next item. An explicit safe integer selects an index; reads clamp to the first or last item when the index lies outside the list. NaN, fractions and unsafe integers throw without changing selection.',
+					'Pass useCycle(() => items) for a live list. Lists must be nonempty whenever read or cycled; an empty list throws. A single function argument is interpreted as the list getter, so wrap callable items in a getter returning an array. Read .current directly rather than destructuring a snapshot.'
+				],
+				code: {
+					label: 'Cycle an animation destination',
+					source: `<script lang="ts">
+  import { useCycle, motion, MotionConfig } from 'astra-motion';
+  const destination = useCycle(0, 80, 160);
+</script>
+
+<button onclick={() => destination.cycle()}>Next destination</button>
+<MotionConfig reducedMotion="user">
+  <motion.div animate={{ x: destination.current }}>Marker</motion.div>
+</MotionConfig>`
+				}
+			},
+
 			section(
 				'composition',
 				'Build relationships between values',

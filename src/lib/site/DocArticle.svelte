@@ -25,6 +25,15 @@
 			<p class="eyebrow">DOCUMENTATION <span>/</span> {doc.group.toUpperCase()}</p>
 			<h1>{doc.title}</h1>
 			<p class="lede">{doc.summary}</p>
+			<p>
+				<a href={resolve('/docs/[slug].md', { slug: doc.slug })}>Read as Markdown</a> ·
+				<a
+					href={resolve('/reference/[version]/[...document]', {
+						version: release.version,
+						document: 'api.json'
+					})}>Versioned API index</a
+				>
+			</p>
 			{#if doc.learning}<p class="learning">
 					<strong>What you’ll learn</strong>
 					{doc.learning}

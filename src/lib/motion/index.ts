@@ -150,3 +150,7 @@ export {
 	type ViewKeyframes,
 	type AnimateViewTarget
 } from './animate-view.js';
+
+export { useCycle, type Cycle, type CycleState, type CycleItemsGetter } from './cycle.svelte.js';
+export { toMotionValue, type MotionValueSource } from './to-motion-value.svelte.js';
+export { attrEffect, propEffect, styleEffect, svgEffect, createEffect } from 'motion-dom';

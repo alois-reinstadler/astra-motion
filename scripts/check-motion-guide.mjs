@@ -1,5 +1,6 @@
 /** Source-consumer checks only: no application build or package emission. */
 import {
+	existsSync,
 	mkdtempSync,
 	mkdirSync,
 	readFileSync,
@@ -9,7 +10,7 @@ import {
 	symlinkSync
 } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join, resolve, relative } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import ts from 'typescript';
@@ -36,15 +37,39 @@ try {
 	// Keep relative runtime imports intact (including the shared release metadata).
 	// Data URLs only work for modules containing no runtime imports.
 	writeFileSync(join(directory, 'package.json'), JSON.stringify(manifest));
+	const compiled = new Set();
 	function compileModule(filename) {
+		if (compiled.has(filename))
+			return pathToFileURL(join(directory, filename.replace(/\.ts$/, '.js'))).href;
+		compiled.add(filename);
+		const source = readFileSync(filename, 'utf8').replace(
+			/from (['"])\$lib\/([^'"]+)\1/g,
+			(_, quote, specifier) =>
+				`from ${quote}${relative(dirname(filename), 'src/lib')}/${specifier}${quote}`
+		);
 		const destination = join(directory, filename.replace(/\.ts$/, '.js'));
 		mkdirSync(dirname(destination), { recursive: true });
 		writeFileSync(
 			destination,
-			ts.transpileModule(readFileSync(filename, 'utf8'), {
-				compilerOptions: { module: ts.ModuleKind.ESNext }
-			}).outputText
+			ts.transpileModule(
+				source.replace(
+					/import (\w+) from ['"]([^'"]+\?raw)['"];?/g,
+					(_, binding, specifier) =>
+						`const ${binding} = ${JSON.stringify(readFileSync(join(dirname(filename), specifier.replace(/\?raw$/, '')), 'utf8'))};`
+				),
+				{
+					compilerOptions: { module: ts.ModuleKind.ESNext }
+				}
+			).outputText
 		);
+		const ast = ts.createSourceFile(filename, source, ts.ScriptTarget.Latest, true);
+		for (const statement of ast.statements) {
+			if (!ts.isImportDeclaration(statement) || statement.importClause?.isTypeOnly) continue;
+			const specifier = statement.moduleSpecifier.text;
+			if (!specifier.startsWith('.') || !specifier.endsWith('.js')) continue;
+			const dependency = join(dirname(filename), specifier.replace(/\.js$/, '.ts'));
+			if (existsSync(dependency)) compileModule(dependency);
+		}
 		return pathToFileURL(destination).href;
 	}
 	compileModule('src/lib/site/release.ts');

@@ -17,6 +17,7 @@ describe('public site discovery', () => {
 			'/about',
 			'/status',
 			'/examples',
+			'/recipes',
 			'/showcase',
 			...Object.values(liveExamples).map((example) => `/examples/${example.id}`),
 			...docs.map((doc) => (doc.slug ? `/docs/${doc.slug}` : '/docs'))
