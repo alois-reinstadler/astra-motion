@@ -169,17 +169,16 @@ it('serializes fluent and declarative requests with one document owner and cance
 	expect(document.querySelector('[data-astra-view-reset]')).toBeNull();
 });
 
-it('reports fluent capture mistakes and still applies the application update once', async () => {
-	if (typeof document.startViewTransition !== 'function') {
-		expect(true).toBe(true);
-		return;
+it.skipIf(typeof document.startViewTransition !== 'function')(
+	'reports fluent capture mistakes and still applies the application update once',
+	async () => {
+		const update = vi.fn();
+		const builder = animateView(update, { reducedMotion: 'never' }).add('[');
+		await expect(Promise.resolve(builder)).rejects.toBeInstanceOf(DOMException);
+		expect(update).toHaveBeenCalledOnce();
+		expect(document.querySelector('[data-astra-fluent-view]')).toBeNull();
 	}
-	const update = vi.fn();
-	const builder = animateView(update, { reducedMotion: 'never' }).add('[');
-	await expect(Promise.resolve(builder)).rejects.toBeInstanceOf(DOMException);
-	expect(update).toHaveBeenCalledOnce();
-	expect(document.querySelector('[data-astra-fluent-view]')).toBeNull();
-});
+);
 
 it('releases a surviving paired source name and restores both authored priorities', async () => {
 	const container = document.createElement('div');
