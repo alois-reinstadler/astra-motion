@@ -39,7 +39,11 @@ test('home demo keeps identity through repeated layout changes and links into th
 		.toBe(true);
 	await page.getByRole('link', { name: 'Start building' }).click();
 	await expect(page).toHaveURL(/\/docs\/quick-start$/);
-	await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+	// Navigation can update the URL before the outgoing Svelte outro is removed.
+	await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
+	await expect(
+		page.getByRole('heading', { level: 1, name: 'Quick start', exact: true })
+	).toBeVisible();
 	expect(errors).toEqual([]);
 });
 
