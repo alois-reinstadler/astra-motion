@@ -6,6 +6,7 @@ import { spawnSync, execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { verifyConsumerDependencies } from './motion-consumer-dependencies.mjs';
 import { stampConsumer } from './motion-consumer-provenance.mjs';
+import { inspectDeclarationGraph } from './check-motion-declaration-graph.mjs';
 
 // Both apps have independent node_modules; neither aliases repository source.
 const root = resolve(import.meta.dirname, '..');
@@ -63,6 +64,14 @@ for (const [name, target] of [
 	writeFileSync(setupPath, JSON.stringify(info, null, 2) + '\n');
 	console.log(
 		JSON.stringify({ consumer: name, dependencies: verifyConsumerDependencies(target) }, null, 2)
+	);
+	const declarations = inspectDeclarationGraph(join(target, 'node_modules', manifest.name));
+	assert.deepEqual(declarations.missing, [], 'Installed package has unresolved declaration edges');
+	console.log(
+		JSON.stringify({
+			consumer: name,
+			declarationGraph: { roots: declarations.roots.length, files: declarations.files }
+		})
 	);
 	const brokenRoot = join(directory, `${name}-missing-forwarding.svelte`);
 	const forwardedRoot = join(directory, `${name}-forwarded.svelte`);
