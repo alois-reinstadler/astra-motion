@@ -38,17 +38,39 @@ it.each(kinds)(
 	}
 );
 it.each(kinds)(
-	'scoped-autoplay-pause: %s pauses before resolution with and without a seek',
+	'scoped-autoplay-pause: %s holds the paused clock with and without a seek',
 	async (kind) => {
 		const { animate } = await fixture(kind);
 		const first = animate(node(kind), { opacity: [1, 0] }, { duration: 1, ease: 'linear' });
 		first.pause();
 		await frames();
-		expect(opacity(kind)).toBe(1);
+		// WAAPI's pending pause is complete when ready resolves, rather than
+		// after an assumed number of frames on a loaded browser.
+		const native = node(kind).getAnimations();
+		await Promise.all(native.map((animation) => animation.ready));
+		for (const animation of native) {
+			expect(animation.playState).toBe('paused');
+			expect(animation.pending).toBe(false);
+		}
+		const heldTime = first.time;
+		// Resolvable 14.5 keyframes can start synchronously before pause().
+		// Assert that both the actual pose and clock stay held.
+		expect(opacity(kind)).toBeGreaterThan(0);
+		expect(opacity(kind)).toBeLessThanOrEqual(1);
+		const heldOpacity = opacity(kind);
+		await frames();
+		expect(first.time).toBe(heldTime);
+		expect(opacity(kind)).toBe(heldOpacity);
 		first.cancel();
 		const seek = animate(node(kind), { opacity: [1, 0] }, { duration: 1, ease: 'linear' });
-		seek.time = 0.5;
 		seek.pause();
+		seek.time = 0.5;
+		await frames();
+		await Promise.all(
+			node(kind)
+				.getAnimations()
+				.map((animation) => animation.ready)
+		);
 		await frames();
 		expect(opacity(kind)).toBeCloseTo(0.5, 2);
 		const time = seek.time;

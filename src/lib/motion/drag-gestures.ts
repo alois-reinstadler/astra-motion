@@ -52,7 +52,7 @@ export function validateDragConstraints(constraints: DragConstraints | undefined
 	}
 }
 
-/** Motion 13.4.4 uses .35; the component documentation's .5 default is stale. */
+/** Motion 14.5.0 uses .35; the component documentation's .5 default is stale. */
 export function resolveDragElastic(value: DragElastic = 0.35): Required<DragConstraints> {
 	const amount = value === true ? 0.35 : value === false ? 0 : value;
 	const get = (key: keyof DragConstraints) => {

@@ -1,5 +1,6 @@
 import type { DocPage, DocSection } from './doc-types.js';
-import type { LiveExample } from './examples.js';
+import { liveExamples, type LiveExample } from './examples.js';
+import { migrationRecipes } from './migrations.js';
 import { publicExampleSource } from './public-example-source.js';
 
 const sources = import.meta.glob<string>('./snippet-previews/*.svelte', {
@@ -42,6 +43,19 @@ const childFiles: Record<string, string> = {
 export function getSnippetPreview(doc: DocPage, section: DocSection): LiveExample | undefined {
 	if (!section.code) return;
 	const id = `${doc.slug}/${section.id}`;
+	if (doc.slug === 'coming-from-react') {
+		const recipe = migrationRecipes.find((recipe) => section.id === `migrate-${recipe.id}`);
+		if (recipe) {
+			const example = liveExamples[recipe.example];
+			return {
+				...example,
+				id: `snippet-${doc.slug}-${section.id}`,
+				snippet: section.code.source,
+				snippetLabel: section.code.label
+			};
+		}
+	}
+
 	const path = `./snippet-previews/${previewFiles[id] ?? `${doc.slug}--${section.id}.svelte`}`;
 	const component = sources[path] ? path : undefined;
 	if (!component) return;

@@ -6,8 +6,8 @@ test.beforeEach(async ({ page }) => {
 	await page.waitForFunction(() => !!window.upstream);
 });
 
-// These characterize the pinned upstream defects. A changed result is a signal to
-// reassess/remove the shim, not an instruction to preserve an upstream bug forever.
+// These characterize the pinned engine, including upstream fixes. Changed results
+// require reassessing the adapter shims rather than preserving old engine defects.
 test('finished cancellation still writes the old endpoint', async ({ page }, testInfo) => {
 	const result = await page.evaluate(() => window.upstream.nativeFinishCancel());
 	await testInfo.attach('upstream-result', {
@@ -17,7 +17,7 @@ test('finished cancellation still writes the old endpoint', async ({ page }, tes
 	expect(result).toEqual({ desired: 0.75, actual: 0.25, remainingAnimations: 0 });
 });
 
-test('the public pending animation getter flushes unrelated measurements', async ({
+test('a resolved animation getter leaves unrelated measurements pending', async ({
 	page
 }, testInfo) => {
 	const result = await page.evaluate(() => window.upstream.pendingGetterMeasurements());
@@ -25,10 +25,12 @@ test('the public pending animation getter flushes unrelated measurements', async
 		body: JSON.stringify(result, null, 2),
 		contentType: 'application/json'
 	});
-	expect(result).toEqual({ beforeGetter: 0, afterGetter: 2 });
+	expect(result.beforeGetter).toBe(0);
+	expect(result.afterGetter).toBe(0);
+	expect(result.afterFlush).toBeGreaterThan(0);
 });
 
-test('timeline scroll cleanup retains listeners while the information callback releases them', async ({
+test('timeline and information scroll cleanup both release their listeners', async ({
 	page
 }, testInfo) => {
 	const result = await page.evaluate(() => window.upstream.scrollCleanupComparison());
@@ -36,7 +38,7 @@ test('timeline scroll cleanup retains listeners while the information callback r
 		body: JSON.stringify(result, null, 2),
 		contentType: 'application/json'
 	});
-	expect(result.timelinePlayback.remainingScrollListeners).toBe(3);
+	expect(result.timelinePlayback.remainingScrollListeners).toBe(0);
 	expect(result.informationCallback.remainingScrollListeners).toBe(0);
 });
 

@@ -1,6 +1,7 @@
 import { expect, it } from 'vitest';
-import { animateTarget, motionValue } from 'motion-dom';
+import { animateTarget, motionValue, arc } from 'motion-dom';
 import { ensureMotionVisual, registerMotionVisual } from '../motion/visual.js';
+import { animateMotionDefinition, ensureMotionAnimationState } from '../motion/animation.js';
 const frame = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
 const microtasks = async () => {
 	for (let i = 0; i < 12; i++) await Promise.resolve();
@@ -100,3 +101,225 @@ it('unsubscribes an externally owned MotionValue without destroying its independ
 		node.remove();
 	}
 });
+
+it.each([true, false])(
+	'adopts a late variant parent with inherit=%s and removes its registration on teardown',
+	async (inherit) => {
+		const parent = document.createElement('div');
+		const child = document.createElement('div');
+		parent.append(child);
+		document.body.append(parent);
+		const unregisterChild = registerMotionVisual(
+			child,
+			{},
+			() => ({ inherit, variants: { shown: { opacity: 1 } } }),
+			() => 'never',
+			() => true,
+			() => parent
+		);
+		const childVisual = ensureMotionVisual(child)!;
+		const unregisterParent = registerMotionVisual(
+			parent,
+			{},
+			() => ({ animate: 'shown', variants: { shown: { opacity: 1 } } }),
+			() => 'never',
+			() => true
+		);
+		try {
+			const parentVisual = ensureMotionVisual(parent)!;
+			expect(childVisual.parent).toBe(parentVisual);
+			expect(childVisual.depth).toBe(parentVisual.depth + 1);
+			expect(parentVisual.children.has(childVisual)).toBe(true);
+			expect(parentVisual.variantChildren?.has(childVisual)).toBe(inherit);
+			unregisterChild();
+			await microtasks();
+			expect(parentVisual.variantChildren?.has(childVisual)).toBe(false);
+			expect(parentVisual.children.has(childVisual)).toBe(false);
+		} finally {
+			unregisterChild();
+			unregisterParent();
+			await microtasks();
+			parent.remove();
+		}
+	}
+);
+
+it.each([true, false])(
+	'walks a late non-variant parent with inherit=%s and detaches when that parent unmounts',
+	async (inherit) => {
+		const root = document.createElement('div');
+		const parent = document.createElement('div');
+		const child = document.createElement('div');
+		root.append(parent);
+		parent.append(child);
+		document.body.append(root);
+		const unregisterRoot = registerMotionVisual(
+			root,
+			{},
+			() => ({ animate: 'shown', variants: { shown: { opacity: 1 } } }),
+			() => 'never',
+			() => true
+		);
+		const rootVisual = ensureMotionVisual(root)!;
+		const unregisterChild = registerMotionVisual(
+			child,
+			{},
+			() => ({ variants: { shown: { opacity: 1 } } }),
+			() => 'never',
+			() => true,
+			() => parent
+		);
+		const childVisual = ensureMotionVisual(child)!;
+		const unregisterParent = registerMotionVisual(
+			parent,
+			{},
+			() => ({ inherit }),
+			() => 'never',
+			() => true
+		);
+		try {
+			const parentVisual = ensureMotionVisual(parent)!;
+			expect(parentVisual.parent).toBe(rootVisual);
+			expect(rootVisual.variantChildren?.has(childVisual)).toBe(inherit);
+			unregisterParent();
+			await microtasks();
+			expect(childVisual.parent).toBeUndefined();
+			expect(childVisual.depth).toBe(0);
+			expect(rootVisual.variantChildren?.has(childVisual)).toBe(false);
+		} finally {
+			unregisterChild();
+			unregisterParent();
+			unregisterRoot();
+			await microtasks();
+			root.remove();
+		}
+	}
+);
+
+it('preserves an initial masked scale and restores it after temporary animation priority', async () => {
+	const node = document.createElement('div');
+	document.body.append(node);
+	const unregister = registerMotionVisual(
+		node,
+		{ transform: 'rotate(60deg)', scale: 3 },
+		() => ({
+			initial: { transform: 'rotate(60deg)', scale: 3 },
+			whileHover: { scale: 4, transition: { duration: 0 } },
+			transition: { duration: 0 }
+		}),
+		() => 'never',
+		() => true
+	);
+	try {
+		const visual = ensureMotionVisual(node)!;
+		expect(visual.hasValue('scale')).toBe(false);
+		const completion = animateMotionDefinition(visual, {
+			scale: 2,
+			transition: { duration: 0.05 }
+		});
+		expect(visual.getValue('scale')?.get()).toBe(3);
+		await completion;
+		expect(visual.getValue('scale')?.get()).toBe(2);
+		const state = ensureMotionAnimationState(visual);
+		await state.setActive('whileHover', true);
+		expect(visual.getValue('scale')?.get()).toBe(4);
+		await state.setActive('whileHover', false);
+		expect(visual.getValue('scale')?.get()).toBe(3);
+	} finally {
+		unregister();
+		await microtasks();
+		node.remove();
+	}
+});
+
+it('removes an old registration when inheritance is disabled before late parent adoption', async () => {
+	const root = document.createElement('div');
+	const parent = document.createElement('div');
+	const child = document.createElement('div');
+	root.append(parent);
+	parent.append(child);
+	document.body.append(root);
+	let declaredParent = root;
+	let inherit = true;
+	const unregisterRoot = registerMotionVisual(
+		root,
+		{},
+		() => ({ animate: 'shown' }),
+		() => 'never',
+		() => true
+	);
+	const rootVisual = ensureMotionVisual(root)!;
+	const props = () => ({ inherit, variants: { shown: { opacity: 1 } } });
+	const unregisterChild = registerMotionVisual(
+		child,
+		{},
+		props,
+		() => 'never',
+		() => true,
+		() => declaredParent
+	);
+	const childVisual = ensureMotionVisual(child)!;
+	expect(rootVisual.variantChildren?.has(childVisual)).toBe(true);
+	inherit = false;
+	childVisual.update(props(), null);
+	declaredParent = parent;
+	const unregisterParent = registerMotionVisual(
+		parent,
+		{},
+		() => ({ animate: 'shown' }),
+		() => 'never',
+		() => true
+	);
+	try {
+		const parentVisual = ensureMotionVisual(parent)!;
+		expect(childVisual.parent).toBe(parentVisual);
+		expect(rootVisual.variantChildren?.has(childVisual)).toBe(false);
+		expect(parentVisual.variantChildren?.has(childVisual)).toBe(false);
+	} finally {
+		unregisterChild();
+		unregisterParent();
+		unregisterRoot();
+		await microtasks();
+		root.remove();
+	}
+});
+
+it.each([
+	{ policy: 'reduceMotion' as const, path: false },
+	{ policy: 'skipAnimations' as const, path: false },
+	{ policy: 'reduceMotion' as const, path: true },
+	{ policy: 'skipAnimations' as const, path: true },
+	{ policy: 'skipAnimations' as const, path: true, overridePolicy: true }
+])(
+	'preserves target $policy with an overridden transition (path=$path, override=$overridePolicy)',
+	async ({ policy, path, overridePolicy }) => {
+		const node = document.createElement('div');
+		document.body.append(node);
+		const unregister = registerMotionVisual(
+			node,
+			{ x: 0 },
+			() => ({ initial: false, style: { x: 0 } }),
+			() => 'never',
+			() => true
+		);
+		try {
+			const visual = ensureMotionVisual(node)!;
+			const finished = animateMotionDefinition(
+				visual,
+				{ x: 40, transition: overridePolicy ? undefined : { [policy]: true } },
+				{
+					transitionOverride: path
+						? { path: arc(), duration: 1, ...(overridePolicy ? { skipAnimations: true } : {}) }
+						: { type: false, delay: 0.3 }
+				}
+			);
+			await frame();
+			await frame();
+			expect(Number(visual.getValue('x')!.get())).toBe(40);
+			await finished;
+		} finally {
+			unregister();
+			node.remove();
+		}
+	}
+);

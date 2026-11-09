@@ -181,7 +181,7 @@ export const gesturesLayoutPages: DocPage[] = [
 				text: [
 					'Numeric dragConstraints are translation offsets from the element’s layout position: { left: -100, right: 100, top: 0, bottom: 200 }. Omitted edges are unbounded. Values must be finite and each minimum must be no greater than its maximum.',
 					'For a responsive container, bind its element and pass dragConstraints={() => bounds}. An element or { current: element } ref is accepted too. Bounds are measured at drag start and during layout/size updates. Resizing a constrained container preserves the element’s relative position within the new bounds.',
-					'Elasticity allows resistance outside a bound. Astra follows the bundled Motion 13.4.4 default of 0.35; Motion’s component article still describes 0.5. False gives hard bounds, true means 0.35, a number applies to every edge, and an edge object configures each edge separately. Unspecified edges in that object use zero elasticity.'
+					'Elasticity allows resistance outside a bound. Astra follows the bundled Motion 14.5.0 default of 0.35; Motion’s component article still describes 0.5. False gives hard bounds, true means 0.35, a number applies to every edge, and an edge object configures each edge separately. Unspecified edges in that object use zero elasticity.'
 				],
 				example: 'drag-playground',
 				code: {
@@ -654,7 +654,7 @@ export const gesturesLayoutPages: DocPage[] = [
 				],
 				points: [
 					'Avoid CSS transforms that independently own the item transform; put animated properties in its motion style.',
-					'For a right-to-left row, set axis="xy" explicitly. Motion 13.4.4 applies RTL insertion only to its two-dimensional algorithm; automatic single-axis x ordering retains that engine limitation.',
+					'For a right-to-left row, set axis="xy" explicitly. Astra applies RTL insertion to its two-dimensional algorithm; automatic single-axis x ordering retains that limitation.',
 					'Keep drag handle touch-action:none, including when the list itself scrolls.',
 					'For large or virtualized collections, ensure every potential neighbor needed for the current interaction is mounted and measured; offscreen virtualization is not supplied by Reorder.',
 					'Provide keyboard move controls and announce the resulting order when that information is important.'

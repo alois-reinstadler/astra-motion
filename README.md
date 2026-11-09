@@ -1,5 +1,7 @@
 # Astra Motion
 
+> Release candidate: see [release scope, limitations and owner checklist](RELEASE.md). This branch prepares a candidate; it does not certify publication readiness.
+
 Motion’s animation engine, connected to Svelte 5. Animate native HTML and SVG,
 coordinate presence and layout, add gestures and drag, and compose reactive values
 without a React runtime.
@@ -57,8 +59,8 @@ pnpm add /absolute/path/to/astra-motion-0.1.0-rc.3.tgz
 
 Use Svelte 5.57.0 or newer within Svelte 5. SvelteKit 2.70.3 or newer within Kit 2
 is needed only for the `routes` and `view-navigation` adapters. The tarball includes
-one qualified DOM engine: Motion/Framer Motion/Motion DOM 13.4.4 and Motion Utils
-13.3.0. Consumers need no separate Motion installation or dependency overrides.
+one qualified DOM engine: Motion/Framer Motion/Motion DOM 14.5.0 and Motion Utils
+14.1.1. Consumers need no separate Motion installation or dependency overrides.
 Get MotionValues from Astra to share that engine identity.
 
 A similarly named registry package should not be assumed to be this project.

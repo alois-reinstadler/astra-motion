@@ -21,7 +21,7 @@ export function verifyPackedFiles(files) {
 	assert(
 		files.every(
 			(file) =>
-				/^package\/(package\.json|README\.md|LICENSE(?:\.md)?|dist\/index\.(js|d\.ts)|dist\/check-motion-forwarding\.mjs|dist\/motion\/.*)$/.test(
+				/^package\/(package\.json|README\.md|CHANGELOG\.md|RELEASE\.md|LICENSE(?:\.md)?|dist\/index\.(js|d\.ts)|dist\/check-motion-forwarding\.mjs|dist\/motion\/.*)$/.test(
 					file
 				) && !file.split('/').includes('..')
 		),

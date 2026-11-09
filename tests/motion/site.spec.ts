@@ -39,7 +39,11 @@ test('home demo keeps identity through repeated layout changes and links into th
 		.toBe(true);
 	await page.getByRole('link', { name: 'Start building' }).click();
 	await expect(page).toHaveURL(/\/docs\/quick-start$/);
-	await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+	// Navigation can update the URL before the outgoing Svelte outro is removed.
+	await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
+	await expect(
+		page.getByRole('heading', { level: 1, name: 'Quick start', exact: true })
+	).toBeVisible();
 	expect(errors).toEqual([]);
 });
 
@@ -87,7 +91,7 @@ test('example discovery filters, searches, and opens a dedicated live example', 
 	await page.getByRole('searchbox', { name: 'Search examples' }).fill('no-such-example');
 	await expect(page.getByRole('heading', { name: 'No examples found.' })).toBeVisible();
 	await page.getByRole('button', { name: 'Show all examples' }).click();
-	await expect(page.locator('.example-grid > .example')).toHaveCount(41);
+	await expect(page.locator('.example-grid > .example')).toHaveCount(42);
 	await page.getByRole('searchbox', { name: 'Search examples' }).fill('hover, press');
 	await expect(page.locator('.example-grid > .example')).toHaveCount(1);
 	await page.locator('.example-grid > .example').click();
@@ -251,7 +255,7 @@ test('the first lesson exposes runnable code and every catalog entry opens its p
 			title: node.querySelector('h2')!.textContent!
 		}))
 	);
-	expect(destinations).toHaveLength(41);
+	expect(destinations).toHaveLength(42);
 	for (const destination of destinations) {
 		// Keep the pointer off document links between independently loaded destinations.
 		await page.mouse.move(0, 0);

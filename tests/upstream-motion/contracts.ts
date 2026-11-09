@@ -5,6 +5,7 @@ import {
 	AsyncMotionValueAnimation,
 	NativeAnimationExtended,
 	animateTarget,
+	arc,
 	createAnimationState,
 	motionValue,
 	JSAnimation,
@@ -48,6 +49,8 @@ export async function inspectContracts() {
 				'update',
 				'getProps',
 				'getValue',
+				'getBaseTargetFromProps',
+				'setBaseTarget',
 				'removeValue',
 				'readValue',
 				'render',
@@ -56,6 +59,7 @@ export async function inspectContracts() {
 			],
 			'VisualElement'
 		);
+		methods(arc(), ['animateValues', 'interpolateProjection'], 'MotionPath');
 		fields(
 			visual,
 			[

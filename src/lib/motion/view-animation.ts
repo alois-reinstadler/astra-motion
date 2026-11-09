@@ -41,7 +41,7 @@ export class ViewAnimationGroup extends GroupAnimation {
 	}
 }
 
-/** Uses the same DOM engine primitives as Motion 13.4.4's separate AnimateView adapter. */
+/** Uses the same DOM engine primitives as Motion's separate AnimateView adapter. */
 export function animateViewChanges(
 	document: Document,
 	changes: readonly ViewChange[],

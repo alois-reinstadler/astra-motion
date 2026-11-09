@@ -121,5 +121,9 @@ it('variant-late-cohorts: after Activity reveal a later child has no obsolete co
 				.transform
 		).m41;
 	await expect.poll(reference, { interval: 10 }).toBe(100);
-	expect(x(2)).toBeCloseTo(100, 2);
+	// Independently committed compositor groups can finish one frame apart.
+	// An obsolete cohort delay would still leave the child at its origin.
+	expect(x(2)).toBeGreaterThan(0);
+	await frames(1);
+	expect(x(2)).toBe(100);
 });

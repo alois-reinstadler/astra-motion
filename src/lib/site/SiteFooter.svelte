@@ -10,6 +10,8 @@
 	<nav aria-label="Footer navigation">
 		<a href={resolve('/docs')}>Documentation</a>
 		<a href={resolve('/examples')}>Examples</a>
+		<a href={resolve('/recipes')}>Recipes</a>
+		<a href={resolve('/llms.txt')}>API for agents</a>
 		<a href={resolve('/showcase')}>Showcase</a>
 		<a href={resolve('/about')}>Why Astra</a>
 		<a href={resolve('/status')}>Project status</a>

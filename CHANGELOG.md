@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased — release preparation
+
+- Document the supported release boundary, upstream attribution and remaining qualification decisions.
+- Include release notes and attribution in the package file allowlist.
+
 ## 0.1.0-rc.3 — local release candidate
 
 Prepared for local installation; not published to a registry.

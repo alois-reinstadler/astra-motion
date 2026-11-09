@@ -27,13 +27,26 @@ interface MotionVisualRecord {
 }
 const records = new Map<MotionElement, MotionVisualRecord>();
 
+/** Follow declared variant ancestry without crossing an explicit inheritance boundary. */
+function variantParent(visual: VisualElement): VisualElement | undefined {
+	let node: VisualElement | undefined = visual;
+	while (node && node.getProps().inherit !== false) {
+		node = node.parent;
+		if (node?.isVariantNode) return node;
+	}
+	return undefined;
+}
+
 /** Deferred feature parents can materialize after already-mounted eager descendants. */
 function adoptVisual(record: MotionVisualRecord, parent: MotionVisual | undefined) {
 	const visual = record.visual;
 	if (!visual || visual.parent === parent) return;
 	record.removeAdoptedVariant?.();
 	record.removeAdoptedVariant = undefined;
-	visual.parent?.getClosestVariantNode()?.variantChildren?.delete(visual);
+	// Props may have changed since mount. Remove the old membership even if
+	// today's inherit=false boundary would hide its original variant ancestor.
+	for (let ancestor = visual.parent; ancestor; ancestor = ancestor.parent)
+		ancestor.variantChildren?.delete(visual);
 	visual.parent?.removeChild(visual);
 	visual.parent = parent;
 	const updateDepth = (node: VisualElement, depth: number) => {
@@ -42,8 +55,11 @@ function adoptVisual(record: MotionVisualRecord, parent: MotionVisual | undefine
 	};
 	updateDepth(visual, parent ? parent.depth + 1 : 0);
 	parent?.addChild(visual);
-	if (parent && visual.isVariantNode && !visual.isControllingVariants)
-		record.removeAdoptedVariant = parent.addVariantChild(visual);
+	if (visual.isVariantNode && !visual.isControllingVariants) {
+		const children = variantParent(visual)?.variantChildren;
+		children?.add(visual);
+		record.removeAdoptedVariant = () => children?.delete(visual);
+	}
 }
 
 export function hasMotionVisual(node: MotionElement) {

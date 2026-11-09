@@ -145,7 +145,15 @@ export function useScroll(input: MotionGetter<UseScrollOptions> = {}): ScrollMot
 							}
 							const detach = animation.attachTimeline({
 								timeline,
-								...(timeline && range ? range : {}),
+								...(timeline && range
+									? {
+											onAttach(native: Animation) {
+												Object.assign(native, range);
+												// The range must be set before replay so Chromium realigns it.
+												native.play();
+											}
+										}
+									: {}),
 								observe(valueAnimation) {
 									valueAnimation.pause();
 									const seek = (latest: number) => {

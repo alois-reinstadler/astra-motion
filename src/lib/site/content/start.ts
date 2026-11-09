@@ -1,3 +1,4 @@
+import { migrationRecipeSections } from '../migrations.js';
 import { release } from '../release.js';
 import type { DocPage } from '../doc-types.js';
 
@@ -208,6 +209,7 @@ export const startDocs: DocPage[] = [
 		summary:
 			'Transfer your Motion knowledge: what keeps its name, what changes shape, and which helpers remain supported.',
 		sections: [
+			...migrationRecipeSections,
 			{
 				id: 'familiar',
 				title: 'What transfers directly',

@@ -1,3 +1,4 @@
+import TiltSource from './TiltExample.svelte?raw';
 import type { LiveExample } from '../examples.js';
 import { publicExampleSource } from '../public-example-source.js';
 import MotionExampleSource from './MotionExample.svelte?raw';
@@ -8,6 +9,18 @@ import LazyMotionExampleSource from './LazyMotionExample.svelte?raw';
 import TextAnimationExampleSource from './TextAnimationExample.svelte?raw';
 
 export const coreExamples = {
+	'tilt-card': {
+		id: 'tilt-card',
+		title: 'Add decorative pointer tilt',
+		filename: 'TiltCard.svelte',
+		description:
+			'A perspective card with a keyboard-accessible opt-out and device motion preference.',
+		category: 'State & gestures',
+		guide: 'text-animation',
+		anchor: 'pointer-tilt',
+		component: './examples/TiltExample.svelte',
+		source: publicExampleSource(TiltSource)
+	},
 	'motion-component': {
 		id: 'motion-component',
 		title: 'Change a reactive destination',

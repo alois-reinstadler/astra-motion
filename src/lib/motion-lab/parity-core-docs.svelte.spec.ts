@@ -110,7 +110,9 @@ it('switches transition settings and interrupts a tween with a reversed spring t
 	button('Move tile').click();
 	// A reversed spring can settle beyond the default polling window.
 	await expect.poll(() => x(element), { timeout: 4000 }).toBe(origin);
-	expect(visualElementStore.get(element)!.getValue('x')!.get()).toBe(-160);
+	await expect
+		.poll(() => visualElementStore.get(element)!.getValue('x')!.get(), { timeout: 4000 })
+		.toBe(-160);
 	expect(tile()).toBe(element);
 });
 

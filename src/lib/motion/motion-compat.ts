@@ -51,7 +51,7 @@ export function pauseMotionPlayback(
 	if (!('pause' in playback) || typeof playback.pause !== 'function') return;
 	playback.pause();
 	if (playback instanceof JSAnimation) {
-		// 13.4.4 pause() updates holdTime but leaves its keep-alive driver running.
+		// The engine's pause() updates holdTime but leaves its keep-alive driver running.
 		// Commit that held pose now, then release the driver without stop()'s
 		// irreversible isStopped flag. play() recreates it from the held time.
 		playback.sample(playback.time * 1000);
@@ -84,7 +84,7 @@ export function stopMotionPlayback(playback: AnimationPlaybackControls): void {
 		playback.state === 'paused' &&
 		!playback.options.pseudoElement
 	) {
-		// 13.4.4's native stop samples time.now() - startTime. A paused WAAPI
+		// The engine's native stop samples time.now() - startTime. A paused WAAPI
 		// animation has no startTime, so a held seek would jump to its endpoint.
 		// Commit the actual held effect, then make native stop take its idle path.
 		const { motionValue, ...options } = playback.options;
@@ -145,9 +145,9 @@ export function completeMotionPlayback(playback: AnimationPlaybackControls): voi
 }
 
 /**
- * Motion cancellation boundary (qualified with motion-dom 13.4.4).
+ * Motion cancellation boundary (qualified with motion-dom 14.5.0).
  * Keep cancellation's two private fields isolated here:
- * Async.animation's public getter flushes unrelated pending keyframe measurements;
+ * Async.animation resolves pending keyframes when its own playback is unresolved;
  * Native.cancel() leaves a queued onfinish able to overwrite a replacement owner.
  * Activity suspension above also qualifies JSAnimation.stopDriver so hidden
  * playback releases frame work without becoming permanently stopped.

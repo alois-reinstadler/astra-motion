@@ -205,6 +205,15 @@ export const guidesDocs: DocPage[] = [
 			'Reveal words, animate numeric text, and coordinate typographic changes with readable semantics and predictable Svelte lifecycles.',
 		sections: [
 			{
+				id: 'pointer-tilt',
+				title: 'Add decorative pointer tilt',
+				text: [
+					'Tilt from astra-motion/tilt keeps measurement, perspective and rotation separate. Use MotionConfig reducedMotion="user" to follow device preferences. Keep the motion decorative and provide a native opt-out when it may be distracting.'
+				],
+				example: 'tilt-card',
+				related: ['motion-config', 'accessibility']
+			},
+			{
 				id: 'words',
 				title: 'Reveal plain text',
 				text: [

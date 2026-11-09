@@ -400,3 +400,26 @@ it('tracks a real browser pointer through window without taking element capture'
 	expect(Number(f.visual.getValue('x', 0).get())).toBeGreaterThan(100);
 	expect(isDragActive()).toBe(false);
 });
+
+// Behavioral scenario from Humanspeak 2.1.1 drag.spec.ts (f2b5d766), independently
+// expressed with Astra's VisualElement fixture: a coalesced move arrives at release.
+it('commits the final move before a same-frame release and reports it exactly once', async () => {
+	const endings: number[] = [];
+	const f = fixture({
+		drag: 'x',
+		dragMomentum: false,
+		onDragEnd: (_, info) => endings.push(info.offset.x)
+	});
+	pointer(f.node, 'pointerdown', 0, 0);
+	pointer(window, 'pointermove', 10, 0);
+	await nextFrame();
+	expect(f.visual.getValue('x', 0).get()).toBe(10);
+	pointer(window, 'pointermove', 100, 0);
+	pointer(window, 'pointerup', 100, 0);
+	await nextFrame();
+	await nextFrame();
+	expect(f.visual.getValue('x', 0).get()).toBe(100);
+	expect(new DOMMatrix(getComputedStyle(f.node).transform).e).toBe(100);
+	expect(endings).toEqual([100]);
+	expect(isDragActive()).toBe(false);
+});

@@ -35,7 +35,7 @@ type Placement = {
 type Sampler = { start: number; end: number; sample(time: number): Pose };
 type Play = (...args: unknown[]) => AnimationPlaybackControlsWithThen;
 
-/** Matches the public sequence engine's label/relative-time rules (Motion 13.4.4). */
+/** Matches the public sequence engine's label/relative-time rules (Motion 14.5.0). */
 function nextTime(current: number, at: unknown, previous: number, labels: Map<string, number>) {
 	if (typeof at === 'number') return at;
 	if (typeof at !== 'string') return current;
@@ -120,7 +120,17 @@ function createSampler(placement: Placement, origin: Pose): Sampler {
 	// them again or dispatch application callbacks while its timeline is built.
 	for (const key of ['x', 'y', 'default', 'onPlay', 'onUpdate', 'onComplete', 'onStop', 'onCancel'])
 		delete (transition as Options)[key];
-	placement.path!.animateVisualElement(visual, target, transition, 0, animations);
+	if (placement.path!.animateValues)
+		placement.path!.animateValues(
+			(key) => visual.getValue(key, visual.latestValues[key] ?? 0),
+			target,
+			transition,
+			0,
+			animations
+		);
+	else if (placement.path!.animateVisualElement)
+		placement.path!.animateVisualElement(visual, target, transition, 0, animations);
+	else throw new Error('Astra useAnimate: a sequence path requires a value animation hook.');
 	if (!animations.every((animation) => animation instanceof JSAnimation))
 		throw new Error(
 			'Astra useAnimate: sequence paths require the synchronous arc sampling contract.'
