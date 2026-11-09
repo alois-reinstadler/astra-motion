@@ -1,5 +1,5 @@
 {
-	"date": "2026-10-21T23:25:15.989Z",
+	"date": "2026-11-09T02:43:44.110Z",
 	"methodology": "Rolldown in-memory ESM minify. All feature exports retained. Svelte and SvelteKit external/shared with host. No app build. Full=local runtime+wait+routes. PresenceFromRoot verifies unused projection tree-shakes.",
 	"motion": "14.5.0",
 	"motionDom": "14.5.0",

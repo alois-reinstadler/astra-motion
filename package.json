@@ -32,7 +32,10 @@
 		"dist/motion",
 		"!dist/**/*.test.*",
 		"!dist/**/*.spec.*",
-		"dist/check-motion-forwarding.mjs"
+		"dist/check-motion-forwarding.mjs",
+		"LICENSE",
+		"CHANGELOG.md",
+		"RELEASE.md"
 	],
 	"sideEffects": [
 		"**/*.css"

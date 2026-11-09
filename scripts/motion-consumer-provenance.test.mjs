@@ -8,6 +8,8 @@ test('accepts the forwarding CLI alongside existing package entrypoints', () => 
 			'package/package.json',
 			'package/LICENSE',
 			'package/README.md',
+			'package/CHANGELOG.md',
+			'package/RELEASE.md',
 			'package/dist/index.js',
 			'package/dist/index.d.ts',
 			'package/dist/check-motion-forwarding.mjs',

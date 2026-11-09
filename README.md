@@ -1,5 +1,7 @@
 # Astra Motion
 
+> Release candidate: see [release scope, limitations and owner checklist](RELEASE.md). This branch prepares a candidate; it does not certify publication readiness.
+
 Motion’s animation engine, connected to Svelte 5. Animate native HTML and SVG,
 coordinate presence and layout, add gestures and drag, and compose reactive values
 without a React runtime.
