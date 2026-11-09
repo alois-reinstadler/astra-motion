@@ -16,7 +16,8 @@ source patch, private scheduler interception, or new dependency.
 Svelte pre-effects do not supply a global React-style before-mutation phase. An
 ancestor can already have changed layout when a descendant sees its exit intent.
 [Svelte issue 16648](https://github.com/sveltejs/svelte/issues/16648) describes this
-Motion integration problem. The earlier prototype demonstrated both a working
+Motion integration problem. A proposed upstream fix, a paired DOM-commit lifecycle,
+is drafted in [presence-upstream-lifecycle-rfc.md](presence-upstream-lifecycle-rfc.md). The earlier prototype demonstrated both a working
 owned scope and a 302px jump when one parent expression bypassed that scope.
 
 ## Implementation

@@ -84,6 +84,8 @@ An attachment with no reactive inputs cannot discover arbitrary application stat
 2. A cached geometry scheduler plus bounded invalidation from group updates, element size changes and relevant container mutations: more automatic, but coordinate normalization and missed position changes must be proven.
 3. Compiler-generated component-level invalidation: useful ergonomic glue, still cannot intercept all changes in ancestors or external stylesheets.
 
+A precise proposal for the missing public primitive (paired before/after DOM-commit callbacks, plus an optional deferred-outro contract) is kept as dated research in [presence-upstream-lifecycle-rfc.md](presence-upstream-lifecycle-rfc.md). It is not an available API.
+
 Do not scan the document with a MutationObserver or poll every participant continuously merely to make the API appear automatic. Batch reads across participants before inverse-transform writes. `tick` provides post-flush timing; `flushSync` provides a synchronous transaction, neither is automatically a pre-commit measurement hook.
 
 ## Attachments, custom components, SSR and HMR
